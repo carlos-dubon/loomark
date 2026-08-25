@@ -20,7 +20,6 @@ model User {
   sessions      Session[]
   collections   Collection[]
   bookmarks     Bookmark[]
-  tags          Tag[]
 }
 
 model Account {
@@ -95,7 +94,6 @@ model Bookmark {
   updatedAt    DateTime    @updatedAt
   collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: SetNull)
   user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tags         Tag[]       @relation("BookmarkTags")
 
   @@index([userId])
   @@index([collectionId])
@@ -103,15 +101,3 @@ model Bookmark {
   @@index([userId, createdAt])
 }
 
-model Tag {
-  id        String     @id @default(cuid())
-  name      String
-  color     String?
-  userId    String
-  createdAt DateTime   @default(now())
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bookmarks Bookmark[] @relation("BookmarkTags")
-
-  @@index([userId])
-  @@unique([userId, name])
-}
