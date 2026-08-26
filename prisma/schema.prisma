@@ -59,44 +59,51 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
+enum CollectionKind {
+  USER
+  UNSORTED
+}
+
 model Collection {
-  id        String       @id @default(cuid())
+  id        String         @id @default(cuid())
   name      String
   icon      String?
   color     String?
-  position  Int          @default(0)
+  kind      CollectionKind @default(USER)
+  position  Int            @default(0)
   parentId  String?
   userId    String
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  parent    Collection?  @relation("CollectionTree", fields: [parentId], references: [id], onDelete: Cascade)
-  children  Collection[] @relation("CollectionTree")
-  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  parent    Collection?    @relation("CollectionTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Collection[]   @relation("CollectionTree")
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   bookmarks Bookmark[]
 
   @@index([userId])
   @@index([parentId])
+  @@index([userId, kind])
 }
 
 model Bookmark {
-  id           String      @id @default(cuid())
+  id           String     @id @default(cuid())
   url          String
   title        String
   description  String?
   faviconUrl   String?
   previewUrl   String?
-  pinned       Boolean     @default(false)
-  position     Int         @default(0)
-  collectionId String?
+  pinned       Boolean    @default(false)
+  position     Int        @default(0)
+  collectionId String
   userId       String
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: SetNull)
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Restrict)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([collectionId])
   @@index([userId, pinned])
   @@index([userId, createdAt])
+  @@index([collectionId, position])
 }
-
