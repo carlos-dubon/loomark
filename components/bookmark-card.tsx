@@ -2,12 +2,13 @@
 
 import { useDraggable } from "@dnd-kit/react"
 import { CalendarIcon, FolderIcon, LinkIcon, PinIcon } from "lucide-react"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
 import { BookmarkMenu } from "@/components/bookmark-menu"
 import { FaviconImage } from "@/components/favicon-image"
 import { Button } from "@/components/ui/button"
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
+import { useBookmarkPreview } from "@/hooks/use-bookmark-preview"
 import { useCollectionName } from "@/hooks/use-collection-name"
 import { DRAG_TYPE } from "@/lib/dnd"
 import { formatDate, hostFromUrl } from "@/lib/format"
@@ -103,11 +104,56 @@ const BookmarkActions = ({
   )
 }
 
+const BookmarkPreview = ({
+  bookmark,
+  pending,
+}: {
+  bookmark: BookmarkDTO
+  pending: boolean
+}) => {
+  const [failed, setFailed] = useState(false)
+  const [lastSrc, setLastSrc] = useState(bookmark.previewUrl)
+
+  if (lastSrc !== bookmark.previewUrl) {
+    setLastSrc(bookmark.previewUrl)
+    setFailed(false)
+  }
+
+  const src = failed ? null : bookmark.previewUrl
+
+  return (
+    <div className="aspect-[16/9] shrink-0 overflow-hidden border-b bg-muted/50">
+      {src ? (
+        <img
+          src={src}
+          alt=""
+          loading="lazy"
+          onError={() => setFailed(true)}
+          className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+        />
+      ) : (
+        <div
+          className={cn(
+            "flex size-full items-center justify-center",
+            pending && "animate-pulse"
+          )}
+        >
+          <FaviconImage
+            src={bookmark.faviconUrl}
+            className="size-8 opacity-30 grayscale"
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+
 const GridCard = ({
   bookmark,
   ref,
   isDragSource,
-}: { bookmark: BookmarkDTO } & DragProps) => (
+  pendingPreview,
+}: { bookmark: BookmarkDTO; pendingPreview: boolean } & DragProps) => (
   <article
     ref={ref}
     className={cn(
@@ -115,16 +161,7 @@ const GridCard = ({
       isDragSource && "opacity-40"
     )}
   >
-    {bookmark.previewUrl ? (
-      <div className="aspect-[16/9] overflow-hidden border-b bg-muted">
-        <img
-          src={bookmark.previewUrl}
-          alt=""
-          loading="lazy"
-          className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-        />
-      </div>
-    ) : null}
+    <BookmarkPreview bookmark={bookmark} pending={pendingPreview} />
     <div className="flex flex-1 flex-col gap-2 p-3">
       <div className="flex items-start gap-2">
         <FaviconImage
@@ -193,8 +230,15 @@ export const BookmarkCard = ({
     data,
   })
 
+  const pendingPreview = useBookmarkPreview(bookmark, mode === "grid")
+
   return mode === "grid" ? (
-    <GridCard bookmark={bookmark} ref={ref} isDragSource={isDragSource} />
+    <GridCard
+      bookmark={bookmark}
+      ref={ref}
+      isDragSource={isDragSource}
+      pendingPreview={pendingPreview}
+    />
   ) : (
     <ListRow bookmark={bookmark} ref={ref} isDragSource={isDragSource} />
   )

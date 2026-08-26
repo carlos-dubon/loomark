@@ -55,6 +55,7 @@ export const PATCH = async (request: Request, { params }: Context) => {
     where: { id },
     data: {
       name: data.name,
+      icon: data.icon,
       parentId: data.parentId,
     },
     include: { _count: { select: { bookmarks: true } } },

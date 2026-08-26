@@ -3,11 +3,12 @@
 import { pointerIntersection } from "@dnd-kit/collision"
 import { useDragOperation, useDraggable, useDroppable } from "@dnd-kit/react"
 import { useAtomValue } from "jotai"
-import { CornerLeftUpIcon, FolderIcon, LibraryIcon } from "lucide-react"
+import { CornerLeftUpIcon, LibraryIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useCallback, useMemo } from "react"
 
+import { CollectionIcon } from "@/components/collection-icon"
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -124,7 +125,7 @@ const CollectionRow = ({
             className="w-full min-w-0 pr-8"
             render={<Link href={href} />}
           >
-            <FolderIcon />
+            <CollectionIcon name={item.icon} />
             <span className="truncate">{item.name}</span>
           </SidebarMenuButton>
           {item.totalCount > 0 ? (

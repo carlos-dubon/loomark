@@ -67,6 +67,7 @@ enum CollectionKind {
 model Collection {
   id        String         @id @default(cuid())
   name      String
+  icon      String?
   kind      CollectionKind @default(USER)
   position  Int            @default(0)
   parentId  String?

@@ -11,6 +11,8 @@ import { signOut } from "next-auth/react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
 
+import { useThemeToggle } from "@/hooks/use-theme-toggle"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -30,7 +32,8 @@ export type SessionUser = {
 }
 
 export const UserMenu = ({ user }: { user: SessionUser }) => {
-  const { resolvedTheme, setTheme } = useTheme()
+  const { resolvedTheme } = useTheme()
+  const toggleTheme = useThemeToggle()
   const label = user.name ?? user.email
   const initials = label.slice(0, 2).toUpperCase()
 
@@ -60,9 +63,7 @@ export const UserMenu = ({ user }: { user: SessionUser }) => {
           <SettingsIcon />
           Settings
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-        >
+        <DropdownMenuItem onClick={toggleTheme}>
           {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
           Toggle theme
         </DropdownMenuItem>

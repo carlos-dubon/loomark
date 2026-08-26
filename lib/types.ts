@@ -16,6 +16,7 @@ export type CollectionKind = "USER" | "UNSORTED"
 export type CollectionDTO = {
   id: string
   name: string
+  icon: string | null
   kind: CollectionKind
   position: number
   parentId: string | null
