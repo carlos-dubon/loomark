@@ -68,6 +68,7 @@ model Collection {
   id        String         @id @default(cuid())
   name      String
   kind      CollectionKind @default(USER)
+  position  Int            @default(0)
   parentId  String?
   userId    String
   createdAt DateTime       @default(now())
@@ -80,6 +81,7 @@ model Collection {
   @@index([userId])
   @@index([parentId])
   @@index([userId, kind])
+  @@index([userId, parentId, position])
 }
 
 model Bookmark {

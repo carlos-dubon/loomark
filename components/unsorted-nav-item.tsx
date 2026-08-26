@@ -1,15 +1,34 @@
 "use client"
 
+import { pointerIntersection } from "@dnd-kit/collision"
+import { useDroppable } from "@dnd-kit/react"
 import { InboxIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useMemo } from "react"
 
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { useCollectionItems } from "@/hooks/use-collection-items"
+import { DRAG_TYPE, DROP_PRIORITY, type DropTargetData } from "@/lib/dnd"
+import { cn } from "@/lib/utils"
 
 export const UnsortedNavItem = () => {
   const pathname = usePathname()
   const { unsorted } = useCollectionItems()
+
+  const data = useMemo<DropTargetData>(
+    () => ({ zone: "into", collectionId: unsorted?.id }),
+    [unsorted?.id]
+  )
+
+  const { ref, isDropTarget } = useDroppable({
+    id: "into:unsorted",
+    accept: DRAG_TYPE.bookmark,
+    collisionDetector: pointerIntersection,
+    collisionPriority: DROP_PRIORITY.row,
+    data,
+    disabled: !unsorted,
+  })
 
   if (!unsorted) {
     return null
@@ -18,7 +37,14 @@ export const UnsortedNavItem = () => {
   const href = `/collections/${unsorted.id}`
 
   return (
-    <SidebarMenuItem className="rounded-md">
+    <SidebarMenuItem
+      ref={ref}
+      className={cn(
+        "rounded-md",
+        isDropTarget &&
+          "ring-2 ring-sidebar-primary/70 ring-offset-1 ring-offset-sidebar"
+      )}
+    >
       <SidebarMenuButton
         isActive={pathname === href}
         tooltip={unsorted.name}
