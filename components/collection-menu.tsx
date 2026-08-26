@@ -151,7 +151,7 @@ export const CollectionMenu = ({
           }
         >
           <PencilIcon />
-          Rename
+          Rename & icon
         </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>

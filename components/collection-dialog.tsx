@@ -7,6 +7,7 @@ import { useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
+import { IconPicker } from "@/components/icon-picker"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -63,6 +64,7 @@ const CollectionForm = ({
     resolver: zodResolver(collectionCreateSchema),
     defaultValues: {
       name: editing?.name ?? "",
+      icon: editing?.icon ?? null,
       parentId: editing?.parentId ?? state.parentId ?? null,
     },
   })
@@ -121,6 +123,13 @@ const CollectionForm = ({
             </p>
           ) : null}
         </div>
+        <Controller
+          control={control}
+          name="icon"
+          render={({ field }) => (
+            <IconPicker value={field.value ?? null} onChange={field.onChange} />
+          )}
+        />
         <div className="flex flex-col gap-2">
           <Label htmlFor="collection-parent">Parent</Label>
           <Controller

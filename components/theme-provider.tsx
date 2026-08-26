@@ -1,7 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes"
+import { ThemeProvider as NextThemesProvider } from "next-themes"
+
+import { useThemeToggle } from "@/hooks/use-theme-toggle"
 
 function ThemeProvider({
   children,
@@ -35,7 +37,7 @@ function isTypingTarget(target: EventTarget | null) {
 }
 
 function ThemeHotkey() {
-  const { resolvedTheme, setTheme } = useTheme()
+  const toggleTheme = useThemeToggle()
 
   React.useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -55,7 +57,7 @@ function ThemeHotkey() {
         return
       }
 
-      setTheme(resolvedTheme === "dark" ? "light" : "dark")
+      toggleTheme()
     }
 
     window.addEventListener("keydown", onKeyDown)
@@ -63,7 +65,7 @@ function ThemeHotkey() {
     return () => {
       window.removeEventListener("keydown", onKeyDown)
     }
-  }, [resolvedTheme, setTheme])
+  }, [toggleTheme])
 
   return null
 }

@@ -74,6 +74,8 @@ export const api = {
     }),
   deleteBookmark: (id: string) =>
     request<void>(`/api/bookmarks/${id}`, { method: "DELETE" }),
+  refreshPreview: (id: string) =>
+    request<BookmarkDTO>(`/api/bookmarks/${id}/preview`, { method: "POST" }),
   listCollections: () => request<CollectionDTO[]>("/api/collections"),
   createCollection: (input: CollectionCreateInput) =>
     request<CollectionDTO>("/api/collections", {
