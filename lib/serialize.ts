@@ -19,6 +19,7 @@ export const serializeCollection = (
 ): CollectionDTO => ({
   id: collection.id,
   name: collection.name,
+  icon: collection.icon,
   kind: collection.kind,
   position: collection.position,
   parentId: collection.parentId,

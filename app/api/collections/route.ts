@@ -42,6 +42,7 @@ export const POST = async (request: Request) => {
     data: {
       userId,
       name: data.name,
+      icon: data.icon ?? null,
       parentId: data.parentId ?? null,
     },
     include: { _count: { select: { bookmarks: true } } },
