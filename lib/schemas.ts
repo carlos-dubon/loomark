@@ -39,6 +39,12 @@ export const collectionCreateSchema = z.object({
 
 export const collectionUpdateSchema = collectionCreateSchema.partial()
 
+export const collectionMoveSchema = z.object({
+  id: z.string().min(1),
+  parentId: z.string().min(1).nullable(),
+  index: z.number().int().min(0),
+})
+
 export const metadataQuerySchema = z.object({
   url: z.url(),
 })
@@ -47,3 +53,4 @@ export type BookmarkCreateInput = z.infer<typeof bookmarkCreateSchema>
 export type BookmarkUpdateInput = z.infer<typeof bookmarkUpdateSchema>
 export type CollectionCreateInput = z.infer<typeof collectionCreateSchema>
 export type CollectionUpdateInput = z.infer<typeof collectionUpdateSchema>
+export type CollectionMoveInput = z.infer<typeof collectionMoveSchema>

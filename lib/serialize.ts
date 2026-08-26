@@ -20,6 +20,7 @@ export const serializeCollection = (
   id: collection.id,
   name: collection.name,
   kind: collection.kind,
+  position: collection.position,
   parentId: collection.parentId,
   bookmarkCount: collection._count?.bookmarks ?? 0,
 })

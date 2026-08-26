@@ -2,6 +2,9 @@ import type { CollectionDTO, CollectionNode } from "@/lib/types"
 
 type TreeShape = { id: string; parentId: string | null }
 
+const compareSiblings = (a: CollectionDTO, b: CollectionDTO) =>
+  a.position - b.position || a.name.localeCompare(b.name)
+
 export const buildCollectionTree = (
   collections: CollectionDTO[]
 ): CollectionNode[] => {
@@ -37,7 +40,7 @@ export const buildCollectionTree = (
     level.sort(
       (a, b) =>
         Number(b.kind === "UNSORTED") - Number(a.kind === "UNSORTED") ||
-        a.name.localeCompare(b.name)
+        compareSiblings(a, b)
     )
 
     for (const node of level) {
@@ -97,3 +100,79 @@ export const flattenTree = (
     { ...node, depth },
     ...flattenTree(node.children, depth + 1),
   ])
+
+export const siblingsOf = (
+  collections: CollectionDTO[],
+  parentId: string | null
+) =>
+  collections
+    .filter(
+      (collection) =>
+        collection.kind === "USER" && collection.parentId === parentId
+    )
+    .sort(compareSiblings)
+
+export const applyCollectionMove = (
+  collections: CollectionDTO[],
+  id: string,
+  parentId: string | null,
+  index: number
+): CollectionDTO[] => {
+  const moved = collections.find((collection) => collection.id === id)
+
+  if (!moved) {
+    return collections
+  }
+
+  const siblings = siblingsOf(collections, parentId).filter(
+    (collection) => collection.id !== id
+  )
+  const target = Math.min(Math.max(index, 0), siblings.length)
+  const ordered = [
+    ...siblings.slice(0, target),
+    moved,
+    ...siblings.slice(target),
+  ]
+  const positions = new Map(ordered.map((collection, i) => [collection.id, i]))
+
+  return collections.map((collection) => {
+    const position = positions.get(collection.id)
+
+    if (position === undefined) {
+      return collection
+    }
+
+    return collection.id === id
+      ? { ...collection, parentId, position }
+      : { ...collection, position }
+  })
+}
+
+export const insertionIndex = (
+  collections: CollectionDTO[],
+  parentId: string | null,
+  beforeId: string | null,
+  excludeId: string
+) => {
+  const siblings = siblingsOf(collections, parentId).filter(
+    (collection) => collection.id !== excludeId
+  )
+
+  if (!beforeId) {
+    return siblings.length
+  }
+
+  const index = siblings.findIndex((collection) => collection.id === beforeId)
+
+  return index === -1 ? siblings.length : index
+}
+
+export const changedCollections = (
+  before: CollectionDTO[],
+  after: CollectionDTO[]
+) =>
+  after.filter(
+    (collection, index) =>
+      collection.parentId !== before[index].parentId ||
+      collection.position !== before[index].position
+  )

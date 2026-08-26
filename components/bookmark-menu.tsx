@@ -55,7 +55,7 @@ export const BookmarkMenu = ({
             size="icon-sm"
             aria-label="Bookmark actions"
             className={cn(
-              "bg-background/80 backdrop-blur transition-opacity focus-visible:opacity-100 aria-expanded:opacity-100 md:opacity-0 md:group-hover:opacity-100",
+              "text-muted-foreground transition-opacity hover:text-foreground focus-visible:opacity-100 aria-expanded:opacity-100",
               className
             )}
           />

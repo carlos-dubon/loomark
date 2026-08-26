@@ -5,6 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { BookmarkDialog } from "@/components/bookmark-dialog"
 import { BookmarkSearchDialog } from "@/components/bookmark-search-dialog"
 import { CollectionDialog } from "@/components/collection-dialog"
+import { DndProvider } from "@/components/dnd-provider"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { auth } from "@/lib/auth"
 import { ensureUnsortedCollection } from "@/lib/collections"
@@ -29,15 +30,17 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
       className="h-svh overflow-hidden"
       defaultOpen={cookieStore.get("sidebar_state")?.value !== "false"}
     >
-      <AppSidebar
-        collections={collections}
-        user={{
-          name: session.user.name ?? null,
-          email: session.user.email ?? "",
-          image: session.user.image ?? null,
-        }}
-      />
-      <SidebarInset>{children}</SidebarInset>
+      <DndProvider>
+        <AppSidebar
+          collections={collections}
+          user={{
+            name: session.user.name ?? null,
+            email: session.user.email ?? "",
+            image: session.user.image ?? null,
+          }}
+        />
+        <SidebarInset>{children}</SidebarInset>
+      </DndProvider>
       <BookmarkDialog />
       <BookmarkSearchDialog />
       <CollectionDialog />
