@@ -1,9 +1,10 @@
 "use client"
 
 import { useSetAtom } from "jotai"
-import { FolderIcon, FolderTreeIcon, PlusIcon } from "lucide-react"
+import { FolderTreeIcon, PlusIcon } from "lucide-react"
 import Link from "next/link"
 
+import { CollectionIcon } from "@/components/collection-icon"
 import { EmptyState } from "@/components/empty-state"
 import { PageHeader } from "@/components/page-header"
 import { Button } from "@/components/ui/button"
@@ -23,7 +24,7 @@ const CollectionCard = ({
     className="group flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-foreground/20 hover:bg-accent/50"
   >
     <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground transition-colors group-hover:bg-background">
-      <FolderIcon className="size-5" />
+      <CollectionIcon name={collection.icon} className="size-5" />
     </span>
     <span className="min-w-0 flex-1">
       <span className="block truncate text-sm font-medium">

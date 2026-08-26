@@ -34,6 +34,12 @@ export const bookmarkQuerySchema = z.object({
 
 export const collectionCreateSchema = z.object({
   name: z.string().trim().min(1).max(80),
+  icon: z
+    .string()
+    .trim()
+    .max(64)
+    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Pick an icon from the list")
+    .nullish(),
   parentId: z.string().min(1).nullish(),
 })
 
