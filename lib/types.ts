@@ -17,6 +17,7 @@ export type CollectionDTO = {
   id: string
   name: string
   kind: CollectionKind
+  position: number
   parentId: string | null
   bookmarkCount: number
 }

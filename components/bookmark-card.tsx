@@ -1,84 +1,181 @@
 "use client"
 
-import { PinIcon } from "lucide-react"
+import { useDraggable } from "@dnd-kit/react"
+import { CalendarIcon, FolderIcon, LinkIcon, PinIcon } from "lucide-react"
+import { useMemo } from "react"
 
 import { BookmarkMenu } from "@/components/bookmark-menu"
 import { FaviconImage } from "@/components/favicon-image"
+import { Button } from "@/components/ui/button"
+import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
+import { useCollectionName } from "@/hooks/use-collection-name"
+import { DRAG_TYPE } from "@/lib/dnd"
 import { formatDate, hostFromUrl } from "@/lib/format"
 import type { BookmarkDTO } from "@/lib/types"
+import { cn } from "@/lib/utils"
 import type { ViewMode } from "@/store/atoms"
 
-const GridCard = ({ bookmark }: { bookmark: BookmarkDTO }) => (
-  <article className="group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:border-foreground/20">
-    <a
-      href={bookmark.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex flex-1 flex-col outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+type DragProps = {
+  ref: (element: Element | null) => void
+  isDragSource: boolean
+}
+
+const bookmarkLabel = (bookmark: BookmarkDTO) =>
+  bookmark.title?.trim() || hostFromUrl(bookmark.url)
+
+const MetaItem = ({
+  icon: Icon,
+  className,
+  children,
+}: {
+  icon: typeof LinkIcon
+  className?: string
+  children: React.ReactNode
+}) => (
+  <span className={cn("flex min-w-0 items-center gap-1", className)}>
+    <Icon className="size-3 shrink-0" />
+    <span className="truncate">{children}</span>
+  </span>
+)
+
+const BookmarkMeta = ({
+  bookmark,
+  wrap = false,
+  className,
+}: {
+  bookmark: BookmarkDTO
+  wrap?: boolean
+  className?: string
+}) => {
+  const collectionName = useCollectionName(bookmark.collectionId)
+  const secondary = wrap ? "flex" : "hidden sm:flex"
+
+  return (
+    <div
+      className={cn(
+        "flex min-w-0 items-center gap-x-3 gap-y-1 text-xs text-muted-foreground",
+        wrap && "flex-wrap",
+        className
+      )}
     >
-      {bookmark.previewUrl ? (
-        <div className="aspect-[16/9] overflow-hidden border-b bg-muted">
-          <img
-            src={bookmark.previewUrl}
-            alt=""
-            loading="lazy"
-            className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-          />
-        </div>
+      <MetaItem icon={LinkIcon}>{hostFromUrl(bookmark.url)}</MetaItem>
+      {collectionName ? (
+        <MetaItem icon={FolderIcon} className={secondary}>
+          {collectionName}
+        </MetaItem>
       ) : null}
-      <div className="flex flex-1 flex-col gap-2 p-3">
-        <div className="flex items-center gap-2">
-          <FaviconImage src={bookmark.faviconUrl} />
-          <span className="truncate text-xs text-muted-foreground">
-            {hostFromUrl(bookmark.url)}
-          </span>
-          {bookmark.pinned ? (
-            <PinIcon className="size-3 shrink-0 text-muted-foreground" />
-          ) : null}
-        </div>
-        <p className="line-clamp-2 text-sm font-medium">{bookmark.title}</p>
-        {bookmark.description ? (
-          <p className="line-clamp-2 text-xs text-muted-foreground">
-            {bookmark.description}
-          </p>
-        ) : null}
-        <time
-          dateTime={bookmark.createdAt}
-          className="mt-auto pt-1 text-xs text-muted-foreground"
-        >
-          Saved {formatDate(bookmark.createdAt)}
+      <MetaItem icon={CalendarIcon} className={cn("shrink-0", secondary)}>
+        <time dateTime={bookmark.createdAt}>
+          {formatDate(bookmark.createdAt)}
         </time>
+      </MetaItem>
+    </div>
+  )
+}
+
+const BookmarkActions = ({
+  bookmark,
+  className,
+}: {
+  bookmark: BookmarkDTO
+  className?: string
+}) => {
+  const { togglePin } = useBookmarkActions()
+
+  return (
+    <div className={cn("relative z-10 flex shrink-0 items-center", className)}>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label={bookmark.pinned ? "Unpin bookmark" : "Pin to homepage"}
+        aria-pressed={bookmark.pinned}
+        onClick={() => togglePin(bookmark)}
+        className={
+          bookmark.pinned
+            ? "text-foreground"
+            : "text-muted-foreground hover:text-foreground"
+        }
+      >
+        <PinIcon className={bookmark.pinned ? "fill-current" : undefined} />
+      </Button>
+      <BookmarkMenu bookmark={bookmark} />
+    </div>
+  )
+}
+
+const GridCard = ({
+  bookmark,
+  ref,
+  isDragSource,
+}: { bookmark: BookmarkDTO } & DragProps) => (
+  <article
+    ref={ref}
+    className={cn(
+      "group relative flex touch-none flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:border-foreground/20",
+      isDragSource && "opacity-40"
+    )}
+  >
+    {bookmark.previewUrl ? (
+      <div className="aspect-[16/9] overflow-hidden border-b bg-muted">
+        <img
+          src={bookmark.previewUrl}
+          alt=""
+          loading="lazy"
+          className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+        />
       </div>
-    </a>
-    <BookmarkMenu bookmark={bookmark} className="absolute top-2 right-2" />
+    ) : null}
+    <div className="flex flex-1 flex-col gap-2 p-3">
+      <div className="flex items-start gap-2">
+        <FaviconImage
+          src={bookmark.faviconUrl}
+          className="mt-0.5 size-4 shrink-0"
+        />
+        <a
+          href={bookmark.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="min-w-0 flex-1 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          <span className="line-clamp-2">{bookmarkLabel(bookmark)}</span>
+        </a>
+        <BookmarkActions bookmark={bookmark} className="-mt-1 -mr-1" />
+      </div>
+      {bookmark.description ? (
+        <p className="line-clamp-2 text-xs text-muted-foreground">
+          {bookmark.description}
+        </p>
+      ) : null}
+      <BookmarkMeta bookmark={bookmark} wrap className="mt-auto pt-1" />
+    </div>
   </article>
 )
 
-const ListRow = ({ bookmark }: { bookmark: BookmarkDTO }) => (
-  <article className="group relative flex items-center gap-3 rounded-lg border bg-card px-3 py-2 transition-colors hover:border-foreground/20">
-    <FaviconImage src={bookmark.faviconUrl} className="size-4 shrink-0" />
-    <a
-      href={bookmark.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="min-w-0 flex-1 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-    >
-      <p className="truncate text-sm font-medium">{bookmark.title}</p>
-      <p className="truncate text-xs text-muted-foreground">
-        {hostFromUrl(bookmark.url)}
-        {bookmark.description ? ` · ${bookmark.description}` : ""}
-      </p>
-    </a>
-    <time
-      dateTime={bookmark.createdAt}
-      className="hidden shrink-0 text-xs text-muted-foreground sm:block"
-    >
-      {formatDate(bookmark.createdAt)}
-    </time>
-    {bookmark.pinned ? (
-      <PinIcon className="size-3 shrink-0 text-muted-foreground" />
-    ) : null}
-    <BookmarkMenu bookmark={bookmark} className="shrink-0" />
+const ListRow = ({
+  bookmark,
+  ref,
+  isDragSource,
+}: { bookmark: BookmarkDTO } & DragProps) => (
+  <article
+    ref={ref}
+    className={cn(
+      "group relative flex touch-none items-center gap-3 rounded-lg border bg-card px-3 py-2 transition-colors hover:border-foreground/20",
+      isDragSource && "opacity-40"
+    )}
+  >
+    <FaviconImage src={bookmark.faviconUrl} className="size-5 shrink-0" />
+    <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+      <a
+        href={bookmark.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="min-w-0 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-3 focus-visible:ring-ring/50"
+      >
+        <span className="block truncate">{bookmarkLabel(bookmark)}</span>
+      </a>
+      <BookmarkMeta bookmark={bookmark} />
+    </div>
+    <BookmarkActions bookmark={bookmark} />
   </article>
 )
 
@@ -88,9 +185,17 @@ export const BookmarkCard = ({
 }: {
   bookmark: BookmarkDTO
   mode: ViewMode
-}) =>
-  mode === "grid" ? (
-    <GridCard bookmark={bookmark} />
+}) => {
+  const data = useMemo(() => ({ bookmark }), [bookmark])
+  const { ref, isDragSource } = useDraggable({
+    id: bookmark.id,
+    type: DRAG_TYPE.bookmark,
+    data,
+  })
+
+  return mode === "grid" ? (
+    <GridCard bookmark={bookmark} ref={ref} isDragSource={isDragSource} />
   ) : (
-    <ListRow bookmark={bookmark} />
+    <ListRow bookmark={bookmark} ref={ref} isDragSource={isDragSource} />
   )
+}

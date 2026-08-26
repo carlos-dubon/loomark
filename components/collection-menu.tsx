@@ -24,6 +24,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useCollectionActions } from "@/hooks/use-collection-actions"
 import { api } from "@/lib/client-api"
 import {
   buildCollectionTree,
@@ -37,7 +38,6 @@ import {
   collectionDialogAtom,
   collectionsAtom,
   removeCollectionAtom,
-  upsertCollectionAtom,
 } from "@/store/atoms"
 
 export const CollectionMenu = ({
@@ -54,8 +54,8 @@ export const CollectionMenu = ({
   const openCollectionDialog = useSetAtom(collectionDialogAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const removeCollection = useSetAtom(removeCollectionAtom)
-  const upsertCollection = useSetAtom(upsertCollectionAtom)
   const collections = useAtomValue(collectionsAtom)
+  const { move } = useCollectionActions()
 
   const href = `/collections/${collection.id}`
 
@@ -71,30 +71,19 @@ export const CollectionMenu = ({
       return
     }
 
-    if (collection.kind === "UNSORTED") {
-      toast.error("Unsorted cannot be moved")
+    if (!(await move(collection.id, newParentId))) {
       return
     }
 
-    try {
-      const updated = await api.updateCollection(collection.id, {
-        parentId: newParentId,
-      })
-      upsertCollection(updated)
+    const parentName = newParentId
+      ? (moveTargets.find((node) => node.id === newParentId)?.name ?? null)
+      : null
 
-      const parentName = newParentId
-        ? (moveTargets.find((node) => node.id === newParentId)?.name ?? null)
-        : null
-
-      toast.success(
-        parentName
-          ? `Moved “${collection.name}” to “${parentName}”`
-          : `Moved “${collection.name}” to top level`
-      )
-      router.refresh()
-    } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Move failed")
-    }
+    toast.success(
+      parentName
+        ? `Moved “${collection.name}” to “${parentName}”`
+        : `Moved “${collection.name}” to top level`
+    )
   }
 
   const onDelete = async () => {

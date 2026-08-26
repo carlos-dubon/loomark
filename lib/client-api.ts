@@ -2,6 +2,7 @@ import type {
   BookmarkCreateInput,
   BookmarkUpdateInput,
   CollectionCreateInput,
+  CollectionMoveInput,
   CollectionUpdateInput,
 } from "@/lib/schemas"
 import type {
@@ -82,6 +83,11 @@ export const api = {
   updateCollection: (id: string, input: CollectionUpdateInput) =>
     request<CollectionDTO>(`/api/collections/${id}`, {
       method: "PATCH",
+      body: JSON.stringify(input),
+    }),
+  moveCollection: (input: CollectionMoveInput) =>
+    request<CollectionDTO[]>("/api/collections/move", {
+      method: "POST",
       body: JSON.stringify(input),
     }),
   deleteCollection: (id: string) =>

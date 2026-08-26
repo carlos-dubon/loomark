@@ -14,7 +14,7 @@ type BookmarkFilters = {
 export const getCollections = async (userId: string) => {
   const collections = await prisma.collection.findMany({
     where: { userId },
-    orderBy: { name: "asc" },
+    orderBy: [{ position: "asc" }, { name: "asc" }],
     include: { _count: { select: { bookmarks: true } } },
   })
 
@@ -33,7 +33,7 @@ export const getCollection = async (userId: string, id: string) => {
 export const getChildCollections = async (userId: string, parentId: string) => {
   const collections = await prisma.collection.findMany({
     where: { userId, parentId },
-    orderBy: { name: "asc" },
+    orderBy: [{ position: "asc" }, { name: "asc" }],
     include: { _count: { select: { bookmarks: true } } },
   })
 
