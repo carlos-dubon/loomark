@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
 import { CollectionTree } from "@/components/collection-tree"
+import { SearchTrigger } from "@/components/search-trigger"
 import { Button } from "@/components/ui/button"
 import {
   Sidebar,
@@ -53,17 +54,7 @@ export const AppSidebar = ({
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="gap-2">
-        <div className="flex items-center gap-2">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border bg-background text-base leading-none">
-            🗃️
-          </div>
-          <div className="grid flex-1 leading-tight group-data-[collapsible=icon]:hidden">
-            <span className="truncate text-sm font-semibold">tana</span>
-            <span className="truncate text-xs text-muted-foreground">
-              your bookmark shelf
-            </span>
-          </div>
-        </div>
+        <SearchTrigger />
         <Button
           className="w-full justify-start group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
           onClick={() =>

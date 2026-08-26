@@ -30,11 +30,43 @@ export const bookmarkListAtom = atom<BookmarkListState>({
   items: [],
 })
 
+export const searchDialogAtom = atom(false)
+
 export const searchQueryAtom = atom("")
 
 export const searchResultsAtom = atom<BookmarkDTO[] | null>(null)
 
 export const searchPendingAtom = atom(false)
+
+const RECENT_SEARCH_LIMIT = 8
+
+export const recentSearchesAtom = atomWithStorage<string[]>(
+  "tana.recent-searches",
+  []
+)
+
+export const pushRecentSearchAtom = atom(null, (get, set, query: string) => {
+  const value = query.trim()
+
+  if (!value) return
+
+  const rest = get(recentSearchesAtom).filter(
+    (item) => item.toLowerCase() !== value.toLowerCase()
+  )
+
+  set(recentSearchesAtom, [value, ...rest].slice(0, RECENT_SEARCH_LIMIT))
+})
+
+export const removeRecentSearchAtom = atom(null, (get, set, query: string) => {
+  set(
+    recentSearchesAtom,
+    get(recentSearchesAtom).filter((item) => item !== query)
+  )
+})
+
+export const clearRecentSearchesAtom = atom(null, (_get, set) => {
+  set(recentSearchesAtom, [])
+})
 
 export const viewModeAtom = atomWithStorage<ViewMode>("tana.view-mode", "grid")
 

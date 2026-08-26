@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { BookmarkDialog } from "@/components/bookmark-dialog"
+import { BookmarkSearchDialog } from "@/components/bookmark-search-dialog"
 import { CollectionDialog } from "@/components/collection-dialog"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { auth } from "@/lib/auth"
@@ -38,6 +39,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
       />
       <SidebarInset>{children}</SidebarInset>
       <BookmarkDialog />
+      <BookmarkSearchDialog />
       <CollectionDialog />
     </SidebarProvider>
   )
