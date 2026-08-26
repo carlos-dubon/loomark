@@ -83,7 +83,6 @@ model Bookmark {
   url          String
   title        String
   description  String?
-  notes        String?
   faviconUrl   String?
   previewUrl   String?
   pinned       Boolean     @default(false)
