@@ -67,10 +67,7 @@ enum CollectionKind {
 model Collection {
   id        String         @id @default(cuid())
   name      String
-  icon      String?
-  color     String?
   kind      CollectionKind @default(USER)
-  position  Int            @default(0)
   parentId  String?
   userId    String
   createdAt DateTime       @default(now())
@@ -93,7 +90,6 @@ model Bookmark {
   faviconUrl   String?
   previewUrl   String?
   pinned       Boolean    @default(false)
-  position     Int        @default(0)
   collectionId String
   userId       String
   createdAt    DateTime   @default(now())
@@ -105,5 +101,6 @@ model Bookmark {
   @@index([collectionId])
   @@index([userId, pinned])
   @@index([userId, createdAt])
-  @@index([collectionId, position])
+  @@index([collectionId, createdAt])
 }
+
