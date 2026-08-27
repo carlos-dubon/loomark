@@ -56,7 +56,7 @@ export const AppSidebar = ({
       <SidebarHeader className="gap-2">
         <SearchTrigger />
         <Button
-          className="w-full justify-start group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          className="w-full justify-start group-data-[collapsible=icon]:size-(--sidebar-icon-tile) group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:bg-clip-border group-data-[collapsible=icon]:px-0"
           onClick={() =>
             openBookmarkDialog({
               open: true,
@@ -65,7 +65,7 @@ export const AppSidebar = ({
             })
           }
         >
-          <PlusIcon />
+          <PlusIcon className="size-(--sidebar-icon-size)" />
           <span className="group-data-[collapsible=icon]:hidden">
             New bookmark
           </span>
