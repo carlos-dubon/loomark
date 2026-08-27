@@ -42,7 +42,7 @@ export const UserMenu = ({ user }: { user: SessionUser }) => {
       <DropdownMenuTrigger
         render={<SidebarMenuButton size="lg" className="h-11 gap-2" />}
       >
-        <Avatar className="size-7">
+        <Avatar className="size-7 group-data-[collapsible=icon]:size-(--sidebar-icon-tile)">
           {user.image ? <AvatarImage src={user.image} alt={label} /> : null}
           <AvatarFallback className="text-xs">{initials}</AvatarFallback>
         </Avatar>
