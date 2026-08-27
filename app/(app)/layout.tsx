@@ -11,6 +11,7 @@ import { CollectionDeleteDialog } from "@/components/collection-delete-dialog"
 import { CollectionDialog } from "@/components/collection-dialog"
 import { DndProvider } from "@/components/dnd-provider"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { getUserRole } from "@/lib/admin"
 import { getAppearance } from "@/lib/appearance"
 import { auth } from "@/lib/auth"
 import { ensureUnsortedCollection } from "@/lib/collections"
@@ -22,6 +23,12 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth()
 
   if (!session?.user?.id) {
+    redirect("/login")
+  }
+
+  const role = await getUserRole(session.user.id)
+
+  if (!role) {
     redirect("/login")
   }
 
@@ -48,6 +55,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
         <DndProvider>
           <AppSidebar
             collections={collections}
+            isOwner={role === "OWNER"}
             user={{
               name: session.user.name ?? null,
               email: session.user.email ?? "",
