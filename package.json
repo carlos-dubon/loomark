@@ -1,6 +1,10 @@
 {
   "name": "tana",
   "version": "0.0.1",
+  "packageManager": "pnpm@11.12.0",
+  "engines": {
+    "node": ">=24"
+  },
   "type": "module",
   "private": true,
   "scripts": {
@@ -13,7 +17,10 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "docker:build": "docker compose -f docker-compose.yml -f docker-compose.build.yml build",
+    "preversion": "pnpm run typecheck && pnpm run lint",
+    "postversion": "git push --follow-tags"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
@@ -57,11 +64,5 @@
     "shadcn": "^4.19.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "allowScripts": {
-    "@prisma/engines": true,
-    "prisma": true,
-    "sharp": true,
-    "unrs-resolver": true
   }
 }

@@ -57,9 +57,11 @@ const summaryLines = (summary: ImportSummary) =>
 export const SettingsView = ({
   bookmarkCount,
   collectionCount,
+  version,
 }: {
   bookmarkCount: number
   collectionCount: number
+  version: string
 }) => {
   const router = useRouter()
   const setCollections = useSetAtom(collectionsAtom)
@@ -205,6 +207,25 @@ export const SettingsView = ({
               Export
             </Button>
           </CardContent>
+        </Card>
+        <Card className="w-full max-w-2xl shrink-0">
+          <CardHeader>
+            <CardTitle>About</CardTitle>
+            <CardDescription>
+              Running tana{" "}
+              <span className="font-mono text-foreground">{version}</span>.
+              Check{" "}
+              <a
+                className="underline underline-offset-4 hover:text-foreground"
+                href="https://github.com/carlos-dubon/tana/releases"
+                target="_blank"
+                rel="noreferrer"
+              >
+                the releases page
+              </a>{" "}
+              for what is new.
+            </CardDescription>
+          </CardHeader>
         </Card>
       </div>
     </>

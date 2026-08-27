@@ -1,0 +1,7 @@
+services:
+  app:
+    image: tana:local
+    build:
+      context: .
+      args:
+        APP_VERSION: local

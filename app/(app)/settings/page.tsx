@@ -20,6 +20,7 @@ const SettingsPage = async () => {
     <SettingsView
       bookmarkCount={bookmarkCount}
       collectionCount={collectionCount}
+      version={process.env.APP_VERSION ?? "dev"}
     />
   )
 }
