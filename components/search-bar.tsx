@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Kbd } from "@/components/ui/kbd"
 
 const isTypingTarget = (target: EventTarget | null) =>
   target instanceof HTMLElement &&
@@ -69,9 +70,7 @@ export const SearchBar = ({
             <XIcon />
           </Button>
         ) : (
-          <kbd className="rounded border px-1.5 py-0.5 text-[10px] text-muted-foreground">
-            /
-          </kbd>
+          <Kbd>/</Kbd>
         )}
       </div>
     </div>

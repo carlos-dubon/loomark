@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
 import { useBookmarkPreview } from "@/hooks/use-bookmark-preview"
 import { useBookmarkSelected } from "@/hooks/use-bookmark-selection"
+import { useCoarsePointer } from "@/hooks/use-coarse-pointer"
 import { useCollection } from "@/hooks/use-collection"
 import { DRAG_TYPE } from "@/lib/dnd"
 import { formatDate, hostFromUrl } from "@/lib/format"
@@ -45,7 +46,7 @@ const SelectToggle = ({
       "relative z-20 flex shrink-0 items-center transition-opacity",
       !selected &&
         !selecting &&
-        "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100",
+        "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100 pointer-coarse:opacity-100",
       className
     )}
   >
@@ -206,7 +207,7 @@ const GridCard = ({
     ref={ref}
     data-selected={select.selected || undefined}
     className={cn(
-      "group relative flex touch-none flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:border-foreground/20",
+      "group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:border-foreground/20 pointer-fine:touch-none",
       isDragSource && "opacity-40",
       select.selected && "border-primary ring-1 ring-primary"
     )}
@@ -253,7 +254,7 @@ const ListRow = ({
     ref={ref}
     data-selected={select.selected || undefined}
     className={cn(
-      "group relative flex touch-none items-center gap-3 rounded-lg border bg-card px-3 py-2 transition-colors hover:border-foreground/20",
+      "group relative flex items-center gap-2.5 rounded-lg border bg-card px-3 py-2 transition-colors hover:border-foreground/20 sm:gap-3 pointer-fine:touch-none",
       isDragSource && "opacity-40",
       select.selected && "border-primary ring-1 ring-primary"
     )}
@@ -283,10 +284,12 @@ export const BookmarkCard = ({
   mode: ViewMode
 }) => {
   const data = useMemo(() => ({ bookmark }), [bookmark])
+  const coarsePointer = useCoarsePointer()
   const { ref, isDragSource } = useDraggable({
     id: bookmark.id,
     type: DRAG_TYPE.bookmark,
     data,
+    disabled: coarsePointer,
   })
 
   const pendingPreview = useBookmarkPreview(bookmark, mode === "grid")
