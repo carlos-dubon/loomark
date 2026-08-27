@@ -6,26 +6,14 @@ import { cn } from "@/lib/utils"
 export type ShaderFireTheme = "light" | "dark" | "auto"
 
 export type ShaderFireOptions = {
-  /** Ember / flame / highlight hex */
   colors?: string[]
-  /** Rise speed. Default 0.55 */
   speed?: number
-  /** Coverage 0–1. Default 0.55 */
   intensity?: number
-  /** How far tongues climb 0–1. Default 0.45 */
   height?: number
-  /** Local heat under the pointer. Default true */
   interactive?: boolean
-  /** Ordered Bayer pixels instead of a soft wash. Default false */
   dither?: boolean
-  /** Dither cell size in CSS px. Default `1` */
   pixelSize?: number
-  /**
-   * Palette mode. Default `auto` follows shadcn / next-themes
-   * (`html.dark` class) so light and dark swap with the site theme.
-   */
   theme?: ShaderFireTheme
-  /** Fires whenever resolved dark mode changes (CSS fallback). */
   onThemeChange?: (dark: boolean) => void
 }
 
@@ -34,9 +22,7 @@ export type ShaderFireInstance = {
   destroy: () => void
 }
 
-/** Warm ink on paper — sienna / amber / dusty peach */
 export const LIGHT_COLORS = ["#9C3A24", "#C96A32", "#E6C4A0"]
-/** Visible coals on slate — ember / flame / highlight */
 export const DARK_COLORS = ["#A33A18", "#D4682A", "#E8B45A"]
 
 export const LIGHT_FALLBACK = {
@@ -109,7 +95,6 @@ float fbm(vec2 p) {
   return v;
 }
 
-// Classic Bayer (WebGL1-safe, no bitwise ops)
 float bayer2(vec2 c) {
   return mod(c.x * 2.0 + c.y * 3.0, 4.0);
 }
@@ -131,11 +116,9 @@ float bayer8(vec2 p) {
 float fireField(vec2 uv, float aspect, float t) {
   float climb = mix(0.22, 0.82, clamp(u_height, 0.0, 1.0));
 
-  // Column space — sway as they rise
   vec2 q = vec2(uv.x * aspect * 1.85, uv.y * 1.55 - t * 0.48);
   q.x += sin(uv.y * 7.0 + t * 1.6) * 0.045 * (0.25 + uv.y);
 
-  // Two-pass domain warp — curling tongues, not blobs
   vec2 w1 = vec2(
     fbm(q * 1.7 + vec2(t * 0.28, t * 0.22)),
     fbm(q * 1.7 + vec2(-t * 0.24, t * 0.31) + 5.2)
@@ -152,7 +135,6 @@ float fireField(vec2 uv, float aspect, float t) {
   float flicker = 0.9 + 0.1 * sin(t * 13.0 + uv.x * 9.0 + shape * 6.0);
   float field = (shape * 0.68 + detail * 0.32) * flicker;
 
-  // Hotter, wider base; thinner breakaways as they climb
   float taper = pow(clamp(1.0 - uv.y / max(climb, 0.05), 0.0, 1.0), 1.35);
   float core = pow(clamp(1.0 - uv.y / max(climb * 0.42, 0.04), 0.0, 1.0), 2.1);
   field = field * taper + core * shape * 0.38;
@@ -194,7 +176,6 @@ void main() {
   vec3 paper = u_dark < 0.5
     ? vec3(0.992, 0.986, 0.978)
     : vec3(0.03, 0.032, 0.042);
-  // Light: watercolor on paper — more air, less orange stain
   float cover = u_dither > 0.5
     ? field
     : field * (u_dark < 0.5 ? 0.68 : 0.84);
@@ -232,7 +213,6 @@ function hexToRgb(hex: string): [number, number, number] {
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]
 }
 
-/** Resolves shadcn / next-themes dark mode (`attribute="class"` → `html.dark`). */
 export function isDarkTheme(): boolean {
   if (typeof document === "undefined") return false
   const root = document.documentElement
@@ -268,10 +248,6 @@ function compile(gl: WebGLRenderingContext, type: number, source: string) {
   return shader
 }
 
-/**
- * Sparse 2D fire wash — tongues rise from the bottom behind UI.
- * Theme-aware light / dusk.
- */
 export function createShaderFire(
   canvas: HTMLCanvasElement,
   initial: ShaderFireOptions = {}
@@ -496,10 +472,6 @@ export type ShaderFireProps = Omit<ShaderFireOptions, "onThemeChange"> & {
   className?: string
 }
 
-/**
- * Sparse 2D fire wash — tongues rise from the bottom behind UI.
- * Theme-aware light / dusk.
- */
 export function ShaderFire({
   className,
   colors,
@@ -549,7 +521,6 @@ export function ShaderFire({
       instanceRef.current?.destroy()
       instanceRef.current = null
     }
-    // Engine reads live options via setOptions; mount once.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

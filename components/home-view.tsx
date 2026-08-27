@@ -19,35 +19,29 @@ const PinnedItem = ({ bookmark }: { bookmark: BookmarkDTO }) => {
   const label = bookmark.title?.trim() || hostFromUrl(bookmark.url)
 
   return (
-    <div className="group/pin flex w-[88px] flex-col items-center gap-2 sm:w-[96px]">
+    <div className="group/pin relative flex w-[88px] flex-col items-center gap-2 sm:w-[96px]">
       <div className="relative">
-        <a
-          href={bookmark.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={label}
-          className="flex size-14 items-center justify-center rounded-xl bg-[#E9EAF2] transition-colors group-focus-within/pin:bg-[#E2E3EB] group-hover/pin:bg-[#E2E3EB] sm:size-16 dark:bg-muted dark:group-focus-within/pin:bg-muted/80 dark:group-hover/pin:bg-muted/80"
-        >
-          <span className="flex size-9 items-center justify-center rounded-[10px] bg-white shadow-sm sm:size-10 dark:bg-card">
+        <div className="flex size-14 items-center justify-center rounded-xl bg-muted ring-1 ring-transparent transition group-focus-within/pin:bg-accent group-focus-within/pin:ring-foreground/20 group-hover/pin:bg-accent group-hover/pin:ring-foreground/20 sm:size-16">
+          <span className="flex size-9 items-center justify-center rounded-[10px] bg-card shadow-sm sm:size-10">
             <FaviconImage
               src={bookmark.faviconUrl}
               className="size-6 rounded-sm sm:size-7"
             />
           </span>
-        </a>
+        </div>
         <BookmarkMenu
           bookmark={bookmark}
-          className="absolute -top-1.5 -right-1.5 size-6 rounded-full border bg-white shadow-sm sm:size-6 md:opacity-0 md:group-focus-within/pin:opacity-100 md:group-hover/pin:opacity-100 dark:bg-card"
+          className="absolute -top-1.5 -right-1.5 z-20 size-6 rounded-full border bg-card shadow-sm sm:size-6 md:opacity-0 md:group-focus-within/pin:opacity-100 md:group-hover/pin:opacity-100"
         />
       </div>
       <a
         href={bookmark.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full truncate text-center text-xs leading-tight text-muted-foreground transition-colors group-focus-within/pin:text-foreground group-hover/pin:text-foreground sm:text-[13px]"
+        className="w-full rounded-sm text-center text-xs leading-tight text-muted-foreground transition-colors outline-none group-focus-within/pin:text-foreground group-hover/pin:text-foreground after:absolute after:inset-0 after:rounded-xl focus-visible:ring-3 focus-visible:ring-ring/50 sm:text-[13px]"
         title={label}
       >
-        {label}
+        <span className="block truncate">{label}</span>
       </a>
     </div>
   )

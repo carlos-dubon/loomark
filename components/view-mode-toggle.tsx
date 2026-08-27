@@ -1,13 +1,12 @@
 "use client"
 
-import { useAtom } from "jotai"
 import { LayoutGridIcon, ListIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { viewModeAtom } from "@/store/atoms"
+import { useViewMode } from "@/hooks/use-view-mode"
 
 export const ViewModeToggle = () => {
-  const [mode, setMode] = useAtom(viewModeAtom)
+  const { mode, select } = useViewMode()
 
   return (
     <div className="flex items-center rounded-lg border p-0.5">
@@ -16,7 +15,7 @@ export const ViewModeToggle = () => {
         size="icon-sm"
         aria-label="Grid view"
         aria-pressed={mode === "grid"}
-        onClick={() => setMode("grid")}
+        onClick={() => select("grid")}
       >
         <LayoutGridIcon />
       </Button>
@@ -25,7 +24,7 @@ export const ViewModeToggle = () => {
         size="icon-sm"
         aria-label="List view"
         aria-pressed={mode === "list"}
-        onClick={() => setMode("list")}
+        onClick={() => select("list")}
       >
         <ListIcon />
       </Button>

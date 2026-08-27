@@ -6,7 +6,7 @@ export const runtime = "nodejs"
 const USER_AGENT =
   "Mozilla/5.0 (compatible; Tana/1.0; +https://github.com/tana-bookmarks)"
 
-const MAX_FAVICON_BYTES = 1 * 1024 * 1024 // 1MB
+const MAX_FAVICON_BYTES = 1 * 1024 * 1024
 const FETCH_TIMEOUT_MS = 8000
 
 const isBlockedHostname = (hostname: string) => {
@@ -53,8 +53,6 @@ export const GET = async (request: Request) => {
     return jsonError("URL too long", 422)
   }
 
-  // Allow data: URLs to pass through? Don't proxy them - client should handle directly.
-  // But if someone requests data: via proxy, reject.
   if (urlParam.startsWith("data:")) {
     return jsonError("data: URLs not proxied", 422)
   }
@@ -96,12 +94,10 @@ export const GET = async (request: Request) => {
         ?.trim()
         .toLowerCase() ?? ""
 
-    // Reject obvious HTML error pages
     if (contentType.includes("text/html")) {
       return jsonError("Not an image", 502)
     }
 
-    // Only allow image/* or known icon types; be permissive if no CT
     const isImage =
       !contentType ||
       contentType.startsWith("image/") ||

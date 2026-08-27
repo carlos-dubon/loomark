@@ -9,7 +9,6 @@ import {
   PlusIcon,
   Trash2Icon,
 } from "lucide-react"
-import { usePathname, useRouter } from "next/navigation"
 import { useMemo } from "react"
 import { toast } from "sonner"
 
@@ -25,7 +24,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useCollectionActions } from "@/hooks/use-collection-actions"
-import { api } from "@/lib/client-api"
 import {
   buildCollectionTree,
   collectDescendantIds,
@@ -35,9 +33,9 @@ import type { CollectionDTO } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import {
   bookmarkDialogAtom,
+  collectionDeleteDialogAtom,
   collectionDialogAtom,
   collectionsAtom,
-  removeCollectionAtom,
 } from "@/store/atoms"
 
 export const CollectionMenu = ({
@@ -49,15 +47,11 @@ export const CollectionMenu = ({
   className?: string
   align?: "start" | "end"
 }) => {
-  const pathname = usePathname()
-  const router = useRouter()
   const openCollectionDialog = useSetAtom(collectionDialogAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
-  const removeCollection = useSetAtom(removeCollectionAtom)
+  const confirmDelete = useSetAtom(collectionDeleteDialogAtom)
   const collections = useAtomValue(collectionsAtom)
   const { move } = useCollectionActions()
-
-  const href = `/collections/${collection.id}`
 
   const moveTargets = useMemo(() => {
     const excluded = new Set(collectDescendantIds(collections, collection.id))
@@ -84,22 +78,6 @@ export const CollectionMenu = ({
         ? `Moved “${collection.name}” to “${parentName}”`
         : `Moved “${collection.name}” to top level`
     )
-  }
-
-  const onDelete = async () => {
-    try {
-      await api.deleteCollection(collection.id)
-      removeCollection(collection.id)
-      toast.success(`Deleted “${collection.name}”`)
-
-      if (pathname.startsWith(href)) {
-        router.push("/")
-      }
-
-      router.refresh()
-    } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Delete failed")
-    }
   }
 
   return (
@@ -185,9 +163,12 @@ export const CollectionMenu = ({
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onClick={onDelete}>
+        <DropdownMenuItem
+          variant="destructive"
+          onClick={() => confirmDelete(collection)}
+        >
           <Trash2Icon />
-          Delete
+          Delete collection
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
