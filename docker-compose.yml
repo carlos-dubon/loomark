@@ -1,3 +1,5 @@
+name: tana
+
 services:
   db:
     image: postgres:17-alpine
@@ -16,8 +18,7 @@ services:
       retries: 12
 
   app:
-    build:
-      context: .
+    image: ghcr.io/carlos-dubon/tana:${TANA_VERSION:-latest}
     restart: unless-stopped
     depends_on:
       db:
