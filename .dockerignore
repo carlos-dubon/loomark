@@ -10,3 +10,5 @@ lib/generated
 .DS_Store
 README.md
 .claude
+backups
+scripts

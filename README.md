@@ -2,6 +2,107 @@
 
 棚 — *shelf*. A self hosted bookmark manager: pinned websites on the homepage, full text search, a nested collections tree, and Chrome compatible import/export.
 
+## Install
+
+You need Docker and a machine to leave it running on. Nothing else — the image is prebuilt, so there is no repo to clone and no build step.
+
+```bash
+mkdir tana && cd tana
+curl -O https://raw.githubusercontent.com/carlos-dubon/tana/main/docker-compose.yml
+curl -o .env https://raw.githubusercontent.com/carlos-dubon/tana/main/.env.example
+```
+
+Open `.env` and set `AUTH_SECRET` to a random value:
+
+```bash
+openssl rand -base64 32
+```
+
+If you will reach tana at anything other than `http://localhost:3000`, set `AUTH_URL` to that origin too. Then start it:
+
+```bash
+docker compose up -d
+```
+
+tana is on http://localhost:3000. The first account you create becomes the owner — create it, then set `ALLOW_REGISTRATION=false` in `.env` and run `docker compose up -d` again to close sign ups.
+
+## Upgrade
+
+New releases are published to GitHub Container Registry. Upgrading is a pull and a restart, from any version to any later version:
+
+```bash
+docker compose pull && docker compose up -d
+```
+
+Database migrations run automatically when the container starts, in order, so a box sitting on `0.0.1` catches up to the newest release in one step. Nothing to run by hand.
+
+There is a script that takes a database backup first, which is the safer habit:
+
+```bash
+curl -O https://raw.githubusercontent.com/carlos-dubon/tana/main/scripts/upgrade.sh
+chmod +x upgrade.sh
+./upgrade.sh
+```
+
+It writes a timestamped dump to `backups/` and then does the pull and restart.
+
+By default you track `latest`. To pin a version instead, set `TANA_VERSION` in `.env`:
+
+```
+TANA_VERSION="0.2.5"
+```
+
+The version you are running is shown in Settings, and at `GET /api/health`.
+
+### Rolling back
+
+Set `TANA_VERSION` to the older release and run `docker compose up -d`. Note that migrations are not reversible — if the newer version migrated your database, restore the dump you took before upgrading:
+
+```bash
+gunzip -c backups/tana-<timestamp>.sql.gz | docker compose exec -T db psql -U tana -d tana
+```
+
+## Development
+
+Requires Node 24, pnpm, and Docker.
+
+```bash
+git clone https://github.com/carlos-dubon/tana.git && cd tana
+cp .env.example .env
+pnpm install
+docker compose up -d db
+pnpm run db:migrate
+pnpm run dev
+```
+
+To build and run the image locally instead of pulling it:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+```
+
+### Releasing
+
+One command:
+
+```bash
+pnpm version 0.2.5
+```
+
+That runs typecheck and lint, bumps `package.json`, commits, tags `v0.2.5`, and pushes the tag. CI takes it from there: it builds `linux/amd64` and `linux/arm64` natively, pushes to `ghcr.io/carlos-dubon/tana` as `0.2.5`, `0.2`, and `latest`, and opens a GitHub release with generated notes.
+
+`patch`, `minor`, and `major` work in place of an explicit number. The checks run before the tag exists, so a failing typecheck stops the release rather than shipping it. Your working tree must be clean.
+
+To build the image locally before tagging:
+
+```bash
+pnpm run docker:build
+```
+
+### Schema changes
+
+`pnpm run db:migrate` creates a migration from your schema edits. Commit the generated folder in `prisma/migrations` — that file is what lets every self hosted instance catch up on its next start. Prefer additive migrations; a column drop takes data with it on machines you cannot see.
+
 ## Import and export
 
 Settings holds both sides of the Netscape bookmark file format, the HTML file every
@@ -19,62 +120,36 @@ backup and as a way into any browser. Pinned state rides along in a custom attri
 that other browsers ignore, which keeps a tana export → tana import round trip
 lossless.
 
+## Environment
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `AUTH_SECRET` | yes | Session encryption key |
+| `AUTH_URL` | yes | Public origin of the instance |
+| `TANA_VERSION` | no | Image tag to run, defaults to `latest` |
+| `ALLOW_REGISTRATION` | no | `false` blocks sign ups once an account exists |
+| `APP_PORT` | no | Host port, defaults to `3000` |
+| `POSTGRES_USER` `POSTGRES_PASSWORD` `POSTGRES_DB` | no | Database credentials |
+| `DATABASE_URL` | yes outside Docker | PostgreSQL connection string, set for you by Compose |
+
 ## Stack
 
 Next.js 16 (App Router + Route Handlers) · React 19 · TypeScript · Tailwind CSS 4 · shadcn/ui on Base UI · Jotai · Zod 4 · Auth.js (NextAuth) · Prisma 7 · PostgreSQL
-
-## Run with Docker
-
-```bash
-cp .env.example .env
-```
-
-Set `AUTH_SECRET` in `.env` to a random value:
-
-```bash
-openssl rand -base64 32
-```
-
-Then start the stack:
-
-```bash
-docker compose up -d --build
-```
-
-The app is on http://localhost:3000. Migrations run automatically on every container start. The first account you create becomes the owner; set `ALLOW_REGISTRATION=false` afterwards to close sign ups.
-
-## Run locally
-
-Requires Node 24 and a PostgreSQL instance.
-
-```bash
-npm install
-cp .env.example .env
-npm run db:migrate
-npm run dev
-```
 
 ## Scripts
 
 | Script | Purpose |
 | --- | --- |
-| `npm run dev` | Development server |
-| `npm run build` | Generate the Prisma client and build |
-| `npm run start` | Production server |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | TypeScript |
-| `npm run db:migrate` | Create and apply a migration |
-| `npm run db:deploy` | Apply pending migrations |
-| `npm run db:studio` | Prisma Studio |
-
-## Environment
-
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `DATABASE_URL` | yes | PostgreSQL connection string |
-| `AUTH_SECRET` | yes | Session encryption key |
-| `AUTH_URL` | yes | Public origin of the instance |
-| `ALLOW_REGISTRATION` | no | `false` blocks sign ups once an account exists |
+| `pnpm run dev` | Development server |
+| `pnpm run build` | Generate the Prisma client and build |
+| `pnpm run start` | Production server |
+| `pnpm run lint` | ESLint |
+| `pnpm run typecheck` | TypeScript |
+| `pnpm run db:migrate` | Create and apply a migration |
+| `pnpm run db:deploy` | Apply pending migrations |
+| `pnpm run db:studio` | Prisma Studio |
+| `pnpm run docker:build` | Build the production image locally |
+| `pnpm version <ver>` | Check, bump, tag, and push a release |
 
 ## API
 
@@ -92,7 +167,7 @@ All routes require a session cookie except `POST /api/register` and `GET /api/he
 | `GET` | `/api/tags` | List tags |
 | `GET` | `/api/metadata?url=` | Title, description, favicon and preview image for a URL |
 | `GET` `PATCH` | `/api/appearance` | Read and update the theme preset and view mode |
-| `GET` | `/api/health` | Liveness and database check |
+| `GET` | `/api/health` | Liveness, database check, and running version |
 
 ## Shortcuts
 
