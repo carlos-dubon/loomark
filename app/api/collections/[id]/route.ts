@@ -1,10 +1,10 @@
 import { jsonError, parseBody, requireUserId } from "@/lib/api"
-import { ensureUnsortedCollection } from "@/lib/collections"
 import { prisma } from "@/lib/prisma"
 import { getCollections } from "@/lib/queries"
 import { collectionUpdateSchema } from "@/lib/schemas"
-import { serializeCollection } from "@/lib/serialize"
+import { serializeBookmark, serializeCollection } from "@/lib/serialize"
 import { collectDescendantIds } from "@/lib/tree"
+import type { CollectionDeletion } from "@/lib/types"
 
 type Context = { params: Promise<{ id: string }> }
 
@@ -74,7 +74,7 @@ export const DELETE = async (_request: Request, { params }: Context) => {
   const { id } = await params
   const collections = await prisma.collection.findMany({
     where: { userId },
-    select: { id: true, parentId: true, kind: true },
+    include: { _count: { select: { bookmarks: true } } },
   })
 
   const existing = collections.find((collection) => collection.id === id)
@@ -87,18 +87,25 @@ export const DELETE = async (_request: Request, { params }: Context) => {
     return jsonError("Unsorted cannot be deleted", 400)
   }
 
-  const unsortedId = await ensureUnsortedCollection(userId)
+  const doomed = collectDescendantIds(collections, id)
+
+  const bookmarks = await prisma.bookmark.findMany({
+    where: { userId, collectionId: { in: doomed } },
+  })
 
   await prisma.$transaction([
-    prisma.bookmark.updateMany({
-      where: {
-        userId,
-        collectionId: { in: collectDescendantIds(collections, id) },
-      },
-      data: { collectionId: unsortedId },
+    prisma.bookmark.deleteMany({
+      where: { userId, collectionId: { in: doomed } },
     }),
     prisma.collection.delete({ where: { id } }),
   ])
 
-  return new Response(null, { status: 204 })
+  const removed = new Set(doomed)
+
+  return Response.json({
+    collections: collections
+      .filter((collection) => removed.has(collection.id))
+      .map(serializeCollection),
+    bookmarks: bookmarks.map(serializeBookmark),
+  } satisfies CollectionDeletion)
 }

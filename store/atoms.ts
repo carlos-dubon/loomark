@@ -2,9 +2,10 @@ import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
 import type { SortOrder } from "@/lib/sort"
+import type { ViewMode } from "@/lib/view-mode"
+import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
+import type { AppearanceDTO } from "@/lib/themes/appearance"
 import type { BookmarkDTO, CollectionDTO } from "@/lib/types"
-
-export type ViewMode = "grid" | "list"
 
 export type BookmarkDialogState = {
   open: boolean
@@ -24,6 +25,44 @@ type BookmarkListState = {
 }
 
 export const collectionsAtom = atom<CollectionDTO[]>([])
+
+export const appearanceAtom = atom<AppearanceDTO>(DEFAULT_APPEARANCE)
+
+export const themeCssAtom = atom("")
+
+export const fontHrefAtom = atom<string | null>(null)
+
+export const selectedBookmarkIdsAtom = atom<ReadonlySet<string>>(
+  new Set<string>()
+)
+
+export const toggleBookmarkSelectionAtom = atom(
+  null,
+  (get, set, id: string) => {
+    const next = new Set(get(selectedBookmarkIdsAtom))
+
+    if (!next.delete(id)) {
+      next.add(id)
+    }
+
+    set(selectedBookmarkIdsAtom, next)
+  }
+)
+
+export const setBookmarkSelectionAtom = atom(
+  null,
+  (_get, set, ids: Iterable<string>) => {
+    set(selectedBookmarkIdsAtom, new Set(ids))
+  }
+)
+
+export const clearBookmarkSelectionAtom = atom(null, (_get, set) => {
+  set(selectedBookmarkIdsAtom, new Set<string>())
+})
+
+export const deleteDialogAtom = atom<BookmarkDTO[]>([])
+
+export const collectionDeleteDialogAtom = atom<CollectionDTO | null>(null)
 
 export const bookmarkListAtom = atom<BookmarkListState>({
   source: [],
@@ -68,12 +107,9 @@ export const clearRecentSearchesAtom = atom(null, (_get, set) => {
   set(recentSearchesAtom, [])
 })
 
-export const viewModeAtom = atomWithStorage<ViewMode>("tana.view-mode", "grid")
+export const viewModeAtom = atom<ViewMode>("grid")
 
-export const sortOrderAtom = atomWithStorage<SortOrder>(
-  "tana.sort-order",
-  "newest"
-)
+export const sortOrderAtom = atom<SortOrder>("newest")
 
 export const bookmarkDialogAtom = atom<BookmarkDialogState>({
   open: false,
@@ -114,23 +150,63 @@ export const upsertBookmarkAtom = atom(
   }
 )
 
-export const removeBookmarkAtom = atom(null, (get, set, id: string) => {
-  const results = get(searchResultsAtom)
+export const removeBookmarksAtom = atom(
+  null,
+  (get, set, ids: Iterable<string>) => {
+    const removed = new Set(ids)
+    const results = get(searchResultsAtom)
 
-  if (results) {
-    set(
-      searchResultsAtom,
-      results.filter((item) => item.id !== id)
-    )
+    if (results) {
+      set(
+        searchResultsAtom,
+        results.filter((item) => !removed.has(item.id))
+      )
+    }
+
+    const list = get(bookmarkListAtom)
+
+    set(bookmarkListAtom, {
+      ...list,
+      items: list.items.filter((item) => !removed.has(item.id)),
+    })
+
+    const selected = get(selectedBookmarkIdsAtom)
+
+    if (selected.size > 0) {
+      set(
+        selectedBookmarkIdsAtom,
+        new Set([...selected].filter((id) => !removed.has(id)))
+      )
+    }
   }
+)
 
-  const list = get(bookmarkListAtom)
+export const restoreBookmarksAtom = atom(
+  null,
+  (get, set, bookmarks: BookmarkDTO[]) => {
+    const results = get(searchResultsAtom)
 
-  set(bookmarkListAtom, {
-    ...list,
-    items: list.items.filter((item) => item.id !== id),
-  })
-})
+    if (results) {
+      const known = new Set(results.map((item) => item.id))
+
+      set(searchResultsAtom, [
+        ...bookmarks.filter((item) => !known.has(item.id)),
+        ...results,
+      ])
+    }
+
+    const list = get(bookmarkListAtom)
+    const known = new Set(list.items.map((item) => item.id))
+
+    set(bookmarkListAtom, {
+      ...list,
+      items: [
+        ...bookmarks.filter((item) => !known.has(item.id)),
+        ...list.items,
+      ],
+    })
+  }
+)
 
 export const upsertCollectionAtom = atom(
   null,

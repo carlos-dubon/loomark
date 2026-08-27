@@ -23,3 +23,8 @@ const comparators: Record<
 
 export const sortBookmarks = (bookmarks: BookmarkDTO[], order: SortOrder) =>
   [...bookmarks].sort(comparators[order])
+
+const KNOWN = new Set<string>(SORT_ORDERS)
+
+export const toSortOrder = (value: string): SortOrder =>
+  KNOWN.has(value) ? (value as SortOrder) : "newest"

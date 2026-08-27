@@ -8,6 +8,7 @@ import { useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
 
 import { PageHeader } from "@/components/page-header"
+import { ThemePicker } from "@/components/settings/theme-picker"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -92,9 +93,25 @@ export const SettingsView = ({
 
   return (
     <>
-      <PageHeader title="Settings" description="Import and export your shelf" />
+      <PageHeader
+        title="Settings"
+        description="Appearance, import and export"
+      />
       <div className="flex min-h-0 flex-1 scroll-fade-b flex-col gap-4 overflow-y-auto p-4 md:p-6">
-        <Card className="max-w-2xl">
+        <Card className="w-full max-w-2xl shrink-0">
+          <CardHeader>
+            <CardTitle>Theme</CardTitle>
+            <CardDescription>
+              Every preset from tweakcn, colours, radius, shadows and fonts
+              included. Light and dark both come along, so the mode toggle keeps
+              working. Press D to switch modes.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ThemePicker />
+          </CardContent>
+        </Card>
+        <Card className="w-full max-w-2xl shrink-0">
           <CardHeader>
             <CardTitle>Import bookmarks</CardTitle>
             <CardDescription>
@@ -148,7 +165,7 @@ export const SettingsView = ({
             </form>
           </CardContent>
         </Card>
-        <Card className="max-w-2xl">
+        <Card className="w-full max-w-2xl shrink-0">
           <CardHeader>
             <CardTitle>Export bookmarks</CardTitle>
             <CardDescription>
