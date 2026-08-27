@@ -4,6 +4,7 @@ import { useSetAtom } from "jotai"
 import { SearchIcon } from "lucide-react"
 import { useSyncExternalStore } from "react"
 
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -33,9 +34,10 @@ export const SearchTrigger = () => {
           <span className="truncate group-data-[collapsible=icon]:hidden">
             Search for bookmarks
           </span>
-          <kbd className="ml-auto inline-flex h-(--icon-size) shrink-0 items-center rounded border bg-background px-1.5 text-[10px] leading-none text-muted-foreground group-data-[collapsible=icon]:hidden">
-            {isMac ? "⌘ K" : "Ctrl K"}
-          </kbd>
+          <KbdGroup className="ml-auto shrink-0 group-data-[collapsible=icon]:hidden">
+            <Kbd>{isMac ? "⌘" : "Ctrl"}</Kbd>
+            <Kbd>K</Kbd>
+          </KbdGroup>
         </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>

@@ -94,11 +94,11 @@ export const BookmarkListView = ({
           <CollectionMenu collection={collection} />
         ) : null}
       </PageHeader>
-      <div className="flex min-h-0 flex-1 scroll-fade-b flex-col gap-6 overflow-y-auto p-4 md:p-6">
+      <div className="@container flex min-h-0 flex-1 scroll-fade-b flex-col gap-6 overflow-y-auto p-4 md:p-6">
         {hasCollections ? (
           <section className="flex flex-col gap-3">
             <h2 className="text-sm font-semibold">Collections</h2>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+            <div className="grid gap-3 @lg:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-4">
               {subcollections.map((child) => (
                 <CollectionCard key={child.id} collection={child} />
               ))}
