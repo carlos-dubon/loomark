@@ -1,20 +1,23 @@
 "use client"
 
 import { useDraggable } from "@dnd-kit/react"
-import { CalendarIcon, FolderIcon, LinkIcon, PinIcon } from "lucide-react"
+import { CalendarIcon, LinkIcon, PinIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { BookmarkMenu } from "@/components/bookmark-menu"
+import { CollectionIcon } from "@/components/collection-icon"
 import { FaviconImage } from "@/components/favicon-image"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
 import { useBookmarkPreview } from "@/hooks/use-bookmark-preview"
-import { useCollectionName } from "@/hooks/use-collection-name"
+import { useBookmarkSelected } from "@/hooks/use-bookmark-selection"
+import { useCollection } from "@/hooks/use-collection"
 import { DRAG_TYPE } from "@/lib/dnd"
 import { formatDate, hostFromUrl } from "@/lib/format"
 import type { BookmarkDTO } from "@/lib/types"
 import { cn } from "@/lib/utils"
-import type { ViewMode } from "@/store/atoms"
+import type { ViewMode } from "@/lib/view-mode"
 
 type DragProps = {
   ref: (element: Element | null) => void
@@ -24,17 +27,47 @@ type DragProps = {
 const bookmarkLabel = (bookmark: BookmarkDTO) =>
   bookmark.title?.trim() || hostFromUrl(bookmark.url)
 
+type SelectProps = {
+  selected: boolean
+  selecting: boolean
+  onSelect: () => void
+}
+
+const SelectToggle = ({
+  bookmark,
+  selected,
+  selecting,
+  onSelect,
+  className,
+}: { bookmark: BookmarkDTO; className?: string } & SelectProps) => (
+  <span
+    className={cn(
+      "relative z-20 flex shrink-0 items-center transition-opacity",
+      !selected &&
+        !selecting &&
+        "opacity-0 group-focus-within:opacity-100 group-hover:opacity-100",
+      className
+    )}
+  >
+    <Checkbox
+      checked={selected}
+      onCheckedChange={onSelect}
+      aria-label={`Select ${bookmarkLabel(bookmark)}`}
+    />
+  </span>
+)
+
 const MetaItem = ({
-  icon: Icon,
+  icon,
   className,
   children,
 }: {
-  icon: typeof LinkIcon
+  icon: React.ReactNode
   className?: string
   children: React.ReactNode
 }) => (
   <span className={cn("flex min-w-0 items-center gap-1", className)}>
-    <Icon className="size-3 shrink-0" />
+    {icon}
     <span className="truncate">{children}</span>
   </span>
 )
@@ -48,7 +81,7 @@ const BookmarkMeta = ({
   wrap?: boolean
   className?: string
 }) => {
-  const collectionName = useCollectionName(bookmark.collectionId)
+  const collection = useCollection(bookmark.collectionId)
   const secondary = wrap ? "flex" : "hidden sm:flex"
 
   return (
@@ -59,13 +92,26 @@ const BookmarkMeta = ({
         className
       )}
     >
-      <MetaItem icon={LinkIcon}>{hostFromUrl(bookmark.url)}</MetaItem>
-      {collectionName ? (
-        <MetaItem icon={FolderIcon} className={secondary}>
-          {collectionName}
+      <MetaItem icon={<LinkIcon className="size-3 shrink-0" />}>
+        {hostFromUrl(bookmark.url)}
+      </MetaItem>
+      {collection ? (
+        <MetaItem
+          icon={
+            <CollectionIcon
+              name={collection.icon}
+              className="size-3 shrink-0"
+            />
+          }
+          className={secondary}
+        >
+          {collection.name}
         </MetaItem>
       ) : null}
-      <MetaItem icon={CalendarIcon} className={cn("shrink-0", secondary)}>
+      <MetaItem
+        icon={<CalendarIcon className="size-3 shrink-0" />}
+        className={cn("shrink-0", secondary)}
+      >
         <time dateTime={bookmark.createdAt}>
           {formatDate(bookmark.createdAt)}
         </time>
@@ -153,14 +199,23 @@ const GridCard = ({
   ref,
   isDragSource,
   pendingPreview,
-}: { bookmark: BookmarkDTO; pendingPreview: boolean } & DragProps) => (
+  ...select
+}: { bookmark: BookmarkDTO; pendingPreview: boolean } & DragProps &
+  SelectProps) => (
   <article
     ref={ref}
+    data-selected={select.selected || undefined}
     className={cn(
       "group relative flex touch-none flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:border-foreground/20",
-      isDragSource && "opacity-40"
+      isDragSource && "opacity-40",
+      select.selected && "border-primary ring-1 ring-primary"
     )}
   >
+    <SelectToggle
+      bookmark={bookmark}
+      {...select}
+      className="absolute top-2 left-2 rounded-[min(var(--radius-sm),6px)] bg-background/80 p-1 backdrop-blur"
+    />
     <BookmarkPreview bookmark={bookmark} pending={pendingPreview} />
     <div className="flex flex-1 flex-col gap-2 p-3">
       <div className="flex items-start gap-2">
@@ -192,14 +247,18 @@ const ListRow = ({
   bookmark,
   ref,
   isDragSource,
-}: { bookmark: BookmarkDTO } & DragProps) => (
+  ...select
+}: { bookmark: BookmarkDTO } & DragProps & SelectProps) => (
   <article
     ref={ref}
+    data-selected={select.selected || undefined}
     className={cn(
       "group relative flex touch-none items-center gap-3 rounded-lg border bg-card px-3 py-2 transition-colors hover:border-foreground/20",
-      isDragSource && "opacity-40"
+      isDragSource && "opacity-40",
+      select.selected && "border-primary ring-1 ring-primary"
     )}
   >
+    <SelectToggle bookmark={bookmark} {...select} />
     <FaviconImage src={bookmark.faviconUrl} className="size-5 shrink-0" />
     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
       <a
@@ -232,14 +291,28 @@ export const BookmarkCard = ({
 
   const pendingPreview = useBookmarkPreview(bookmark, mode === "grid")
 
+  const { selected, selecting, toggle } = useBookmarkSelected(bookmark.id)
+
+  const select = {
+    selected,
+    selecting,
+    onSelect: () => toggle(bookmark.id),
+  }
+
   return mode === "grid" ? (
     <GridCard
       bookmark={bookmark}
       ref={ref}
       isDragSource={isDragSource}
       pendingPreview={pendingPreview}
+      {...select}
     />
   ) : (
-    <ListRow bookmark={bookmark} ref={ref} isDragSource={isDragSource} />
+    <ListRow
+      bookmark={bookmark}
+      ref={ref}
+      isDragSource={isDragSource}
+      {...select}
+    />
   )
 }

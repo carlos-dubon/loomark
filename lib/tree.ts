@@ -90,6 +90,30 @@ export const collectDescendantIds = (
   return ids
 }
 
+export const parentsFirst = <
+  T extends { id: string; parentId?: string | null },
+>(
+  collections: T[]
+): T[] => {
+  const byId = new Map(
+    collections.map((collection) => [collection.id, collection])
+  )
+
+  const depthOf = (collection: T, seen = new Set<string>()): number => {
+    const parent = collection.parentId ? byId.get(collection.parentId) : null
+
+    if (!parent || seen.has(collection.id)) {
+      return 0
+    }
+
+    seen.add(collection.id)
+
+    return depthOf(parent, seen) + 1
+  }
+
+  return [...collections].sort((a, b) => depthOf(a) - depthOf(b))
+}
+
 export type FlatCollection = CollectionNode & { depth: number }
 
 export const flattenTree = (

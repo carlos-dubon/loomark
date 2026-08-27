@@ -6,7 +6,7 @@ export const runtime = "nodejs"
 const USER_AGENT =
   "Mozilla/5.0 (compatible; Tana/1.0; +https://github.com/tana-bookmarks)"
 
-const MAX_FAVICON_BYTES = 1 * 1024 * 1024 // 1MB
+const MAX_FAVICON_BYTES = 1 * 1024 * 1024
 const FETCH_TIMEOUT_MS = 8000
 
 const isBlockedHostname = (hostname: string) => {

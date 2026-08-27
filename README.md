@@ -84,11 +84,14 @@ All routes require a session cookie except `POST /api/register` and `GET /api/he
 | --- | --- | --- |
 | `POST` | `/api/register` | Create an account |
 | `GET` `POST` | `/api/bookmarks` | List (`q`, `collectionId`, `tag`, `pinned`, `unsorted`, `take`, `skip`) and create |
+| `DELETE` | `/api/bookmarks` | Delete many by `ids` |
+| `POST` | `/api/bookmarks/restore` | Put deleted bookmarks back, ids and dates intact |
 | `GET` `PATCH` `DELETE` | `/api/bookmarks/[id]` | Read, update, delete |
 | `GET` `POST` | `/api/collections` | List and create |
 | `PATCH` `DELETE` | `/api/collections/[id]` | Update and delete |
 | `GET` | `/api/tags` | List tags |
 | `GET` | `/api/metadata?url=` | Title, description, favicon and preview image for a URL |
+| `GET` `PATCH` | `/api/appearance` | Read and update the theme preset and view mode |
 | `GET` | `/api/health` | Liveness and database check |
 
 ## Shortcuts
@@ -98,3 +101,4 @@ All routes require a session cookie except `POST /api/register` and `GET /api/he
 | `/` | Focus search |
 | `⌘B` / `Ctrl+B` | Toggle the sidebar |
 | `D` | Toggle dark mode |
+| `Esc` | Clear the current bookmark selection |

@@ -33,7 +33,7 @@ export const SearchTrigger = () => {
           <span className="truncate group-data-[collapsible=icon]:hidden">
             Search for bookmarks
           </span>
-          <kbd className="ml-auto rounded border bg-background px-1.5 py-0.5 text-[10px] leading-none text-muted-foreground group-data-[collapsible=icon]:hidden">
+          <kbd className="ml-auto inline-flex h-(--icon-size) shrink-0 items-center rounded border bg-background px-1.5 text-[10px] leading-none text-muted-foreground group-data-[collapsible=icon]:hidden">
             {isMac ? "⌘ K" : "Ctrl K"}
           </kbd>
         </SidebarMenuButton>

@@ -6,12 +6,11 @@ import { toast } from "sonner"
 
 import { api } from "@/lib/client-api"
 import type { BookmarkDTO } from "@/lib/types"
-import { removeBookmarkAtom, upsertBookmarkAtom } from "@/store/atoms"
+import { upsertBookmarkAtom } from "@/store/atoms"
 
 export const useBookmarkActions = () => {
   const router = useRouter()
   const upsertBookmark = useSetAtom(upsertBookmarkAtom)
-  const removeBookmark = useSetAtom(removeBookmarkAtom)
 
   const togglePin = async (bookmark: BookmarkDTO) => {
     try {
@@ -37,17 +36,6 @@ export const useBookmarkActions = () => {
     }
   }
 
-  const destroy = async (bookmark: BookmarkDTO) => {
-    try {
-      await api.deleteBookmark(bookmark.id)
-      removeBookmark(bookmark.id)
-      toast.success("Bookmark deleted")
-      router.refresh()
-    } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Delete failed")
-    }
-  }
-
   const copyLink = async (bookmark: BookmarkDTO) => {
     try {
       await navigator.clipboard.writeText(bookmark.url)
@@ -57,5 +45,5 @@ export const useBookmarkActions = () => {
     }
   }
 
-  return { togglePin, move, destroy, copyLink }
+  return { togglePin, move, copyLink }
 }

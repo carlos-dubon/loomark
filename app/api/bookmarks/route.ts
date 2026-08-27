@@ -4,7 +4,11 @@ import { normalizeUrl } from "@/lib/format"
 import { fetchUrlMetadata } from "@/lib/metadata"
 import { prisma } from "@/lib/prisma"
 import { getBookmarks } from "@/lib/queries"
-import { bookmarkCreateSchema, bookmarkQuerySchema } from "@/lib/schemas"
+import {
+  bookmarkBulkDeleteSchema,
+  bookmarkCreateSchema,
+  bookmarkQuerySchema,
+} from "@/lib/schemas"
 import { serializeBookmark } from "@/lib/serialize"
 
 export const GET = async (request: Request) => {
@@ -76,4 +80,24 @@ export const POST = async (request: Request) => {
   })
 
   return Response.json(serializeBookmark(bookmark), { status: 201 })
+}
+
+export const DELETE = async (request: Request) => {
+  const userId = await requireUserId()
+
+  if (!userId) {
+    return jsonError("Unauthorized", 401)
+  }
+
+  const { data, response } = await parseBody(request, bookmarkBulkDeleteSchema)
+
+  if (!data) {
+    return response
+  }
+
+  const { count } = await prisma.bookmark.deleteMany({
+    where: { userId, id: { in: data.ids } },
+  })
+
+  return Response.json({ count })
 }

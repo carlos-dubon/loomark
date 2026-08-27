@@ -28,7 +28,11 @@ import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
 import { buildCollectionTree, flattenTree } from "@/lib/tree"
 import type { BookmarkDTO } from "@/lib/types"
 import { cn } from "@/lib/utils"
-import { bookmarkDialogAtom, collectionsAtom } from "@/store/atoms"
+import {
+  bookmarkDialogAtom,
+  collectionsAtom,
+  deleteDialogAtom,
+} from "@/store/atoms"
 
 export const BookmarkMenu = ({
   bookmark,
@@ -39,7 +43,8 @@ export const BookmarkMenu = ({
 }) => {
   const collections = useAtomValue(collectionsAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
-  const { togglePin, move, destroy, copyLink } = useBookmarkActions()
+  const confirmDelete = useSetAtom(deleteDialogAtom)
+  const { togglePin, move, copyLink } = useBookmarkActions()
 
   const flat = useMemo(
     () => flattenTree(buildCollectionTree(collections)),
@@ -117,10 +122,10 @@ export const BookmarkMenu = ({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
-          onClick={() => destroy(bookmark)}
+          onClick={() => confirmDelete([bookmark])}
         >
           <Trash2Icon />
-          Delete
+          Delete bookmark
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
