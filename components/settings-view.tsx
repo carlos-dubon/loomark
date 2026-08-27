@@ -1,10 +1,14 @@
 "use client"
 
 import { useSetAtom } from "jotai"
-import { DownloadIcon, Loader2Icon, UploadIcon } from "lucide-react"
+import {
+  DownloadIcon,
+  FileCodeIcon,
+  Loader2Icon,
+  UploadIcon,
+} from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
 
 import { PageHeader } from "@/components/page-header"
@@ -17,11 +21,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import {
+  Dropzone,
+  DropzoneArea,
+  DropzoneDescription,
+  DropzoneFile,
+  DropzoneFileList,
+  DropzoneIcon,
+  DropzoneInput,
+  DropzoneTitle,
+} from "@/components/ui/dropzone"
 import { api } from "@/lib/client-api"
 import type { ImportSummary } from "@/lib/types"
 import { collectionsAtom } from "@/store/atoms"
+
+const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 
 const plural = (count: number, word: string) =>
   `${count} ${count === 1 ? word : `${word}s`}`
@@ -50,33 +64,23 @@ export const SettingsView = ({
   const router = useRouter()
   const setCollections = useSetAtom(collectionsAtom)
 
+  const [file, setFile] = useState<File | null>(null)
   const [summary, setSummary] = useState<ImportSummary | null>(null)
+  const [importing, setImporting] = useState(false)
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    control,
-    formState: { isSubmitting },
-  } = useForm<{ files: FileList | null }>({ defaultValues: { files: null } })
-
-  const files = useWatch({ control, name: "files" })
-  const fileField = register("files", { required: true })
-
-  const onImport = handleSubmit(async (values) => {
-    const file = values.files?.[0]
-
+  const onImport = async () => {
     if (!file) {
       return
     }
 
     setSummary(null)
+    setImporting(true)
 
     try {
       const result = await api.importBookmarks(file)
 
       setSummary(result)
-      reset()
+      setFile(null)
 
       if (result.bookmarks === 0) {
         toast.info("Nothing new to import")
@@ -88,8 +92,10 @@ export const SettingsView = ({
       router.refresh()
     } catch (cause) {
       toast.error(cause instanceof Error ? cause.message : "Import failed")
+    } finally {
+      setImporting(false)
     }
-  })
+  }
 
   return (
     <>
@@ -120,49 +126,64 @@ export const SettingsView = ({
               become collections and links you already saved are left alone.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={onImport} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="import-file">Bookmarks file</Label>
-                <Input
-                  id="import-file"
-                  type="file"
-                  accept=".html,.htm,text/html"
-                  disabled={isSubmitting}
-                  className="h-auto py-1.5 file:mr-2 file:cursor-pointer"
-                  {...fileField}
-                  onChange={(event) => {
-                    void fileField.onChange(event)
-                    setSummary(null)
-                  }}
-                />
-              </div>
-              {summary ? (
-                <div
-                  className="rounded-lg border border-dashed px-3 py-2 text-sm"
-                  role="status"
-                >
-                  {summaryLines(summary).map((line) => (
-                    <p key={line} className="text-muted-foreground">
-                      {line}
-                    </p>
-                  ))}
-                </div>
+          <CardContent className="flex flex-col gap-4">
+            <Dropzone
+              accept=".html,.htm,text/html"
+              maxSize={IMPORT_MAX_BYTES}
+              disabled={importing}
+              onDrop={(files) => {
+                setFile(files[0])
+                setSummary(null)
+              }}
+              onError={(message) => toast.error(message)}
+            >
+              <DropzoneInput />
+              <DropzoneArea>
+                <DropzoneIcon />
+                <DropzoneTitle>
+                  Drop your bookmarks file or click to browse
+                </DropzoneTitle>
+                <DropzoneDescription>
+                  A single .html export, up to 10 MB
+                </DropzoneDescription>
+              </DropzoneArea>
+              {file ? (
+                <DropzoneFileList>
+                  <DropzoneFile
+                    file={file}
+                    preview={
+                      <FileCodeIcon className="size-4 shrink-0 text-muted-foreground" />
+                    }
+                    onRemove={importing ? undefined : () => setFile(null)}
+                  />
+                </DropzoneFileList>
               ) : null}
-              <div>
-                <Button
-                  type="submit"
-                  disabled={!files || files.length === 0 || isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <Loader2Icon className="animate-spin" />
-                  ) : (
-                    <UploadIcon />
-                  )}
-                  {isSubmitting ? "Importing…" : "Import"}
-                </Button>
+            </Dropzone>
+            {summary ? (
+              <div
+                className="rounded-lg border border-dashed px-3 py-2 text-sm"
+                role="status"
+              >
+                {summaryLines(summary).map((line) => (
+                  <p key={line} className="text-muted-foreground">
+                    {line}
+                  </p>
+                ))}
               </div>
-            </form>
+            ) : null}
+            <div>
+              <Button
+                disabled={!file || importing}
+                onClick={() => void onImport()}
+              >
+                {importing ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : (
+                  <UploadIcon />
+                )}
+                {importing ? "Importing…" : "Import"}
+              </Button>
+            </div>
           </CardContent>
         </Card>
         <Card className="w-full max-w-2xl shrink-0">
