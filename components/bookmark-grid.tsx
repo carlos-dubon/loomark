@@ -2,7 +2,7 @@
 
 import { BookmarkCard } from "@/components/bookmark-card"
 import type { BookmarkDTO } from "@/lib/types"
-import type { ViewMode } from "@/store/atoms"
+import type { ViewMode } from "@/lib/view-mode"
 
 export const BookmarkGrid = ({
   bookmarks,

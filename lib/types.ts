@@ -28,6 +28,11 @@ export type CollectionNode = CollectionDTO & {
   totalCount: number
 }
 
+export type CollectionDeletion = {
+  collections: CollectionDTO[]
+  bookmarks: BookmarkDTO[]
+}
+
 export type UrlMetadata = {
   url: string
   title: string

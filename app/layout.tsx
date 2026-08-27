@@ -6,9 +6,12 @@ import { Providers } from "@/components/providers"
 import { Toaster } from "@/components/ui/sonner"
 import { cn } from "@/lib/utils"
 
-const fontSans = Geist({ subsets: ["latin"], variable: "--font-sans" })
+const fontSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" })
 
-const fontMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
+const fontMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+})
 
 export const metadata: Metadata = {
   title: "tana",

@@ -1,12 +1,15 @@
 import type {
+  AppearanceUpdateInput,
   BookmarkCreateInput,
   BookmarkUpdateInput,
   CollectionCreateInput,
   CollectionMoveInput,
   CollectionUpdateInput,
 } from "@/lib/schemas"
+import type { AppearanceDTO } from "@/lib/themes/appearance"
 import type {
   BookmarkDTO,
+  CollectionDeletion,
   CollectionDTO,
   ImportSummary,
   UrlMetadata,
@@ -72,8 +75,16 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify(input),
     }),
-  deleteBookmark: (id: string) =>
-    request<void>(`/api/bookmarks/${id}`, { method: "DELETE" }),
+  deleteBookmarks: (ids: string[]) =>
+    request<{ count: number }>("/api/bookmarks", {
+      method: "DELETE",
+      body: JSON.stringify({ ids }),
+    }),
+  restoreBookmarks: (bookmarks: BookmarkDTO[]) =>
+    request<BookmarkDTO[]>("/api/bookmarks/restore", {
+      method: "POST",
+      body: JSON.stringify({ bookmarks }),
+    }),
   refreshPreview: (id: string) =>
     request<BookmarkDTO>(`/api/bookmarks/${id}/preview`, { method: "POST" }),
   listCollections: () => request<CollectionDTO[]>("/api/collections"),
@@ -93,7 +104,12 @@ export const api = {
       body: JSON.stringify(input),
     }),
   deleteCollection: (id: string) =>
-    request<void>(`/api/collections/${id}`, { method: "DELETE" }),
+    request<CollectionDeletion>(`/api/collections/${id}`, { method: "DELETE" }),
+  restoreCollection: (deletion: CollectionDeletion) =>
+    request<CollectionDTO[]>("/api/collections/restore", {
+      method: "POST",
+      body: JSON.stringify(deletion),
+    }),
   fetchMetadata: (url: string, signal?: AbortSignal) =>
     request<UrlMetadata>(`/api/metadata?url=${encodeURIComponent(url)}`, {
       signal,
@@ -107,6 +123,11 @@ export const api = {
       body,
     })
   },
+  updateAppearance: (input: AppearanceUpdateInput) =>
+    request<AppearanceDTO>("/api/appearance", {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    }),
   register: (input: { name: string; email: string; password: string }) =>
     request<{ id: string; email: string }>("/api/register", {
       method: "POST",
