@@ -47,3 +47,17 @@ export type ImportSummary = {
   duplicates: number
   skipped: number
 }
+
+export type UserRole = "OWNER" | "MEMBER"
+
+export type InstanceUserDTO = {
+  id: string
+  name: string | null
+  email: string
+  image: string | null
+  role: UserRole
+  createdAt: string
+  bookmarkCount: number
+  collectionCount: number
+  bytes: number
+}

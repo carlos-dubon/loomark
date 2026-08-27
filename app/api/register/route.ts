@@ -31,6 +31,7 @@ export const POST = async (request: Request) => {
       name: data.name,
       email: data.email,
       passwordHash: await hash(data.password, 12),
+      role: userCount === 0 ? "OWNER" : "MEMBER",
     },
   })
 

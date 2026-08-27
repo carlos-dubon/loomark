@@ -128,6 +128,13 @@ export const api = {
       method: "PATCH",
       body: JSON.stringify(input),
     }),
+  resetUserPassword: (id: string, password: string) =>
+    request<void>(`/api/admin/users/${id}/password`, {
+      method: "POST",
+      body: JSON.stringify({ password }),
+    }),
+  deleteUser: (id: string) =>
+    request<void>(`/api/admin/users/${id}`, { method: "DELETE" }),
   register: (input: { name: string; email: string; password: string }) =>
     request<{ id: string; email: string }>("/api/register", {
       method: "POST",
