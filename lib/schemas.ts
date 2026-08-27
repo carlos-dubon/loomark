@@ -14,6 +14,10 @@ export const loginSchema = z.object({
   password: z.string().min(1),
 })
 
+export const passwordResetSchema = z.object({
+  password: z.string().min(8).max(200),
+})
+
 export const bookmarkCreateSchema = z.object({
   url: z.string().trim().min(1).max(2000),
   title: z.string().trim().min(1).max(300).optional(),
@@ -112,6 +116,7 @@ export const collectionRestoreSchema = z.object({
     .max(5000),
 })
 
+export type PasswordResetInput = z.infer<typeof passwordResetSchema>
 export type BookmarkCreateInput = z.infer<typeof bookmarkCreateSchema>
 export type BookmarkUpdateInput = z.infer<typeof bookmarkUpdateSchema>
 export type CollectionCreateInput = z.infer<typeof collectionCreateSchema>

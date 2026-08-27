@@ -4,6 +4,7 @@ import {
   ChevronsUpDownIcon,
   LogOutIcon,
   MoonIcon,
+  ServerIcon,
   SettingsIcon,
   SunIcon,
 } from "lucide-react"
@@ -31,7 +32,13 @@ export type SessionUser = {
   image: string | null
 }
 
-export const UserMenu = ({ user }: { user: SessionUser }) => {
+export const UserMenu = ({
+  user,
+  isOwner,
+}: {
+  user: SessionUser
+  isOwner: boolean
+}) => {
   const { resolvedTheme } = useTheme()
   const toggleTheme = useThemeToggle()
   const label = user.name ?? user.email
@@ -59,6 +66,12 @@ export const UserMenu = ({ user }: { user: SessionUser }) => {
           <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        {isOwner ? (
+          <DropdownMenuItem render={<Link href="/admin" />}>
+            <ServerIcon />
+            Server administration
+          </DropdownMenuItem>
+        ) : null}
         <DropdownMenuItem render={<Link href="/settings" />}>
           <SettingsIcon />
           Settings
