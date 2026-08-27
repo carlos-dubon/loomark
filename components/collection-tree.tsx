@@ -159,7 +159,7 @@ const RootDropZone = () => {
             : "text-muted-foreground"
         )}
       >
-        <CornerLeftUpIcon className="size-3.5" />
+        <CornerLeftUpIcon className="size-(--sidebar-icon-size)" />
         Move to top level
       </div>
     </SidebarMenuItem>

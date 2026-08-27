@@ -168,3 +168,25 @@
     @apply font-sans;
     }
 }
+
+@layer components {
+    [data-slot="sidebar"] {
+        .lucide-plus {
+            scale: 1.25;
+            stroke-width: 1.6;
+        }
+        .lucide-library,
+        .lucide-chevrons-up-down {
+            scale: 1.111;
+            stroke-width: 1.8;
+        }
+        .lucide-house {
+            scale: 0.952;
+            stroke-width: 2.1;
+        }
+        .lucide-inbox {
+            scale: 0.909;
+            stroke-width: 2.2;
+        }
+    }
+}
