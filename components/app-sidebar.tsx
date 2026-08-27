@@ -35,9 +35,11 @@ import {
 
 export const AppSidebar = ({
   user,
+  isOwner,
   collections: initialCollections,
 }: {
   user: SessionUser
+  isOwner: boolean
   collections: CollectionDTO[]
 }) => {
   useHydrateAtoms([[collectionsAtom, initialCollections]])
@@ -111,7 +113,7 @@ export const AppSidebar = ({
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <UserMenu user={user} />
+            <UserMenu user={user} isOwner={isOwner} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

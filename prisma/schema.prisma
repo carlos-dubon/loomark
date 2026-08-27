@@ -7,6 +7,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  OWNER
+  MEMBER
+}
+
 model User {
   id            String       @id @default(cuid())
   name          String?
@@ -14,6 +19,7 @@ model User {
   emailVerified DateTime?
   image         String?
   passwordHash  String?
+  role          UserRole     @default(MEMBER)
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   accounts      Account[]
