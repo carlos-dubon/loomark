@@ -59,30 +59,28 @@ export const HomeView = ({ pinned }: { pinned: BookmarkDTO[] }) => {
       <PageHeader title="Homepage">
         <SortOrderSelect />
       </PageHeader>
-      <div className="relative flex flex-1 flex-col overflow-hidden">
-        <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-y-auto p-4 md:p-6 lg:p-8">
-          {items.length === 0 ? (
-            <div className="my-auto">
-              <EmptyState
-                icon={PinIcon}
-                title="Nothing pinned yet"
-                description="Pin the sites you open every day and they will live right here."
-                action={
-                  <Button variant="outline" onClick={addBookmark}>
-                    <PlusIcon />
-                    Add your first bookmark
-                  </Button>
-                }
-              />
-            </div>
-          ) : (
-            <div className="mx-auto my-auto flex w-full max-w-5xl flex-wrap justify-center gap-x-4 gap-y-6 py-4 sm:gap-x-6 sm:gap-y-8 sm:py-6 lg:gap-x-8">
-              {items.map((bookmark) => (
-                <PinnedItem key={bookmark.id} bookmark={bookmark} />
-              ))}
-            </div>
-          )}
-        </div>
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-4 md:p-6 lg:p-8">
+        {items.length === 0 ? (
+          <div className="my-auto">
+            <EmptyState
+              icon={PinIcon}
+              title="Nothing pinned yet"
+              description="Pin the sites you open every day and they will live right here."
+              action={
+                <Button variant="outline" onClick={addBookmark}>
+                  <PlusIcon />
+                  Add your first bookmark
+                </Button>
+              }
+            />
+          </div>
+        ) : (
+          <div className="mx-auto my-auto flex w-full max-w-5xl flex-wrap justify-center gap-x-4 gap-y-6 py-4 sm:gap-x-6 sm:gap-y-8 sm:py-6 lg:gap-x-8">
+            {items.map((bookmark) => (
+              <PinnedItem key={bookmark.id} bookmark={bookmark} />
+            ))}
+          </div>
+        )}
       </div>
     </>
   )
