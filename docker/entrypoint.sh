@@ -11,7 +11,7 @@ if [ -z "$AUTH_SECRET" ]; then
   exit 1
 fi
 
-echo "tana: applying database migrations"
-npx --no-install prisma migrate deploy
+echo "tana ${APP_VERSION:-dev}: applying database migrations"
+node_modules/.bin/prisma migrate deploy
 
 exec "$@"
