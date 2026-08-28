@@ -51,7 +51,7 @@ export const LoginForm = () => {
     <Card className="w-full max-w-sm">
       <CardHeader>
         <CardTitle>Welcome back</CardTitle>
-        <CardDescription>Sign in to reach your shelf.</CardDescription>
+        <CardDescription>Sign in to reach your library.</CardDescription>
       </CardHeader>
       <form onSubmit={onSubmit} noValidate>
         <CardContent className="flex flex-col gap-4">

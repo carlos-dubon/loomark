@@ -14,7 +14,7 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
       <div className="flex flex-col items-center gap-1">
         <span className="text-4xl leading-none">🗃️</span>
         <span className="text-sm text-muted-foreground">
-          tana — your bookmark shelf
+          Loomark — your bookmark library
         </span>
       </div>
       {children}

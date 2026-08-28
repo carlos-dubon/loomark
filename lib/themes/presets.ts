@@ -6,7 +6,7 @@ import type { ThemePreset } from "@/lib/themes/theme"
 export const THEME_PRESETS: ThemePreset[] = [
   {
     id: "default",
-    label: "Tana",
+    label: "Loomark",
     theme: {
       "font-sans":
         "var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif",
