@@ -14,8 +14,8 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "tana",
-  description: "A self hosted shelf for everything you bookmark.",
+  title: "Loomark",
+  description: "A self hosted home for everything you bookmark.",
 }
 
 const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => (

@@ -27,7 +27,7 @@ export const GET = async () => {
   return new Response(file, {
     headers: {
       "content-type": "text/html; charset=utf-8",
-      "content-disposition": `attachment; filename="tana-bookmarks-${stamp}.html"`,
+      "content-disposition": `attachment; filename="loomark-bookmarks-${stamp}.html"`,
       "cache-control": "no-store",
     },
   })

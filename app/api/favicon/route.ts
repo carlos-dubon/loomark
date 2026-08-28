@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
 const USER_AGENT =
-  "Mozilla/5.0 (compatible; Tana/1.0; +https://github.com/tana-bookmarks)"
+  "Mozilla/5.0 (compatible; Loomark/1.0; +https://github.com/carlos-dubon/loomark)"
 
 const MAX_FAVICON_BYTES = 1 * 1024 * 1024
 const FETCH_TIMEOUT_MS = 8000
