@@ -1,8 +1,11 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 import { HomeView } from "@/components/home-view"
 import { auth } from "@/lib/auth"
 import { getBookmarks } from "@/lib/queries"
+
+export const metadata: Metadata = { title: "Homepage" }
 
 const HomePage = async () => {
   const session = await auth()

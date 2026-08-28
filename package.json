@@ -18,6 +18,7 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
+    "brand:generate": "node scripts/generate-brand-assets.mjs",
     "docker:build": "docker compose -f docker-compose.yml -f docker-compose.build.yml build",
     "preversion": "pnpm run typecheck && pnpm run lint",
     "postversion": "git push --follow-tags"
@@ -62,6 +63,7 @@
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "shadcn": "^4.19.0",
+    "sharp": "0.35.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

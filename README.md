@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/brand/loomark-rounded-512.png" alt="Loomark" width="112" height="112">
+</p>
+
 # Loomark
 
 A self hosted bookmark manager: pinned websites on the homepage, full text search, a nested collections tree, and Chrome compatible import/export.
@@ -25,6 +29,20 @@ docker compose up -d
 ```
 
 Loomark is on http://localhost:3000. The first account you create becomes the owner — create it, then set `ALLOW_REGISTRATION=false` in `.env` and run `docker compose up -d` again to close sign ups.
+
+## Install as an app
+
+Loomark is a PWA, so it installs to the dock, the home screen, and the app switcher with no store involved.
+
+| Platform | How |
+| --- | --- |
+| macOS, Windows, Linux | Chrome or Edge: the install button in the address bar. Safari: File → Add to Dock |
+| iPhone, iPad | Share → Add to Home Screen |
+| Android | Chrome menu → Install app |
+
+Installing needs a secure context — `https://` or `http://localhost`. On a plain `http://` LAN address no browser will offer it, so put Loomark behind TLS (Caddy, Traefik, nginx, Tailscale) and point `AUTH_URL` at that origin.
+
+Pages are always fetched from the server, since they carry your library. An installed Loomark is not an offline copy of it — when the server is unreachable you get a small offline screen instead.
 
 ## Upgrade
 
@@ -99,6 +117,27 @@ To build the image locally before tagging:
 pnpm run docker:build
 ```
 
+### Brand assets
+
+Every icon comes from one path definition in [`scripts/generate-brand-assets.mjs`](scripts/generate-brand-assets.mjs). Edit the geometry there, then:
+
+```bash
+pnpm run brand:generate
+```
+
+| Asset | Path |
+| --- | --- |
+| Mark, SVG, inherits `currentColor` | `public/brand/loomark-mark.svg` |
+| Flat PNG, transparent | `public/brand/loomark-flat-{256,512,1024}.png` |
+| Flat PNG, transparent, for dark backgrounds | `public/brand/loomark-flat-1024-light.png` |
+| Flat PNG on the gradient tile | `public/brand/loomark-gradient-{512,1024}.png` |
+| Rounded PNG on the gradient tile | `public/brand/loomark-rounded-{512,1024}.png` |
+| Favicons | `app/icon.svg`, `app/favicon.ico` |
+| Apple touch icon | `app/apple-icon.png` |
+| PWA icons | `public/icons/icon-{192,512}.png`, `public/icons/maskable-{192,512}.png` |
+
+The output is committed; CI does not regenerate it.
+
 ### Schema changes
 
 `pnpm run db:migrate` creates a migration from your schema edits. Commit the generated folder in `prisma/migrations` — that file is what lets every self hosted instance catch up on its next start. Prefer additive migrations; a column drop takes data with it on machines you cannot see.
@@ -148,6 +187,7 @@ Next.js 16 (App Router + Route Handlers) · React 19 · TypeScript · Tailwind C
 | `pnpm run db:migrate` | Create and apply a migration |
 | `pnpm run db:deploy` | Apply pending migrations |
 | `pnpm run db:studio` | Prisma Studio |
+| `pnpm run brand:generate` | Regenerate every logo, favicon, and PWA icon |
 | `pnpm run docker:build` | Build the production image locally |
 | `pnpm version <ver>` | Check, bump, tag, and push a release |
 

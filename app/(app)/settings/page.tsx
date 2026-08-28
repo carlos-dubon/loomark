@@ -1,8 +1,11 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 import { SettingsView } from "@/components/settings-view"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+
+export const metadata: Metadata = { title: "Settings" }
 
 const SettingsPage = async () => {
   const session = await auth()
