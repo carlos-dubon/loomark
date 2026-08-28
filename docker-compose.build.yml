@@ -1,6 +1,6 @@
 services:
   app:
-    image: tana:local
+    image: loomark:local
     build:
       context: .
       args:

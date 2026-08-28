@@ -212,12 +212,12 @@ export const SettingsView = ({
           <CardHeader>
             <CardTitle>About</CardTitle>
             <CardDescription>
-              Running tana{" "}
+              Running Loomark{" "}
               <span className="font-mono text-foreground">{version}</span>.
               Check{" "}
               <a
                 className="underline underline-offset-4 hover:text-foreground"
-                href="https://github.com/carlos-dubon/tana/releases"
+                href="https://github.com/carlos-dubon/loomark/releases"
                 target="_blank"
                 rel="noreferrer"
               >

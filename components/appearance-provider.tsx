@@ -46,7 +46,7 @@ const ThemeStyle = () => {
   return (
     <>
       {href ? (
-        <link rel="stylesheet" href={href} precedence="tana-theme-font" />
+        <link rel="stylesheet" href={href} precedence="loomark-theme-font" />
       ) : null}
       <style dangerouslySetInnerHTML={{ __html: css }} />
     </>

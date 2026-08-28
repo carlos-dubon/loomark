@@ -1,15 +1,15 @@
-# tana
+# Loomark
 
-棚 — *shelf*. A self hosted bookmark manager: pinned websites on the homepage, full text search, a nested collections tree, and Chrome compatible import/export.
+A self hosted bookmark manager: pinned websites on the homepage, full text search, a nested collections tree, and Chrome compatible import/export.
 
 ## Install
 
 You need Docker and a machine to leave it running on. Nothing else — the image is prebuilt, so there is no repo to clone and no build step.
 
 ```bash
-mkdir tana && cd tana
-curl -O https://raw.githubusercontent.com/carlos-dubon/tana/main/docker-compose.yml
-curl -o .env https://raw.githubusercontent.com/carlos-dubon/tana/main/.env.example
+mkdir loomark && cd loomark
+curl -O https://raw.githubusercontent.com/carlos-dubon/loomark/main/docker-compose.yml
+curl -o .env https://raw.githubusercontent.com/carlos-dubon/loomark/main/.env.example
 ```
 
 Open `.env` and set `AUTH_SECRET` to a random value:
@@ -18,13 +18,13 @@ Open `.env` and set `AUTH_SECRET` to a random value:
 openssl rand -base64 32
 ```
 
-If you will reach tana at anything other than `http://localhost:3000`, set `AUTH_URL` to that origin too. Then start it:
+If you will reach Loomark at anything other than `http://localhost:3000`, set `AUTH_URL` to that origin too. Then start it:
 
 ```bash
 docker compose up -d
 ```
 
-tana is on http://localhost:3000. The first account you create becomes the owner — create it, then set `ALLOW_REGISTRATION=false` in `.env` and run `docker compose up -d` again to close sign ups.
+Loomark is on http://localhost:3000. The first account you create becomes the owner — create it, then set `ALLOW_REGISTRATION=false` in `.env` and run `docker compose up -d` again to close sign ups.
 
 ## Upgrade
 
@@ -39,27 +39,27 @@ Database migrations run automatically when the container starts, in order, so a 
 There is a script that takes a database backup first, which is the safer habit:
 
 ```bash
-curl -O https://raw.githubusercontent.com/carlos-dubon/tana/main/scripts/upgrade.sh
+curl -O https://raw.githubusercontent.com/carlos-dubon/loomark/main/scripts/upgrade.sh
 chmod +x upgrade.sh
 ./upgrade.sh
 ```
 
 It writes a timestamped dump to `backups/` and then does the pull and restart.
 
-By default you track `latest`. To pin a version instead, set `TANA_VERSION` in `.env`:
+By default you track `latest`. To pin a version instead, set `LOOMARK_VERSION` in `.env`:
 
 ```
-TANA_VERSION="0.2.5"
+LOOMARK_VERSION="0.2.5"
 ```
 
 The version you are running is shown in Settings, and at `GET /api/health`.
 
 ### Rolling back
 
-Set `TANA_VERSION` to the older release and run `docker compose up -d`. Note that migrations are not reversible — if the newer version migrated your database, restore the dump you took before upgrading:
+Set `LOOMARK_VERSION` to the older release and run `docker compose up -d`. Note that migrations are not reversible — if the newer version migrated your database, restore the dump you took before upgrading:
 
 ```bash
-gunzip -c backups/tana-<timestamp>.sql.gz | docker compose exec -T db psql -U tana -d tana
+gunzip -c backups/loomark-<timestamp>.sql.gz | docker compose exec -T db psql -U loomark -d loomark
 ```
 
 ## Development
@@ -67,7 +67,7 @@ gunzip -c backups/tana-<timestamp>.sql.gz | docker compose exec -T db psql -U ta
 Requires Node 24, pnpm, and Docker.
 
 ```bash
-git clone https://github.com/carlos-dubon/tana.git && cd tana
+git clone https://github.com/carlos-dubon/loomark.git && cd loomark
 cp .env.example .env
 pnpm install
 docker compose up -d db
@@ -89,7 +89,7 @@ One command:
 pnpm version 0.2.5
 ```
 
-That runs typecheck and lint, bumps `package.json`, commits, tags `v0.2.5`, and pushes the tag. CI takes it from there: it builds `linux/amd64` and `linux/arm64` natively, pushes to `ghcr.io/carlos-dubon/tana` as `0.2.5`, `0.2`, and `latest`, and opens a GitHub release with generated notes.
+That runs typecheck and lint, bumps `package.json`, commits, tags `v0.2.5`, and pushes the tag. CI takes it from there: it builds `linux/amd64` and `linux/arm64` natively, pushes to `ghcr.io/carlos-dubon/loomark` as `0.2.5`, `0.2`, and `latest`, and opens a GitHub release with generated notes.
 
 `patch`, `minor`, and `major` work in place of an explicit number. The checks run before the tag exists, so a failing typecheck stops the release rather than shipping it. Your working tree must be clean.
 
@@ -110,14 +110,14 @@ major browser reads and writes.
 
 **Import** takes a file exported from Chrome, Edge, Safari, Firefox, or anything else
 speaking that format. Folders become collections, nesting is preserved, and links
-already on your shelf are counted as duplicates rather than saved twice — so
+already in your library are counted as duplicates rather than saved twice — so
 re-importing the same file is a no-op. Root level links land in Unsorted, empty
 folders are skipped, and non `http(s)` entries such as bookmarklets are reported as
 skipped.
 
-**Export** writes your whole shelf back out to the same format, so it doubles as a
+**Export** writes your whole library back out to the same format, so it doubles as a
 backup and as a way into any browser. Pinned state rides along in a custom attribute
-that other browsers ignore, which keeps a tana export → tana import round trip
+that other browsers ignore, which keeps a Loomark export → Loomark import round trip
 lossless.
 
 ## Environment
@@ -126,7 +126,7 @@ lossless.
 | --- | --- | --- |
 | `AUTH_SECRET` | yes | Session encryption key |
 | `AUTH_URL` | yes | Public origin of the instance |
-| `TANA_VERSION` | no | Image tag to run, defaults to `latest` |
+| `LOOMARK_VERSION` | no | Image tag to run, defaults to `latest` |
 | `ALLOW_REGISTRATION` | no | `false` blocks sign ups once an account exists |
 | `APP_PORT` | no | Host port, defaults to `3000` |
 | `POSTGRES_USER` `POSTGRES_PASSWORD` `POSTGRES_DB` | no | Database credentials |

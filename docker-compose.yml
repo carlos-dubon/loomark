@@ -1,30 +1,30 @@
-name: tana
+name: loomark
 
 services:
   db:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-tana}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tana}
-      POSTGRES_DB: ${POSTGRES_DB:-tana}
+      POSTGRES_USER: ${POSTGRES_USER:-loomark}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-loomark}
+      POSTGRES_DB: ${POSTGRES_DB:-loomark}
     volumes:
-      - tana-db:/var/lib/postgresql/data
+      - loomark-db:/var/lib/postgresql/data
     healthcheck:
       test:
-        ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tana} -d ${POSTGRES_DB:-tana}"]
+        ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-loomark} -d ${POSTGRES_DB:-loomark}"]
       interval: 5s
       timeout: 5s
       retries: 12
 
   app:
-    image: ghcr.io/carlos-dubon/tana:${TANA_VERSION:-latest}
+    image: ghcr.io/carlos-dubon/loomark:${LOOMARK_VERSION:-latest}
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-tana}:${POSTGRES_PASSWORD:-tana}@db:5432/${POSTGRES_DB:-tana}?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:-loomark}:${POSTGRES_PASSWORD:-loomark}@db:5432/${POSTGRES_DB:-loomark}?schema=public
       AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET in your .env file}
       AUTH_URL: ${AUTH_URL:-http://localhost:3000}
       AUTH_TRUST_HOST: "true"
@@ -33,4 +33,4 @@ services:
       - "${APP_PORT:-3000}:3000"
 
 volumes:
-  tana-db:
+  loomark-db:

@@ -2,7 +2,7 @@ import { decodeEntities, normalizeUrl } from "@/lib/format"
 import type { UrlMetadata } from "@/lib/types"
 
 const USER_AGENT =
-  "Mozilla/5.0 (compatible; Tana/1.0; +https://github.com/tana-bookmarks)"
+  "Mozilla/5.0 (compatible; Loomark/1.0; +https://github.com/carlos-dubon/loomark)"
 
 const MAX_BYTES = 512 * 1024
 

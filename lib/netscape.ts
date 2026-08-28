@@ -159,7 +159,7 @@ export const parseBookmarksFile = (html: string): NetscapeFolder => {
         description: null,
         faviconUrl: readFavicon(attributes),
         addDate: readDate(attributes.add_date),
-        pinned: attributes.tana_pinned === "true",
+        pinned: attributes.loomark_pinned === "true",
       }
 
       stack[stack.length - 1].bookmarks.push(last)
@@ -192,7 +192,7 @@ const writeBookmark = (bookmark: NetscapeBookmark, indent: string) => {
     `${indent}<DT><A HREF="${escapeHtml(bookmark.url)}"` +
       attribute("ADD_DATE", toSeconds(bookmark.addDate)) +
       attribute("ICON", bookmark.faviconUrl) +
-      (bookmark.pinned ? ' TANA_PINNED="true"' : "") +
+      (bookmark.pinned ? ' LOOMARK_PINNED="true"' : "") +
       `>${escapeHtml(bookmark.title)}</A>`,
   ]
 
