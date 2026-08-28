@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <text
-    x="32"
-    y="34"
-    font-size="54"
-    text-anchor="middle"
-    dominant-baseline="central"
-    font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif"
-  >🗃️</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <style>
+    path { stroke: #1c1c1c; }
+    @media (prefers-color-scheme: dark) { path { stroke: #f5f5f5; } }
+  </style>
+  <g fill="none" stroke-width="24" stroke-linejoin="round" transform="translate(-128 -128) scale(1.5)">
+    <path d="M168 189 L214 143 L258 143 L258 277 L298 277 L344 324 L344 351 A18 18 0 0 1 326 369 L186 369 A18 18 0 0 1 168 351 Z"/>
+    <path d="M214 150 L214 326 L344 326"/>
+  </g>
 </svg>
