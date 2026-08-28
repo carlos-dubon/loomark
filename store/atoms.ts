@@ -80,7 +80,7 @@ export const searchPendingAtom = atom(false)
 const RECENT_SEARCH_LIMIT = 8
 
 export const recentSearchesAtom = atomWithStorage<string[]>(
-  "tana.recent-searches",
+  "loomark.recent-searches",
   []
 )
 

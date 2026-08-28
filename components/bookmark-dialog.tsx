@@ -165,7 +165,7 @@ const BookmarkForm = ({
       <DialogHeader>
         <DialogTitle>{editing ? "Edit bookmark" : "New bookmark"}</DialogTitle>
         <DialogDescription>
-          Paste a link and tana fills in the rest.
+          Paste a link and Loomark fills in the rest.
         </DialogDescription>
       </DialogHeader>
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">

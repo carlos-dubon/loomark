@@ -53,7 +53,7 @@ export const RegisterForm = () => {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Create your shelf</CardTitle>
+        <CardTitle>Create your library</CardTitle>
         <CardDescription>
           The first account becomes the owner of this instance.
         </CardDescription>
