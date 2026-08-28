@@ -1,3 +1,5 @@
+import { cache } from "react"
+
 import type { Prisma } from "@/lib/generated/prisma/client"
 import { prisma } from "@/lib/prisma"
 import { serializeBookmark, serializeCollection } from "@/lib/serialize"
@@ -21,14 +23,14 @@ export const getCollections = async (userId: string) => {
   return collections.map(serializeCollection)
 }
 
-export const getCollection = async (userId: string, id: string) => {
+export const getCollection = cache(async (userId: string, id: string) => {
   const collection = await prisma.collection.findFirst({
     where: { id, userId },
     include: { _count: { select: { bookmarks: true } } },
   })
 
   return collection ? serializeCollection(collection) : null
-}
+})
 
 export const getChildCollections = async (userId: string, parentId: string) => {
   const collections = await prisma.collection.findMany({

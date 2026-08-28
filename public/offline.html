@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offline · Loomark</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #ffffff;
+        --fg: #171717;
+        --muted: #737373;
+        --border: #e5e5e5;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0a0a0a;
+          --fg: #fafafa;
+          --muted: #a1a1a1;
+          --border: #262626;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.25rem;
+        padding: 2rem;
+        background: var(--bg);
+        color: var(--fg);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        text-align: center;
+      }
+      svg {
+        width: 3.5rem;
+        height: 3.5rem;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+      p {
+        margin: 0;
+        max-width: 28rem;
+        font-size: 0.875rem;
+        color: var(--muted);
+      }
+      button {
+        font: inherit;
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.625rem;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <svg
+      viewBox="136 136 240 240"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="14"
+      stroke-linejoin="round"
+      role="img"
+      aria-label="Loomark"
+    >
+      <path
+        d="M168 189 L214 143 L258 143 L258 277 L298 277 L344 324 L344 351 A18 18 0 0 1 326 369 L186 369 A18 18 0 0 1 168 351 Z"
+      />
+      <path d="M214 150 L214 326 L344 326" />
+    </svg>
+    <h1>You are offline</h1>
+    <p>
+      Loomark could not reach the server. Your bookmarks are safe — reconnect
+      and try again.
+    </p>
+    <button type="button" onclick="location.reload()">Retry</button>
+  </body>
+</html>

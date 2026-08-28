@@ -1,8 +1,26 @@
+import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 
 import { BookmarkListView } from "@/components/bookmark-list-view"
 import { auth } from "@/lib/auth"
 import { getBookmarks, getChildCollections, getCollection } from "@/lib/queries"
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> => {
+  const session = await auth()
+
+  if (!session?.user?.id) {
+    return {}
+  }
+
+  const { id } = await params
+  const collection = await getCollection(session.user.id, id)
+
+  return { title: collection?.name ?? "Collection" }
+}
 
 const CollectionPage = async ({
   params,
