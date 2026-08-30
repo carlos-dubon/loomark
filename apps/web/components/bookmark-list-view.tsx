@@ -130,17 +130,19 @@ export const BookmarkListView = ({
             </div>
           </section>
         ) : (
-          <EmptyState
-            icon={EMPTY_ICONS[emptyIcon]}
-            title={emptyTitle}
-            description={emptyDescription}
-            action={
-              <Button variant="outline" onClick={addBookmark}>
-                <PlusIcon />
-                Add bookmark
-              </Button>
-            }
-          />
+          <div className="flex flex-1 items-center justify-center">
+            <EmptyState
+              icon={EMPTY_ICONS[emptyIcon]}
+              title={emptyTitle}
+              description={emptyDescription}
+              action={
+                <Button variant="outline" onClick={addBookmark}>
+                  <PlusIcon />
+                  Add bookmark
+                </Button>
+              }
+            />
+          </div>
         )}
       </div>
     </>
