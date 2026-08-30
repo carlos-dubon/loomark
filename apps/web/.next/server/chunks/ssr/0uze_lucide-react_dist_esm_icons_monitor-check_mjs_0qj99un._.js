@@ -1,0 +1,3 @@
+module.exports=[645892,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"m9 10 2 2 4-4",key:"1gnqz4"}],["rect",{width:"20",height:"14",x:"2",y:"3",rx:"2",key:"48i651"}],["path",{d:"M12 17v4",key:"1riwvh"}],["path",{d:"M8 21h8",key:"1ev6f3"}]],d=(0,b.default)("monitor-check",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_monitor-check_mjs_0qj99un._.js.map

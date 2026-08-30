@@ -1,0 +1,3 @@
+module.exports=[998141,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M18 17a1 1 0 0 0-1 1v1a2 2 0 1 0 2-2z",key:"skzb1g"}],["path",{d:"M20.97 3.61a.45.45 0 0 0-.58-.58C10.2 6.6 6.6 10.2 3.03 20.39a.45.45 0 0 0 .58.58C13.8 17.4 17.4 13.8 20.97 3.61",key:"cv9jm7"}],["path",{d:"m6.707 6.707 10.586 10.586",key:"d2l993"}],["path",{d:"M7 5a2 2 0 1 0-2 2h1a1 1 0 0 0 1-1z",key:"i0et4n"}]],d=(0,b.default)("kayak",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_kayak_mjs_0dp58rd._.js.map

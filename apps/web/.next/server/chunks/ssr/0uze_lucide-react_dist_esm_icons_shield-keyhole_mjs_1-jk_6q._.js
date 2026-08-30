@@ -1,0 +1,3 @@
+module.exports=[919663,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 13v3",key:"gkc6qb"}],["path",{d:"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 01-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 011-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 011.52 0C14.51 3.81 17 5 19 5a1 1 0 011 1z",key:"1buusj"}],["circle",{cx:"12",cy:"11",r:"2",key:"1yggc4"}]],d=(0,b.default)("shield-keyhole",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_shield-keyhole_mjs_1-jk_6q._.js.map

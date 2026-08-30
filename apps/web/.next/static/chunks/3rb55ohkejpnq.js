@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,864469,t=>{"use strict";var e=t.i(339985);let o=[["path",{d:"M6 12h12",key:"8npq4p"}],["rect",{x:"2",y:"8",width:"20",height:"8",rx:"4",key:"86l77p"}]],c=(0,e.default)("usb-c-port",o);t.s(["__iconNode",0,o,"default",0,c])}]);

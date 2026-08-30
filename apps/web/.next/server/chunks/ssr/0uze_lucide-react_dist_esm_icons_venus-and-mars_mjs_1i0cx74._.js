@@ -1,0 +1,3 @@
+module.exports=[15949,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M10 20h4",key:"ni2waw"}],["path",{d:"M12 16v6",key:"c8a4gj"}],["path",{d:"M17 2h4v4",key:"vhe59"}],["path",{d:"m21 2-5.46 5.46",key:"19kypf"}],["circle",{cx:"12",cy:"11",r:"5",key:"16gxyc"}]],d=(0,b.default)("venus-and-mars",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_venus-and-mars_mjs_1i0cx74._.js.map

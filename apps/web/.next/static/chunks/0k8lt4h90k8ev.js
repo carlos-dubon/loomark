@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,388930,e=>{"use strict";var t=e.i(339985);let o=[["path",{d:"M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z",key:"17jzev"}]],a=(0,t.default)("thermometer",o);e.s(["__iconNode",0,o,"default",0,a])}]);

@@ -1,0 +1,3 @@
+module.exports=[542716,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M3 5v14",key:"1nt18q"}],["path",{d:"M8 5v14",key:"1ybrkv"}],["path",{d:"M12 5v14",key:"s699le"}],["path",{d:"M17 5v14",key:"ycjyhj"}],["path",{d:"M21 5v14",key:"nzette"}]],d=(0,b.default)("barcode",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_barcode_mjs_1eiefvp._.js.map

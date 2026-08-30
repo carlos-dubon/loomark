@@ -1,0 +1,3 @@
+module.exports=[582857,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M16 13v2.2l1.6 1",key:"1bc147"}],["path",{d:"M3 12h3.458",key:"brzde3"}],["path",{d:"M3 19h3.832",key:"1d2y74"}],["path",{d:"M3 5h18",key:"1u36vt"}],["circle",{cx:"16",cy:"15",r:"6",key:"1cvf88"}]],d=(0,b.default)("list-clock",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_list-clock_mjs_1cqvowy._.js.map

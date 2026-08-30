@@ -1,0 +1,3 @@
+module.exports=[947745,a=>{"use strict";var b=a.i(938409);let c=[["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",key:"afitv7"}],["path",{d:"M9 8h7",key:"kbo1nt"}],["path",{d:"M8 12h6",key:"ikassy"}],["path",{d:"M11 16h5",key:"oq65wt"}]],d=(0,b.default)("square-chart-gantt",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_square-chart-gantt_mjs_1r9ytrl._.js.map

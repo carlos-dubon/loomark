@@ -1,0 +1,10 @@
+var R=require("../../../../chunks/[turbopack]_runtime.js")("server/app/api/bookmarks/[id]/route.js")
+R.c("server/chunks/[externals]__0lzuosc._.js")
+R.c("server/chunks/apps_web_lib_0yh00_t._.js")
+R.c("server/chunks/[root-of-the-server]__1qvkccy._.js")
+R.c("server/chunks/_0-f7ubp._.js")
+R.c("server/chunks/0y88_next_034ucbv._.js")
+R.c("server/chunks/[root-of-the-server]__0owoyfy._.js")
+R.c("server/chunks/apps_web__next-internal_server_app_api_bookmarks_[id]_route_actions_0jymzdh.js")
+R.m(274817)
+module.exports=R.m(274817).exports

@@ -1,0 +1,3 @@
+module.exports=[115527,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M10 17h.01",key:"nbq80n"}],["path",{d:"M10 7v6",key:"nne03l"}],["path",{d:"M14 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2",key:"1m83kb"}],["path",{d:"M22 14v-4",key:"14q9d5"}],["path",{d:"M6 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2",key:"h8lgfh"}]],d=(0,b.default)("battery-warning",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_battery-warning_mjs_17ba2cs._.js.map

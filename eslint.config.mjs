@@ -6,11 +6,13 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   globalIgnores([
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-    "lib/generated/**",
+    "**/.next/**",
+    "**/out/**",
+    "**/build/**",
+    "**/output/**",
+    "**/next-env.d.ts",
+    "**/lib/generated/**",
+    "**/node_modules/**",
   ]),
   {
     rules: {

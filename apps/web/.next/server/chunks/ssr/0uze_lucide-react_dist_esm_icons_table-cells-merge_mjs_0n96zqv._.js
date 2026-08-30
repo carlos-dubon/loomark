@@ -1,0 +1,3 @@
+module.exports=[520032,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 21v-6",key:"lihzve"}],["path",{d:"M12 9V3",key:"da5inc"}],["path",{d:"M3 15h18",key:"5xshup"}],["path",{d:"M3 9h18",key:"1pudct"}],["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",key:"afitv7"}]],d=(0,b.default)("table-cells-merge",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_table-cells-merge_mjs_0n96zqv._.js.map

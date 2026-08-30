@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,104656,t=>{"use strict";var e=t.i(339985);let a=[["path",{d:"M18 22V2.8a.8.8 0 0 0-1.17-.71L5.45 7.78a.8.8 0 0 0 0 1.44L18 15.5",key:"rbbtmw"}]],l=(0,e.default)("flag-triangle-left",a);t.s(["__iconNode",0,a,"default",0,l])}]);

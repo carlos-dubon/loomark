@@ -1,0 +1,3 @@
+module.exports=[692422,a=>{"use strict";var b=a.i(938409);let c=[["rect",{width:"10",height:"14",x:"3",y:"8",rx:"2",key:"1vrsiq"}],["path",{d:"M5 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2h-2.4",key:"1j4zmg"}],["path",{d:"M8 18h.01",key:"lrp35t"}]],d=(0,b.default)("tablet-smartphone",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_tablet-smartphone_mjs_12gorrb._.js.map

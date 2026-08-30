@@ -1,0 +1,3 @@
+module.exports=[64440,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M11.748 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4.875",key:"t4e5a5"}],["path",{d:"m16 19 2 2 4-4",key:"1b14m6"}],["path",{d:"M18 12h.01",key:"yjnet6"}],["path",{d:"M6 12h.01",key:"c2rlol"}],["circle",{cx:"12",cy:"12",r:"2",key:"1c9p78"}]],d=(0,b.default)("banknote-check",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_banknote-check_mjs_170ntcb._.js.map

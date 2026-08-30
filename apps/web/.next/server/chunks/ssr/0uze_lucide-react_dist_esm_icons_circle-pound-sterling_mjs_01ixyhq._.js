@@ -1,0 +1,3 @@
+module.exports=[76706,a=>{"use strict";var b=a.i(938409);let c=[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["path",{d:"M10 16V9.5a1 1 0 0 1 5 0",key:"1i1are"}],["path",{d:"M8 12h4",key:"qz6y1c"}],["path",{d:"M8 16h7",key:"sbedsn"}]],d=(0,b.default)("circle-pound-sterling",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_circle-pound-sterling_mjs_01ixyhq._.js.map

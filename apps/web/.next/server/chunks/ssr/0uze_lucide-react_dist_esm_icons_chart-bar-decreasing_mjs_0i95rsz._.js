@@ -1,0 +1,3 @@
+module.exports=[635797,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M3 3v16a2 2 0 0 0 2 2h16",key:"c24i48"}],["path",{d:"M7 11h8",key:"1feolt"}],["path",{d:"M7 16h3",key:"ur6vzw"}],["path",{d:"M7 6h12",key:"sz5b0d"}]],d=(0,b.default)("chart-bar-decreasing",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_chart-bar-decreasing_mjs_0i95rsz._.js.map

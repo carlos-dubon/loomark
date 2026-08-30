@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,114101,t=>{"use strict";var e=t.i(339985);let a=[["path",{d:"M15 3h6v6",key:"1q9fwt"}],["path",{d:"M21 3 3 21",key:"1011np"}],["path",{d:"m9 9 6 6",key:"z0biqf"}]],i=(0,e.default)("zodiac-sagittarius",a);t.s(["__iconNode",0,a,"default",0,i])}]);
