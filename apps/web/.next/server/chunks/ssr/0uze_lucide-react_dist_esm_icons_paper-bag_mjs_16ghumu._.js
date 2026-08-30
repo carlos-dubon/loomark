@@ -1,0 +1,3 @@
+module.exports=[726161,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M5.364 3.848C4 6 3 9.652 3 12.652V19a2 2 0 002 2h14a2 2 0 002-2v-5c0-2.334-1.816-4.668-2.622-7.002",key:"vlsvfu"}],["path",{d:"M7 3h11.379a2 2 0 011.789 1.106l.723 1.447A1 1 0 0119.997 7h-8.525a2 2 0 01-1.789-1.106L8.79 4.105a2 2 0 10-3.579 1.789l2.261 4.522A5 5 0 018 12.652V21",key:"12exh5"}]],d=(0,b.default)("paper-bag",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_paper-bag_mjs_16ghumu._.js.map

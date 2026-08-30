@@ -1,0 +1,3 @@
+module.exports=[877176,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M16 14v2.2l1.6 1",key:"fo4ql5"}],["path",{d:"m22 7-.759.484",key:"12ll7o"}],["path",{d:"M6.835 20H4a2 2 0 01-2-2V6a2 2 0 012-2h16a2 2 0 012 2v2",key:"1wt3ht"}],["path",{d:"M7.605 10.567 2 7",key:"1ducps"}],["circle",{cx:"16",cy:"16",r:"6",key:"qoo3c4"}]],d=(0,b.default)("mail-clock",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_mail-clock_mjs_16_sq5g._.js.map

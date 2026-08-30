@@ -12,6 +12,6 @@ if [ -z "$AUTH_SECRET" ]; then
 fi
 
 echo "loomark ${APP_VERSION:-dev}: applying database migrations"
-node_modules/.bin/prisma migrate deploy
+pnpm --filter loomark db:deploy
 
 exec "$@"

@@ -1,0 +1,3 @@
+module.exports=[266876,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M13 17V9",key:"1fwyjl"}],["path",{d:"M18 17v-3",key:"1sqioe"}],["path",{d:"M3 3v16a2 2 0 0 0 2 2h16",key:"c24i48"}],["path",{d:"M8 17V5",key:"1wzmnc"}]],d=(0,b.default)("chart-column-decreasing",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_chart-column-decreasing_mjs_0lv_sl2._.js.map

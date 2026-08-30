@@ -1,0 +1,3 @@
+module.exports=[551131,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M16 2v3",key:"otl347"}],["path",{d:"m17 16 5 5",key:"1a37d9"}],["path",{d:"m17 21 5-5",key:"1b797a"}],["path",{d:"M21 12V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h8",key:"14ws7l"}],["path",{d:"M3 9h18",key:"1pudct"}],["path",{d:"M8 2v3",key:"1ioesn"}]],d=(0,b.default)("calendar-x-2",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_calendar-x-2_mjs_1kipo37._.js.map

@@ -1,0 +1,3 @@
+module.exports=[76486,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12.5 11.134 18.196 21",key:"gf58kt"}],["path",{d:"M20.425 5.299a10 10 0 0 0-16.941 9.78c.183.563.843.774 1.355.478L20.16 6.711c.512-.296.66-.973.264-1.413",key:"znqfe4"}],["path",{d:"M21 21H3",key:"oafrgs"}]],d=(0,b.default)("parasol",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_parasol_mjs_1cjusvz._.js.map

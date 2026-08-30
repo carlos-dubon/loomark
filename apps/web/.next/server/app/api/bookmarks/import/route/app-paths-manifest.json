@@ -1,0 +1,3 @@
+{
+  "/api/bookmarks/import/route": "app/api/bookmarks/import/route.js"
+}

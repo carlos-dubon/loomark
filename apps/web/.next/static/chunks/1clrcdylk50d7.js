@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,574110,t=>{"use strict";var e=t.i(339985);let a=[["path",{d:"M5 3v14",key:"9nsxs2"}],["path",{d:"M12 3v8",key:"1h2ygw"}],["path",{d:"M19 3v18",key:"1sk56x"}]],d=(0,e.default)("kanban",a);t.s(["__iconNode",0,a,"default",0,d])}]);

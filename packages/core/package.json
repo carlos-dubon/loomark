@@ -1,0 +1,24 @@
+{
+  "name": "@loomark/core",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts",
+    "./utils": "./src/utils.ts",
+    "./types": "./src/types.ts",
+    "./url": "./src/url.ts",
+    "./format": "./src/format.ts",
+    "./tree": "./src/tree.ts",
+    "./sort": "./src/sort.ts",
+    "./view-mode": "./src/view-mode.ts"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.6.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

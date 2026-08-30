@@ -1,0 +1,3 @@
+module.exports=[863502,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M21 15.251A4.5 4.5 0 0 0 17.5 8h-1.79A7 7 0 1 0 3 13.607",key:"xpoh9y"}],["path",{d:"M7 11v4h4",key:"q9yh32"}],["path",{d:"M8 19a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5 4.82 4.82 0 0 0-3.41 1.41L7 15",key:"1xm8iu"}]],d=(0,b.default)("cloud-backup",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_cloud-backup_mjs_1c1lds8._.js.map

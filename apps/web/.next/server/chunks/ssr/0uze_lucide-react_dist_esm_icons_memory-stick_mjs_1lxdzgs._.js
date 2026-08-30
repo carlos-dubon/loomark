@@ -1,0 +1,3 @@
+module.exports=[38036,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 12v-2",key:"fwoke6"}],["path",{d:"M12 18v-2",key:"qj6yno"}],["path",{d:"M16 12v-2",key:"heuere"}],["path",{d:"M16 18v-2",key:"s1ct0w"}],["path",{d:"M2 11h1.5",key:"15p63e"}],["path",{d:"M20 18v-2",key:"12ehxp"}],["path",{d:"M20.5 11H22",key:"khsy7a"}],["path",{d:"M4 18v-2",key:"1c3oqr"}],["path",{d:"M8 12v-2",key:"1mwtfd"}],["path",{d:"M8 18v-2",key:"qcmpov"}],["rect",{x:"2",y:"6",width:"20",height:"10",rx:"2",key:"1qcswk"}]],d=(0,b.default)("memory-stick",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_memory-stick_mjs_1lxdzgs._.js.map

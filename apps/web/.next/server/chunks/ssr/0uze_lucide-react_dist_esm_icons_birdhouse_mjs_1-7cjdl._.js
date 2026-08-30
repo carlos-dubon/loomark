@@ -1,0 +1,3 @@
+module.exports=[12655,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 18v4",key:"jadmvz"}],["path",{d:"m17 18 1.956-11.468",key:"l5n2ro"}],["path",{d:"m3 8 7.82-5.615a2 2 0 0 1 2.36 0L21 8",key:"1sy6n7"}],["path",{d:"M4 18h16",key:"19g7jn"}],["path",{d:"M7 18 5.044 6.532",key:"1uqdf2"}],["circle",{cx:"12",cy:"10",r:"2",key:"1yojzk"}]],d=(0,b.default)("birdhouse",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_birdhouse_mjs_1-7cjdl._.js.map

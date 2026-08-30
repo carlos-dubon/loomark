@@ -1,0 +1,3 @@
+module.exports=[869872,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M21 14.5A9 6.5 0 0 1 5.5 19",key:"1xj2o6"}],["path",{d:"M3 9.5A9 6.5 0 0 1 18.5 5",key:"1gln3t"}],["circle",{cx:"17.5",cy:"14.5",r:"3.5",key:"1ccu1t"}],["circle",{cx:"6.5",cy:"9.5",r:"3.5",key:"x5tc2d"}]],d=(0,b.default)("zodiac-cancer",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_zodiac-cancer_mjs_0ilcn-u._.js.map

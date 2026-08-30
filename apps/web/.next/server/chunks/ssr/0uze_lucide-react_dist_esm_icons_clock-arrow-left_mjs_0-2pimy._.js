@@ -1,0 +1,3 @@
+module.exports=[811342,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 6v6l1.5.8",key:"uc7jki"}],["path",{d:"M12.338 21.994a10 10 0 1 1 9.587-8.767",key:"1lz5pu"}],["path",{d:"M14 18h8",key:"1le3fr"}],["path",{d:"m18 22-4-4 4-4",key:"dh5o1f"}]],d=(0,b.default)("clock-arrow-left",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_clock-arrow-left_mjs_0-2pimy._.js.map

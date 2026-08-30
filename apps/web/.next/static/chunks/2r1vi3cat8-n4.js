@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,490253,t=>{"use strict";var e=t.i(339985);let o=[["path",{d:"M3 10A6.06 6.06 0 0 1 12 10 A6.06 6.06 0 0 0 21 10",key:"13lfmc"}],["path",{d:"M6 3v12a6 6 0 0 0 12 0V3",key:"1jnivp"}]],c=(0,e.default)("zodiac-ophiuchus",o);t.s(["__iconNode",0,o,"default",0,c])}]);

@@ -1,0 +1,3 @@
+module.exports=[652200,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M22 9a1 1 0 00-1-1H3a1 1 0 00-1 1v4a1 1 0 001 1h.5a2 2 0 011.6.8l.3.4A2 2 0 007 16h10a2 2 0 001.6-.8l.3-.4a2 2 0 011.6-.8h.5a1 1 0 001-1z",key:"1kwg9h"}],["path",{d:"M8 12h8",key:"1wcyev"}]],d=(0,b.default)("hdmi-port",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_hdmi-port_mjs_0dmrr1n._.js.map

@@ -1,0 +1,3 @@
+module.exports=[244881,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M10.268 21a2 2 0 0 0 3.464 0",key:"vwvbt9"}],["path",{d:"m15 8 2 2 4-4",key:"sbrgsm"}],["path",{d:"M16.8607 4.4824A6 6 0 0 0 6 8C6 12.499 4.589 13.956 3.262 15.326",key:"qcog4a"}],["path",{d:"M3.262 15.326A1 1 0 0 0 4 17H20A1 1 0 0 0 20.74 15.327C20.209 14.779 19.665 14.218 19.203 13.454",key:"mxnnoh"}]],d=(0,b.default)("bell-check",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_bell-check_mjs_1dcdf9e._.js.map

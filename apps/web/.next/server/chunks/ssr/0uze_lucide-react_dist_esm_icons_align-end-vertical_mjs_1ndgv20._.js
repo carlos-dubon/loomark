@@ -1,0 +1,3 @@
+module.exports=[558348,a=>{"use strict";var b=a.i(938409);let c=[["rect",{width:"16",height:"6",x:"2",y:"4",rx:"2",key:"10wcwx"}],["rect",{width:"9",height:"6",x:"9",y:"14",rx:"2",key:"4p5bwg"}],["path",{d:"M22 22V2",key:"12ipfv"}]],d=(0,b.default)("align-end-vertical",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_align-end-vertical_mjs_1ndgv20._.js.map

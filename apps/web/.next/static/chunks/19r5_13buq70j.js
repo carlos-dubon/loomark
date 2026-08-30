@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,519374,t=>{"use strict";var e=t.i(339985);let o=[["path",{d:"m7 7 10 10-5 5V2l5 5L7 17",key:"1q5490"}]],l=(0,e.default)("bluetooth",o);t.s(["__iconNode",0,o,"default",0,l])}]);

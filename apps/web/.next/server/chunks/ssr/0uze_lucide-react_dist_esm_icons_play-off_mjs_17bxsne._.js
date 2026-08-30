@@ -1,0 +1,3 @@
+module.exports=[320596,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"m10.215 4.56 9.79 5.71a2 2 0 0 1 .003 3.458l-.393.23",key:"fdtkwz"}],["path",{d:"m16.042 16.042-8.034 4.686A2 2 0 0 1 5 19V5",key:"1c8hxg"}],["path",{d:"m2 2 20 20",key:"1ooewy"}]],d=(0,b.default)("play-off",c);a.s(["__iconNode",0,c,"default",0,d])}];
+
+//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_play-off_mjs_17bxsne._.js.map
