@@ -1,6 +1,6 @@
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -9,14 +9,22 @@
 !.yarn/versions
 
 # testing
-/coverage
+coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
+.turbo/
+.vercel/
 
 # production
-/build
+build/
+dist/
+
+# wxt / extension
+output/
+.wxt/
+stats.html
 
 # misc
 .DS_Store
