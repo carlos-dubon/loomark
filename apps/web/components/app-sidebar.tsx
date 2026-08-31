@@ -7,9 +7,8 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
-import { CollectionTree } from "@/components/collection-tree"
-import { SearchTrigger } from "@/components/search-trigger"
-import { Button } from "@/components/ui/button"
+import type { CollectionDTO } from "@loomark/core/types"
+import { Button } from "@loomark/ui/components/button"
 import {
   Sidebar,
   SidebarContent,
@@ -23,10 +22,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@loomark/ui/components/sidebar"
+
+import { CollectionTree } from "@/components/collection-tree"
+import { SearchTrigger } from "@/components/search-trigger"
 import { UnsortedNavItem } from "@/components/unsorted-nav-item"
 import { UserMenu, type SessionUser } from "@/components/user-menu"
-import type { CollectionDTO } from "@/lib/types"
 import {
   bookmarkDialogAtom,
   collectionDialogAtom,

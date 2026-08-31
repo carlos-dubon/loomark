@@ -1,9 +1,10 @@
+import { parentsFirst } from "@loomark/core/tree"
+
 import { jsonError, parseBody, requireUserId } from "@/lib/api"
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { prisma } from "@/lib/prisma"
 import { getCollections } from "@/lib/queries"
 import { collectionRestoreSchema } from "@/lib/schemas"
-import { parentsFirst } from "@/lib/tree"
 
 export const POST = async (request: Request) => {
   const userId = await requireUserId()

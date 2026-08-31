@@ -1,10 +1,10 @@
+import { routes } from "@loomark/core/routes"
 import type {
   Account,
   BookmarkDTO,
   CollectionDTO,
   UrlMetadata,
-} from "@/lib/types"
-
+} from "@loomark/core/types"
 export type Auth = { serverUrl: string; token: string }
 
 export class ApiError extends Error {
@@ -73,34 +73,31 @@ export const connect = (
   serverUrl: string,
   credentials: { email: string; password: string }
 ) =>
-  send<{ token: string; user: Account }>(serverUrl, "/api/extension/token", {
+  send<{ token: string; user: Account }>(serverUrl, routes.extensionToken, {
     method: "POST",
     body: JSON.stringify({ ...credentials, name: "Browser extension" }),
   })
 
 export const verify = (auth: Auth) =>
-  authed<{ user: Account }>(auth, "/api/extension/token")
+  authed<{ user: Account }>(auth, routes.extensionToken)
 
 export const disconnect = (auth: Auth) =>
-  authed<void>(auth, "/api/extension/token", { method: "DELETE" })
+  authed<void>(auth, routes.extensionToken, { method: "DELETE" })
 
 export const listCollections = (auth: Auth) =>
-  authed<CollectionDTO[]>(auth, "/api/collections")
+  authed<CollectionDTO[]>(auth, routes.collections)
 
 export const createCollection = (
   auth: Auth,
   input: { name: string; icon: string | null; parentId: string | null }
 ) =>
-  authed<CollectionDTO>(auth, "/api/collections", {
+  authed<CollectionDTO>(auth, routes.collections, {
     method: "POST",
     body: JSON.stringify(input),
   })
 
 export const lookupBookmark = (auth: Auth, url: string) =>
-  authed<BookmarkDTO | null>(
-    auth,
-    `/api/bookmarks/lookup?url=${encodeURIComponent(url)}`
-  )
+  authed<BookmarkDTO | null>(auth, routes.bookmarkLookup(url))
 
 export const createBookmark = (
   auth: Auth,
@@ -112,7 +109,7 @@ export const createBookmark = (
     pinned: boolean
   }
 ) =>
-  authed<BookmarkDTO>(auth, "/api/bookmarks", {
+  authed<BookmarkDTO>(auth, routes.bookmarks, {
     method: "POST",
     body: JSON.stringify(input),
   })
@@ -127,13 +124,13 @@ export const updateBookmark = (
     pinned?: boolean
   }
 ) =>
-  authed<BookmarkDTO>(auth, `/api/bookmarks/${id}`, {
+  authed<BookmarkDTO>(auth, routes.bookmark(id), {
     method: "PATCH",
     body: JSON.stringify(input),
   })
 
 export const deleteBookmark = (auth: Auth, id: string) =>
-  authed<void>(auth, `/api/bookmarks/${id}`, { method: "DELETE" })
+  authed<void>(auth, routes.bookmark(id), { method: "DELETE" })
 
 export const fetchMetadata = (auth: Auth, url: string) =>
-  authed<UrlMetadata>(auth, `/api/metadata?url=${encodeURIComponent(url)}`)
+  authed<UrlMetadata>(auth, routes.metadata(url))

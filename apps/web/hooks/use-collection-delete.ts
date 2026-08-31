@@ -5,8 +5,9 @@ import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
+import type { CollectionDeletion, CollectionDTO } from "@loomark/core/types"
+
 import { api } from "@/lib/client-api"
-import type { CollectionDeletion, CollectionDTO } from "@/lib/types"
 import {
   collectionsAtom,
   removeBookmarksAtom,

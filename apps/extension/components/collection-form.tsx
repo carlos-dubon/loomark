@@ -2,13 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeftIcon } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 
+import { flattenCollections } from "@loomark/core/tree"
+import type { CollectionDTO } from "@loomark/core/types"
+import { Button } from "@loomark/ui/components/button"
+import { Field, FieldInput, FieldSelect } from "@loomark/ui/components/field"
+
 import { IconPicker } from "@/components/icon-picker"
-import { Button } from "@/components/ui/button"
-import { Field, Input, Select } from "@/components/ui/field"
 import { createCollection, type Auth } from "@/lib/api"
 import { collectionFormSchema, type CollectionFormValues } from "@/lib/schemas"
-import { flattenCollections } from "@/lib/tree"
-import type { CollectionDTO } from "@/lib/types"
 
 const ROOT = "__root__"
 
@@ -69,7 +70,7 @@ export const CollectionForm = ({
         htmlFor="collection-name"
         error={errors.name?.message}
       >
-        <Input
+        <FieldInput
           id="collection-name"
           placeholder="Reading list"
           autoFocus
@@ -89,7 +90,7 @@ export const CollectionForm = ({
           control={control}
           name="parentId"
           render={({ field }) => (
-            <Select
+            <FieldSelect
               id="collection-parent"
               value={field.value ?? ROOT}
               onChange={(event) =>
@@ -104,7 +105,7 @@ export const CollectionForm = ({
                   {`${"  ".repeat(node.depth)}${node.name}`}
                 </option>
               ))}
-            </Select>
+            </FieldSelect>
           )}
         />
       </Field>

@@ -5,7 +5,8 @@ import { Trash2Icon, XIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@loomark/ui/components/button"
+
 import { useBookmarkSelection } from "@/hooks/use-bookmark-selection"
 import { bookmarkListAtom, deleteDialogAtom } from "@/store/atoms"
 

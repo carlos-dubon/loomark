@@ -13,7 +13,10 @@ import {
 } from "lucide-react"
 import { useMemo } from "react"
 
-import { Button } from "@/components/ui/button"
+import { buildCollectionTree, flattenTree } from "@loomark/core/tree"
+import type { BookmarkDTO } from "@loomark/core/types"
+import { cn } from "@loomark/core/utils"
+import { Button } from "@loomark/ui/components/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,11 +26,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@loomark/ui/components/dropdown-menu"
+
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
-import { buildCollectionTree, flattenTree } from "@/lib/tree"
-import type { BookmarkDTO } from "@/lib/types"
-import { cn } from "@/lib/utils"
 import {
   bookmarkDialogAtom,
   collectionsAtom,

@@ -12,27 +12,32 @@ import {
 } from "lucide-react"
 import { useState } from "react"
 
-import { UserDeleteDialog } from "@/components/admin/user-delete-dialog"
-import { UserPasswordDialog } from "@/components/admin/user-password-dialog"
-import { PageHeader } from "@/components/page-header"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { formatBytes, formatDate } from "@loomark/core/format"
+import type { InstanceUserDTO } from "@loomark/core/types"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@loomark/ui/components/avatar"
+import { Button } from "@loomark/ui/components/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@loomark/ui/components/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { formatBytes, formatDate } from "@/lib/format"
-import type { InstanceUserDTO } from "@/lib/types"
+} from "@loomark/ui/components/dropdown-menu"
+
+import { UserDeleteDialog } from "@/components/admin/user-delete-dialog"
+import { UserPasswordDialog } from "@/components/admin/user-password-dialog"
+import { PageHeader } from "@/components/page-header"
 
 const Stat = ({
   icon: Icon,

@@ -1,10 +1,11 @@
 import { browser } from "wxt/browser"
 import { defineBackground } from "wxt/utils/define-background"
 
+import { isBookmarkable } from "@loomark/core/url"
+
 import { lookupBookmark, type Auth } from "@/lib/api"
 import type { ExtensionMessage } from "@/lib/messages"
 import { readConnection, watchConnection } from "@/lib/storage"
-import { isBookmarkable } from "@/lib/url"
 
 const CACHE_TTL = 5 * 60 * 1000
 const BADGE_COLOR = "#16a34a"

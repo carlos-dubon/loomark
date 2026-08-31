@@ -1,8 +1,9 @@
+import { toSortOrder } from "@loomark/core/sort"
+import { toViewMode } from "@loomark/core/view-mode"
+
 import { prisma } from "@/lib/prisma"
-import { toSortOrder } from "@/lib/sort"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
 import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
-import { toViewMode } from "@/lib/view-mode"
 
 export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
   const user = await prisma.user.findUnique({

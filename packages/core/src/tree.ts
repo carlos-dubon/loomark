@@ -8,7 +8,9 @@ type TreeShape = { id: string; parentId: string | null }
 const compareSiblings = (a: CollectionDTO, b: CollectionDTO) =>
   a.position - b.position || a.name.localeCompare(b.name)
 
-export const buildCollectionTree = (collections: CollectionDTO[]): CollectionNode[] => {
+export const buildCollectionTree = (
+  collections: CollectionDTO[]
+): CollectionNode[] => {
   const nodes = new Map<string, CollectionNode>()
 
   for (const collection of collections) {
@@ -46,7 +48,10 @@ export const buildCollectionTree = (collections: CollectionDTO[]): CollectionNod
 
     for (const node of level) {
       sortLevel(node.children)
-      node.totalCount += node.children.reduce((sum, child) => sum + child.totalCount, 0)
+      node.totalCount += node.children.reduce(
+        (sum, child) => sum + child.totalCount,
+        0
+      )
     }
   }
 
@@ -55,7 +60,9 @@ export const buildCollectionTree = (collections: CollectionDTO[]): CollectionNod
   return roots
 }
 
-export const flattenCollections = (collections: CollectionDTO[]): FlatCollection[] => {
+export const flattenCollections = (
+  collections: CollectionDTO[]
+): FlatCollection[] => {
   const byParent = new Map<string | null, CollectionDTO[]>()
 
   for (const collection of collections) {
@@ -118,10 +125,14 @@ export const collectDescendantIds = (
   return ids
 }
 
-export const parentsFirst = <T extends { id: string; parentId?: string | null }>(
+export const parentsFirst = <
+  T extends { id: string; parentId?: string | null },
+>(
   collections: T[]
 ): T[] => {
-  const byId = new Map(collections.map((collection) => [collection.id, collection]))
+  const byId = new Map(
+    collections.map((collection) => [collection.id, collection])
+  )
 
   const depthOf = (collection: T, seen = new Set<string>()): number => {
     const parent = collection.parentId ? byId.get(collection.parentId) : null
@@ -138,12 +149,24 @@ export const parentsFirst = <T extends { id: string; parentId?: string | null }>
   return [...collections].sort((a, b) => depthOf(a) - depthOf(b))
 }
 
-export const flattenTree = (nodes: CollectionNode[], depth = 0): FlatCollection[] =>
-  nodes.flatMap((node) => [{ ...node, depth }, ...flattenTree(node.children, depth + 1)])
+export const flattenTree = (
+  nodes: CollectionNode[],
+  depth = 0
+): FlatCollection[] =>
+  nodes.flatMap((node) => [
+    { ...node, depth },
+    ...flattenTree(node.children, depth + 1),
+  ])
 
-export const siblingsOf = (collections: CollectionDTO[], parentId: string | null) =>
+export const siblingsOf = (
+  collections: CollectionDTO[],
+  parentId: string | null
+) =>
   collections
-    .filter((collection) => collection.kind === "USER" && collection.parentId === parentId)
+    .filter(
+      (collection) =>
+        collection.kind === "USER" && collection.parentId === parentId
+    )
     .sort(compareSiblings)
 
 export const applyCollectionMove = (
@@ -162,7 +185,11 @@ export const applyCollectionMove = (
     (collection) => collection.id !== id
   )
   const target = Math.min(Math.max(index, 0), siblings.length)
-  const ordered = [...siblings.slice(0, target), moved, ...siblings.slice(target)]
+  const ordered = [
+    ...siblings.slice(0, target),
+    moved,
+    ...siblings.slice(target),
+  ]
   const positions = new Map(ordered.map((collection, i) => [collection.id, i]))
 
   return collections.map((collection) => {
@@ -197,7 +224,10 @@ export const insertionIndex = (
   return index === -1 ? siblings.length : index
 }
 
-export const changedCollections = (before: CollectionDTO[], after: CollectionDTO[]) =>
+export const changedCollections = (
+  before: CollectionDTO[],
+  after: CollectionDTO[]
+) =>
   after.filter(
     (collection, index) =>
       collection.parentId !== before[index]?.parentId ||

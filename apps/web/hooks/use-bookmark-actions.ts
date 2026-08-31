@@ -4,8 +4,9 @@ import { useSetAtom } from "jotai"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
+import type { BookmarkDTO } from "@loomark/core/types"
+
 import { api } from "@/lib/client-api"
-import type { BookmarkDTO } from "@/lib/types"
 import { upsertBookmarkAtom } from "@/store/atoms"
 
 export const useBookmarkActions = () => {

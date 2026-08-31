@@ -12,7 +12,14 @@ import {
 import { useMemo } from "react"
 import { toast } from "sonner"
 
-import { Button } from "@/components/ui/button"
+import {
+  buildCollectionTree,
+  collectDescendantIds,
+  flattenTree,
+} from "@loomark/core/tree"
+import type { CollectionDTO } from "@loomark/core/types"
+import { cn } from "@loomark/core/utils"
+import { Button } from "@loomark/ui/components/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,15 +29,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@loomark/ui/components/dropdown-menu"
+
 import { useCollectionActions } from "@/hooks/use-collection-actions"
-import {
-  buildCollectionTree,
-  collectDescendantIds,
-  flattenTree,
-} from "@/lib/tree"
-import type { CollectionDTO } from "@/lib/types"
-import { cn } from "@/lib/utils"
 import {
   bookmarkDialogAtom,
   collectionDeleteDialogAtom,

@@ -12,9 +12,11 @@ import { signOut } from "next-auth/react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
 
-import { useThemeToggle } from "@/hooks/use-theme-toggle"
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@loomark/ui/components/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,8 +25,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { SidebarMenuButton } from "@/components/ui/sidebar"
+} from "@loomark/ui/components/dropdown-menu"
+import { SidebarMenuButton } from "@loomark/ui/components/sidebar"
+
+import { useThemeToggle } from "@/hooks/use-theme-toggle"
 
 export type SessionUser = {
   name: string | null

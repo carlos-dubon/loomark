@@ -7,11 +7,20 @@ import {
 } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 
+import { unsortedCollection } from "@loomark/core/tree"
+import type {
+  ActiveTab,
+  BookmarkDTO,
+  CollectionDTO,
+  Connection,
+} from "@loomark/core/types"
+import { hostFromUrl } from "@loomark/core/url"
+import { Button } from "@loomark/ui/components/button"
+import { CollectionIcon } from "@loomark/ui/components/collection-icon"
+
 import { BookmarkForm } from "@/components/bookmark-form"
 import { CollectionForm } from "@/components/collection-form"
-import { CollectionIcon } from "@/components/collection-icon"
 import { SetupForm } from "@/components/setup-form"
-import { Button } from "@/components/ui/button"
 import {
   disconnect,
   isOffline,
@@ -21,21 +30,13 @@ import {
   type Auth,
 } from "@/lib/api"
 import { requestHostPermission } from "@/lib/permissions"
-import { readActiveTab } from "@/lib/tabs"
 import {
   clearConnection,
   readConnection,
   readLastCollectionId,
   writeConnection,
 } from "@/lib/storage"
-import { unsortedCollection } from "@/lib/tree"
-import type {
-  ActiveTab,
-  BookmarkDTO,
-  CollectionDTO,
-  Connection,
-} from "@/lib/types"
-import { hostFromUrl } from "@/lib/url"
+import { readActiveTab } from "@/lib/tabs"
 
 const Shell = ({ children }: { children: React.ReactNode }) => (
   <div className="flex w-[380px] flex-col">{children}</div>
@@ -147,9 +148,6 @@ const Workspace = ({
   }, [])
 
   const load = useCallback(async () => {
-    setError(null)
-    setOffline(false)
-
     try {
       const [list, existing, lastId] = await Promise.all([
         listCollections(auth),
@@ -182,6 +180,12 @@ const Workspace = ({
     void load()
   }, [load])
 
+  const retry = useCallback(() => {
+    setError(null)
+    setOffline(false)
+    void load()
+  }, [load])
+
   const savedIn =
     collections?.find((item) => item.id === bookmark?.collectionId) ?? null
 
@@ -196,13 +200,13 @@ const Workspace = ({
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  void requestHostPermission(connection.serverUrl).then(load)
+                  void requestHostPermission(connection.serverUrl).then(retry)
                 }}
               >
                 Grant access
               </Button>
             ) : null}
-            <Button size="sm" onClick={() => void load()}>
+            <Button size="sm" onClick={retry}>
               Try again
             </Button>
           </div>

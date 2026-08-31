@@ -3,8 +3,9 @@
 import { useAtom, useAtomValue } from "jotai"
 import { useEffect, useMemo } from "react"
 
-import { sortBookmarks } from "@/lib/sort"
-import type { BookmarkDTO } from "@/lib/types"
+import { sortBookmarks } from "@loomark/core/sort"
+import type { BookmarkDTO } from "@loomark/core/types"
+
 import { bookmarkListAtom, sortOrderAtom } from "@/store/atoms"
 
 export const useBookmarkList = (source: BookmarkDTO[]) => {

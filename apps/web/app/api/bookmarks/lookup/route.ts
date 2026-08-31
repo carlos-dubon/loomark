@@ -1,5 +1,6 @@
+import { normalizeUrl } from "@loomark/core/url"
+
 import { jsonError, parseQuery, requireUserId } from "@/lib/api"
-import { normalizeUrl } from "@/lib/format"
 import { prisma } from "@/lib/prisma"
 import { bookmarkLookupSchema } from "@/lib/schemas"
 import { serializeBookmark } from "@/lib/serialize"

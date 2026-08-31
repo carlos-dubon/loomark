@@ -1,5 +1,6 @@
-import { decodeEntities, normalizeUrl } from "@/lib/format"
-import type { UrlMetadata } from "@/lib/types"
+import { decodeEntities } from "@loomark/core/format"
+import type { UrlMetadata } from "@loomark/core/types"
+import { normalizeUrl } from "@loomark/core/url"
 
 const USER_AGENT =
   "Mozilla/5.0 (compatible; Loomark/1.0; +https://github.com/carlos-dubon/loomark)"

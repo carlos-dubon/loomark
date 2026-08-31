@@ -11,9 +11,9 @@
     "dev": "pnpm --filter loomark dev",
     "build": "pnpm --filter loomark build",
     "start": "pnpm --filter loomark start",
-    "lint": "pnpm --filter loomark lint",
-    "format": "pnpm --filter loomark format",
-    "typecheck": "pnpm --filter loomark typecheck",
+    "lint": "eslint",
+    "format": "pnpm -r format",
+    "typecheck": "pnpm -r typecheck",
     "db:generate": "pnpm --filter loomark db:generate",
     "db:migrate": "pnpm --filter loomark db:migrate",
     "db:deploy": "pnpm --filter loomark db:deploy",
@@ -26,11 +26,14 @@
     "ext:typecheck": "pnpm --filter loomark-extension typecheck",
     "ext:zip": "pnpm --filter loomark-extension zip",
     "ext:zip:firefox": "pnpm --filter loomark-extension zip:firefox",
-    "preversion": "pnpm run typecheck && pnpm run lint && pnpm run ext:typecheck && pnpm run ext:build",
+    "preversion": "pnpm run typecheck && pnpm run lint && pnpm run ext:build",
     "postversion": "git push --follow-tags"
   },
   "devDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": "^16.3.2",
     "prettier": "^3.8.3",
-    "prettier-plugin-tailwindcss": "^0.8.0"
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "typescript": "^5"
   }
 }

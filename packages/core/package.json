@@ -5,20 +5,20 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./*": "./src/*.ts",
-    "./utils": "./src/utils.ts",
-    "./types": "./src/types.ts",
-    "./url": "./src/url.ts",
-    "./format": "./src/format.ts",
-    "./tree": "./src/tree.ts",
-    "./sort": "./src/sort.ts",
-    "./view-mode": "./src/view-mode.ts"
+    "./*": "./src/*.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "zod": "^4.4.3"
   },
-  "peerDependencies": {
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "devDependencies": {
+    "prettier": "^3.8.3",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "typescript": "^5"
   }
 }

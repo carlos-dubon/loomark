@@ -3,7 +3,8 @@
 import { useAtom } from "jotai"
 import { Loader2Icon, Trash2Icon } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { hostFromUrl } from "@loomark/core/url"
+import { Button } from "@loomark/ui/components/button"
 import {
   Dialog,
   DialogClose,
@@ -12,9 +13,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@loomark/ui/components/dialog"
+
 import { useBookmarkDelete } from "@/hooks/use-bookmark-delete"
-import { hostFromUrl } from "@/lib/format"
 import { deleteDialogAtom } from "@/store/atoms"
 
 export const BookmarkDeleteDialog = () => {

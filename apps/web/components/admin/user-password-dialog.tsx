@@ -5,7 +5,8 @@ import * as React from "react"
 import { useState } from "react"
 import { toast } from "sonner"
 
-import { Button } from "@/components/ui/button"
+import type { InstanceUserDTO } from "@loomark/core/types"
+import { Button } from "@loomark/ui/components/button"
 import {
   Dialog,
   DialogClose,
@@ -14,11 +15,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@loomark/ui/components/dialog"
+import { Input } from "@loomark/ui/components/input"
+import { Label } from "@loomark/ui/components/label"
+
 import { api } from "@/lib/client-api"
-import type { InstanceUserDTO } from "@/lib/types"
 
 const ALPHABET = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 

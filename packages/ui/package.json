@@ -4,21 +4,13 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./*": "./src/*.ts",
     "./components/*": "./src/components/*.tsx",
-    "./components/ui/*": "./src/components/ui/*.tsx",
-    "./button": "./src/components/ui/button.tsx",
-    "./switch": "./src/components/ui/switch.tsx",
-    "./field": "./src/components/ui/field.tsx",
-    "./input": "./src/components/ui/input.tsx",
-    "./label": "./src/components/ui/label.tsx",
-    "./select": "./src/components/ui/select.tsx",
-    "./textarea": "./src/components/ui/textarea.tsx",
-    "./card": "./src/components/ui/card.tsx",
-    "./dialog": "./src/components/ui/dialog.tsx",
-    "./dropdown-menu": "./src/components/ui/dropdown-menu.tsx",
-    "./tooltip": "./src/components/ui/tooltip.tsx"
+    "./hooks/*": "./src/hooks/*.ts",
+    "./lib/*": "./src/lib/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -26,6 +18,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "fuse.js": "^7.5.0",
     "lucide-react": "^1.34.0",
     "next-themes": "^0.4.6",
     "sonner": "^2.0.8",
@@ -39,6 +32,8 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "prettier": "^3.8.3",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "typescript": "^5"
   }
 }

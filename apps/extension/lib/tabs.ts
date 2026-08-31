@@ -1,7 +1,7 @@
 import { browser } from "wxt/browser"
 
-import type { ActiveTab } from "@/lib/types"
-import { isBookmarkable } from "@/lib/url"
+import type { ActiveTab } from "@loomark/core/types"
+import { isBookmarkable } from "@loomark/core/url"
 
 export const readActiveTab = async (): Promise<ActiveTab | null> => {
   const [tab] = await browser.tabs.query({ active: true, currentWindow: true })

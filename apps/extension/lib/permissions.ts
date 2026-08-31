@@ -1,6 +1,6 @@
 import { browser } from "wxt/browser"
 
-import { originPattern } from "@/lib/url"
+import { originPattern } from "@loomark/core/url"
 
 export const hasHostPermission = (serverUrl: string) =>
   browser.permissions.contains({ origins: [originPattern(serverUrl)] })

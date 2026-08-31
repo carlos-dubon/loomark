@@ -4,13 +4,14 @@ import { useAtom } from "jotai"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
-import { api } from "@/lib/client-api"
 import {
   applyCollectionMove,
   changedCollections,
   collectDescendantIds,
   insertionIndex,
-} from "@/lib/tree"
+} from "@loomark/core/tree"
+
+import { api } from "@/lib/client-api"
 import { collectionsAtom } from "@/store/atoms"
 
 export const useCollectionActions = () => {

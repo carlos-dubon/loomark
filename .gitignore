@@ -11,19 +11,18 @@ node_modules/
 # testing
 coverage/
 
-# next.js
-.next/
-out/
-.turbo/
-.vercel/
+**/.next/
+**/out/
+**/build/
+**/dist/
+**/.turbo/
+**/.vercel/
 
-# production
-build/
-dist/
+**/lib/generated/
 
 # wxt / extension
-output/
-.wxt/
+**/output/
+**/.wxt/
 stats.html
 
 # misc
@@ -44,5 +43,4 @@ pnpm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/lib/generated/prisma
 backups/

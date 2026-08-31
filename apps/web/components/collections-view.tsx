@@ -4,12 +4,13 @@ import { useSetAtom } from "jotai"
 import { FolderTreeIcon, PlusIcon } from "lucide-react"
 import Link from "next/link"
 
-import { CollectionIcon } from "@/components/collection-icon"
+import type { FlatCollection } from "@loomark/core/tree"
+import { Button } from "@loomark/ui/components/button"
+import { CollectionIcon } from "@loomark/ui/components/collection-icon"
+
 import { EmptyState } from "@/components/empty-state"
 import { PageHeader } from "@/components/page-header"
-import { Button } from "@/components/ui/button"
 import { useCollectionItems } from "@/hooks/use-collection-items"
-import type { FlatCollection } from "@/lib/tree"
 import { collectionDialogAtom } from "@/store/atoms"
 
 const CollectionCard = ({

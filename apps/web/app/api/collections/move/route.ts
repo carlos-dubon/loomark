@@ -1,12 +1,13 @@
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
-import { prisma } from "@/lib/prisma"
-import { getCollections } from "@/lib/queries"
-import { collectionMoveSchema } from "@/lib/schemas"
 import {
   applyCollectionMove,
   changedCollections,
   collectDescendantIds,
-} from "@/lib/tree"
+} from "@loomark/core/tree"
+
+import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { prisma } from "@/lib/prisma"
+import { getCollections } from "@/lib/queries"
+import { collectionMoveSchema } from "@/lib/schemas"
 
 export const POST = async (request: Request) => {
   const userId = await requireUserId()
