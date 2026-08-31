@@ -125,13 +125,14 @@ export const SettingsView = ({
             <CardTitle>Import bookmarks</CardTitle>
             <CardDescription>
               Upload an HTML bookmarks file exported from Chrome, Edge, Safari,
-              Firefox, or any other browser that speaks the same format. Folders
-              become collections and links you already saved are left alone.
+              Firefox, or any other browser that speaks the same format, or a
+              JSON backup exported from Linkwarden. Folders and collections come
+              across and links you already saved are left alone.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <Dropzone
-              accept=".html,.htm,text/html"
+              accept=".html,.htm,.json,text/html,application/json"
               maxSize={IMPORT_MAX_BYTES}
               disabled={importing}
               onDrop={(files) => {
@@ -147,7 +148,7 @@ export const SettingsView = ({
                   Drop your bookmarks file or click to browse
                 </DropzoneTitle>
                 <DropzoneDescription>
-                  A single .html export, up to 10 MB
+                  A single .html or .json export, up to 10 MB
                 </DropzoneDescription>
               </DropzoneArea>
               {file ? (
