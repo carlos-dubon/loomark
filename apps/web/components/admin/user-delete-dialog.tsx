@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
-import { Button } from "@/components/ui/button"
+import type { InstanceUserDTO } from "@loomark/core/types"
+import { Button } from "@loomark/ui/components/button"
 import {
   Dialog,
   DialogClose,
@@ -14,9 +15,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@loomark/ui/components/dialog"
+
 import { api } from "@/lib/client-api"
-import type { InstanceUserDTO } from "@/lib/types"
 
 const plural = (count: number, word: string) =>
   `${count} ${count === 1 ? word : `${word}s`}`

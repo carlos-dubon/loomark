@@ -1,5 +1,6 @@
+import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
+
 import type { Bookmark, Collection } from "@/lib/generated/prisma/client"
-import type { BookmarkDTO, CollectionDTO } from "@/lib/types"
 
 export const serializeBookmark = (bookmark: Bookmark): BookmarkDTO => ({
   id: bookmark.id,

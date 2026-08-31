@@ -3,8 +3,9 @@
 import { Provider as JotaiProvider } from "jotai"
 import { SessionProvider } from "next-auth/react"
 
+import { TooltipProvider } from "@loomark/ui/components/tooltip"
+
 import { ThemeProvider } from "@/components/theme-provider"
-import { TooltipProvider } from "@/components/ui/tooltip"
 
 export const Providers = ({ children }: { children: React.ReactNode }) => (
   <SessionProvider>

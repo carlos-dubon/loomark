@@ -4,16 +4,17 @@ import { useAtomValue, useSetAtom } from "jotai"
 import { BookmarkIcon, InboxIcon, PlusIcon } from "lucide-react"
 import Link from "next/link"
 
+import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
+import { Button } from "@loomark/ui/components/button"
+import { CollectionIcon } from "@loomark/ui/components/collection-icon"
+
 import { BookmarkGrid } from "@/components/bookmark-grid"
-import { CollectionIcon } from "@/components/collection-icon"
 import { CollectionMenu } from "@/components/collection-menu"
 import { EmptyState } from "@/components/empty-state"
 import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
-import { Button } from "@/components/ui/button"
 import { ViewModeToggle } from "@/components/view-mode-toggle"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
-import type { BookmarkDTO, CollectionDTO } from "@/lib/types"
 import { bookmarkDialogAtom, viewModeAtom } from "@/store/atoms"
 
 const EMPTY_ICONS = {

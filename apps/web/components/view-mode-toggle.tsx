@@ -2,7 +2,8 @@
 
 import { LayoutGridIcon, ListIcon } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@loomark/ui/components/button"
+
 import { useViewMode } from "@/hooks/use-view-mode"
 
 export const ViewModeToggle = () => {

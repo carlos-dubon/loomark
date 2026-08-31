@@ -8,16 +8,17 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useCallback, useMemo } from "react"
 
-import { CollectionIcon } from "@/components/collection-icon"
+import { collectDescendantIds, type FlatCollection } from "@loomark/core/tree"
+import { cn } from "@loomark/core/utils"
+import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@loomark/ui/components/sidebar"
+
 import { useCollectionItems } from "@/hooks/use-collection-items"
 import { DRAG_TYPE, DROP_PRIORITY, type DropTargetData } from "@/lib/dnd"
-import { collectDescendantIds, type FlatCollection } from "@/lib/tree"
-import { cn } from "@/lib/utils"
 import { collectionsAtom } from "@/store/atoms"
 
 const INDENT_WIDTH = 16

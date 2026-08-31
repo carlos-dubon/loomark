@@ -2,15 +2,16 @@
 
 import { ArrowUpDownIcon } from "lucide-react"
 
+import { SORT_LABELS, SORT_ORDERS, type SortOrder } from "@loomark/core/sort"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@loomark/ui/components/select"
+
 import { useSortOrder } from "@/hooks/use-sort-order"
-import { SORT_LABELS, SORT_ORDERS, type SortOrder } from "@/lib/sort"
 
 export const SortOrderSelect = () => {
   const { order, select } = useSortOrder()

@@ -1,5 +1,5 @@
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Separator } from "@loomark/ui/components/separator"
+import { SidebarTrigger } from "@loomark/ui/components/sidebar"
 
 export const PageHeader = ({
   title,

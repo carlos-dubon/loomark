@@ -1,6 +1,7 @@
+import type { InstanceUserDTO } from "@loomark/core/types"
+
 import { requireUserId } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
-import type { InstanceUserDTO } from "@/lib/types"
 
 type StorageRow = { id: string; bytes: bigint | number | string | null }
 

@@ -3,8 +3,9 @@
 import { useAtom } from "jotai"
 import { toast } from "sonner"
 
+import type { SortOrder } from "@loomark/core/sort"
+
 import { api } from "@/lib/client-api"
-import type { SortOrder } from "@/lib/sort"
 import { sortOrderAtom } from "@/store/atoms"
 
 export const useSortOrder = () => {

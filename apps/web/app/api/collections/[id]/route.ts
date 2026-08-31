@@ -1,10 +1,11 @@
+import { collectDescendantIds } from "@loomark/core/tree"
+import type { CollectionDeletion } from "@loomark/core/types"
+
 import { jsonError, parseBody, requireUserId } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 import { getCollections } from "@/lib/queries"
 import { collectionUpdateSchema } from "@/lib/schemas"
 import { serializeBookmark, serializeCollection } from "@/lib/serialize"
-import { collectDescendantIds } from "@/lib/tree"
-import type { CollectionDeletion } from "@/lib/types"
 
 type Context = { params: Promise<{ id: string }> }
 

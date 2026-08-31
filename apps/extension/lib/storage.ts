@@ -1,6 +1,6 @@
 import { storage } from "wxt/utils/storage"
 
-import type { Connection } from "@/lib/types"
+import type { Connection } from "@loomark/core/types"
 
 const connectionItem = storage.defineItem<Connection | null>(
   "local:connection",

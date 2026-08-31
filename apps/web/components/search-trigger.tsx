@@ -4,12 +4,13 @@ import { useSetAtom } from "jotai"
 import { SearchIcon } from "lucide-react"
 import { useSyncExternalStore } from "react"
 
-import { Kbd, KbdGroup } from "@/components/ui/kbd"
+import { Kbd, KbdGroup } from "@loomark/ui/components/kbd"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@loomark/ui/components/sidebar"
+
 import { searchDialogAtom } from "@/store/atoms"
 
 const subscribe = () => () => {}

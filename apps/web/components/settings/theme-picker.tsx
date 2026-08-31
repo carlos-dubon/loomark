@@ -6,8 +6,10 @@ import * as React from "react"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { cn } from "@loomark/core/utils"
+import { Button } from "@loomark/ui/components/button"
+import { Input } from "@loomark/ui/components/input"
+
 import { useIsDark } from "@/hooks/use-is-dark"
 import { api } from "@/lib/client-api"
 import { THEME_PRESETS } from "@/lib/themes/presets"
@@ -19,7 +21,6 @@ import {
   presetToCss,
   type ThemePreset,
 } from "@/lib/themes/theme"
-import { cn } from "@/lib/utils"
 import { appearanceAtom, fontHrefAtom, themeCssAtom } from "@/store/atoms"
 
 const SWATCHES = ["primary", "secondary", "accent", "muted"] as const

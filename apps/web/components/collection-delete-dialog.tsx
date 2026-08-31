@@ -4,7 +4,9 @@ import { useAtom, useAtomValue } from "jotai"
 import { Loader2Icon, Trash2Icon } from "lucide-react"
 import { useState } from "react"
 
-import { Button } from "@/components/ui/button"
+import { collectDescendantIds } from "@loomark/core/tree"
+import type { CollectionDTO } from "@loomark/core/types"
+import { Button } from "@loomark/ui/components/button"
 import {
   Dialog,
   DialogClose,
@@ -13,10 +15,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@loomark/ui/components/dialog"
+
 import { useCollectionDelete } from "@/hooks/use-collection-delete"
-import { collectDescendantIds } from "@/lib/tree"
-import type { CollectionDTO } from "@/lib/types"
 import { collectionDeleteDialogAtom, collectionsAtom } from "@/store/atoms"
 
 type Doomed = {

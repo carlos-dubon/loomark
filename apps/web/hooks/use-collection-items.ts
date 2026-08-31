@@ -3,7 +3,8 @@
 import { useAtomValue } from "jotai"
 import { useMemo } from "react"
 
-import { buildCollectionTree, flattenTree } from "@/lib/tree"
+import { buildCollectionTree, flattenTree } from "@loomark/core/tree"
+
 import { collectionsAtom } from "@/store/atoms"
 
 export const useCollectionItems = () => {

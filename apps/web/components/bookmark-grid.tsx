@@ -1,8 +1,9 @@
 "use client"
 
+import type { BookmarkDTO } from "@loomark/core/types"
+import type { ViewMode } from "@loomark/core/view-mode"
+
 import { BookmarkCard } from "@/components/bookmark-card"
-import type { BookmarkDTO } from "@/lib/types"
-import type { ViewMode } from "@/lib/view-mode"
 
 export const BookmarkGrid = ({
   bookmarks,

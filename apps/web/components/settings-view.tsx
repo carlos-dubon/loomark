@@ -11,16 +11,15 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
-import { PageHeader } from "@/components/page-header"
-import { ThemePicker } from "@/components/settings/theme-picker"
-import { Button } from "@/components/ui/button"
+import type { ImportSummary } from "@loomark/core/types"
+import { Button } from "@loomark/ui/components/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@loomark/ui/components/card"
 import {
   Dropzone,
   DropzoneArea,
@@ -30,9 +29,11 @@ import {
   DropzoneIcon,
   DropzoneInput,
   DropzoneTitle,
-} from "@/components/ui/dropzone"
+} from "@loomark/ui/components/dropzone"
+
+import { PageHeader } from "@/components/page-header"
+import { ThemePicker } from "@/components/settings/theme-picker"
 import { api } from "@/lib/client-api"
-import type { ImportSummary } from "@/lib/types"
 import { collectionsAtom } from "@/store/atoms"
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
