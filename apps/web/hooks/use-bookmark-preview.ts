@@ -37,7 +37,9 @@ export const useBookmarkPreview = (bookmark: BookmarkDTO, enabled: boolean) => {
   const [settled, setSettled] = useState(() => attempted.has(bookmark.id))
 
   useEffect(() => {
-    if (!enabled || bookmark.previewUrl || attempted.has(bookmark.id)) {
+    const wanted = (enabled && !bookmark.previewUrl) || !bookmark.faviconUrl
+
+    if (!wanted || attempted.has(bookmark.id)) {
       return
     }
 
@@ -49,7 +51,10 @@ export const useBookmarkPreview = (bookmark: BookmarkDTO, enabled: boolean) => {
       try {
         const updated = await api.refreshPreview(bookmark.id)
 
-        if (updated.previewUrl) {
+        if (
+          updated.previewUrl !== bookmark.previewUrl ||
+          updated.faviconUrl !== bookmark.faviconUrl
+        ) {
           upsertBookmark(updated)
         }
       } catch {
@@ -66,7 +71,13 @@ export const useBookmarkPreview = (bookmark: BookmarkDTO, enabled: boolean) => {
     return () => {
       cancelled = true
     }
-  }, [bookmark.id, bookmark.previewUrl, enabled, upsertBookmark])
+  }, [
+    bookmark.id,
+    bookmark.previewUrl,
+    bookmark.faviconUrl,
+    enabled,
+    upsertBookmark,
+  ])
 
   return enabled && !bookmark.previewUrl && !settled
 }
