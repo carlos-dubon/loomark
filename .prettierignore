@@ -1,7 +1,7 @@
-dist/
 node_modules/
-.next/
-.turbo/
-coverage/
+**/node_modules/
+**/.next/
+**/output/
+**/.wxt/
+**/lib/generated/
 pnpm-lock.yaml
-.pnpm-store/

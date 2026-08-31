@@ -60,8 +60,27 @@ jobs:
           path: /tmp/digests/*
           retention-days: 1
 
+  extension:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run ext:typecheck
+      - run: pnpm run ext:zip
+      - run: pnpm run ext:zip:firefox
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extension
+          path: apps/extension/output/*.zip
+          retention-days: 1
+
   publish:
-    needs: build
+    needs: [build, extension]
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -72,6 +91,11 @@ jobs:
           path: /tmp/digests
           pattern: digest-*
           merge-multiple: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: extension
+          path: /tmp/extension
 
       - uses: docker/setup-buildx-action@v3
 
@@ -103,3 +127,4 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           generate_release_notes: true
+          files: /tmp/extension/*.zip
