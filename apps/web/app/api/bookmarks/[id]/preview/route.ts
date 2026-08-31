@@ -21,22 +21,27 @@ export const POST = async (_request: Request, { params }: Context) => {
     return jsonError("Bookmark not found", 404)
   }
 
-  if (bookmark.previewUrl) {
+  if (bookmark.previewUrl && bookmark.faviconUrl) {
     return Response.json(serializeBookmark(bookmark))
   }
 
   const metadata = await fetchUrlMetadata(bookmark.url)
+  const previewUrl = bookmark.previewUrl ?? metadata.previewUrl
+  const faviconUrl = bookmark.faviconUrl ?? metadata.faviconUrl
 
-  if (!metadata.previewUrl) {
+  if (
+    previewUrl === bookmark.previewUrl &&
+    faviconUrl === bookmark.faviconUrl
+  ) {
     return Response.json(serializeBookmark(bookmark))
   }
 
   const updated = await prisma.bookmark.update({
     where: { id },
     data: {
-      previewUrl: metadata.previewUrl,
+      previewUrl,
       description: bookmark.description ?? metadata.description,
-      faviconUrl: bookmark.faviconUrl ?? metadata.faviconUrl,
+      faviconUrl,
     },
   })
 

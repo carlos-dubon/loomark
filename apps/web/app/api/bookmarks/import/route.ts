@@ -1,4 +1,5 @@
 import { jsonError, requireUserId } from "@/lib/api"
+import { isLinkwardenBackup, parseLinkwardenBackup } from "@/lib/linkwarden"
 import { parseBookmarksFile } from "@/lib/netscape"
 import { importBookmarksTree } from "@/lib/transfer"
 
@@ -22,16 +23,40 @@ export const POST = async (request: Request) => {
     return jsonError("That file is larger than 10 MB", 413)
   }
 
-  const html = await file.text()
+  const contents = await file.text()
 
-  if (!/<a\s[^>]*href=/i.test(html)) {
+  if (contents.trimStart().startsWith("{")) {
+    const backup = ((): unknown => {
+      try {
+        return JSON.parse(contents) as unknown
+      } catch {
+        return null
+      }
+    })()
+
+    if (!isLinkwardenBackup(backup)) {
+      return jsonError(
+        "That JSON file does not look like a Linkwarden backup. Export one from Linkwarden with Settings → Import & Export → Export Data.",
+        422
+      )
+    }
+
+    return Response.json(
+      await importBookmarksTree(userId, parseLinkwardenBackup(backup))
+    )
+  }
+
+  if (!/<a\s[^>]*href=/i.test(contents)) {
     return jsonError(
       "That does not look like a bookmarks file. Export one from Chrome with Bookmarks → Bookmark manager → Export bookmarks.",
       422
     )
   }
 
-  const summary = await importBookmarksTree(userId, parseBookmarksFile(html))
+  const summary = await importBookmarksTree(
+    userId,
+    parseBookmarksFile(contents)
+  )
 
   return Response.json(summary)
 }
