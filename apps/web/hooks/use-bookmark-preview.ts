@@ -3,8 +3,9 @@
 import { useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
 
+import type { BookmarkDTO } from "@loomark/core/types"
+
 import { api } from "@/lib/client-api"
-import type { BookmarkDTO } from "@/lib/types"
 import { upsertBookmarkAtom } from "@/store/atoms"
 
 const MAX_CONCURRENT = 2

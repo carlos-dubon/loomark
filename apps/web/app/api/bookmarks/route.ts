@@ -1,6 +1,7 @@
+import { normalizeUrl } from "@loomark/core/url"
+
 import { jsonError, parseBody, parseQuery, requireUserId } from "@/lib/api"
 import { resolveCollectionId } from "@/lib/collections"
-import { normalizeUrl } from "@/lib/format"
 import { fetchUrlMetadata } from "@/lib/metadata"
 import { prisma } from "@/lib/prisma"
 import { getBookmarks } from "@/lib/queries"

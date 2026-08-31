@@ -1,5 +1,4 @@
-import { decodeEntities, escapeHtml } from "@/lib/format"
-
+import { decodeEntities, escapeHtml } from "@loomark/core/format"
 export type NetscapeBookmark = {
   url: string
   title: string

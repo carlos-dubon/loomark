@@ -1,3 +1,0 @@
-module.exports=[301138,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M2 17h18a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H2",key:"hpo31w"}],["path",{d:"M2 21V3",key:"1bzk4w"}],["path",{d:"M7 17v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3",key:"5hbqbf"}],["circle",{cx:"16",cy:"11",r:"2",key:"qt15rb"}],["circle",{cx:"8",cy:"11",r:"2",key:"ssideg"}]],d=(0,b.default)("gpu",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_gpu_mjs_0u7olt6._.js.map

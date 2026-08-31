@@ -1,3 +1,0 @@
-module.exports=[128018,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"m13 21-3-3 3-3",key:"s3o1nf"}],["path",{d:"M20 18H10",key:"14r3mt"}],["path",{d:"M3 11h.01",key:"1eifu7"}],["rect",{x:"6",y:"3",width:"5",height:"8",rx:"2.5",key:"v9paqo"}]],d=(0,b.default)("decimals-arrow-left",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_decimals-arrow-left_mjs_05ujcsd._.js.map

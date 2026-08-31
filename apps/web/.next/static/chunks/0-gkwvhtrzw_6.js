@@ -1,1 +1,0 @@
-(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,559828,e=>{"use strict";var t=e.i(339985);let l=[["ellipse",{cx:"12",cy:"12",rx:"10",ry:"6",key:"swdkt4"}]],c=(0,t.default)("ellipse",l);e.s(["__iconNode",0,l,"default",0,c])}]);

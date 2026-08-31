@@ -1,3 +1,0 @@
-module.exports=[361521,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"m17 18-1.535 1.605a5 5 0 0 1-8-1.5",key:"adpv5j"}],["path",{d:"M17 22v-4h-4",key:"ex1ofj"}],["path",{d:"M20.996 15.251A4.5 4.5 0 0 0 17.495 8h-1.79a7 7 0 1 0-12.709 5.607",key:"ziqt14"}],["path",{d:"M7 10v4h4",key:"1j6gx1"}],["path",{d:"m7 14 1.535-1.605a5 5 0 0 1 8 1.5",key:"19q5h7"}]],d=(0,b.default)("cloud-sync",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_cloud-sync_mjs_00b8pd5._.js.map

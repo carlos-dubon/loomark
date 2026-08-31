@@ -1,3 +1,0 @@
-module.exports=[412236,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M22 7h-2",key:"1okbx2"}],["path",{d:"M6.5 3h11A2.5 2.5 0 0 1 20 5.5V20a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1V5.5a1 1 0 0 0-5 0V17a1 1 0 0 0 1 1h4",key:"kc32tg"}],["path",{d:"M9 7H2",key:"ahf7b7"}]],d=(0,b.default)("towel-rack",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_towel-rack_mjs_1uim10p._.js.map

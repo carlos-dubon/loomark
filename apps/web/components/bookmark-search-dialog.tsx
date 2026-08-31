@@ -4,7 +4,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { ClockIcon, Loader2Icon, XIcon } from "lucide-react"
 import { useEffect } from "react"
 
-import { FaviconImage } from "@/components/favicon-image"
+import { hostFromUrl } from "@loomark/core/url"
 import {
   CommandDialog,
   CommandEmpty,
@@ -12,9 +12,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@loomark/ui/components/command"
+
+import { FaviconImage } from "@/components/favicon-image"
 import { api } from "@/lib/client-api"
-import { hostFromUrl } from "@/lib/format"
 import {
   clearRecentSearchesAtom,
   pushRecentSearchAtom,

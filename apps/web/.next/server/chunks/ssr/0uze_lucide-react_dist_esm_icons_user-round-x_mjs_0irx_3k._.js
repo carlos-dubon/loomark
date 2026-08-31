@@ -1,3 +1,0 @@
-module.exports=[335401,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M2 21a8 8 0 0 1 11.873-7",key:"74fkxq"}],["circle",{cx:"10",cy:"8",r:"5",key:"o932ke"}],["path",{d:"m17 17 5 5",key:"p7ous7"}],["path",{d:"m22 17-5 5",key:"gqnmv0"}]],d=(0,b.default)("user-round-x",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_user-round-x_mjs_0irx_3k._.js.map

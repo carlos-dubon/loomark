@@ -76,7 +76,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: extension
-          path: extension/output/*.zip
+          path: apps/extension/output/*.zip
           retention-days: 1
 
   publish:

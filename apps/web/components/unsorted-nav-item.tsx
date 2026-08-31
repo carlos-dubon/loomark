@@ -7,10 +7,14 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMemo } from "react"
 
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import { cn } from "@loomark/core/utils"
+import {
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@loomark/ui/components/sidebar"
+
 import { useCollectionItems } from "@/hooks/use-collection-items"
 import { DRAG_TYPE, DROP_PRIORITY, type DropTargetData } from "@/lib/dnd"
-import { cn } from "@/lib/utils"
 
 export const UnsortedNavItem = () => {
   const pathname = usePathname()

@@ -1,3 +1,0 @@
-module.exports=[139463,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 2v8",key:"1q4o3n"}],["path",{d:"M2 15c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1",key:"1p9f19"}],["path",{d:"M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1",key:"vbxynw"}],["path",{d:"m8 6 4-4 4 4",key:"ybng9g"}]],d=(0,b.default)("waves-arrow-up",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_waves-arrow-up_mjs_0c1xy78._.js.map

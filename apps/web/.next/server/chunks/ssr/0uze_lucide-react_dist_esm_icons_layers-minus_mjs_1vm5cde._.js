@@ -1,3 +1,0 @@
-module.exports=[643900,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 .83.18 2 2 0 0 0 .83-.18l8.58-3.9a1 1 0 0 0 0-1.832z",key:"tq134k"}],["path",{d:"M16 17h6",key:"1ook5g"}],["path",{d:"M2.003 11.995a1 1 0 0 0 .597.915l8.58 3.91a2 2 0 0 0 .83.18",key:"8mjqed"}],["path",{d:"M2.003 16.995a1 1 0 0 0 .597.915l8.58 3.91a2 2 0 0 0 .83.18 2 2 0 0 0 .83-.18l2.11-.96",key:"7vwz41"}],["path",{d:"M22.018 12.004a1 1 0 0 1-.598.916l-.177.08",key:"bm5b9y"}]],d=(0,b.default)("layers-minus",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_layers-minus_mjs_1vm5cde._.js.map

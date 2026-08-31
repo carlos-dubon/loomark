@@ -1,31 +1,42 @@
 import { z } from "zod"
 
-import { SORT_ORDERS } from "@/lib/sort"
-import { VIEW_MODES } from "@/lib/view-mode"
+import {
+  bookmarkDescription,
+  bookmarkTitle,
+  collectionName,
+  emailField,
+  iconSlug,
+  ICON_SLUG,
+  idField,
+  passwordField,
+  urlString,
+} from "@loomark/core/schemas"
+import { SORT_ORDERS } from "@loomark/core/sort"
+import { VIEW_MODES } from "@loomark/core/view-mode"
 
 export const registerSchema = z.object({
-  name: z.string().trim().min(1).max(80),
-  email: z.email().trim().toLowerCase(),
-  password: z.string().min(8).max(200),
+  name: collectionName,
+  email: emailField,
+  password: passwordField,
 })
 
 export const loginSchema = z.object({
-  email: z.email().trim().toLowerCase(),
+  email: emailField,
   password: z.string().min(1),
 })
 
 export const apiTokenCreateSchema = loginSchema.extend({
-  name: z.string().trim().min(1).max(80).optional(),
+  name: collectionName.optional(),
 })
 
 export const passwordResetSchema = z.object({
-  password: z.string().min(8).max(200),
+  password: passwordField,
 })
 
 export const bookmarkCreateSchema = z.object({
-  url: z.string().trim().min(1).max(2000),
-  title: z.string().trim().min(1).max(300).optional(),
-  description: z.string().trim().max(2000).nullish(),
+  url: urlString,
+  title: bookmarkTitle.optional(),
+  description: bookmarkDescription.nullish(),
   faviconUrl: z.string().trim().max(2000).nullish(),
   previewUrl: z.string().trim().max(2000).nullish(),
   collectionId: z.string().min(1).nullish(),
@@ -35,7 +46,7 @@ export const bookmarkCreateSchema = z.object({
 export const bookmarkUpdateSchema = bookmarkCreateSchema.partial()
 
 export const bookmarkLookupSchema = z.object({
-  url: z.string().trim().min(1).max(2000),
+  url: urlString,
 })
 
 export const bookmarkQuerySchema = z.object({
@@ -48,13 +59,8 @@ export const bookmarkQuerySchema = z.object({
 })
 
 export const collectionCreateSchema = z.object({
-  name: z.string().trim().min(1).max(80),
-  icon: z
-    .string()
-    .trim()
-    .max(64)
-    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Pick an icon from the list")
-    .nullish(),
+  name: collectionName,
+  icon: iconSlug.nullish(),
   parentId: z.string().min(1).nullish(),
 })
 
@@ -70,11 +76,7 @@ export const metadataQuerySchema = z.object({
   url: z.url(),
 })
 
-const slug = z
-  .string()
-  .trim()
-  .max(64)
-  .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Unknown preset")
+const slug = z.string().trim().max(64).regex(ICON_SLUG, "Unknown preset")
 
 export const appearanceUpdateSchema = z
   .object({
@@ -85,15 +87,15 @@ export const appearanceUpdateSchema = z
   .partial()
 
 export const bookmarkBulkDeleteSchema = z.object({
-  ids: z.array(z.string().min(1).max(60)).min(1).max(500),
+  ids: z.array(idField).min(1).max(500),
 })
 
 export const bookmarkRestoreSchema = z.object({
   bookmarks: z
     .array(
       bookmarkCreateSchema.extend({
-        id: z.string().min(1).max(60),
-        title: z.string().trim().min(1).max(300),
+        id: idField,
+        title: bookmarkTitle,
         createdAt: z.iso.datetime(),
       })
     )
@@ -105,8 +107,8 @@ export const collectionRestoreSchema = z.object({
   collections: z
     .array(
       collectionCreateSchema.extend({
-        id: z.string().min(1).max(60),
-        name: z.string().trim().min(1).max(80),
+        id: idField,
+        name: collectionName,
         position: z.number().int().min(0),
       })
     )
@@ -115,9 +117,9 @@ export const collectionRestoreSchema = z.object({
   bookmarks: z
     .array(
       bookmarkCreateSchema.extend({
-        id: z.string().min(1).max(60),
-        title: z.string().trim().min(1).max(300),
-        collectionId: z.string().min(1).max(60),
+        id: idField,
+        title: bookmarkTitle,
+        collectionId: idField,
         createdAt: z.iso.datetime(),
       })
     )

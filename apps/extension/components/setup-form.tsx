@@ -3,8 +3,11 @@ import { ArrowLeftIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
-import { Button } from "@/components/ui/button"
-import { Field, Input } from "@/components/ui/field"
+import type { Connection } from "@loomark/core/types"
+import { safeNormalizeUrl } from "@loomark/core/url"
+import { Button } from "@loomark/ui/components/button"
+import { Field, FieldInput } from "@loomark/ui/components/field"
+
 import { connect } from "@/lib/api"
 import { hasHostPermission, requestHostPermission } from "@/lib/permissions"
 import {
@@ -18,8 +21,6 @@ import {
   readDraftServerUrl,
   writeDraftServerUrl,
 } from "@/lib/storage"
-import type { Connection } from "@/lib/types"
-import { safeNormalizeUrl } from "@/lib/url"
 
 const ServerStep = ({
   defaultValue,
@@ -90,7 +91,7 @@ const ServerStep = ({
         htmlFor="server-url"
         error={errors.serverUrl?.message}
       >
-        <Input
+        <FieldInput
           id="server-url"
           placeholder="https://loomark.example.com"
           autoFocus
@@ -162,7 +163,7 @@ const CredentialsStep = ({
         </div>
       </div>
       <Field label="Email" htmlFor="email" error={errors.email?.message}>
-        <Input
+        <FieldInput
           id="email"
           type="email"
           autoComplete="username"
@@ -176,7 +177,7 @@ const CredentialsStep = ({
         htmlFor="password"
         error={errors.password?.message}
       >
-        <Input
+        <FieldInput
           id="password"
           type="password"
           autoComplete="current-password"

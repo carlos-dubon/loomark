@@ -3,9 +3,18 @@ import { Loader2Icon, PlusIcon, WandSparklesIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 
-import { Button } from "@/components/ui/button"
-import { Field, Input, Label, Select, Textarea } from "@/components/ui/field"
-import { Switch } from "@/components/ui/switch"
+import { flattenCollections } from "@loomark/core/tree"
+import type { ActiveTab, BookmarkDTO, CollectionDTO } from "@loomark/core/types"
+import { Button } from "@loomark/ui/components/button"
+import {
+  Field,
+  FieldInput,
+  FieldLabel,
+  FieldSelect,
+  FieldTextarea,
+} from "@loomark/ui/components/field"
+import { Switch } from "@loomark/ui/components/switch"
+
 import {
   createBookmark,
   deleteBookmark,
@@ -16,8 +25,6 @@ import {
 import { notifyBookmarksChanged } from "@/lib/messages"
 import { bookmarkFormSchema, type BookmarkFormValues } from "@/lib/schemas"
 import { writeLastCollectionId } from "@/lib/storage"
-import { flattenCollections } from "@/lib/tree"
-import type { ActiveTab, BookmarkDTO, CollectionDTO } from "@/lib/types"
 
 export const BookmarkForm = ({
   auth,
@@ -145,7 +152,7 @@ export const BookmarkForm = ({
         error={errors.title?.message}
       >
         <div className="flex gap-2">
-          <Input
+          <FieldInput
             id="bookmark-title"
             placeholder="Read from the page when left empty"
             aria-invalid={Boolean(errors.title)}
@@ -172,7 +179,7 @@ export const BookmarkForm = ({
         htmlFor="bookmark-description"
         error={errors.description?.message}
       >
-        <Textarea
+        <FieldTextarea
           id="bookmark-description"
           rows={2}
           aria-invalid={Boolean(errors.description)}
@@ -185,7 +192,7 @@ export const BookmarkForm = ({
             control={control}
             name="collectionId"
             render={({ field }) => (
-              <Select
+              <FieldSelect
                 id="bookmark-collection"
                 value={field.value ?? ""}
                 onChange={(event) => field.onChange(event.target.value)}
@@ -195,7 +202,7 @@ export const BookmarkForm = ({
                     {`${"  ".repeat(node.depth)}${node.name}`}
                   </option>
                 ))}
-              </Select>
+              </FieldSelect>
             )}
           />
           <Button
@@ -210,9 +217,9 @@ export const BookmarkForm = ({
         </div>
       </Field>
       <div className="flex items-center justify-between rounded-md border px-3 py-2">
-        <Label htmlFor="bookmark-pinned" className="text-foreground">
+        <FieldLabel htmlFor="bookmark-pinned" className="text-foreground">
           Pin to homepage
-        </Label>
+        </FieldLabel>
         <Controller
           control={control}
           name="pinned"

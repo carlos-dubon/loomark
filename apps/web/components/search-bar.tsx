@@ -4,9 +4,9 @@ import { Loader2Icon, SearchIcon, XIcon } from "lucide-react"
 import * as React from "react"
 import { useEffect, useRef } from "react"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Kbd } from "@/components/ui/kbd"
+import { Button } from "@loomark/ui/components/button"
+import { Input } from "@loomark/ui/components/input"
+import { Kbd } from "@loomark/ui/components/kbd"
 
 const isTypingTarget = (target: EventTarget | null) =>
   target instanceof HTMLElement &&

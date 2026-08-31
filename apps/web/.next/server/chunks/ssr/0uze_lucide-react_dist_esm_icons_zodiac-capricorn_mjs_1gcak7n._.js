@@ -1,3 +1,0 @@
-module.exports=[607770,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M11 21a3 3 0 0 0 3-3V6.5a1 1 0 0 0-7 0",key:"1kkncs"}],["path",{d:"M7 19V6a3 3 0 0 0-3-3h0",key:"1jg5y1"}],["circle",{cx:"17",cy:"17",r:"3",key:"18b49y"}]],d=(0,b.default)("zodiac-capricorn",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_zodiac-capricorn_mjs_1gcak7n._.js.map

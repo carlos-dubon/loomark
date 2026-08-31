@@ -1,3 +1,0 @@
-module.exports=[231917,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M3 5h8",key:"18g2rq"}],["path",{d:"M3 12h8",key:"1xfjp6"}],["path",{d:"M3 19h8",key:"fpbke4"}],["path",{d:"m15 8 3-3 3 3",key:"bc4io6"}],["path",{d:"m15 16 3 3 3-3",key:"9wmg1l"}]],d=(0,b.default)("list-chevrons-up-down",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_list-chevrons-up-down_mjs_1b6z-a9._.js.map

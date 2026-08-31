@@ -1,3 +1,0 @@
-module.exports=[368803,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 6h4a2 2 0 0 1 2 2v7",key:"18ej7s"}],["path",{d:"M6 12v9",key:"9e33v1"}],["path",{d:"M9 3 3 9",key:"ahyygn"}],["path",{d:"M9 9 3 3",key:"v551iv"}],["circle",{cx:"18",cy:"18",r:"3",key:"1xkwt0"}]],d=(0,b.default)("git-merge-conflict",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_git-merge-conflict_mjs_06viinz._.js.map

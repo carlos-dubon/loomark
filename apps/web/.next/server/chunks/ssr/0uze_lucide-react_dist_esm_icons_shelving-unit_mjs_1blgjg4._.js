@@ -1,3 +1,0 @@
-module.exports=[972274,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 12V9a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3",key:"wiz68x"}],["path",{d:"M16 20v-3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3",key:"1b59c4"}],["path",{d:"M20 22V2",key:"1bnhr8"}],["path",{d:"M4 12h16",key:"1lakjw"}],["path",{d:"M4 20h16",key:"14thso"}],["path",{d:"M4 2v20",key:"gtpd5x"}],["path",{d:"M4 4h16",key:"1bkgr1"}]],d=(0,b.default)("shelving-unit",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_shelving-unit_mjs_1blgjg4._.js.map

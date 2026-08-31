@@ -3,7 +3,7 @@
 import { GlobeIcon } from "lucide-react"
 import { useState } from "react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@loomark/core/utils"
 
 export const FaviconImage = ({
   src,

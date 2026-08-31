@@ -1,3 +1,0 @@
-module.exports=[575288,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 18v4",key:"jadmvz"}],["path",{d:"M2 14.499a5.5 5.5 0 0 0 9.591 3.675.6.6 0 0 1 .818.001A5.5 5.5 0 0 0 22 14.5c0-2.29-1.5-4-3-5.5l-5.492-5.312a2 2 0 0 0-3-.02L5 8.999c-1.5 1.5-3 3.2-3 5.5",key:"1aw2pz"}]],d=(0,b.default)("spade",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_spade_mjs_0g-ub1u._.js.map

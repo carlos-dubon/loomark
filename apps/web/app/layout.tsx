@@ -2,10 +2,12 @@ import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
+
+import { cn } from "@loomark/core/utils"
+import { Toaster } from "@loomark/ui/components/sonner"
+
 import { Providers } from "@/components/providers"
 import { ServiceWorker } from "@/components/service-worker"
-import { Toaster } from "@/components/ui/sonner"
-import { cn } from "@/lib/utils"
 
 const fontSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" })
 

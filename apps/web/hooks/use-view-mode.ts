@@ -3,8 +3,9 @@
 import { useAtom } from "jotai"
 import { toast } from "sonner"
 
+import type { ViewMode } from "@loomark/core/view-mode"
+
 import { api } from "@/lib/client-api"
-import type { ViewMode } from "@/lib/view-mode"
 import { viewModeAtom } from "@/store/atoms"
 
 export const useViewMode = () => {

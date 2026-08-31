@@ -1,17 +1,19 @@
 "use client"
 
 import { useSetAtom } from "jotai"
-import { PinIcon, PlusIcon } from "lucide-react"
+import { PinIcon, PlusIcon, UploadIcon } from "lucide-react"
+import Link from "next/link"
+
+import type { BookmarkDTO } from "@loomark/core/types"
+import { hostFromUrl } from "@loomark/core/url"
+import { Button } from "@loomark/ui/components/button"
 
 import { BookmarkMenu } from "@/components/bookmark-menu"
 import { EmptyState } from "@/components/empty-state"
 import { FaviconImage } from "@/components/favicon-image"
 import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
-import { Button } from "@/components/ui/button"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
-import { hostFromUrl } from "@/lib/format"
-import type { BookmarkDTO } from "@/lib/types"
 import { bookmarkDialogAtom } from "@/store/atoms"
 
 const PinnedItem = ({ bookmark }: { bookmark: BookmarkDTO }) => {
@@ -46,13 +48,21 @@ const PinnedItem = ({ bookmark }: { bookmark: BookmarkDTO }) => {
   )
 }
 
-export const HomeView = ({ pinned }: { pinned: BookmarkDTO[] }) => {
+export const HomeView = ({
+  pinned,
+  bookmarkCount,
+}: {
+  pinned: BookmarkDTO[]
+  bookmarkCount?: number
+}) => {
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
 
   const addBookmark = () =>
     openBookmarkDialog({ open: true, bookmark: null, collectionId: null })
 
   const items = useBookmarkList(pinned)
+
+  const isEmptyLibrary = bookmarkCount === 0 && pinned.length === 0
 
   return (
     <>
@@ -62,17 +72,31 @@ export const HomeView = ({ pinned }: { pinned: BookmarkDTO[] }) => {
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-4 md:p-6 lg:p-8">
         {items.length === 0 ? (
           <div className="my-auto">
-            <EmptyState
-              icon={PinIcon}
-              title="Nothing pinned yet"
-              description="Pin the sites you open every day and they will live right here."
-              action={
-                <Button variant="outline" onClick={addBookmark}>
-                  <PlusIcon />
-                  Add your first bookmark
-                </Button>
-              }
-            />
+            {isEmptyLibrary ? (
+              <EmptyState
+                icon={UploadIcon}
+                title="No bookmarks yet"
+                description="Import your bookmarks from your browser to get started. You can bring your existing bookmarks in one click from Settings."
+                action={
+                  <Button variant="outline" render={<Link href="/settings" />}>
+                    <UploadIcon />
+                    Import bookmarks
+                  </Button>
+                }
+              />
+            ) : (
+              <EmptyState
+                icon={PinIcon}
+                title="Nothing pinned yet"
+                description="Pin the sites you open every day and they will live right here."
+                action={
+                  <Button variant="outline" onClick={addBookmark}>
+                    <PlusIcon />
+                    Add your first bookmark
+                  </Button>
+                }
+              />
+            )}
           </div>
         ) : (
           <div className="mx-auto my-auto flex w-full max-w-5xl flex-wrap justify-center gap-x-4 gap-y-6 py-4 sm:gap-x-6 sm:gap-y-8 sm:py-6 lg:gap-x-8">

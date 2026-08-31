@@ -1,74 +1,14 @@
-import Fuse from "fuse.js"
 import { RotateCcwIcon } from "lucide-react"
-import { DynamicIcon, iconNames, type IconName } from "lucide-react/dynamic"
+import { DynamicIcon } from "lucide-react/dynamic"
 import { useMemo, useState } from "react"
 
-import { isIconName } from "@/components/collection-icon"
-import { Button } from "@/components/ui/button"
-import { Input, Label } from "@/components/ui/field"
-import { cn } from "@/lib/utils"
+import { cn } from "@loomark/core/utils"
+import { Button } from "@loomark/ui/components/button"
+import { isIconName } from "@loomark/ui/components/collection-icon"
+import { FieldInput, FieldLabel } from "@loomark/ui/components/field"
+import { searchIcons, SUGGESTED_ICONS } from "@loomark/ui/lib/icons"
 
 const RESULT_LIMIT = 48
-
-const SUGGESTED: IconName[] = [
-  "folder",
-  "folder-open",
-  "bookmark",
-  "star",
-  "heart",
-  "book",
-  "book-open",
-  "library",
-  "briefcase",
-  "code",
-  "terminal",
-  "palette",
-  "camera",
-  "music",
-  "film",
-  "gamepad-2",
-  "graduation-cap",
-  "lightbulb",
-  "rocket",
-  "plane",
-  "map-pin",
-  "shopping-cart",
-  "utensils",
-  "dumbbell",
-  "leaf",
-  "sparkles",
-  "flame",
-  "zap",
-  "globe",
-  "newspaper",
-  "file-text",
-  "pen-tool",
-  "image",
-  "video",
-  "headphones",
-  "wallet",
-  "chart-line",
-  "users",
-  "house",
-  "calendar",
-  "inbox",
-  "tag",
-  "flask-conical",
-  "wrench",
-]
-
-const fuse = new Fuse(
-  iconNames.map((name) => ({ name, words: name.split("-") })),
-  {
-    keys: [
-      { name: "name", weight: 2 },
-      { name: "words", weight: 1 },
-    ],
-    threshold: 0.35,
-    ignoreLocation: true,
-    minMatchCharLength: 1,
-  }
-)
 
 export const IconPicker = ({
   value,
@@ -83,19 +23,17 @@ export const IconPicker = ({
     const trimmed = query.trim()
 
     if (!trimmed) {
-      const selected = isIconName(value) && !SUGGESTED.includes(value)
-      return selected ? [value, ...SUGGESTED] : SUGGESTED
+      const selected = isIconName(value) && !SUGGESTED_ICONS.includes(value)
+      return selected ? [value, ...SUGGESTED_ICONS] : SUGGESTED_ICONS
     }
 
-    return fuse
-      .search(trimmed, { limit: RESULT_LIMIT })
-      .map((result) => result.item.name)
+    return searchIcons(trimmed, RESULT_LIMIT)
   }, [query, value])
 
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
-        <Label htmlFor="collection-icon">Icon</Label>
+        <FieldLabel htmlFor="collection-icon">Icon</FieldLabel>
         {value ? (
           <Button
             type="button"
@@ -108,7 +46,7 @@ export const IconPicker = ({
           </Button>
         ) : null}
       </div>
-      <Input
+      <FieldInput
         id="collection-icon"
         placeholder="Search icons"
         value={query}

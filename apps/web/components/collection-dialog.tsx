@@ -7,8 +7,12 @@ import { useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
-import { IconPicker } from "@/components/icon-picker"
-import { Button } from "@/components/ui/button"
+import {
+  buildCollectionTree,
+  collectDescendantIds,
+  flattenTree,
+} from "@loomark/core/tree"
+import { Button } from "@loomark/ui/components/button"
 import {
   Dialog,
   DialogContent,
@@ -16,23 +20,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@loomark/ui/components/dialog"
+import { Input } from "@loomark/ui/components/input"
+import { Label } from "@loomark/ui/components/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@loomark/ui/components/select"
+
+import { IconPicker } from "@/components/icon-picker"
 import { api } from "@/lib/client-api"
 import { collectionCreateSchema } from "@/lib/schemas"
-import {
-  buildCollectionTree,
-  collectDescendantIds,
-  flattenTree,
-} from "@/lib/tree"
 import {
   collectionDialogAtom,
   collectionsAtom,
