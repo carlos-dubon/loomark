@@ -1,14 +1,15 @@
 import { RotateCcwIcon } from "lucide-react"
-import { DynamicIcon } from "lucide-react/dynamic"
-import { useMemo, useState } from "react"
+import { type IconName } from "lucide-react/dynamic"
+import { useMemo, useRef, useState } from "react"
 
-import { cn } from "@loomark/core/utils"
 import { Button } from "@loomark/ui/components/button"
-import { isIconName } from "@loomark/ui/components/collection-icon"
+import {
+  CollectionIcon,
+  isIconName,
+} from "@loomark/ui/components/collection-icon"
 import { FieldInput, FieldLabel } from "@loomark/ui/components/field"
-import { searchIcons, SUGGESTED_ICONS } from "@loomark/ui/lib/icons"
-
-const RESULT_LIMIT = 48
+import { IconGrid, type IconGridHandle } from "@loomark/ui/components/icon-grid"
+import { iconNames, searchIcons, SUGGESTED_ICONS } from "@loomark/ui/lib/icons"
 
 export const IconPicker = ({
   value,
@@ -18,68 +19,78 @@ export const IconPicker = ({
   onChange: (value: string | null) => void
 }) => {
   const [query, setQuery] = useState("")
+  const [initialValue] = useState(() => (isIconName(value) ? value : null))
+  const gridRef = useRef<IconGridHandle | null>(null)
 
-  const results = useMemo(() => {
+  const results = useMemo<IconName[]>(() => {
     const trimmed = query.trim()
 
-    if (!trimmed) {
-      const selected = isIconName(value) && !SUGGESTED_ICONS.includes(value)
-      return selected ? [value, ...SUGGESTED_ICONS] : SUGGESTED_ICONS
+    if (trimmed) {
+      return searchIcons(trimmed)
     }
 
-    return searchIcons(trimmed, RESULT_LIMIT)
-  }, [query, value])
+    const pinned = initialValue
+      ? [
+          initialValue,
+          ...SUGGESTED_ICONS.filter((name) => name !== initialValue),
+        ]
+      : SUGGESTED_ICONS
+    const seen = new Set(pinned)
+
+    return [...pinned, ...iconNames.filter((name) => !seen.has(name))]
+  }, [query, initialValue])
+
+  const handleQueryChange = (next: string) => {
+    setQuery(next)
+    gridRef.current?.scrollToTop()
+  }
 
   return (
     <div className="flex flex-col gap-1.5">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <FieldLabel htmlFor="collection-icon">Icon</FieldLabel>
-        {value ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="iconSm"
-            aria-label="Clear icon"
-            onClick={() => onChange(null)}
-          >
-            <RotateCcwIcon />
-          </Button>
-        ) : null}
+        <span className="text-xs text-muted-foreground tabular-nums">
+          {results.length} icons
+        </span>
       </div>
-      <FieldInput
-        id="collection-icon"
-        placeholder="Search icons"
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-      />
-      <div className="grid max-h-32 grid-cols-8 gap-1 overflow-y-auto rounded-md border p-1.5">
-        {results.length === 0 ? (
-          <p className="col-span-8 py-3 text-center text-xs text-muted-foreground">
-            No icons match “{query.trim()}”
-          </p>
-        ) : (
-          results.map((name) => (
-            <button
-              key={name}
-              type="button"
-              aria-label={name}
-              aria-pressed={value === name}
-              onClick={() => onChange(name)}
-              className={cn(
-                "flex aspect-square items-center justify-center rounded-sm transition-colors hover:bg-accent",
-                value === name &&
-                  "bg-primary text-primary-foreground hover:bg-primary"
-              )}
-            >
-              <DynamicIcon
-                name={name}
-                className="size-4"
-                fallback={() => <span className="size-4" />}
-              />
-            </button>
-          ))
-        )}
+      <div className="flex items-center gap-1.5">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-md border bg-muted/40">
+          <CollectionIcon name={value} className="size-4" />
+        </span>
+        <FieldInput
+          id="collection-icon"
+          placeholder="Search all Lucide icons"
+          value={query}
+          onChange={(event) => handleQueryChange(event.target.value)}
+        />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label="Use the default folder icon"
+          disabled={!value}
+          onClick={() => onChange(null)}
+        >
+          <RotateCcwIcon />
+        </Button>
       </div>
+      {results.length === 0 ? (
+        <p className="rounded-md border px-3 py-6 text-center text-xs text-muted-foreground">
+          No icons match “{query.trim()}”
+        </p>
+      ) : (
+        <IconGrid
+          icons={results}
+          value={value}
+          onChange={onChange}
+          handleRef={gridRef}
+          minCell={28}
+          className="h-32 rounded-md border"
+          viewportClassName="p-1.5"
+          buttonClassName="rounded-sm"
+          selectedClassName="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
+        />
+      )}
     </div>
   )
 }
