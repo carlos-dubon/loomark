@@ -1,59 +1,19 @@
 "use client"
 
 import { RotateCcwIcon } from "lucide-react"
-import { DynamicIcon } from "lucide-react/dynamic"
+import { type IconName } from "lucide-react/dynamic"
 import * as React from "react"
-import { useCallback, useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 
-import { cn } from "@loomark/core/utils"
 import { Button } from "@loomark/ui/components/button"
 import {
   CollectionIcon,
   isIconName,
 } from "@loomark/ui/components/collection-icon"
+import { IconGrid, type IconGridHandle } from "@loomark/ui/components/icon-grid"
 import { Input } from "@loomark/ui/components/input"
 import { Label } from "@loomark/ui/components/label"
 import { iconNames, searchIcons, SUGGESTED_ICONS } from "@loomark/ui/lib/icons"
-
-const MIN_CELL = 36
-const GAP = 4
-const OVERSCAN = 4
-
-const useElementSize = () => {
-  const [size, setSize] = useState({ width: 0, height: 0 })
-  const observerRef = useRef<ResizeObserver | null>(null)
-
-  const ref = useCallback((element: HTMLElement | null) => {
-    observerRef.current?.disconnect()
-    observerRef.current = null
-
-    if (!element) {
-      return
-    }
-
-    const measure = () => {
-      setSize((current) =>
-        current.width === element.clientWidth &&
-        current.height === element.clientHeight
-          ? current
-          : { width: element.clientWidth, height: element.clientHeight }
-      )
-    }
-
-    measure()
-
-    const observer = new ResizeObserver(measure)
-
-    observer.observe(element)
-    observerRef.current = observer
-  }, [])
-
-  return [ref, size] as const
-}
-
-const IconPlaceholder = () => (
-  <span className="size-4 rounded-sm bg-muted-foreground/15" />
-)
 
 export const IconPicker = ({
   value,
@@ -64,38 +24,9 @@ export const IconPicker = ({
 }) => {
   const [query, setQuery] = useState("")
   const [initialValue] = useState(() => (isIconName(value) ? value : null))
-  const [scrollTop, setScrollTop] = useState(0)
-  const [viewportRef, viewport] = useElementSize()
-  const [sizerRef, sizer] = useElementSize()
-  const scrollRef = useRef<HTMLDivElement | null>(null)
+  const gridRef = useRef<IconGridHandle | null>(null)
 
-  const frameRef = useRef<number | null>(null)
-
-  const attachScroller = useCallback(
-    (element: HTMLDivElement | null) => {
-      if (!element && frameRef.current !== null) {
-        cancelAnimationFrame(frameRef.current)
-        frameRef.current = null
-      }
-
-      scrollRef.current = element
-      viewportRef(element)
-    },
-    [viewportRef]
-  )
-
-  const handleScroll = () => {
-    if (frameRef.current !== null) {
-      return
-    }
-
-    frameRef.current = requestAnimationFrame(() => {
-      frameRef.current = null
-      setScrollTop(scrollRef.current?.scrollTop ?? 0)
-    })
-  }
-
-  const results = useMemo(() => {
+  const results = useMemo<IconName[]>(() => {
     if (!query.trim()) {
       const pinned = initialValue
         ? [
@@ -113,28 +44,7 @@ export const IconPicker = ({
 
   const handleQueryChange = (next: string) => {
     setQuery(next)
-    setScrollTop(0)
-    scrollRef.current?.scrollTo({ top: 0 })
-  }
-
-  const columns = Math.max(
-    1,
-    Math.floor((sizer.width + GAP) / (MIN_CELL + GAP))
-  )
-  const cell = sizer.width
-    ? (sizer.width - GAP * (columns - 1)) / columns
-    : MIN_CELL
-  const rowHeight = cell + GAP
-  const rowCount = Math.ceil(results.length / columns)
-  const firstRow = Math.max(0, Math.floor(scrollTop / rowHeight) - OVERSCAN)
-  const lastRow = Math.min(
-    rowCount - 1,
-    Math.ceil((scrollTop + viewport.height) / rowHeight) + OVERSCAN
-  )
-
-  const rows = []
-  for (let row = firstRow; row <= lastRow; row++) {
-    rows.push(row)
+    gridRef.current?.scrollToTop()
   }
 
   return (
@@ -178,55 +88,14 @@ export const IconPicker = ({
           No icon matches “{query.trim()}”
         </p>
       ) : (
-        <div
-          ref={attachScroller}
-          onScroll={handleScroll}
-          style={{ overflowAnchor: "none" }}
-          className="no-scrollbar h-56 scroll-fade-y overflow-y-auto rounded-md border p-2"
-        >
-          <div
-            ref={sizerRef}
-            className="relative w-full"
-            style={{ height: Math.max(0, rowCount * rowHeight - GAP) }}
-          >
-            {rows.map((row) => (
-              <div
-                key={row}
-                className="absolute inset-x-0 grid"
-                style={{
-                  top: row * rowHeight,
-                  height: cell,
-                  gap: GAP,
-                  gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-                }}
-              >
-                {results
-                  .slice(row * columns, row * columns + columns)
-                  .map((name) => (
-                    <button
-                      key={name}
-                      type="button"
-                      title={name}
-                      aria-label={name}
-                      aria-pressed={value === name}
-                      onClick={() => onChange(name)}
-                      className={cn(
-                        "flex items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
-                        value === name &&
-                          "bg-accent text-accent-foreground ring-1 ring-foreground/20"
-                      )}
-                    >
-                      <DynamicIcon
-                        name={name}
-                        className="size-4"
-                        fallback={IconPlaceholder}
-                      />
-                    </button>
-                  ))}
-              </div>
-            ))}
-          </div>
-        </div>
+        <IconGrid
+          icons={results}
+          value={value}
+          onChange={onChange}
+          handleRef={gridRef}
+          className="h-56 rounded-md border"
+          viewportClassName="p-2"
+        />
       )}
     </div>
   )
