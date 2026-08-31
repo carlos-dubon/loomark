@@ -14,10 +14,13 @@ import { FaviconImage } from "@/components/favicon-image"
 import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
+import { useBookmarkPreview } from "@/hooks/use-bookmark-preview"
 import { bookmarkDialogAtom } from "@/store/atoms"
 
 const PinnedItem = ({ bookmark }: { bookmark: BookmarkDTO }) => {
   const label = bookmark.title?.trim() || hostFromUrl(bookmark.url)
+
+  useBookmarkPreview(bookmark, false)
 
   return (
     <div className="group/pin relative flex w-[88px] flex-col items-center gap-2 sm:w-[96px]">
@@ -76,9 +79,13 @@ export const HomeView = ({
               <EmptyState
                 icon={UploadIcon}
                 title="No bookmarks yet"
-                description="Import your bookmarks from your browser to get started. You can bring your existing bookmarks in one click from Settings."
+                description="Import your bookmarks from your browser to get started."
                 action={
-                  <Button variant="outline" render={<Link href="/settings" />}>
+                  <Button
+                    variant="outline"
+                    nativeButton={false}
+                    render={<Link href="/settings" />}
+                  >
                     <UploadIcon />
                     Import bookmarks
                   </Button>
