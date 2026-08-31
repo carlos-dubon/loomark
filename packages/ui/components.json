@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-nova",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "../../apps/web/app/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@loomark/ui/components",
+    "ui": "@loomark/ui/components",
+    "utils": "@loomark/core",
+    "lib": "@loomark/core",
+    "hooks": "@loomark/ui/hooks"
+  },
+  "registries": {
+    "@23rd": "https://23rd.dev/r/{name}.json"
+  }
+}

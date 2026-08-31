@@ -1,6 +1,6 @@
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -9,14 +9,21 @@
 !.yarn/versions
 
 # testing
-/coverage
+coverage/
 
-# next.js
-/.next/
-/out/
+**/.next/
+**/out/
+**/build/
+**/dist/
+**/.turbo/
+**/.vercel/
 
-# production
-/build
+**/lib/generated/
+
+# wxt / extension
+**/output/
+**/.wxt/
+stats.html
 
 # misc
 .DS_Store
@@ -36,5 +43,4 @@ pnpm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/lib/generated/prisma
 backups/
