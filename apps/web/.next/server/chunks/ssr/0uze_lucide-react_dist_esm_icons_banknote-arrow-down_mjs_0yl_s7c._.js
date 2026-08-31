@@ -1,3 +1,0 @@
-module.exports=[220725,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5",key:"x6cv4u"}],["path",{d:"m16 19 3 3 3-3",key:"1ibux0"}],["path",{d:"M18 12h.01",key:"yjnet6"}],["path",{d:"M19 16v6",key:"tddt3s"}],["path",{d:"M6 12h.01",key:"c2rlol"}],["circle",{cx:"12",cy:"12",r:"2",key:"1c9p78"}]],d=(0,b.default)("banknote-arrow-down",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_banknote-arrow-down_mjs_0yl_s7c._.js.map

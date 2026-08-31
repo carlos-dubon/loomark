@@ -1,3 +1,0 @@
-module.exports=[888665,a=>{"use strict";var b=a.i(938409);let c=[["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",key:"afitv7"}],["line",{x1:"10",x2:"10",y1:"15",y2:"9",key:"c1nkhi"}],["line",{x1:"14",x2:"14",y1:"15",y2:"9",key:"h65svq"}]],d=(0,b.default)("square-pause",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_square-pause_mjs_0gcqkea._.js.map

@@ -1,3 +1,0 @@
-module.exports=[191652,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8",key:"1k78r4"}],["path",{d:"M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4",key:"fb3tl2"}],["path",{d:"M12 4v6",key:"1dcgq2"}],["path",{d:"M2 18h20",key:"ajqnye"}]],d=(0,b.default)("bed-double",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_bed-double_mjs_1pp-w73._.js.map

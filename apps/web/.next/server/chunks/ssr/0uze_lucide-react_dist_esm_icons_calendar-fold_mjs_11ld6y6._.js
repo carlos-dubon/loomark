@@ -1,3 +1,0 @@
-module.exports=[281084,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M16 2v3",key:"otl347"}],["path",{d:"M21 15V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h10v-5a1 1 0 011-1za2.4 2.4 0 01-.706 1.706l-3.588 3.588A2.4 2.4 0 0115 21",key:"4uit17"}],["path",{d:"M3 9h18",key:"1pudct"}],["path",{d:"M8 2v3",key:"1ioesn"}]],d=(0,b.default)("calendar-fold",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_calendar-fold_mjs_11ld6y6._.js.map

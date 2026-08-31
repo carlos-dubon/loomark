@@ -1,3 +1,0 @@
-module.exports=[394751,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M10 13V7",key:"1u13u9"}],["path",{d:"M14 13V7",key:"1vj9om"}],["rect",{width:"20",height:"14",x:"2",y:"3",rx:"2",key:"48i651"}],["path",{d:"M12 17v4",key:"1riwvh"}],["path",{d:"M8 21h8",key:"1ev6f3"}]],d=(0,b.default)("monitor-pause",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_monitor-pause_mjs_0kzkvkb._.js.map

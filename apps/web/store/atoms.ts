@@ -1,11 +1,12 @@
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
-import type { SortOrder } from "@/lib/sort"
-import type { ViewMode } from "@/lib/view-mode"
-import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
+import type { SortOrder } from "@loomark/core/sort"
+import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
+import type { ViewMode } from "@loomark/core/view-mode"
+
 import type { AppearanceDTO } from "@/lib/themes/appearance"
-import type { BookmarkDTO, CollectionDTO } from "@/lib/types"
+import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
 
 export type BookmarkDialogState = {
   open: boolean

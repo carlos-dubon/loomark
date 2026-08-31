@@ -1,1 +1,0 @@
-(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,664905,t=>{"use strict";var e=t.i(339985);let r=[["rect",{width:"20",height:"6",x:"2",y:"4",rx:"2",key:"qdearl"}],["rect",{width:"20",height:"6",x:"2",y:"14",rx:"2",key:"1xrn6j"}]],i=(0,e.default)("stretch-horizontal",r);t.s(["__iconNode",0,r,"default",0,i])}]);

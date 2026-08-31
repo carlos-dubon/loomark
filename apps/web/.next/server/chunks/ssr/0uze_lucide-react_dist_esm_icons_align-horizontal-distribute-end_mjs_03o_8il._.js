@@ -1,3 +1,0 @@
-module.exports=[421600,a=>{"use strict";var b=a.i(938409);let c=[["rect",{width:"6",height:"14",x:"4",y:"5",rx:"2",key:"1wwnby"}],["rect",{width:"6",height:"10",x:"14",y:"7",rx:"2",key:"1fe6j6"}],["path",{d:"M10 2v20",key:"uyc634"}],["path",{d:"M20 2v20",key:"1tx262"}]],d=(0,b.default)("align-horizontal-distribute-end",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_align-horizontal-distribute-end_mjs_03o_8il._.js.map

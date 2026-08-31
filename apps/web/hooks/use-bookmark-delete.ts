@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
+import type { BookmarkDTO } from "@loomark/core/types"
+
 import { api } from "@/lib/client-api"
-import type { BookmarkDTO } from "@/lib/types"
 import {
   clearBookmarkSelectionAtom,
   removeBookmarksAtom,

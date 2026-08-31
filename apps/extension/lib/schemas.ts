@@ -1,17 +1,14 @@
 import { z } from "zod"
 
-import { safeNormalizeUrl } from "@/lib/url"
+import {
+  bookmarkDescription,
+  collectionName,
+  iconSlug,
+  serverUrlField,
+} from "@loomark/core/schemas"
 
 export const serverUrlSchema = z.object({
-  serverUrl: z
-    .string()
-    .trim()
-    .min(1, "Enter your Loomark URL")
-    .max(2000)
-    .refine(
-      (value) => safeNormalizeUrl(value) !== null,
-      "That does not look like a URL"
-    ),
+  serverUrl: serverUrlField,
 })
 
 export const credentialsSchema = z.object({
@@ -21,19 +18,14 @@ export const credentialsSchema = z.object({
 
 export const bookmarkFormSchema = z.object({
   title: z.string().trim().max(300),
-  description: z.string().trim().max(2000),
+  description: bookmarkDescription,
   collectionId: z.string().nullable(),
   pinned: z.boolean(),
 })
 
 export const collectionFormSchema = z.object({
-  name: z.string().trim().min(1, "Give the collection a name").max(80),
-  icon: z
-    .string()
-    .trim()
-    .max(64)
-    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Pick an icon from the list")
-    .nullable(),
+  name: collectionName.min(1, "Give the collection a name"),
+  icon: iconSlug.nullable(),
   parentId: z.string().nullable(),
 })
 

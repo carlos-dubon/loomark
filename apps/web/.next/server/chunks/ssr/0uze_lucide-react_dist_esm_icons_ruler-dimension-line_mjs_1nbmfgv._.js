@@ -1,3 +1,0 @@
-module.exports=[661491,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M10 15v-3",key:"1pjskw"}],["path",{d:"M14 15v-3",key:"1o1mqj"}],["path",{d:"M18 15v-3",key:"cws6he"}],["path",{d:"M2 8V4",key:"3jv1jz"}],["path",{d:"M22 6H2",key:"1iqbfk"}],["path",{d:"M22 8V4",key:"16f4ou"}],["path",{d:"M6 15v-3",key:"1ij1qe"}],["rect",{x:"2",y:"12",width:"20",height:"8",rx:"2",key:"1tqiko"}]],d=(0,b.default)("ruler-dimension-line",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_ruler-dimension-line_mjs_1nbmfgv._.js.map

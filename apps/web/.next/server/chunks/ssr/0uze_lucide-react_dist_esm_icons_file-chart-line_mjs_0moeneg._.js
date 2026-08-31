@@ -1,3 +1,0 @@
-module.exports=[767537,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z",key:"1oefj6"}],["path",{d:"M14 2v5a1 1 0 0 0 1 1h5",key:"wfsgrz"}],["path",{d:"m16 13-3.5 3.5-2-2L8 17",key:"zz7yod"}]],d=(0,b.default)("file-chart-line",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_file-chart-line_mjs_0moeneg._.js.map

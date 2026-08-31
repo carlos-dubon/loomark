@@ -1,3 +1,0 @@
-module.exports=[909723,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M20.4 20.4a2 2 0 01-1.4.6H5a2 2 0 01-2-2V5a2 2 0 01.59-1.41",key:"7ym6nm"}],["path",{d:"M21 15.3V5a2 2 0 00-2-2H8.7",key:"m4nk5y"}],["path",{d:"M22 22 2 2",key:"1r8tn9"}]],d=(0,b.default)("square-off",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_square-off_mjs_0niudld._.js.map

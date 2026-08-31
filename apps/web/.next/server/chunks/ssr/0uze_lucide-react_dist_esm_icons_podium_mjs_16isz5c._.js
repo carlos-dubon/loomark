@@ -1,3 +1,0 @@
-module.exports=[552262,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M12 6V2h-1",key:"1hv4eo"}],["path",{d:"M9 15a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1",key:"1jvw5n"}],["path",{d:"M9 21V11a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v10",key:"rgi5dp"}]],d=(0,b.default)("podium",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_podium_mjs_16isz5c._.js.map

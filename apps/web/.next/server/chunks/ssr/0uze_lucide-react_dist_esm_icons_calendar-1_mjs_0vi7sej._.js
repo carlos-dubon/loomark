@@ -1,3 +1,0 @@
-module.exports=[783653,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M11 13h1v4",key:"10p4bv"}],["path",{d:"M16 2v3",key:"otl347"}],["path",{d:"M3 9h18",key:"1pudct"}],["path",{d:"M8 2v3",key:"1ioesn"}],["rect",{x:"3",y:"3",width:"18",height:"18",rx:"2",key:"h1oib"}]],d=(0,b.default)("calendar-1",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_calendar-1_mjs_0vi7sej._.js.map

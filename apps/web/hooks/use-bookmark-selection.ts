@@ -2,7 +2,8 @@
 
 import { useAtomValue, useSetAtom } from "jotai"
 
-import type { BookmarkDTO } from "@/lib/types"
+import type { BookmarkDTO } from "@loomark/core/types"
+
 import {
   clearBookmarkSelectionAtom,
   selectedBookmarkIdsAtom,

@@ -7,10 +7,11 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/react"
 
+import type { BookmarkDTO } from "@loomark/core/types"
+
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
 import { useCollectionActions } from "@/hooks/use-collection-actions"
 import { DRAG_TYPE, dropTargetData } from "@/lib/dnd"
-import type { BookmarkDTO } from "@/lib/types"
 
 const NON_DRAGGABLE = "button, input, textarea, select"
 

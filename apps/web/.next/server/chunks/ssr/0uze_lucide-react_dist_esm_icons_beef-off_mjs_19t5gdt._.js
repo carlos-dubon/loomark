@@ -1,3 +1,0 @@
-module.exports=[481197,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M11.771 6.109a2.5 2.5 0 0 1 3.12 3.12",key:"3w1grc"}],["path",{d:"M17.852 12.185a6.5 6.5 0 0 0-9.035-9.04",key:"1xgl7b"}],["path",{d:"M18.013 18.013C15.029 20.349 10.831 22 7 22a3 3 0 0 1-2.68-1.66L2.4 16.5",key:"3m3yc0"}],["path",{d:"m18.5 6 2.19 4.5a6.48 6.48 0 0 1-.139 4.393",key:"1rvkn7"}],["path",{d:"m2 2 20 20",key:"1ooewy"}],["path",{d:"M6.355 6.37a7 7 0 0 0-.075.23c-1.1 3.13-.78 3.9-3.18 6.08A3 3 0 0 0 5 18c3.356 0 6.993-1.267 9.85-3.151",key:"54713r"}]],d=(0,b.default)("beef-off",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_beef-off_mjs_19t5gdt._.js.map

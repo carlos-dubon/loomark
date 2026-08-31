@@ -1,3 +1,0 @@
-module.exports=[169418,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M4 11V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h7",key:"huwfnr"}],["path",{d:"M14 2v5a1 1 0 0 0 1 1h5",key:"wfsgrz"}],["path",{d:"m10 18 3-3-3-3",key:"18f6ys"}]],d=(0,b.default)("file-symlink",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_file-symlink_mjs_0b4aey8._.js.map

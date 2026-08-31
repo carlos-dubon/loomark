@@ -1,3 +1,0 @@
-module.exports=[520510,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"m2 16 4.039-9.69a.5.5 0 0 1 .923 0L11 16",key:"d5nyq2"}],["path",{d:"M22 9v7",key:"pvm9v3"}],["path",{d:"M3.304 13h6.392",key:"1q3zxz"}],["circle",{cx:"18.5",cy:"12.5",r:"3.5",key:"z97x68"}]],d=(0,b.default)("case-sensitive",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_case-sensitive_mjs_1-vho0y._.js.map

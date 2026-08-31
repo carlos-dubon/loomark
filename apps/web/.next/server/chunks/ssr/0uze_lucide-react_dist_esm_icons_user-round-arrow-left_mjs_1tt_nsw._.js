@@ -1,3 +1,0 @@
-module.exports=[571700,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"m19 16-3 3",key:"lp3y45"}],["path",{d:"M2 21a8 8 0 0 1 12.664-6.5",key:"1ap0vn"}],["path",{d:"M22 19h-6l3 3",key:"13fjle"}],["circle",{cx:"10",cy:"8",r:"5",key:"o932ke"}]],d=(0,b.default)("user-round-arrow-left",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_user-round-arrow-left_mjs_1tt_nsw._.js.map

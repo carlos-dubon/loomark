@@ -1,3 +1,0 @@
-module.exports=[308794,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M8.43 8.43 3 11l8 2 2 8 2.57-5.43",key:"1vdtb7"}],["path",{d:"M17.39 11.73 22 2l-9.73 4.61",key:"tya3r6"}],["line",{x1:"2",x2:"22",y1:"2",y2:"22",key:"a6p6uj"}]],d=(0,b.default)("navigation-off",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_navigation-off_mjs_0ttw1_m._.js.map

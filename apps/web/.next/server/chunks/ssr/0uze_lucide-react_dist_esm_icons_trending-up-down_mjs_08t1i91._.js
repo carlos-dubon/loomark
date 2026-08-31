@@ -1,3 +1,0 @@
-module.exports=[424657,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M14.828 14.828 21 21",key:"ar5fw7"}],["path",{d:"M21 16v5h-5",key:"1ck2sf"}],["path",{d:"m21 3-9 9-4-4-6 6",key:"1h02xo"}],["path",{d:"M21 8V3h-5",key:"1qoq8a"}]],d=(0,b.default)("trending-up-down",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_trending-up-down_mjs_08t1i91._.js.map

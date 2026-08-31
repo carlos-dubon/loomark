@@ -1,3 +1,0 @@
-module.exports=[700125,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M13.5 10.5 15 9",key:"1nsxvm"}],["path",{d:"M4 4v15a1 1 0 0 0 1 1h15",key:"1w6lkd"}],["path",{d:"M4.293 19.707 6 18",key:"3g1p8c"}],["path",{d:"m9 15 1.5-1.5",key:"1xfbes"}]],d=(0,b.default)("axis-3d",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_axis-3d_mjs_1gsj3-3._.js.map

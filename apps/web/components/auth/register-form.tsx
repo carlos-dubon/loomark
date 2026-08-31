@@ -1,12 +1,12 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@loomark/ui/components/button"
 import {
   Card,
   CardContent,
@@ -14,9 +14,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@loomark/ui/components/card"
+import { Input } from "@loomark/ui/components/input"
+import { Label } from "@loomark/ui/components/label"
+
 import { api } from "@/lib/client-api"
 import { registerSchema } from "@/lib/schemas"
 

@@ -1,82 +1,23 @@
 "use client"
 
-import Fuse from "fuse.js"
 import { RotateCcwIcon } from "lucide-react"
-import { DynamicIcon, iconNames, type IconName } from "lucide-react/dynamic"
+import { DynamicIcon } from "lucide-react/dynamic"
 import * as React from "react"
 import { useCallback, useMemo, useRef, useState } from "react"
 
-import { CollectionIcon, isIconName } from "@/components/collection-icon"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { cn } from "@/lib/utils"
+import { cn } from "@loomark/core/utils"
+import { Button } from "@loomark/ui/components/button"
+import {
+  CollectionIcon,
+  isIconName,
+} from "@loomark/ui/components/collection-icon"
+import { Input } from "@loomark/ui/components/input"
+import { Label } from "@loomark/ui/components/label"
+import { iconNames, searchIcons, SUGGESTED_ICONS } from "@loomark/ui/lib/icons"
 
 const MIN_CELL = 36
 const GAP = 4
 const OVERSCAN = 4
-
-const SUGGESTED: IconName[] = [
-  "folder",
-  "folder-open",
-  "bookmark",
-  "star",
-  "heart",
-  "book",
-  "book-open",
-  "library",
-  "briefcase",
-  "code",
-  "terminal",
-  "palette",
-  "camera",
-  "music",
-  "film",
-  "gamepad-2",
-  "graduation-cap",
-  "lightbulb",
-  "rocket",
-  "plane",
-  "map-pin",
-  "shopping-cart",
-  "utensils",
-  "dumbbell",
-  "leaf",
-  "sparkles",
-  "flame",
-  "zap",
-  "globe",
-  "newspaper",
-  "file-text",
-  "pen-tool",
-  "image",
-  "video",
-  "headphones",
-  "wallet",
-  "chart-line",
-  "users",
-  "house",
-  "calendar",
-  "inbox",
-  "tag",
-  "flask-conical",
-  "wrench",
-]
-
-const searchIndex = iconNames.map((name) => ({
-  name,
-  words: name.split("-"),
-}))
-
-const fuse = new Fuse(searchIndex, {
-  keys: [
-    { name: "name", weight: 2 },
-    { name: "words", weight: 1 },
-  ],
-  threshold: 0.35,
-  ignoreLocation: true,
-  minMatchCharLength: 1,
-})
 
 const useElementSize = () => {
   const [size, setSize] = useState({ width: 0, height: 0 })
@@ -155,18 +96,19 @@ export const IconPicker = ({
   }
 
   const results = useMemo(() => {
-    const needle = query.trim().toLowerCase().replace(/\s+/g, "-")
-
-    if (!needle) {
+    if (!query.trim()) {
       const pinned = initialValue
-        ? [initialValue, ...SUGGESTED.filter((name) => name !== initialValue)]
-        : SUGGESTED
+        ? [
+            initialValue,
+            ...SUGGESTED_ICONS.filter((name) => name !== initialValue),
+          ]
+        : SUGGESTED_ICONS
       const seen = new Set(pinned)
 
       return [...pinned, ...iconNames.filter((name) => !seen.has(name))]
     }
 
-    return fuse.search(needle).map((result) => result.item.name)
+    return searchIcons(query)
   }, [query, initialValue])
 
   const handleQueryChange = (next: string) => {

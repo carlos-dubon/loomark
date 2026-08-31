@@ -1,3 +1,0 @@
-module.exports=[863809,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M16 4h2a2 2 0 0 1 2 2v2",key:"j91f56"}],["path",{d:"M21.34 15.664a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z",key:"16fuwn"}],["path",{d:"M8 22H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2",key:"120tdm"}],["rect",{x:"8",y:"2",width:"8",height:"4",rx:"1",key:"ublpy"}]],d=(0,b.default)("clipboard-pen",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_clipboard-pen_mjs_1w3ob0b._.js.map

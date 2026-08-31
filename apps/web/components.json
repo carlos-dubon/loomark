@@ -14,9 +14,9 @@
   "rtl": false,
   "aliases": {
     "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
+    "ui": "@loomark/ui/components",
+    "utils": "@loomark/core",
+    "lib": "@loomark/core",
     "hooks": "@/hooks"
   },
   "menuColor": "default",

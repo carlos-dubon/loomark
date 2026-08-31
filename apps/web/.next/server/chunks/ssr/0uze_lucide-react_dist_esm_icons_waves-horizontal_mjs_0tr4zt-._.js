@@ -1,3 +1,0 @@
-module.exports=[990803,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M2 12q2.5 2 5 0t5 0 5 0 5 0",key:"8ddzzs"}],["path",{d:"M2 19q2.5 2 5 0t5 0 5 0 5 0",key:"1wj4st"}],["path",{d:"M2 5q2.5 2 5 0t5 0 5 0 5 0",key:"69x50u"}]],d=(0,b.default)("waves-horizontal",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_waves-horizontal_mjs_0tr4zt-._.js.map

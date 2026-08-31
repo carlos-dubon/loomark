@@ -1,3 +1,0 @@
-module.exports=[401288,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M14 18a2 2 0 0 0-4 0",key:"1v8fkw"}],["path",{d:"m19 11-2.11-6.657a2 2 0 0 0-2.752-1.148l-1.276.61A2 2 0 0 1 12 4H8.5a2 2 0 0 0-1.925 1.456L5 11",key:"1fkr7p"}],["path",{d:"M2 11h20",key:"3eubbj"}],["circle",{cx:"17",cy:"18",r:"3",key:"82mm0e"}],["circle",{cx:"7",cy:"18",r:"3",key:"lvkj7j"}]],d=(0,b.default)("hat-glasses",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_hat-glasses_mjs_1mr9902._.js.map

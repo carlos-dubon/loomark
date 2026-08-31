@@ -1,1 +1,0 @@
-(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,537822,e=>{"use strict";var t=e.i(339985);let a=[["path",{d:"M12 7.5a4.5 4.5 0 1 1 5 4.5",key:"k987hv"}],["path",{d:"M7 12a4.5 4.5 0 1 1 5-4.5V21",key:"mjup0w"}]],o=(0,t.default)("zodiac-aries",a);e.s(["__iconNode",0,a,"default",0,o])}]);

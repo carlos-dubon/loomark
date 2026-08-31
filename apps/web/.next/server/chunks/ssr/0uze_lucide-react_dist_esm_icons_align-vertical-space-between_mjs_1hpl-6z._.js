@@ -1,3 +1,0 @@
-module.exports=[896063,a=>{"use strict";var b=a.i(938409);let c=[["rect",{width:"14",height:"6",x:"5",y:"15",rx:"2",key:"1w91an"}],["rect",{width:"10",height:"6",x:"7",y:"3",rx:"2",key:"17wqzy"}],["path",{d:"M2 21h20",key:"1nyx9w"}],["path",{d:"M2 3h20",key:"91anmk"}]],d=(0,b.default)("align-vertical-space-between",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_align-vertical-space-between_mjs_1hpl-6z._.js.map

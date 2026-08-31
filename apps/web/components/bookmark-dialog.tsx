@@ -10,7 +10,9 @@ import { Controller, useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { Button } from "@/components/ui/button"
+import { buildCollectionTree, flattenTree } from "@loomark/core/tree"
+import { normalizeUrl } from "@loomark/core/url"
+import { Button } from "@loomark/ui/components/button"
 import {
   Dialog,
   DialogContent,
@@ -18,21 +20,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@loomark/ui/components/dialog"
+import { Input } from "@loomark/ui/components/input"
+import { Label } from "@loomark/ui/components/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { Textarea } from "@/components/ui/textarea"
+} from "@loomark/ui/components/select"
+import { Switch } from "@loomark/ui/components/switch"
+import { Textarea } from "@loomark/ui/components/textarea"
+
 import { api } from "@/lib/client-api"
-import { normalizeUrl } from "@/lib/format"
-import { buildCollectionTree, flattenTree } from "@/lib/tree"
 import {
   bookmarkDialogAtom,
   collectionsAtom,

@@ -1,3 +1,12 @@
+import { routes } from "@loomark/core/routes"
+import type {
+  BookmarkDTO,
+  CollectionDeletion,
+  CollectionDTO,
+  ImportSummary,
+  UrlMetadata,
+} from "@loomark/core/types"
+
 import type {
   AppearanceUpdateInput,
   BookmarkCreateInput,
@@ -7,13 +16,6 @@ import type {
   CollectionUpdateInput,
 } from "@/lib/schemas"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
-import type {
-  BookmarkDTO,
-  CollectionDeletion,
-  CollectionDTO,
-  ImportSummary,
-  UrlMetadata,
-} from "@/lib/types"
 
 const request = async <T>(url: string, init?: RequestInit): Promise<T> => {
   const json = !(init?.body instanceof FormData)
@@ -62,81 +64,81 @@ const toSearchParams = (query: BookmarkQuery) => {
 
 export const api = {
   listBookmarks: (query: BookmarkQuery = {}, signal?: AbortSignal) =>
-    request<BookmarkDTO[]>(`/api/bookmarks?${toSearchParams(query)}`, {
+    request<BookmarkDTO[]>(`${routes.bookmarks}?${toSearchParams(query)}`, {
       signal,
     }),
   createBookmark: (input: BookmarkCreateInput) =>
-    request<BookmarkDTO>("/api/bookmarks", {
+    request<BookmarkDTO>(routes.bookmarks, {
       method: "POST",
       body: JSON.stringify(input),
     }),
   updateBookmark: (id: string, input: BookmarkUpdateInput) =>
-    request<BookmarkDTO>(`/api/bookmarks/${id}`, {
+    request<BookmarkDTO>(routes.bookmark(id), {
       method: "PATCH",
       body: JSON.stringify(input),
     }),
   deleteBookmarks: (ids: string[]) =>
-    request<{ count: number }>("/api/bookmarks", {
+    request<{ count: number }>(routes.bookmarks, {
       method: "DELETE",
       body: JSON.stringify({ ids }),
     }),
   restoreBookmarks: (bookmarks: BookmarkDTO[]) =>
-    request<BookmarkDTO[]>("/api/bookmarks/restore", {
+    request<BookmarkDTO[]>(routes.bookmarksRestore, {
       method: "POST",
       body: JSON.stringify({ bookmarks }),
     }),
   refreshPreview: (id: string) =>
-    request<BookmarkDTO>(`/api/bookmarks/${id}/preview`, { method: "POST" }),
-  listCollections: () => request<CollectionDTO[]>("/api/collections"),
+    request<BookmarkDTO>(routes.bookmarkPreview(id), { method: "POST" }),
+  listCollections: () => request<CollectionDTO[]>(routes.collections),
   createCollection: (input: CollectionCreateInput) =>
-    request<CollectionDTO>("/api/collections", {
+    request<CollectionDTO>(routes.collections, {
       method: "POST",
       body: JSON.stringify(input),
     }),
   updateCollection: (id: string, input: CollectionUpdateInput) =>
-    request<CollectionDTO>(`/api/collections/${id}`, {
+    request<CollectionDTO>(routes.collection(id), {
       method: "PATCH",
       body: JSON.stringify(input),
     }),
   moveCollection: (input: CollectionMoveInput) =>
-    request<CollectionDTO[]>("/api/collections/move", {
+    request<CollectionDTO[]>(routes.collectionsMove, {
       method: "POST",
       body: JSON.stringify(input),
     }),
   deleteCollection: (id: string) =>
-    request<CollectionDeletion>(`/api/collections/${id}`, { method: "DELETE" }),
+    request<CollectionDeletion>(routes.collection(id), { method: "DELETE" }),
   restoreCollection: (deletion: CollectionDeletion) =>
-    request<CollectionDTO[]>("/api/collections/restore", {
+    request<CollectionDTO[]>(routes.collectionsRestore, {
       method: "POST",
       body: JSON.stringify(deletion),
     }),
   fetchMetadata: (url: string, signal?: AbortSignal) =>
-    request<UrlMetadata>(`/api/metadata?url=${encodeURIComponent(url)}`, {
+    request<UrlMetadata>(routes.metadata(url), {
       signal,
     }),
   importBookmarks: (file: File) => {
     const body = new FormData()
     body.append("file", file)
 
-    return request<ImportSummary>("/api/bookmarks/import", {
+    return request<ImportSummary>(routes.bookmarksImport, {
       method: "POST",
       body,
     })
   },
   updateAppearance: (input: AppearanceUpdateInput) =>
-    request<AppearanceDTO>("/api/appearance", {
+    request<AppearanceDTO>(routes.appearance, {
       method: "PATCH",
       body: JSON.stringify(input),
     }),
   resetUserPassword: (id: string, password: string) =>
-    request<void>(`/api/admin/users/${id}/password`, {
+    request<void>(routes.adminUserPassword(id), {
       method: "POST",
       body: JSON.stringify({ password }),
     }),
   deleteUser: (id: string) =>
-    request<void>(`/api/admin/users/${id}`, { method: "DELETE" }),
+    request<void>(routes.adminUser(id), { method: "DELETE" }),
   register: (input: { name: string; email: string; password: string }) =>
-    request<{ id: string; email: string }>("/api/register", {
+    request<{ id: string; email: string }>(routes.register, {
       method: "POST",
       body: JSON.stringify(input),
     }),

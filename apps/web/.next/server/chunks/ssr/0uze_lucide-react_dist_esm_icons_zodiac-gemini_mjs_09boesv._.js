@@ -1,3 +1,0 @@
-module.exports=[841315,a=>{"use strict";var b=a.i(938409);let c=[["path",{d:"M16 4.525v14.948",key:"bgoxo0"}],["path",{d:"M20 3A17 17 0 0 1 4 3",key:"1djemw"}],["path",{d:"M4 21a17 17 0 0 1 16 0",key:"onoyo7"}],["path",{d:"M8 4.525v14.948",key:"u5iyof"}]],d=(0,b.default)("zodiac-gemini",c);a.s(["__iconNode",0,c,"default",0,d])}];
-
-//# sourceMappingURL=0uze_lucide-react_dist_esm_icons_zodiac-gemini_mjs_09boesv._.js.map

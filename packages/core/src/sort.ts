@@ -11,7 +11,10 @@ export const SORT_LABELS: Record<SortOrder, string> = {
   oldest: "Oldest",
 }
 
-const comparators: Record<SortOrder, (a: BookmarkDTO, b: BookmarkDTO) => number> = {
+const comparators: Record<
+  SortOrder,
+  (a: BookmarkDTO, b: BookmarkDTO) => number
+> = {
   "a-z": (a, b) => a.title.localeCompare(b.title),
   "z-a": (a, b) => b.title.localeCompare(a.title),
   newest: (a, b) => b.createdAt.localeCompare(a.createdAt),
