@@ -4,8 +4,9 @@ import {
   parseFloccusBody,
 } from "@/lib/floccus/schemas"
 import { floccusSession } from "@/lib/floccus/session"
-import { loadTree } from "@/lib/floccus/tree"
+import { loadTree, siblingOf } from "@/lib/floccus/tree"
 import { prisma } from "@/lib/prisma"
+import { renumber } from "@/lib/siblings"
 
 type Context = { params: Promise<{ id: string }> }
 
@@ -34,25 +35,19 @@ export const PATCH = async (request: Request, { params }: Context) => {
     folder.children.map((child) => [`${child.type}:${child.id}`, child])
   )
 
-  const updates = body.data.flatMap((entry, position) => {
+  const listed = body.data.flatMap((entry) => {
     const child = children.get(`${entry.type}:${entry.id}`)
 
-    if (!child || child.position === position) {
-      return []
-    }
-
-    return [
-      child.type === "folder"
-        ? prisma.collection.update({
-            where: { id: child.id },
-            data: { position },
-          })
-        : prisma.bookmark.update({
-            where: { id: child.id },
-            data: { position },
-          }),
-    ]
+    return child ? [child] : []
   })
+
+  const seen = new Set(listed)
+  const ordered = [
+    ...listed,
+    ...folder.children.filter((child) => !seen.has(child)),
+  ]
+
+  const updates = renumber(ordered.map(siblingOf))
 
   if (updates.length > 0) {
     await prisma.$transaction(updates)

@@ -4,6 +4,13 @@ import { isBookmarkable, safeNormalizeUrl } from "@loomark/core/url"
 
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { prisma } from "@/lib/prisma"
+import {
+  containerOf,
+  nextSiblingPosition,
+  unsortedCollectionId,
+} from "@/lib/siblings"
+
+import type { Sibling } from "@loomark/core/order"
 
 export const ROOT_ID = "-1"
 
@@ -186,13 +193,7 @@ export const bookmarkItem = (
   tags: [],
 })
 
-export const unsortedCollectionId = async (userId: string) =>
-  (
-    await prisma.collection.findFirst({
-      where: { userId, kind: "UNSORTED" },
-      select: { id: true },
-    })
-  )?.id ?? null
+export { unsortedCollectionId }
 
 export const collectionIdForFolder = async (
   userId: string,
@@ -214,28 +215,20 @@ export const ownedCollection = (userId: string, id: string) =>
     select: { id: true, name: true, parentId: true },
   })
 
-export const nextChildPosition = async (
+export const siblingOf = (node: TreeNode): Sibling => ({
+  type: node.type === "folder" ? "collection" : "bookmark",
+  id: node.id,
+  title: node.title ?? "",
+  position: node.position,
+})
+
+export const nextChildPosition = (
   userId: string,
   folderId: string,
   unsortedId: string | null
-) => {
-  const collectionId = folderId === ROOT_ID ? unsortedId : folderId
-
-  const [collections, bookmarks] = await Promise.all([
-    prisma.collection.aggregate({
-      where: { userId, parentId: folderId === ROOT_ID ? null : folderId },
-      _max: { position: true },
-    }),
-    collectionId
-      ? prisma.bookmark.aggregate({
-          where: { userId, collectionId },
-          _max: { position: true },
-        })
-      : null,
-  ])
-
-  return (
-    Math.max(collections._max.position ?? -1, bookmarks?._max.position ?? -1) +
-    1
+) =>
+  nextSiblingPosition(
+    userId,
+    containerOf(folderId === ROOT_ID ? null : folderId, unsortedId),
+    unsortedId
   )
-}
