@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getCollections } from "@/lib/queries"
 import { collectionCreateSchema } from "@/lib/schemas"
 import { serializeCollection } from "@/lib/serialize"
+import { nextSiblingPosition, unsortedCollectionId } from "@/lib/siblings"
 
 export const GET = async () => {
   const userId = await requireUserId()
@@ -38,12 +39,16 @@ export const POST = async (request: Request) => {
     }
   }
 
+  const parentId = data.parentId ?? null
+  const unsortedId = await unsortedCollectionId(userId)
+
   const collection = await prisma.collection.create({
     data: {
       userId,
       name: data.name,
       icon: data.icon ?? null,
-      parentId: data.parentId ?? null,
+      parentId,
+      position: await nextSiblingPosition(userId, parentId, unsortedId),
     },
     include: { _count: { select: { bookmarks: true } } },
   })

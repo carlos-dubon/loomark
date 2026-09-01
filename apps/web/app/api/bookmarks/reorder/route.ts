@@ -1,6 +1,38 @@
+import { reorderWithin } from "@loomark/core/order"
 import { jsonError, parseBody, requireUserId } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 import { bookmarkReorderSchema } from "@/lib/schemas"
+import {
+  containerOf,
+  loadSiblings,
+  renumber,
+  unsortedCollectionId,
+} from "@/lib/siblings"
+
+const reorderPinned = async (userId: string, ids: string[]) => {
+  const bookmarks = await prisma.bookmark.findMany({
+    where: { userId, id: { in: ids }, pinned: true },
+    select: { id: true, pinnedPosition: true },
+  })
+
+  if (bookmarks.length !== ids.length) {
+    return jsonError("Bookmark not found", 404)
+  }
+
+  const current = new Map(bookmarks.map((bookmark) => [bookmark.id, bookmark]))
+
+  const updates = ids.flatMap((id, pinnedPosition) =>
+    current.get(id)?.pinnedPosition === pinnedPosition
+      ? []
+      : [prisma.bookmark.update({ where: { id }, data: { pinnedPosition } })]
+  )
+
+  if (updates.length > 0) {
+    await prisma.$transaction(updates)
+  }
+
+  return new Response(null, { status: 204 })
+}
 
 export const POST = async (request: Request) => {
   const userId = await requireUserId()
@@ -15,46 +47,25 @@ export const POST = async (request: Request) => {
     return response
   }
 
-  const pinned = data.scope === "pinned"
+  if (data.scope === "pinned") {
+    return reorderPinned(userId, data.ids)
+  }
 
-  const bookmarks = await prisma.bookmark.findMany({
-    where: {
-      userId,
-      id: { in: data.ids },
-      ...(pinned ? { pinned: true } : {}),
-      ...(!pinned && data.collectionId
-        ? { collectionId: data.collectionId }
-        : {}),
-    },
-    select: { id: true, position: true, pinnedPosition: true },
-  })
+  const unsortedId = await unsortedCollectionId(userId)
+  const container = containerOf(data.collectionId, unsortedId)
+  const siblings = await loadSiblings(userId, container, unsortedId)
 
-  if (bookmarks.length !== data.ids.length) {
+  const known = new Set(
+    siblings.flatMap((sibling) =>
+      sibling.type === "bookmark" ? [sibling.id] : []
+    )
+  )
+
+  if (data.ids.some((id) => !known.has(id))) {
     return jsonError("Bookmark not found", 404)
   }
 
-  const current = new Map(bookmarks.map((bookmark) => [bookmark.id, bookmark]))
-
-  const updates = data.ids.flatMap((id, position) => {
-    const bookmark = current.get(id)
-
-    if (!bookmark) {
-      return []
-    }
-
-    const stored = pinned ? bookmark.pinnedPosition : bookmark.position
-
-    if (stored === position) {
-      return []
-    }
-
-    return [
-      prisma.bookmark.update({
-        where: { id },
-        data: pinned ? { pinnedPosition: position } : { position },
-      }),
-    ]
-  })
+  const updates = renumber(reorderWithin(siblings, "bookmark", data.ids))
 
   if (updates.length > 0) {
     await prisma.$transaction(updates)
