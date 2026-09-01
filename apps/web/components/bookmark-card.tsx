@@ -1,6 +1,6 @@
 "use client"
 
-import { useDraggable } from "@dnd-kit/react"
+import { useSortable } from "@dnd-kit/react/sortable"
 import { CalendarIcon, LinkIcon, PinIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 
@@ -281,17 +281,23 @@ const ListRow = ({
 export const BookmarkCard = ({
   bookmark,
   mode,
+  index,
+  manual,
 }: {
   bookmark: BookmarkDTO
   mode: ViewMode
+  index: number
+  manual: boolean
 }) => {
   const data = useMemo(() => ({ bookmark }), [bookmark])
   const coarsePointer = useCoarsePointer()
-  const { ref, isDragSource } = useDraggable({
+  const { ref, isDragSource } = useSortable({
     id: bookmark.id,
+    index,
     type: DRAG_TYPE.bookmark,
+    accept: DRAG_TYPE.bookmark,
     data,
-    disabled: coarsePointer,
+    disabled: { draggable: coarsePointer, droppable: !manual },
   })
 
   const pendingPreview = useBookmarkPreview(bookmark, mode === "grid")

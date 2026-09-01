@@ -2,6 +2,7 @@ import { normalizeUrl } from "@loomark/core/url"
 
 import { jsonError, parseBody, requireUserId } from "@/lib/api"
 import { resolveCollectionId } from "@/lib/collections"
+import { nextBookmarkPosition, nextPinnedPosition } from "@/lib/positions"
 import { prisma } from "@/lib/prisma"
 import { bookmarkUpdateSchema } from "@/lib/schemas"
 import { serializeBookmark } from "@/lib/serialize"
@@ -43,7 +44,7 @@ export const PATCH = async (request: Request, { params }: Context) => {
 
   const existing = await prisma.bookmark.findFirst({
     where: { id, userId },
-    select: { id: true, collectionId: true },
+    select: { id: true, collectionId: true, pinned: true },
   })
 
   if (!existing) {
@@ -72,6 +73,8 @@ export const PATCH = async (request: Request, { params }: Context) => {
     }
   }
 
+  const pinning = data.pinned === true && !existing.pinned
+
   const bookmark = await prisma.bookmark.update({
     where: { id },
     data: {
@@ -81,6 +84,10 @@ export const PATCH = async (request: Request, { params }: Context) => {
       faviconUrl: data.faviconUrl,
       previewUrl: data.previewUrl,
       pinned: data.pinned,
+      position: collectionId
+        ? await nextBookmarkPosition(userId, collectionId)
+        : undefined,
+      pinnedPosition: pinning ? await nextPinnedPosition(userId) : undefined,
       collectionId,
     },
   })

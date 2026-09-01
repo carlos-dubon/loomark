@@ -101,11 +101,36 @@ export const importBookmarksTree = async (
     }),
     prisma.bookmark.findMany({
       where: { userId },
-      select: { url: true },
+      select: {
+        url: true,
+        collectionId: true,
+        position: true,
+        pinned: true,
+        pinnedPosition: true,
+      },
     }),
   ])
 
   const seen = new Set(existing.map((bookmark) => bookmark.url))
+  const nextPosition = new Map<string, number>()
+  let nextPinnedPosition = 0
+
+  for (const bookmark of existing) {
+    nextPosition.set(
+      bookmark.collectionId,
+      Math.max(
+        nextPosition.get(bookmark.collectionId) ?? 0,
+        bookmark.position + 1
+      )
+    )
+
+    if (bookmark.pinned) {
+      nextPinnedPosition = Math.max(
+        nextPinnedPosition,
+        bookmark.pinnedPosition + 1
+      )
+    }
+  }
   const collectionIds = new Map(
     collections.map((collection) => [
       folderKey(collection.parentId, collection.name),
@@ -168,6 +193,9 @@ export const importBookmarksTree = async (
 
     seen.add(url)
 
+    const position = nextPosition.get(collectionId) ?? 0
+    nextPosition.set(collectionId, position + 1)
+
     pending.push({
       userId,
       url,
@@ -175,6 +203,8 @@ export const importBookmarksTree = async (
       description: bookmark.description?.slice(0, 2000) ?? null,
       faviconUrl: bookmark.faviconUrl,
       pinned: bookmark.pinned,
+      position,
+      pinnedPosition: bookmark.pinned ? nextPinnedPosition++ : 0,
       collectionId,
       ...(bookmark.addDate ? { createdAt: bookmark.addDate } : {}),
     })

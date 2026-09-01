@@ -8,6 +8,7 @@ export const routes = {
   bookmarkLookup: (url: string) => withUrl("/api/bookmarks/lookup", url),
   bookmarksImport: "/api/bookmarks/import",
   bookmarksRestore: "/api/bookmarks/restore",
+  bookmarksReorder: "/api/bookmarks/reorder",
   collections: "/api/collections",
   collection: (id: string) => `/api/collections/${id}`,
   collectionsMove: "/api/collections/move",

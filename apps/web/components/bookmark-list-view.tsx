@@ -63,7 +63,11 @@ export const BookmarkListView = ({
 }) => {
   const mode = useAtomValue(viewModeAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
-  const items = useBookmarkList(bookmarks)
+  const { items, manual } = useBookmarkList(
+    bookmarks,
+    "collection",
+    collectionId
+  )
 
   const addBookmark = () =>
     openBookmarkDialog({ open: true, bookmark: null, collectionId })
@@ -111,7 +115,7 @@ export const BookmarkListView = ({
             {hasCollections ? (
               <h2 className="text-sm font-semibold">Bookmarks</h2>
             ) : null}
-            <BookmarkGrid bookmarks={items} mode={mode} />
+            <BookmarkGrid bookmarks={items} mode={mode} manual={manual} />
           </>
         ) : hasCollections ? (
           <section className="flex flex-col gap-3">

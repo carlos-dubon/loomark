@@ -11,7 +11,7 @@ import {
   passwordField,
   urlString,
 } from "@loomark/core/schemas"
-import { SORT_ORDERS } from "@loomark/core/sort"
+import { ORDER_SCOPES, SORT_ORDERS } from "@loomark/core/sort"
 import { VIEW_MODES } from "@loomark/core/view-mode"
 
 export const registerSchema = z.object({
@@ -58,6 +58,12 @@ export const bookmarkQuerySchema = z.object({
   skip: z.coerce.number().int().min(0).default(0),
 })
 
+export const bookmarkReorderSchema = z.object({
+  scope: z.enum(ORDER_SCOPES),
+  collectionId: z.string().min(1).nullish(),
+  ids: z.array(idField).min(1).max(500),
+})
+
 export const collectionCreateSchema = z.object({
   name: collectionName,
   icon: iconSlug.nullish(),
@@ -96,6 +102,8 @@ export const bookmarkRestoreSchema = z.object({
       bookmarkCreateSchema.extend({
         id: idField,
         title: bookmarkTitle,
+        position: z.number().int().min(0).optional(),
+        pinnedPosition: z.number().int().min(0).optional(),
         createdAt: z.iso.datetime(),
       })
     )
@@ -120,6 +128,8 @@ export const collectionRestoreSchema = z.object({
         id: idField,
         title: bookmarkTitle,
         collectionId: idField,
+        position: z.number().int().min(0).optional(),
+        pinnedPosition: z.number().int().min(0).optional(),
         createdAt: z.iso.datetime(),
       })
     )
@@ -135,5 +145,6 @@ export type CollectionUpdateInput = z.infer<typeof collectionUpdateSchema>
 export type CollectionMoveInput = z.infer<typeof collectionMoveSchema>
 export type AppearanceUpdateInput = z.infer<typeof appearanceUpdateSchema>
 export type BookmarkBulkDeleteInput = z.infer<typeof bookmarkBulkDeleteSchema>
+export type BookmarkReorderInput = z.infer<typeof bookmarkReorderSchema>
 export type BookmarkRestoreInput = z.infer<typeof bookmarkRestoreSchema>
 export type CollectionRestoreInput = z.infer<typeof collectionRestoreSchema>
