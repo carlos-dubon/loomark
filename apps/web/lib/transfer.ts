@@ -8,6 +8,7 @@ import type {
 } from "@/lib/generated/prisma/client"
 import type { NetscapeBookmark, NetscapeFolder } from "@/lib/netscape"
 import { prisma } from "@/lib/prisma"
+import { normalizeUserPositions } from "@/lib/siblings"
 
 const MAX_BOOKMARKS = 10000
 
@@ -243,6 +244,8 @@ export const importBookmarksTree = async (
     const { count } = await prisma.bookmark.createMany({ data: batch })
     summary.bookmarks += count
   }
+
+  await normalizeUserPositions(userId)
 
   return summary
 }

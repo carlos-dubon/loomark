@@ -1,13 +1,11 @@
-import {
-  applyCollectionMove,
-  changedCollections,
-  collectDescendantIds,
-} from "@loomark/core/tree"
+import { slotForTypeIndex } from "@loomark/core/order"
+import { collectDescendantIds } from "@loomark/core/tree"
 
 import { jsonError, parseBody, requireUserId } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 import { getCollections } from "@/lib/queries"
 import { collectionMoveSchema } from "@/lib/schemas"
+import { loadSiblings, renumber, unsortedCollectionId } from "@/lib/siblings"
 
 export const POST = async (request: Request) => {
   const userId = await requireUserId()
@@ -51,27 +49,70 @@ export const POST = async (request: Request) => {
     }
   }
 
-  const next = applyCollectionMove(
-    collections,
-    data.id,
-    data.parentId,
-    data.index
-  )
-  const changed = changedCollections(collections, next)
+  const unsortedId = await unsortedCollectionId(userId)
+  const from = moving.parentId
+  const to = data.parentId ?? null
+  const sameParent = from === to
 
-  if (changed.length > 0) {
-    await prisma.$transaction(
-      changed.map((collection) =>
-        prisma.collection.update({
-          where: { id: collection.id },
-          data: {
-            parentId: collection.parentId,
-            position: collection.position,
-          },
-        })
-      )
-    )
+  const [source, destinationSiblings] = await Promise.all([
+    loadSiblings(userId, from, unsortedId),
+    sameParent ? null : loadSiblings(userId, to, unsortedId),
+  ])
+
+  const node = source.find(
+    (sibling) => sibling.type === "collection" && sibling.id === data.id
+  )
+
+  if (!node) {
+    return jsonError("Collection not found", 404)
   }
 
-  return Response.json(next)
+  const remaining = source.filter((sibling) => sibling !== node)
+  const destination = destinationSiblings ?? remaining
+  const slot = slotForTypeIndex(destination, "collection", data.index)
+  const ordered = [
+    ...destination.slice(0, slot),
+    node,
+    ...destination.slice(slot),
+  ]
+
+  await prisma.$transaction([
+    ...(sameParent
+      ? []
+      : [
+          prisma.collection.update({
+            where: { id: data.id },
+            data: { parentId: to },
+          }),
+          ...renumber(remaining),
+        ]),
+    ...renumber(ordered),
+  ])
+
+  const positions = new Map<string, number>()
+
+  const record = (siblings: typeof ordered) =>
+    siblings.forEach((sibling, position) => {
+      if (sibling.type === "collection") {
+        positions.set(sibling.id, position)
+      }
+    })
+
+  if (!sameParent) {
+    record(remaining)
+  }
+
+  record(ordered)
+
+  return Response.json(
+    collections.map((collection) => {
+      const position = positions.get(collection.id)
+
+      return {
+        ...collection,
+        ...(collection.id === data.id ? { parentId: to } : {}),
+        ...(position === undefined ? {} : { position }),
+      }
+    })
+  )
 }
