@@ -10,6 +10,7 @@ import type {
 import type {
   AppearanceUpdateInput,
   BookmarkCreateInput,
+  BookmarkReorderInput,
   BookmarkUpdateInput,
   CollectionCreateInput,
   CollectionMoveInput,
@@ -86,6 +87,11 @@ export const api = {
     request<BookmarkDTO[]>(routes.bookmarksRestore, {
       method: "POST",
       body: JSON.stringify({ bookmarks }),
+    }),
+  reorderBookmarks: (input: BookmarkReorderInput) =>
+    request<void>(routes.bookmarksReorder, {
+      method: "POST",
+      body: JSON.stringify(input),
     }),
   refreshPreview: (id: string) =>
     request<BookmarkDTO>(routes.bookmarkPreview(id), { method: "POST" }),
