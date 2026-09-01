@@ -3,6 +3,7 @@ import { normalizeUrl } from "@loomark/core/url"
 import { jsonError, parseBody, parseQuery, requireUserId } from "@/lib/api"
 import { resolveCollectionId } from "@/lib/collections"
 import { fetchUrlMetadata } from "@/lib/metadata"
+import { nextBookmarkPosition, nextPinnedPosition } from "@/lib/positions"
 import { prisma } from "@/lib/prisma"
 import { getBookmarks } from "@/lib/queries"
 import {
@@ -67,6 +68,8 @@ export const POST = async (request: Request) => {
     return jsonError("Collection not found", 404)
   }
 
+  const pinned = data.pinned ?? false
+
   const bookmark = await prisma.bookmark.create({
     data: {
       userId,
@@ -75,7 +78,9 @@ export const POST = async (request: Request) => {
       description: data.description ?? metadata?.description ?? null,
       faviconUrl: data.faviconUrl ?? metadata?.faviconUrl ?? null,
       previewUrl: data.previewUrl ?? metadata?.previewUrl ?? null,
-      pinned: data.pinned ?? false,
+      pinned,
+      position: await nextBookmarkPosition(userId, collectionId),
+      pinnedPosition: pinned ? await nextPinnedPosition(userId) : 0,
       collectionId,
     },
   })

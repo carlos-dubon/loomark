@@ -60,6 +60,8 @@ export const POST = async (request: Request) => {
       faviconUrl: bookmark.faviconUrl ?? null,
       previewUrl: bookmark.previewUrl ?? null,
       pinned: bookmark.pinned ?? false,
+      position: bookmark.position ?? 0,
+      pinnedPosition: bookmark.pinnedPosition ?? 0,
       collectionId: known.has(bookmark.collectionId)
         ? bookmark.collectionId
         : fallback,

@@ -6,6 +6,8 @@ export type BookmarkDTO = {
   faviconUrl: string | null
   previewUrl: string | null
   pinned: boolean
+  position: number
+  pinnedPosition: number
   collectionId: string
   createdAt: string
   updatedAt: string

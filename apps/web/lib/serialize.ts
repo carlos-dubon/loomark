@@ -10,6 +10,8 @@ export const serializeBookmark = (bookmark: Bookmark): BookmarkDTO => ({
   faviconUrl: bookmark.faviconUrl,
   previewUrl: bookmark.previewUrl,
   pinned: bookmark.pinned,
+  position: bookmark.position,
+  pinnedPosition: bookmark.pinnedPosition,
   collectionId: bookmark.collectionId,
   createdAt: bookmark.createdAt.toISOString(),
   updatedAt: bookmark.updatedAt.toISOString(),

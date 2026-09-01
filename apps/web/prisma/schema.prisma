@@ -116,6 +116,7 @@ model Bookmark {
   previewUrl   String?
   pinned       Boolean    @default(false)
   position     Int        @default(0)
+  pinnedPosition Int      @default(0)
   collectionId String
   userId       String
   createdAt    DateTime   @default(now())
@@ -125,7 +126,7 @@ model Bookmark {
 
   @@index([userId])
   @@index([collectionId])
-  @@index([userId, pinned])
+  @@index([userId, pinned, pinnedPosition])
   @@index([userId, createdAt])
   @@index([collectionId, createdAt])
   @@index([collectionId, position])
