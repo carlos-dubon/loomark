@@ -52,6 +52,27 @@ It is not in any store yet, so you sideload it. Every release ships a prebuilt z
 
 It signs in with your Loomark email and password, exchanges them for an API token, and talks to the same API the web app uses. Nothing else on your instance changes: the extension has no host access until you name your server in the popup, and the API keeps rejecting cross origin requests from ordinary websites.
 
+## Browser sync
+
+[floccus](https://floccus.org) is a browser extension — not something you host — that syncs your browser's own bookmark manager (the one behind Chrome's star icon) against a backend. Loomark speaks the Nextcloud Bookmarks API, which is one of the backends floccus supports, so it can be that backend directly. Nothing extra to stand up: point floccus at the Loomark you already have running.
+
+Install it once per browser: [Chrome](https://chromewebstore.google.com/detail/floccus-bookmarks-sync/fnaicdffflnofjppbagibeoednhnbjhg), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/floccus/), [Edge](https://microsoftedge.microsoft.com/addons/detail/floccus-bookmarks-sync/gjkddcofhiifldbllobcamllmanombji). Then in the extension, add an account and pick **Nextcloud Bookmarks** as the type. Floccus asks for permission to reach your server first — grant it, it talks to Loomark directly and nothing is routed through anyone else.
+
+Enter your Loomark URL (e.g. `https://loomark.example.com`) and click **Connect**, then **Start Login Flow**. That opens a tab where you sign in to Loomark and click **Allow** — floccus never sees your password, it gets a device token instead. Close the tab once it says Connected.
+
+The next step asks which folders to sync:
+
+| Field         | What to put                                                                                     |
+| -------------- | ------------------------------------------------------------------------------------------------ |
+| Server target | Leave it empty to sync at the top of your library. A path like `/Browser` scopes everything under one collection instead, keeping synced bookmarks separate from the rest. |
+| Local target  | Keep **Bookmarks folder** selected, not Browser tabs. For a first sync, point it at a new, empty folder rather than your whole bookmarks bar — floccus merges whatever is already in that folder into Loomark right away, in both directions. |
+
+Repeat the install on every browser and device you want in sync; Loomark is the one hub they all sync through.
+
+Collections are folders and folders are collections, nested the same way in both. Bookmarks that sit at the top of your browser's tree land in Unsorted, since that is what Loomark calls a bookmark with no collection. Order is kept in both directions, so dragging a bookmark in your browser moves it in Loomark too.
+
+Two things do not survive the trip, because a browser has nowhere to put them: descriptions and preview images stay on the Loomark side, and only `http` and `https` bookmarks sync at all.
+
 ## Upgrade
 
 New releases are published to GitHub Container Registry. Upgrading is a pull and a restart, from any version to any later version:
@@ -226,6 +247,8 @@ All routes require a session cookie except `POST /api/register` and `GET /api/he
 | `GET`                  | `/api/metadata?url=`     | Title, description, favicon and preview image for a URL                            |
 | `GET` `PATCH`          | `/api/appearance`        | Read and update the theme preset and view mode                                     |
 | `GET`                  | `/api/health`            | Liveness, database check, and running version                                      |
+
+Floccus talks to a separate surface under `/index.php/apps/bookmarks/public/rest/v2`, which implements the slice of the Nextcloud Bookmarks API its adapter uses. Those routes authenticate with Basic auth or an API token rather than the session cookie, and never with it.
 
 ## Shortcuts
 

@@ -2,14 +2,14 @@ import { createHash, randomBytes } from "node:crypto"
 
 import { prisma } from "@/lib/prisma"
 
-const PREFIX = "lmk_"
+export const API_TOKEN_PREFIX = "lmk_"
 const STALE_MS = 60 * 60 * 1000
 
 const hashToken = (token: string) =>
   createHash("sha256").update(token).digest("hex")
 
 export const createApiToken = async (userId: string, name: string) => {
-  const token = `${PREFIX}${randomBytes(32).toString("base64url")}`
+  const token = `${API_TOKEN_PREFIX}${randomBytes(32).toString("base64url")}`
 
   await prisma.apiToken.create({
     data: { userId, name, tokenHash: hashToken(token) },
@@ -20,7 +20,7 @@ export const createApiToken = async (userId: string, name: string) => {
 }
 
 export const userIdFromApiToken = async (token: string) => {
-  if (!token.startsWith(PREFIX)) {
+  if (!token.startsWith(API_TOKEN_PREFIX)) {
     return null
   }
 

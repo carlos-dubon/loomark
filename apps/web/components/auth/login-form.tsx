@@ -20,8 +20,14 @@ import { Label } from "@loomark/ui/components/label"
 
 import { loginSchema } from "@/lib/schemas"
 
-export const LoginForm = () => {
+type Props = { callbackUrl?: string }
+
+export const LoginForm = ({ callbackUrl }: Props) => {
   const router = useRouter()
+  const destination =
+    callbackUrl?.startsWith("/") && !callbackUrl.startsWith("//")
+      ? callbackUrl
+      : "/"
 
   const {
     register,
@@ -44,7 +50,7 @@ export const LoginForm = () => {
       return
     }
 
-    router.replace("/")
+    router.replace(destination)
     router.refresh()
   })
 
