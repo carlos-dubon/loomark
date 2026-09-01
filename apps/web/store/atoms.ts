@@ -70,6 +70,15 @@ export const bookmarkListAtom = atom<BookmarkListState>({
   items: [],
 })
 
+export const setBookmarkItemsAtom = atom(
+  null,
+  (get, set, update: (items: BookmarkDTO[]) => BookmarkDTO[]) => {
+    const list = get(bookmarkListAtom)
+
+    set(bookmarkListAtom, { ...list, items: update(list.items) })
+  }
+)
+
 export const searchDialogAtom = atom(false)
 
 export const searchQueryAtom = atom("")

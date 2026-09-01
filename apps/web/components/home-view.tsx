@@ -1,11 +1,14 @@
 "use client"
 
+import { useSortable } from "@dnd-kit/react/sortable"
 import { useSetAtom } from "jotai"
 import { PinIcon, PlusIcon, UploadIcon } from "lucide-react"
 import Link from "next/link"
+import { useMemo } from "react"
 
 import type { BookmarkDTO } from "@loomark/core/types"
 import { hostFromUrl } from "@loomark/core/url"
+import { cn } from "@loomark/core/utils"
 import { Button } from "@loomark/ui/components/button"
 
 import { BookmarkMenu } from "@/components/bookmark-menu"
@@ -15,15 +18,43 @@ import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
 import { useBookmarkPreview } from "@/hooks/use-bookmark-preview"
+import { useCoarsePointer } from "@/hooks/use-coarse-pointer"
+import { DRAG_TYPE } from "@/lib/dnd"
 import { bookmarkDialogAtom } from "@/store/atoms"
 
-const PinnedItem = ({ bookmark }: { bookmark: BookmarkDTO }) => {
+const PinnedItem = ({
+  bookmark,
+  index,
+  manual,
+}: {
+  bookmark: BookmarkDTO
+  index: number
+  manual: boolean
+}) => {
   const label = bookmark.title?.trim() || hostFromUrl(bookmark.url)
+  const data = useMemo(() => ({ bookmark }), [bookmark])
+  const coarsePointer = useCoarsePointer()
+
+  const { ref, isDragSource } = useSortable({
+    id: bookmark.id,
+    index,
+    type: DRAG_TYPE.bookmark,
+    accept: DRAG_TYPE.bookmark,
+    data,
+    disabled: !manual || coarsePointer,
+  })
 
   useBookmarkPreview(bookmark, false)
 
   return (
-    <div className="group/pin relative flex w-[88px] flex-col items-center gap-2 sm:w-[96px]">
+    <div
+      ref={ref}
+      className={cn(
+        "group/pin relative flex w-[88px] flex-col items-center gap-2 sm:w-[96px]",
+        manual && "pointer-fine:touch-none",
+        isDragSource && "opacity-40"
+      )}
+    >
       <div className="relative">
         <div className="flex size-14 items-center justify-center rounded-xl bg-muted ring-1 ring-transparent transition group-focus-within/pin:bg-accent group-focus-within/pin:ring-foreground/20 group-hover/pin:bg-accent group-hover/pin:ring-foreground/20 sm:size-16">
           <span className="flex size-9 items-center justify-center rounded-[10px] bg-card shadow-sm sm:size-10">
@@ -63,7 +94,7 @@ export const HomeView = ({
   const addBookmark = () =>
     openBookmarkDialog({ open: true, bookmark: null, collectionId: null })
 
-  const items = useBookmarkList(pinned)
+  const { items, manual } = useBookmarkList(pinned, "pinned")
 
   const isEmptyLibrary = bookmarkCount === 0 && pinned.length === 0
 
@@ -107,8 +138,13 @@ export const HomeView = ({
           </div>
         ) : (
           <div className="mx-auto my-auto flex w-full max-w-5xl flex-wrap justify-center gap-x-4 gap-y-6 py-4 sm:gap-x-6 sm:gap-y-8 sm:py-6 lg:gap-x-8">
-            {items.map((bookmark) => (
-              <PinnedItem key={bookmark.id} bookmark={bookmark} />
+            {items.map((bookmark, index) => (
+              <PinnedItem
+                key={bookmark.id}
+                bookmark={bookmark}
+                index={index}
+                manual={manual}
+              />
             ))}
           </div>
         )}
