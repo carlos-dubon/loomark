@@ -115,6 +115,7 @@ model Bookmark {
   faviconUrl   String?
   previewUrl   String?
   pinned       Boolean    @default(false)
+  position     Int        @default(0)
   collectionId String
   userId       String
   createdAt    DateTime   @default(now())
@@ -127,5 +128,6 @@ model Bookmark {
   @@index([userId, pinned])
   @@index([userId, createdAt])
   @@index([collectionId, createdAt])
+  @@index([collectionId, position])
 }
 
