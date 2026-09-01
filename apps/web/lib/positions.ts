@@ -1,15 +1,21 @@
 import { prisma } from "@/lib/prisma"
+import {
+  containerOf,
+  nextSiblingPosition,
+  unsortedCollectionId,
+} from "@/lib/siblings"
 
 export const nextBookmarkPosition = async (
   userId: string,
   collectionId: string
 ) => {
-  const { _max } = await prisma.bookmark.aggregate({
-    where: { userId, collectionId },
-    _max: { position: true },
-  })
+  const unsortedId = await unsortedCollectionId(userId)
 
-  return (_max.position ?? -1) + 1
+  return nextSiblingPosition(
+    userId,
+    containerOf(collectionId, unsortedId),
+    unsortedId
+  )
 }
 
 export const nextPinnedPosition = async (userId: string) => {
