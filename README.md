@@ -1,14 +1,40 @@
 <p align="center">
-  <img src="apps/web/public/brand/loomark-rounded-512.png" alt="Loomark" width="112" height="112">
+  <img src="apps/web/public/brand/loomark-rounded-512.png" alt="Loomark" width="96" height="96">
 </p>
 
-# Loomark
+<h1 align="center">Loomark</h1>
 
-A self hosted bookmark manager: pinned websites on the homepage, full text search, a nested collections tree, and Chrome compatible import/export.
+<p align="center">
+  <b>A modern self-hosted bookmark manager.</b><br>
+  Runs on your server. Looks good doing it.
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/home-light.png" alt="The Loomark homepage" width="900">
+</p>
+
+---
+
+I built Loomark to be the bookmark manager I'd actually open every day. Quick to search, easy on the eyes, and running on my own server.
+
+- Pinned sites on the homepage, collections nested as deep as you want, grid or list
+- Search on `⌘K` across titles, URLs and descriptions
+- 43 [tweakcn](https://tweakcn.com) themes, light and dark. Press `D` to switch
+- A browser extension for Chrome and Firefox, plus a New Tab build
+- Two-way browser sync through [floccus](https://floccus.org)
+- Import from any browser or from [Linkwarden](https://linkwarden.app), export the same way
+- Read-only share links for any collection
+- Optional page archiving: screenshot, HTML, PDF, markdown
+- Installable as a PWA
+
+<p align="center">
+  <img src="docs/screenshots/home-dark.png" alt="Loomark in dark mode" width="49%">
+  <img src="docs/screenshots/settings-themes.png" alt="The theme picker" width="49%">
+</p>
 
 ## Install
 
-You need Docker and a machine to leave it running on. Nothing else — the image is prebuilt, so there is no repo to clone and no build step.
+Docker, and something to leave it running on.
 
 ```bash
 mkdir loomark && cd loomark
@@ -16,112 +42,81 @@ curl -O https://raw.githubusercontent.com/carlos-dubon/loomark/main/docker-compo
 curl -o .env https://raw.githubusercontent.com/carlos-dubon/loomark/main/.env.example
 ```
 
-Open `.env` and set `AUTH_SECRET` to a random value:
-
-```bash
-openssl rand -base64 32
-```
-
-If you will reach Loomark at anything other than `http://localhost:3000`, set `AUTH_URL` to that origin too. Then start it:
+Set `AUTH_SECRET` in `.env` to the output of `openssl rand -base64 32`. If you'll reach Loomark at anything other than `http://localhost:3000`, set `AUTH_URL` too.
 
 ```bash
 docker compose up -d
 ```
 
-Loomark is on http://localhost:3000. The first account you create becomes the owner — create it, then set `ALLOW_REGISTRATION=false` in `.env` and run `docker compose up -d` again to close sign ups.
+The first account you create is the owner. Make it, then set `ALLOW_REGISTRATION=false` and run `docker compose up -d` again.
 
-## Install as an app
+## Extension
 
-Loomark is a PWA, so it installs to the dock, the home screen, and the app switcher with no store involved.
+No store listing yet, so you sideload it from the [latest release](https://github.com/carlos-dubon/loomark/releases/latest).
 
-| Platform              | How                                                                               |
-| --------------------- | --------------------------------------------------------------------------------- |
-| macOS, Windows, Linux | Chrome or Edge: the install button in the address bar. Safari: File → Add to Dock |
-| iPhone, iPad          | Share → Add to Home Screen                                                        |
-| Android               | Chrome menu → Install app                                                         |
+**Chromium** (Chrome, Edge, Brave, Arc): unzip `loomark-extension-<version>-chrome.zip`, then load the folder at `chrome://extensions` with developer mode on.
 
-Installing needs a secure context — `https://` or `http://localhost`. On a plain `http://` LAN address no browser will offer it, so put Loomark behind TLS (Caddy, Traefik, nginx, Tailscale) and point `AUTH_URL` at that origin.
+**Firefox** 127+: load `loomark-extension-<version>-firefox.zip` at `about:debugging#/runtime/this-firefox` as a temporary add-on. Firefox drops it on restart.
 
-Pages are always fetched from the server, since they carry your library. An installed Loomark is not an offline copy of it — when the server is unreachable you get a small offline screen instead.
+The popup asks for your server URL and password on first run, then trades the password for an API token. After that it's one click to save, and the popup opens in edit mode on pages you've already saved.
 
-## Sharing a collection
-
-A collection can be published as a read only link. Open its menu, pick **Share…**, and turn on **Share with a link** — you get a `/s/<token>` URL to hand out.
-
-Anyone holding that link reads the collection and everything nested under it, without an account and without touching the rest of your library. They cannot change anything. The pages are marked `noindex`, so the link stays as private as you keep it: it is the secret. Turn the switch off to revoke it, or **Regenerate link** to mint a new one and kill the old.
-
-The shared pages carry your theme, and favicons are proxied the same way the app proxies them — but only for bookmarks inside the shared collection, so the link never becomes an open image proxy. `Unsorted` cannot be shared.
-
-## Browser extension
-
-There is a companion extension in [`extension/`](extension) that saves the page you are on straight into a collection, and shows a check when the page is already in your library.
-
-It is not in any store yet, so you sideload it. Every release ships a prebuilt zip — grab `loomark-extension-<version>-chrome.zip` from the [latest release](https://github.com/carlos-dubon/loomark/releases/latest), unzip it, and load the folder as an unpacked extension. [`extension/README.md`](extension/README.md) has the per browser steps, and how to build it yourself instead.
-
-There is a second build, **Loomark New Tab** (`loomark-extension-newtab-<version>-...`), that is the same extension plus a new tab page pointed at your instance. Most browsers let you set a custom new tab in their own settings and need nothing extra; take this one when yours does not, as Helium does not. Install one variant or the other, not both.
-
-It signs in with your Loomark email and password, exchanges them for an API token, and talks to the same API the web app uses. Nothing else on your instance changes: the extension has no host access until you name your server in the popup, and the API keeps rejecting cross origin requests from ordinary websites.
+There's also a **New Tab** build (`loomark-extension-newtab-<version>-*.zip`) that points your new tab at Loomark, for browsers that can't do it in their own settings. Install one or the other, not both.
 
 ## Browser sync
 
-[floccus](https://floccus.org) is a browser extension — not something you host — that syncs your browser's own bookmark manager (the one behind Chrome's star icon) against a backend. Loomark speaks the Nextcloud Bookmarks API, which is one of the backends floccus supports, so it can be that backend directly. Nothing extra to stand up: point floccus at the Loomark you already have running.
+[floccus](https://floccus.org) syncs your browser's native bookmarks against a backend, and Loomark speaks the API it needs.
 
-Install it once per browser: [Chrome](https://chromewebstore.google.com/detail/floccus-bookmarks-sync/fnaicdffflnofjppbagibeoednhnbjhg), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/floccus/), [Edge](https://microsoftedge.microsoft.com/addons/detail/floccus-bookmarks-sync/gjkddcofhiifldbllobcamllmanombji). Then in the extension, add an account and pick **Nextcloud Bookmarks** as the type. Floccus asks for permission to reach your server first — grant it, it talks to Loomark directly and nothing is routed through anyone else.
+Install floccus ([Chrome](https://chromewebstore.google.com/detail/floccus-bookmarks-sync/fnaicdffflnofjppbagibeoednhnbjhg), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/floccus/), [Edge](https://microsoftedge.microsoft.com/addons/detail/floccus-bookmarks-sync/gjkddcofhiifldbllobcamllmanombji)), add an account of type **Nextcloud Bookmarks**, enter your Loomark URL, and run the login flow.
 
-Enter your Loomark URL (e.g. `https://loomark.example.com`) and click **Connect**, then **Start Login Flow**. That opens a tab where you sign in to Loomark and click **Allow** — floccus never sees your password, it gets a device token instead. Close the tab once it says Connected.
+Then set the sync targets:
 
-The next step asks which folders to sync:
+| Field             | What to put                                                                            |
+| ----------------- | -------------------------------------------------------------------------------------- |
+| **Server target** | Empty for the top of your library, or a path like `/Browser` to scope it               |
+| **Local target**  | A **new, empty** bookmarks folder. floccus merges anything already in there, both ways |
 
-| Field         | What to put                                                                                                                                                                                                                                   |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Server target | Leave it empty to sync at the top of your library. A path like `/Browser` scopes everything under one collection instead, keeping synced bookmarks separate from the rest.                                                                    |
-| Local target  | Keep **Bookmarks folder** selected, not Browser tabs. For a first sync, point it at a new, empty folder rather than your whole bookmarks bar — floccus merges whatever is already in that folder into Loomark right away, in both directions. |
+Descriptions and preview images stay on the Loomark side, and only `http` and `https` bookmarks sync.
 
-Repeat the install on every browser and device you want in sync; Loomark is the one hub they all sync through.
-
-Collections are folders and folders are collections, nested the same way in both. Bookmarks that sit at the top of your browser's tree land in Unsorted, since that is what Loomark calls a bookmark with no collection. Order is kept in both directions, so dragging a bookmark in your browser moves it in Loomark too.
-
-Two things do not survive the trip, because a browser has nowhere to put them: descriptions and preview images stay on the Loomark side, and only `http` and `https` bookmarks sync at all.
-
-## Upgrade
-
-New releases are published to GitHub Container Registry. Upgrading is a pull and a restart, from any version to any later version:
+## Updating
 
 ```bash
 docker compose pull && docker compose up -d
 ```
 
-Database migrations run automatically when the container starts, in order, so a box sitting on `0.0.1` catches up to the newest release in one step. Nothing to run by hand.
-
-There is a script that takes a database backup first, which is the safer habit:
+Migrations run on start, so any version catches up in one step. To take a database dump first:
 
 ```bash
-curl -O https://raw.githubusercontent.com/carlos-dubon/loomark/main/scripts/upgrade.sh
-chmod +x upgrade.sh
-./upgrade.sh
+curl -O https://raw.githubusercontent.com/carlos-dubon/loomark/main/apps/web/scripts/upgrade.sh
+chmod +x upgrade.sh && ./upgrade.sh
 ```
 
-It writes a timestamped dump to `backups/` and then does the pull and restart.
+You track `latest` by default. Pin with `LOOMARK_VERSION="0.1.0"` in `.env`.
 
-By default you track `latest`. To pin a version instead, set `LOOMARK_VERSION` in `.env`:
+## Config
 
-```
-LOOMARK_VERSION="0.2.5"
-```
+| Variable                                          |              |                                        |
+| ------------------------------------------------- | ------------ | -------------------------------------- |
+| `AUTH_SECRET`                                     | **required** | Session encryption key                 |
+| `AUTH_URL`                                        | **required** | Public origin of your instance         |
+| `LOOMARK_VERSION`                                 | optional     | Image tag to run, defaults to `latest` |
+| `ALLOW_REGISTRATION`                              | optional     | `false` closes signups                 |
+| `APP_PORT`                                        | optional     | Host port, defaults to `3000`          |
+| `POSTGRES_USER` `POSTGRES_PASSWORD` `POSTGRES_DB` | optional     | Database credentials                   |
 
-The version you are running is shown in Settings, and at `GET /api/health`.
+Archives live on disk in the `loomark-archives` volume, so keep an eye on space.
 
-### Rolling back
+## Shortcuts
 
-Set `LOOMARK_VERSION` to the older release and run `docker compose up -d`. Note that migrations are not reversible — if the newer version migrated your database, restore the dump you took before upgrading:
-
-```bash
-gunzip -c backups/loomark-<timestamp>.sql.gz | docker compose exec -T db psql -U loomark -d loomark
-```
+| Key             |                  |
+| --------------- | ---------------- |
+| `⌘K` / `Ctrl+K` | Search           |
+| `⌘B` / `Ctrl+B` | Toggle sidebar   |
+| `D`             | Toggle dark mode |
+| `Esc`           | Clear selection  |
 
 ## Development
 
-Requires Node 24, pnpm, and Docker.
+Node 24, pnpm, Docker.
 
 ```bash
 git clone https://github.com/carlos-dubon/loomark.git && cd loomark
@@ -132,140 +127,8 @@ pnpm run db:migrate
 pnpm run dev
 ```
 
-The extension is a workspace package, so `pnpm install` at the root installs it too. `pnpm run ext:dev` runs it against a browser with hot reload.
+`pnpm run ext:dev` runs the extension with hot reload. `ext:build` and `ext:build:firefox` produce loadable folders in `apps/extension/output/`. Append `:newtab` for the New Tab variant.
 
-To build and run the image locally instead of pulling it:
+---
 
-```bash
-docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
-```
-
-### Releasing
-
-One command:
-
-```bash
-pnpm version 0.2.5
-```
-
-That runs typecheck and lint on both the app and the extension, builds the extension, bumps `package.json`, commits, tags `v0.2.5`, and pushes the tag. CI takes it from there: it builds `linux/amd64` and `linux/arm64` natively, pushes to `ghcr.io/carlos-dubon/loomark` as `0.2.5`, `0.2`, and `latest`, zips the Chrome and Firefox extension builds, and opens a GitHub release with generated notes and those zips attached.
-
-`patch`, `minor`, and `major` work in place of an explicit number. The checks run before the tag exists, so a failing typecheck stops the release rather than shipping it. Your working tree must be clean.
-
-The extension takes its manifest version from the root `package.json`, so it is always stamped with the release it shipped in — there is no second version to bump.
-
-To build the image locally before tagging:
-
-```bash
-pnpm run docker:build
-```
-
-To produce the release zips locally:
-
-```bash
-pnpm run ext:zip && pnpm run ext:zip:firefox
-```
-
-### Brand assets
-
-Every icon comes from one path definition in [`scripts/generate-brand-assets.mjs`](scripts/generate-brand-assets.mjs). Edit the geometry there, then:
-
-```bash
-pnpm run brand:generate
-```
-
-| Asset                                       | Path                                                                     |
-| ------------------------------------------- | ------------------------------------------------------------------------ |
-| Mark, SVG, inherits `currentColor`          | `public/brand/loomark-mark.svg`                                          |
-| Flat PNG, transparent                       | `public/brand/loomark-flat-{256,512,1024}.png`                           |
-| Flat PNG, transparent, for dark backgrounds | `public/brand/loomark-flat-1024-light.png`                               |
-| Flat PNG on the gradient tile               | `public/brand/loomark-gradient-{512,1024}.png`                           |
-| Rounded PNG on the gradient tile            | `public/brand/loomark-rounded-{512,1024}.png`                            |
-| Favicons                                    | `app/icon.svg`, `app/favicon.ico`                                        |
-| Apple touch icon                            | `app/apple-icon.png`                                                     |
-| PWA icons                                   | `public/icons/icon-{192,512}.png`, `public/icons/maskable-{192,512}.png` |
-
-The output is committed; CI does not regenerate it.
-
-### Schema changes
-
-`pnpm run db:migrate` creates a migration from your schema edits. Commit the generated folder in `prisma/migrations` — that file is what lets every self hosted instance catch up on its next start. Prefer additive migrations; a column drop takes data with it on machines you cannot see.
-
-## Import and export
-
-Settings holds both sides of the Netscape bookmark file format, the HTML file every
-major browser reads and writes.
-
-**Import** takes a file exported from Chrome, Edge, Safari, Firefox, or anything else
-speaking that format. Folders become collections, nesting is preserved, and links
-already in your library are counted as duplicates rather than saved twice — so
-re-importing the same file is a no-op. Root level links land in Unsorted, empty
-folders are skipped, and non `http(s)` entries such as bookmarklets are reported as
-skipped.
-
-**Export** writes your whole library back out to the same format, so it doubles as a
-backup and as a way into any browser. Pinned state rides along in a custom attribute
-that other browsers ignore, which keeps a Loomark export → Loomark import round trip
-lossless.
-
-## Environment
-
-| Variable                                          | Required           | Purpose                                              |
-| ------------------------------------------------- | ------------------ | ---------------------------------------------------- |
-| `AUTH_SECRET`                                     | yes                | Session encryption key                               |
-| `AUTH_URL`                                        | yes                | Public origin of the instance                        |
-| `LOOMARK_VERSION`                                 | no                 | Image tag to run, defaults to `latest`               |
-| `ALLOW_REGISTRATION`                              | no                 | `false` blocks sign ups once an account exists       |
-| `APP_PORT`                                        | no                 | Host port, defaults to `3000`                        |
-| `POSTGRES_USER` `POSTGRES_PASSWORD` `POSTGRES_DB` | no                 | Database credentials                                 |
-| `DATABASE_URL`                                    | yes outside Docker | PostgreSQL connection string, set for you by Compose |
-
-## Stack
-
-Next.js 16 (App Router + Route Handlers) · React 19 · TypeScript · Tailwind CSS 4 · shadcn/ui on Base UI · Jotai · Zod 4 · Auth.js (NextAuth) · Prisma 7 · PostgreSQL
-
-## Scripts
-
-| Script                    | Purpose                                      |
-| ------------------------- | -------------------------------------------- |
-| `pnpm run dev`            | Development server                           |
-| `pnpm run build`          | Generate the Prisma client and build         |
-| `pnpm run start`          | Production server                            |
-| `pnpm run lint`           | ESLint                                       |
-| `pnpm run typecheck`      | TypeScript                                   |
-| `pnpm run db:migrate`     | Create and apply a migration                 |
-| `pnpm run db:deploy`      | Apply pending migrations                     |
-| `pnpm run db:studio`      | Prisma Studio                                |
-| `pnpm run brand:generate` | Regenerate every logo, favicon, and PWA icon |
-| `pnpm run docker:build`   | Build the production image locally           |
-| `pnpm version <ver>`      | Check, bump, tag, and push a release         |
-
-## API
-
-All routes require a session cookie except `POST /api/register`, `GET /api/health`, and the share routes, which are authenticated by the share token in the URL.
-
-| Method                 | Route                             | Purpose                                                                            |
-| ---------------------- | --------------------------------- | ---------------------------------------------------------------------------------- |
-| `POST`                 | `/api/register`                   | Create an account                                                                  |
-| `GET` `POST`           | `/api/bookmarks`                  | List (`q`, `collectionId`, `tag`, `pinned`, `unsorted`, `take`, `skip`) and create |
-| `DELETE`               | `/api/bookmarks`                  | Delete many by `ids`                                                               |
-| `POST`                 | `/api/bookmarks/restore`          | Put deleted bookmarks back, ids and dates intact                                   |
-| `GET` `PATCH` `DELETE` | `/api/bookmarks/[id]`             | Read, update, delete                                                               |
-| `GET` `POST`           | `/api/collections`                | List and create                                                                    |
-| `PATCH` `DELETE`       | `/api/collections/[id]`           | Update and delete                                                                  |
-| `POST` `DELETE`        | `/api/collections/[id]/share`     | Create or rotate a share link, and revoke it                                       |
-| `GET`                  | `/api/share/[token]/favicon?url=` | Favicon proxy scoped to one shared collection                                      |
-| `GET`                  | `/api/tags`                       | List tags                                                                          |
-| `GET`                  | `/api/metadata?url=`              | Title, description, favicon and preview image for a URL                            |
-| `GET` `PATCH`          | `/api/appearance`                 | Read and update the theme preset and view mode                                     |
-| `GET`                  | `/api/health`                     | Liveness, database check, and running version                                      |
-
-Floccus talks to a separate surface under `/index.php/apps/bookmarks/public/rest/v2`, which implements the slice of the Nextcloud Bookmarks API its adapter uses. Those routes authenticate with Basic auth or an API token rather than the session cookie, and never with it.
-
-## Shortcuts
-
-| Key             | Action                               |
-| --------------- | ------------------------------------ |
-| `⌘B` / `Ctrl+B` | Toggle the sidebar                   |
-| `D`             | Toggle dark mode                     |
-| `Esc`           | Clear the current bookmark selection |
+[MIT](LICENSE)

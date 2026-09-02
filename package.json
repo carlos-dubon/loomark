@@ -1,6 +1,32 @@
 {
-  "name": "tana",
+  "name": "loomark-monorepo",
   "version": "0.0.1",
+  "description": "Self-hosted bookmark manager that archives the pages you save, syncs with your browser through floccus, and ships a Chrome and Firefox extension.",
+  "keywords": [
+    "bookmarks",
+    "bookmark-manager",
+    "self-hosted",
+    "selfhosted",
+    "archiving",
+    "web-archive",
+    "floccus",
+    "nextcloud-bookmarks",
+    "linkwarden",
+    "browser-extension",
+    "nextjs",
+    "docker",
+    "pwa"
+  ],
+  "homepage": "https://github.com/carlos-dubon/loomark#readme",
+  "bugs": {
+    "url": "https://github.com/carlos-dubon/loomark/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlos-dubon/loomark.git"
+  },
+  "license": "MIT",
+  "author": "Carlos Daniel Dubón <holacarlosdubon@gmail.com>",
   "packageManager": "pnpm@11.12.0",
   "engines": {
     "node": ">=24"
