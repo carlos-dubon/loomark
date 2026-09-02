@@ -7,6 +7,7 @@ import type { AppearanceDTO } from "@/lib/themes/appearance"
 import {
   appearanceAtom,
   fontHrefAtom,
+  openInNewTabAtom,
   sidebarNoiseAtom,
   sidebarSideAtom,
   sortOrderAtom,
@@ -18,11 +19,13 @@ export const AppearanceProvider = ({
   appearance,
   themeCss,
   fontHref,
+  openInNewTab,
   children,
 }: {
   appearance: AppearanceDTO
   themeCss: string
   fontHref: string | null
+  openInNewTab: boolean
   children: React.ReactNode
 }) => {
   useHydrateAtoms([
@@ -33,6 +36,7 @@ export const AppearanceProvider = ({
     [sidebarNoiseAtom, appearance.sidebarNoise],
     [themeCssAtom, themeCss],
     [fontHrefAtom, fontHref],
+    [openInNewTabAtom, openInNewTab],
   ])
 
   return (

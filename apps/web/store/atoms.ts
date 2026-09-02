@@ -126,6 +126,8 @@ export const sidebarSideAtom = atom<SidebarSide>("left")
 
 export const sidebarNoiseAtom = atom<NoiseLevel>("off")
 
+export const openInNewTabAtom = atom(true)
+
 export const bookmarkDialogAtom = atom<BookmarkDialogState>({
   open: false,
   bookmark: null,

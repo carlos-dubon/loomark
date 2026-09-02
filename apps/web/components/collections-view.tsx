@@ -2,13 +2,13 @@
 
 import { useSetAtom } from "jotai"
 import { FolderTreeIcon, PlusIcon } from "lucide-react"
-import Link from "next/link"
 
 import type { FlatCollection } from "@loomark/core/tree"
 import { Button } from "@loomark/ui/components/button"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
 import { EmptyState } from "@/components/empty-state"
+import { Link } from "@/components/link"
 import { PageHeader } from "@/components/page-header"
 import { useCollectionItems } from "@/hooks/use-collection-items"
 import { collectionDialogAtom } from "@/store/atoms"
