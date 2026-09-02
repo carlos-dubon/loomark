@@ -1,3 +1,4 @@
+import { toNoiseLevel, toSidebarSide } from "@loomark/core/sidebar"
 import { toSortOrder } from "@loomark/core/sort"
 import { toViewMode } from "@loomark/core/view-mode"
 
@@ -8,7 +9,13 @@ import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
 export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { themePreset: true, viewMode: true, sortOrder: true },
+    select: {
+      themePreset: true,
+      viewMode: true,
+      sortOrder: true,
+      sidebarSide: true,
+      sidebarNoise: true,
+    },
   })
 
   if (!user) {
@@ -19,5 +26,7 @@ export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
     themePreset: user.themePreset,
     viewMode: toViewMode(user.viewMode),
     sortOrder: toSortOrder(user.sortOrder),
+    sidebarSide: toSidebarSide(user.sidebarSide),
+    sidebarNoise: toNoiseLevel(user.sidebarNoise),
   }
 }
