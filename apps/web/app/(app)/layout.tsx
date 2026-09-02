@@ -5,6 +5,7 @@ import { SidebarInset, SidebarProvider } from "@loomark/ui/components/sidebar"
 
 import { AppSidebar } from "@/components/app-sidebar"
 import { AppearanceProvider } from "@/components/appearance-provider"
+import { ArchiveDialog } from "@/components/archive-dialog"
 import { BookmarkDeleteDialog } from "@/components/bookmark-delete-dialog"
 import { BookmarkDialog } from "@/components/bookmark-dialog"
 import { BookmarkSearchDialog } from "@/components/bookmark-search-dialog"
@@ -75,6 +76,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
         <BookmarkDeleteDialog />
         <CollectionDeleteDialog />
         <CollectionShareDialog />
+        <ArchiveDialog />
       </SidebarProvider>
     </AppearanceProvider>
   )

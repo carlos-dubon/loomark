@@ -2,6 +2,7 @@
 
 import { useAtomValue, useSetAtom } from "jotai"
 import {
+  ArchiveIcon,
   ExternalLinkIcon,
   FolderInputIcon,
   LinkIcon,
@@ -31,6 +32,7 @@ import {
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
 import { useOpenInNewTab } from "@/hooks/use-open-in-new-tab"
 import {
+  archiveDialogAtom,
   bookmarkDialogAtom,
   collectionsAtom,
   deleteDialogAtom,
@@ -46,6 +48,7 @@ export const BookmarkMenu = ({
   const collections = useAtomValue(collectionsAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const confirmDelete = useSetAtom(deleteDialogAtom)
+  const openArchives = useSetAtom(archiveDialogAtom)
   const { togglePin, move, copyLink } = useBookmarkActions()
   const { open } = useOpenInNewTab()
 
@@ -95,6 +98,10 @@ export const BookmarkMenu = ({
         <DropdownMenuItem onClick={() => togglePin(bookmark)}>
           {bookmark.pinned ? <PinOffIcon /> : <PinIcon />}
           {bookmark.pinned ? "Unpin" : "Pin to homepage"}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => openArchives(bookmark)}>
+          <ArchiveIcon />
+          Archived copies
         </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>

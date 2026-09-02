@@ -5,6 +5,9 @@ export const routes = {
   bookmarks: "/api/bookmarks",
   bookmark: (id: string) => `/api/bookmarks/${id}`,
   bookmarkPreview: (id: string) => `/api/bookmarks/${id}/preview`,
+  bookmarkArchives: (id: string) => `/api/bookmarks/${id}/archives`,
+  bookmarkArchive: (id: string, format: string) =>
+    `/api/bookmarks/${id}/archives/${format}`,
   bookmarkLookup: (url: string) => withUrl("/api/bookmarks/lookup", url),
   bookmarksImport: "/api/bookmarks/import",
   bookmarksRestore: "/api/bookmarks/restore",
@@ -19,6 +22,8 @@ export const routes = {
   favicon: (url: string) => withUrl("/api/favicon", url),
   metadata: (url: string) => withUrl("/api/metadata", url),
   appearance: "/api/appearance",
+  archiveSettings: "/api/archives/settings",
+  archiveBackfill: "/api/archives/backfill",
   register: "/api/register",
   extensionToken: "/api/extension/token",
   adminUser: (id: string) => `/api/admin/users/${id}`,

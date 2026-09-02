@@ -44,3 +44,5 @@ pnpm-debug.log*
 next-env.d.ts
 
 backups/
+
+.archives

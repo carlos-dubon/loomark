@@ -1,5 +1,7 @@
+import type { ArchiveSettings } from "@loomark/core/archive"
 import { routes } from "@loomark/core/routes"
 import type {
+  ArchiveDTO,
   BookmarkDTO,
   CollectionDeletion,
   CollectionDTO,
@@ -10,6 +12,7 @@ import type {
 
 import type {
   AppearanceUpdateInput,
+  ArchiveRunInput,
   BookmarkCreateInput,
   BookmarkReorderInput,
   BookmarkUpdateInput,
@@ -96,6 +99,20 @@ export const api = {
     }),
   refreshPreview: (id: string) =>
     request<BookmarkDTO>(routes.bookmarkPreview(id), { method: "POST" }),
+  listArchives: (id: string, signal?: AbortSignal) =>
+    request<ArchiveDTO[]>(routes.bookmarkArchives(id), { signal }),
+  runArchives: (id: string, input: ArchiveRunInput = {}) =>
+    request<ArchiveDTO[]>(routes.bookmarkArchives(id), {
+      method: "POST",
+      body: JSON.stringify(input),
+    }),
+  updateArchiveSettings: (input: Partial<ArchiveSettings>) =>
+    request<ArchiveSettings>(routes.archiveSettings, {
+      method: "PATCH",
+      body: JSON.stringify(input),
+    }),
+  backfillArchives: () =>
+    request<{ queued: number }>(routes.archiveBackfill, { method: "POST" }),
   listCollections: () => request<CollectionDTO[]>(routes.collections),
   createCollection: (input: CollectionCreateInput) =>
     request<CollectionDTO>(routes.collections, {

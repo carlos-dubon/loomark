@@ -1,4 +1,7 @@
+import { after } from "next/server"
+
 import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { enqueueForUser } from "@/lib/archives/queue"
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { prisma } from "@/lib/prisma"
 import { bookmarkRestoreSchema } from "@/lib/schemas"
@@ -55,6 +58,13 @@ export const POST = async (request: Request) => {
         update: values,
       })
     })
+  )
+
+  after(() =>
+    enqueueForUser(
+      userId,
+      restored.map((bookmark) => bookmark.id)
+    )
   )
 
   return Response.json(restored.map(serializeBookmark), { status: 201 })
