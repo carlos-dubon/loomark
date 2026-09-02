@@ -3,6 +3,7 @@
 import { GlobeIcon } from "lucide-react"
 import { useState } from "react"
 
+import { routes } from "@loomark/core/routes"
 import { cn } from "@loomark/core/utils"
 
 export const FaviconImage = ({
@@ -23,8 +24,8 @@ export const FaviconImage = ({
   const proxiedSrc = (() => {
     if (!src) return null
     if (src.startsWith("data:")) return src
-    if (src.startsWith("/api/favicon")) return src
-    return `/api/favicon?url=${encodeURIComponent(src)}`
+    if (src.startsWith("/api/")) return src
+    return routes.favicon(src)
   })()
 
   if (!proxiedSrc || failed) {
