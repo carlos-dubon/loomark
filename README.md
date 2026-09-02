@@ -254,7 +254,6 @@ Floccus talks to a separate surface under `/index.php/apps/bookmarks/public/rest
 
 | Key             | Action                               |
 | --------------- | ------------------------------------ |
-| `/`             | Focus search                         |
 | `⌘B` / `Ctrl+B` | Toggle the sidebar                   |
 | `D`             | Toggle dark mode                     |
 | `Esc`           | Clear the current bookmark selection |
