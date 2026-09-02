@@ -1,8 +1,20 @@
 {
   "name": "loomark",
   "version": "0.0.1",
-  "type": "module",
+  "description": "The Loomark web app: Next.js, Prisma, PostgreSQL.",
+  "homepage": "https://github.com/carlos-dubon/loomark#readme",
+  "bugs": {
+    "url": "https://github.com/carlos-dubon/loomark/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlos-dubon/loomark.git",
+    "directory": "apps/web"
+  },
+  "license": "MIT",
+  "author": "Carlos Daniel Dubón <holacarlosdubon@gmail.com>",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
