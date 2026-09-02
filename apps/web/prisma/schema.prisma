@@ -30,6 +30,8 @@ model User {
   themePreset   String       @default("default")
   viewMode      String       @default("grid")
   sortOrder     String       @default("newest")
+  sidebarSide   String       @default("left")
+  sidebarNoise  String       @default("off")
 }
 
 model Account {

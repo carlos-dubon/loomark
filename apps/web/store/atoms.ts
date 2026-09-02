@@ -1,6 +1,7 @@
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
+import type { NoiseLevel, SidebarSide } from "@loomark/core/sidebar"
 import type { SortOrder } from "@loomark/core/sort"
 import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import type { ViewMode } from "@loomark/core/view-mode"
@@ -120,6 +121,10 @@ export const clearRecentSearchesAtom = atom(null, (_get, set) => {
 export const viewModeAtom = atom<ViewMode>("grid")
 
 export const sortOrderAtom = atom<SortOrder>("newest")
+
+export const sidebarSideAtom = atom<SidebarSide>("left")
+
+export const sidebarNoiseAtom = atom<NoiseLevel>("off")
 
 export const bookmarkDialogAtom = atom<BookmarkDialogState>({
   open: false,
