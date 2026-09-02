@@ -3,7 +3,6 @@
 import { pointerIntersection } from "@dnd-kit/collision"
 import { useDroppable } from "@dnd-kit/react"
 import { InboxIcon } from "lucide-react"
-import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useMemo } from "react"
 
@@ -13,6 +12,7 @@ import {
   SidebarMenuItem,
 } from "@loomark/ui/components/sidebar"
 
+import { Link } from "@/components/link"
 import { useCollectionItems } from "@/hooks/use-collection-items"
 import { DRAG_TYPE, DROP_PRIORITY, type DropTargetData } from "@/lib/dnd"
 

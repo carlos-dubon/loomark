@@ -15,6 +15,7 @@ import {
 } from "@loomark/ui/components/command"
 
 import { FaviconImage } from "@/components/favicon-image"
+import { useOpenInNewTab } from "@/hooks/use-open-in-new-tab"
 import { api } from "@/lib/client-api"
 import {
   clearRecentSearchesAtom,
@@ -39,6 +40,7 @@ export const BookmarkSearchDialog = () => {
   const pushRecent = useSetAtom(pushRecentSearchAtom)
   const removeRecent = useSetAtom(removeRecentSearchAtom)
   const clearRecents = useSetAtom(clearRecentSearchesAtom)
+  const { open: openUrl } = useOpenInNewTab()
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -97,7 +99,7 @@ export const BookmarkSearchDialog = () => {
   const openBookmark = (url: string) => {
     pushRecent(query)
     setOpen(false)
-    window.open(url, "_blank", "noopener,noreferrer")
+    openUrl(url)
   }
 
   const term = query.trim()

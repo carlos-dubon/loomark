@@ -10,7 +10,6 @@ import {
 } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { useTheme } from "next-themes"
-import Link from "next/link"
 
 import {
   Avatar,
@@ -28,6 +27,7 @@ import {
 } from "@loomark/ui/components/dropdown-menu"
 import { SidebarMenuButton } from "@loomark/ui/components/sidebar"
 
+import { Link } from "@/components/link"
 import { useThemeToggle } from "@/hooks/use-theme-toggle"
 
 export type SessionUser = {
