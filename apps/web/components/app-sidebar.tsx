@@ -3,7 +3,6 @@
 import { useAtomValue, useSetAtom } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
 import { HouseIcon, PlusIcon } from "lucide-react"
-import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
@@ -26,6 +25,7 @@ import {
 } from "@loomark/ui/components/sidebar"
 
 import { CollectionTree } from "@/components/collection-tree"
+import { Link } from "@/components/link"
 import { SearchTrigger } from "@/components/search-trigger"
 import { UnsortedNavItem } from "@/components/unsorted-nav-item"
 import { UserMenu, type SessionUser } from "@/components/user-menu"

@@ -15,6 +15,7 @@ import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
 import { BookmarkMenu } from "@/components/bookmark-menu"
 import { FaviconImage } from "@/components/favicon-image"
+import { Link } from "@/components/link"
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
 import { useBookmarkPreview } from "@/hooks/use-bookmark-preview"
 import { useBookmarkSelected } from "@/hooks/use-bookmark-selection"
@@ -226,14 +227,12 @@ const GridCard = ({
           src={bookmark.faviconUrl}
           className="mt-0.5 size-4 shrink-0"
         />
-        <a
+        <Link
           href={bookmark.url}
-          target="_blank"
-          rel="noopener noreferrer"
           className="min-w-0 flex-1 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           <span className="line-clamp-2">{bookmarkLabel(bookmark)}</span>
-        </a>
+        </Link>
         <BookmarkActions bookmark={bookmark} className="-mt-1 -mr-1" />
       </div>
       {bookmark.description ? (
@@ -264,14 +263,12 @@ const ListRow = ({
     <SelectToggle bookmark={bookmark} {...select} />
     <FaviconImage src={bookmark.faviconUrl} className="size-5 shrink-0" />
     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-      <a
+      <Link
         href={bookmark.url}
-        target="_blank"
-        rel="noopener noreferrer"
         className="min-w-0 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-3 focus-visible:ring-ring/50"
       >
         <span className="block truncate">{bookmarkLabel(bookmark)}</span>
-      </a>
+      </Link>
       <BookmarkMeta bookmark={bookmark} />
     </div>
     <BookmarkActions bookmark={bookmark} />
