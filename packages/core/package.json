@@ -1,20 +1,32 @@
 {
   "name": "@loomark/core",
   "version": "0.0.1",
+  "description": "Shared Loomark types, schemas, and helpers.",
+  "homepage": "https://github.com/carlos-dubon/loomark#readme",
+  "bugs": {
+    "url": "https://github.com/carlos-dubon/loomark/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlos-dubon/loomark.git",
+    "directory": "packages/core"
+  },
+  "license": "MIT",
+  "author": "Carlos Daniel Dubón <holacarlosdubon@gmail.com>",
   "private": true,
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*.ts"
   },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
   "dependencies": {
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"
-  },
-  "scripts": {
-    "typecheck": "tsc --noEmit",
-    "format": "prettier --write \"src/**/*.ts\""
   },
   "devDependencies": {
     "prettier": "^3.8.3",
