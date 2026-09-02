@@ -177,6 +177,9 @@ const Workspace = ({
   }, [connection.serverUrl, connection.token, tab.url])
 
   useEffect(() => {
+    // load() only touches state after awaiting network I/O, so this never
+    // cascades renders synchronously.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load()
   }, [load])
 
