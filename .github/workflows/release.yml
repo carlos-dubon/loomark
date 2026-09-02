@@ -73,6 +73,8 @@ jobs:
       - run: pnpm run ext:typecheck
       - run: pnpm run ext:zip
       - run: pnpm run ext:zip:firefox
+      - run: pnpm run ext:zip:newtab
+      - run: pnpm run ext:zip:firefox:newtab
       - uses: actions/upload-artifact@v4
         with:
           name: extension

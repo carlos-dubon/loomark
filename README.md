@@ -50,6 +50,8 @@ There is a companion extension in [`extension/`](extension) that saves the page 
 
 It is not in any store yet, so you sideload it. Every release ships a prebuilt zip — grab `loomark-extension-<version>-chrome.zip` from the [latest release](https://github.com/carlos-dubon/loomark/releases/latest), unzip it, and load the folder as an unpacked extension. [`extension/README.md`](extension/README.md) has the per browser steps, and how to build it yourself instead.
 
+There is a second build, **Loomark New Tab** (`loomark-extension-newtab-<version>-...`), that is the same extension plus a new tab page pointed at your instance. Most browsers let you set a custom new tab in their own settings and need nothing extra; take this one when yours does not, as Helium does not. Install one variant or the other, not both.
+
 It signs in with your Loomark email and password, exchanges them for an API token, and talks to the same API the web app uses. Nothing else on your instance changes: the extension has no host access until you name your server in the popup, and the API keeps rejecting cross origin requests from ordinary websites.
 
 ## Browser sync

@@ -6,10 +6,16 @@
   "scripts": {
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
+    "dev:newtab": "wxt -c wxt.newtab.config.ts",
+    "dev:firefox:newtab": "wxt -b firefox -c wxt.newtab.config.ts",
     "build": "wxt build",
     "build:firefox": "wxt build -b firefox",
+    "build:newtab": "wxt build -c wxt.newtab.config.ts",
+    "build:firefox:newtab": "wxt build -b firefox -c wxt.newtab.config.ts",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
+    "zip:newtab": "wxt zip -c wxt.newtab.config.ts",
+    "zip:firefox:newtab": "wxt zip -b firefox -c wxt.newtab.config.ts",
     "postinstall": "wxt prepare",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx}\""

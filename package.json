@@ -21,12 +21,17 @@
     "brand:generate": "pnpm --filter loomark brand:generate",
     "docker:build": "docker compose -f docker-compose.yml -f docker-compose.build.yml build",
     "ext:dev": "pnpm --filter loomark-extension dev",
+    "ext:dev:newtab": "pnpm --filter loomark-extension dev:newtab",
     "ext:build": "pnpm --filter loomark-extension build",
     "ext:build:firefox": "pnpm --filter loomark-extension build:firefox",
+    "ext:build:newtab": "pnpm --filter loomark-extension build:newtab",
+    "ext:build:firefox:newtab": "pnpm --filter loomark-extension build:firefox:newtab",
     "ext:typecheck": "pnpm --filter loomark-extension typecheck",
     "ext:zip": "pnpm --filter loomark-extension zip",
     "ext:zip:firefox": "pnpm --filter loomark-extension zip:firefox",
-    "preversion": "pnpm run typecheck && pnpm run lint && pnpm run ext:build",
+    "ext:zip:newtab": "pnpm --filter loomark-extension zip:newtab",
+    "ext:zip:firefox:newtab": "pnpm --filter loomark-extension zip:firefox:newtab",
+    "preversion": "pnpm run typecheck && pnpm run lint && pnpm run ext:build && pnpm run ext:build:newtab",
     "postversion": "git push --follow-tags"
   },
   "devDependencies": {
