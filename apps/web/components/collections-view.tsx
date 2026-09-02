@@ -1,7 +1,7 @@
 "use client"
 
 import { useSetAtom } from "jotai"
-import { FolderTreeIcon, PlusIcon } from "lucide-react"
+import { FolderTreeIcon, PlusIcon, Share2Icon } from "lucide-react"
 
 import type { FlatCollection } from "@loomark/core/tree"
 import { Button } from "@loomark/ui/components/button"
@@ -28,8 +28,14 @@ const CollectionCard = ({
       <CollectionIcon name={collection.icon} className="size-5" />
     </span>
     <span className="min-w-0 flex-1">
-      <span className="block truncate text-sm font-medium">
-        {collection.name}
+      <span className="flex min-w-0 items-center gap-1.5">
+        <span className="truncate text-sm font-medium">{collection.name}</span>
+        {collection.shareToken ? (
+          <Share2Icon
+            className="size-3 shrink-0 text-muted-foreground"
+            aria-label="Shared with a link"
+          />
+        ) : null}
       </span>
       <span className="block truncate text-xs text-muted-foreground">
         {collection.totalCount}{" "}

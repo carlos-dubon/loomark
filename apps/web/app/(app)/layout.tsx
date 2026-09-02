@@ -11,6 +11,7 @@ import { BookmarkSearchDialog } from "@/components/bookmark-search-dialog"
 import { BookmarkSelectionBar } from "@/components/bookmark-selection-bar"
 import { CollectionDeleteDialog } from "@/components/collection-delete-dialog"
 import { CollectionDialog } from "@/components/collection-dialog"
+import { CollectionShareDialog } from "@/components/collection-share-dialog"
 import { DndProvider } from "@/components/dnd-provider"
 import { getUserRole } from "@/lib/admin"
 import { getAppearance } from "@/lib/appearance"
@@ -73,6 +74,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
         <BookmarkSelectionBar />
         <BookmarkDeleteDialog />
         <CollectionDeleteDialog />
+        <CollectionShareDialog />
       </SidebarProvider>
     </AppearanceProvider>
   )
