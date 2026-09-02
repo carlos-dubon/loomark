@@ -3,6 +3,7 @@ import type {
   BookmarkDTO,
   CollectionDeletion,
   CollectionDTO,
+  CollectionShareDTO,
   ImportSummary,
   UrlMetadata,
 } from "@loomark/core/types"
@@ -113,6 +114,14 @@ export const api = {
     }),
   deleteCollection: (id: string) =>
     request<CollectionDeletion>(routes.collection(id), { method: "DELETE" }),
+  shareCollection: (id: string) =>
+    request<CollectionShareDTO>(routes.collectionShare(id), {
+      method: "POST",
+    }),
+  unshareCollection: (id: string) =>
+    request<CollectionShareDTO>(routes.collectionShare(id), {
+      method: "DELETE",
+    }),
   restoreCollection: (deletion: CollectionDeletion) =>
     request<CollectionDTO[]>(routes.collectionsRestore, {
       method: "POST",

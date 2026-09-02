@@ -11,8 +11,12 @@ export const routes = {
   bookmarksReorder: "/api/bookmarks/reorder",
   collections: "/api/collections",
   collection: (id: string) => `/api/collections/${id}`,
+  collectionShare: (id: string) => `/api/collections/${id}/share`,
   collectionsMove: "/api/collections/move",
   collectionsRestore: "/api/collections/restore",
+  shareFavicon: (token: string, url: string) =>
+    withUrl(`/api/share/${token}/favicon`, url),
+  favicon: (url: string) => withUrl("/api/favicon", url),
   metadata: (url: string) => withUrl("/api/metadata", url),
   appearance: "/api/appearance",
   register: "/api/register",
@@ -20,3 +24,9 @@ export const routes = {
   adminUser: (id: string) => `/api/admin/users/${id}`,
   adminUserPassword: (id: string) => `/api/admin/users/${id}/password`,
 } as const
+
+export const sharePath = (token: string, collectionId?: string | null) =>
+  collectionId ? `/s/${token}/${collectionId}` : `/s/${token}`
+
+export const shareUrl = (origin: string, token: string) =>
+  `${origin}${sharePath(token)}`

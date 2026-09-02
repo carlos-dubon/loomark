@@ -44,6 +44,14 @@ Installing needs a secure context — `https://` or `http://localhost`. On a pla
 
 Pages are always fetched from the server, since they carry your library. An installed Loomark is not an offline copy of it — when the server is unreachable you get a small offline screen instead.
 
+## Sharing a collection
+
+A collection can be published as a read only link. Open its menu, pick **Share…**, and turn on **Share with a link** — you get a `/s/<token>` URL to hand out.
+
+Anyone holding that link reads the collection and everything nested under it, without an account and without touching the rest of your library. They cannot change anything. The pages are marked `noindex`, so the link stays as private as you keep it: it is the secret. Turn the switch off to revoke it, or **Regenerate link** to mint a new one and kill the old.
+
+The shared pages carry your theme, and favicons are proxied the same way the app proxies them — but only for bookmarks inside the shared collection, so the link never becomes an open image proxy. `Unsorted` cannot be shared.
+
 ## Browser extension
 
 There is a companion extension in [`extension/`](extension) that saves the page you are on straight into a collection, and shows a check when the page is already in your library.
@@ -64,9 +72,9 @@ Enter your Loomark URL (e.g. `https://loomark.example.com`) and click **Connect*
 
 The next step asks which folders to sync:
 
-| Field         | What to put                                                                                     |
-| -------------- | ------------------------------------------------------------------------------------------------ |
-| Server target | Leave it empty to sync at the top of your library. A path like `/Browser` scopes everything under one collection instead, keeping synced bookmarks separate from the rest. |
+| Field         | What to put                                                                                                                                                                                                                                   |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Server target | Leave it empty to sync at the top of your library. A path like `/Browser` scopes everything under one collection instead, keeping synced bookmarks separate from the rest.                                                                    |
 | Local target  | Keep **Bookmarks folder** selected, not Browser tabs. For a first sync, point it at a new, empty folder rather than your whole bookmarks bar — floccus merges whatever is already in that folder into Loomark right away, in both directions. |
 
 Repeat the install on every browser and device you want in sync; Loomark is the one hub they all sync through.
@@ -234,21 +242,23 @@ Next.js 16 (App Router + Route Handlers) · React 19 · TypeScript · Tailwind C
 
 ## API
 
-All routes require a session cookie except `POST /api/register` and `GET /api/health`.
+All routes require a session cookie except `POST /api/register`, `GET /api/health`, and the share routes, which are authenticated by the share token in the URL.
 
-| Method                 | Route                    | Purpose                                                                            |
-| ---------------------- | ------------------------ | ---------------------------------------------------------------------------------- |
-| `POST`                 | `/api/register`          | Create an account                                                                  |
-| `GET` `POST`           | `/api/bookmarks`         | List (`q`, `collectionId`, `tag`, `pinned`, `unsorted`, `take`, `skip`) and create |
-| `DELETE`               | `/api/bookmarks`         | Delete many by `ids`                                                               |
-| `POST`                 | `/api/bookmarks/restore` | Put deleted bookmarks back, ids and dates intact                                   |
-| `GET` `PATCH` `DELETE` | `/api/bookmarks/[id]`    | Read, update, delete                                                               |
-| `GET` `POST`           | `/api/collections`       | List and create                                                                    |
-| `PATCH` `DELETE`       | `/api/collections/[id]`  | Update and delete                                                                  |
-| `GET`                  | `/api/tags`              | List tags                                                                          |
-| `GET`                  | `/api/metadata?url=`     | Title, description, favicon and preview image for a URL                            |
-| `GET` `PATCH`          | `/api/appearance`        | Read and update the theme preset and view mode                                     |
-| `GET`                  | `/api/health`            | Liveness, database check, and running version                                      |
+| Method                 | Route                             | Purpose                                                                            |
+| ---------------------- | --------------------------------- | ---------------------------------------------------------------------------------- |
+| `POST`                 | `/api/register`                   | Create an account                                                                  |
+| `GET` `POST`           | `/api/bookmarks`                  | List (`q`, `collectionId`, `tag`, `pinned`, `unsorted`, `take`, `skip`) and create |
+| `DELETE`               | `/api/bookmarks`                  | Delete many by `ids`                                                               |
+| `POST`                 | `/api/bookmarks/restore`          | Put deleted bookmarks back, ids and dates intact                                   |
+| `GET` `PATCH` `DELETE` | `/api/bookmarks/[id]`             | Read, update, delete                                                               |
+| `GET` `POST`           | `/api/collections`                | List and create                                                                    |
+| `PATCH` `DELETE`       | `/api/collections/[id]`           | Update and delete                                                                  |
+| `POST` `DELETE`        | `/api/collections/[id]/share`     | Create or rotate a share link, and revoke it                                       |
+| `GET`                  | `/api/share/[token]/favicon?url=` | Favicon proxy scoped to one shared collection                                      |
+| `GET`                  | `/api/tags`                       | List tags                                                                          |
+| `GET`                  | `/api/metadata?url=`              | Title, description, favicon and preview image for a URL                            |
+| `GET` `PATCH`          | `/api/appearance`                 | Read and update the theme preset and view mode                                     |
+| `GET`                  | `/api/health`                     | Liveness, database check, and running version                                      |
 
 Floccus talks to a separate surface under `/index.php/apps/bookmarks/public/rest/v2`, which implements the slice of the Nextcloud Bookmarks API its adapter uses. Those routes authenticate with Basic auth or an API token rather than the session cookie, and never with it.
 

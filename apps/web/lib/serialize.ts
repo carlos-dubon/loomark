@@ -1,4 +1,9 @@
-import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
+import type {
+  BookmarkDTO,
+  CollectionDTO,
+  SharedBookmarkDTO,
+  SharedCollectionDTO,
+} from "@loomark/core/types"
 
 import type { Bookmark, Collection } from "@/lib/generated/prisma/client"
 
@@ -26,5 +31,27 @@ export const serializeCollection = (
   kind: collection.kind,
   position: collection.position,
   parentId: collection.parentId,
+  bookmarkCount: collection._count?.bookmarks ?? 0,
+  shareToken: collection.shareToken,
+})
+
+export const serializeSharedBookmark = (
+  bookmark: BookmarkDTO
+): SharedBookmarkDTO => ({
+  id: bookmark.id,
+  url: bookmark.url,
+  title: bookmark.title,
+  description: bookmark.description,
+  faviconUrl: bookmark.faviconUrl,
+  previewUrl: bookmark.previewUrl,
+  createdAt: bookmark.createdAt,
+})
+
+export const serializeSharedCollection = (
+  collection: Collection & { _count?: { bookmarks: number } }
+): SharedCollectionDTO => ({
+  id: collection.id,
+  name: collection.name,
+  icon: collection.icon,
   bookmarkCount: collection._count?.bookmarks ?? 0,
 })

@@ -23,6 +23,42 @@ export type CollectionDTO = {
   position: number
   parentId: string | null
   bookmarkCount: number
+  shareToken: string | null
+}
+
+export type SharedBookmarkDTO = {
+  id: string
+  url: string
+  title: string
+  description: string | null
+  faviconUrl: string | null
+  previewUrl: string | null
+  createdAt: string
+}
+
+export type SharedCollectionDTO = {
+  id: string
+  name: string
+  icon: string | null
+  bookmarkCount: number
+}
+
+export type SharedCollectionPage = {
+  token: string
+  root: SharedCollectionDTO
+  collection: SharedCollectionDTO
+  trail: SharedCollectionDTO[]
+  ownerName: string | null
+  sharedAt: string
+  themePreset: string
+  bookmarks: SharedBookmarkDTO[]
+  subcollections: SharedCollectionDTO[]
+}
+
+export type CollectionShareDTO = {
+  id: string
+  shareToken: string | null
+  sharedAt: string | null
 }
 
 export type CollectionNode = CollectionDTO & {

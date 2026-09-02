@@ -1,7 +1,7 @@
 "use client"
 
 import { useAtomValue, useSetAtom } from "jotai"
-import { BookmarkIcon, InboxIcon, PlusIcon } from "lucide-react"
+import { BookmarkIcon, InboxIcon, PlusIcon, Share2Icon } from "lucide-react"
 
 import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
@@ -15,7 +15,11 @@ import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
 import { ViewModeToggle } from "@/components/view-mode-toggle"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
-import { bookmarkDialogAtom, viewModeAtom } from "@/store/atoms"
+import {
+  bookmarkDialogAtom,
+  collectionShareDialogAtom,
+  viewModeAtom,
+} from "@/store/atoms"
 
 const EMPTY_ICONS = {
   bookmark: BookmarkIcon,
@@ -63,6 +67,7 @@ export const BookmarkListView = ({
 }) => {
   const mode = useAtomValue(viewModeAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
+  const openShareDialog = useSetAtom(collectionShareDialogAtom)
   const { items, manual } = useBookmarkList(
     bookmarks,
     "collection",
@@ -95,6 +100,17 @@ export const BookmarkListView = ({
       >
         <ViewModeToggle />
         <SortOrderSelect />
+        {collection?.shareToken ? (
+          <Button
+            variant="outline"
+            size="icon"
+            aria-label="Manage the share link"
+            title="Shared with a link"
+            onClick={() => openShareDialog(collection)}
+          >
+            <Share2Icon />
+          </Button>
+        ) : null}
         {collection && collection.kind === "USER" ? (
           <CollectionMenu collection={collection} />
         ) : null}

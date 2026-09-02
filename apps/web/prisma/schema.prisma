@@ -89,19 +89,21 @@ enum CollectionKind {
 }
 
 model Collection {
-  id        String         @id @default(cuid())
-  name      String
-  icon      String?
-  kind      CollectionKind @default(USER)
-  position  Int            @default(0)
-  parentId  String?
-  userId    String
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  parent    Collection?    @relation("CollectionTree", fields: [parentId], references: [id], onDelete: Cascade)
-  children  Collection[]   @relation("CollectionTree")
-  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bookmarks Bookmark[]
+  id         String         @id @default(cuid())
+  name       String
+  icon       String?
+  kind       CollectionKind @default(USER)
+  position   Int            @default(0)
+  parentId   String?
+  userId     String
+  shareToken String?        @unique
+  sharedAt   DateTime?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  parent     Collection?    @relation("CollectionTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children   Collection[]   @relation("CollectionTree")
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookmarks  Bookmark[]
 
   @@index([userId])
   @@index([parentId])
