@@ -1,6 +1,10 @@
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
+import {
+  DEFAULT_ARCHIVE_SETTINGS,
+  type ArchiveSettings,
+} from "@loomark/core/archive"
 import type { NoiseLevel, SidebarSide } from "@loomark/core/sidebar"
 import type { SortOrder } from "@loomark/core/sort"
 import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
@@ -67,6 +71,12 @@ export const deleteDialogAtom = atom<BookmarkDTO[]>([])
 export const collectionDeleteDialogAtom = atom<CollectionDTO | null>(null)
 
 export const collectionShareDialogAtom = atom<CollectionDTO | null>(null)
+
+export const archiveDialogAtom = atom<BookmarkDTO | null>(null)
+
+export const archiveSettingsAtom = atom<ArchiveSettings>(
+  DEFAULT_ARCHIVE_SETTINGS
+)
 
 export const bookmarkListAtom = atom<BookmarkListState>({
   source: [],

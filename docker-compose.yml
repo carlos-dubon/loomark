@@ -31,8 +31,12 @@ services:
       AUTH_URL: ${AUTH_URL:-http://localhost:3000}
       AUTH_TRUST_HOST: "true"
       ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-true}
+      ARCHIVE_DIR: /data/archives
+    volumes:
+      - loomark-archives:/data/archives
     ports:
       - "${APP_PORT:-3000}:3000"
 
 volumes:
   loomark-db:
+  loomark-archives:

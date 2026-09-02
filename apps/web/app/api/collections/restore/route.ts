@@ -1,6 +1,9 @@
+import { after } from "next/server"
+
 import { parentsFirst } from "@loomark/core/tree"
 
 import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { enqueueForUser } from "@/lib/archives/queue"
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { prisma } from "@/lib/prisma"
 import { getCollections } from "@/lib/queries"
@@ -75,6 +78,13 @@ export const POST = async (request: Request) => {
   })
 
   await prisma.$transaction([...creates, ...bookmarks])
+
+  after(() =>
+    enqueueForUser(
+      userId,
+      data.bookmarks.map((bookmark) => bookmark.id)
+    )
+  )
 
   return Response.json(await getCollections(userId), { status: 201 })
 }
