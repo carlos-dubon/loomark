@@ -1,6 +1,6 @@
 {
   "name": "loomark-monorepo",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Self-hosted bookmark manager that archives the pages you save, syncs with your browser through floccus, and ships a Chrome and Firefox extension.",
   "keywords": [
     "bookmarks",
