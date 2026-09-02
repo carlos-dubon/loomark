@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/brand/loomark-rounded-512.png" alt="Loomark" width="112" height="112">
+  <img src="apps/web/public/brand/loomark-rounded-512.png" alt="Loomark" width="112" height="112">
 </p>
 
 # Loomark
