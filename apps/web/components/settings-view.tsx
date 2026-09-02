@@ -32,6 +32,7 @@ import {
 } from "@loomark/ui/components/dropzone"
 
 import { PageHeader } from "@/components/page-header"
+import { SidebarSettings } from "@/components/settings/sidebar-settings"
 import { ThemePicker } from "@/components/settings/theme-picker"
 import { api } from "@/lib/client-api"
 import { collectionsAtom } from "@/store/atoms"
@@ -118,6 +119,19 @@ export const SettingsView = ({
           </CardHeader>
           <CardContent>
             <ThemePicker />
+          </CardContent>
+        </Card>
+        <Card className="w-full max-w-2xl shrink-0">
+          <CardHeader>
+            <CardTitle>Sidebar</CardTitle>
+            <CardDescription>
+              Park the sidebar on either edge of the window, and dial in a film
+              grain over it. The grain is purely decorative and follows whatever
+              theme you picked above.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SidebarSettings />
           </CardContent>
         </Card>
         <Card className="w-full max-w-2xl shrink-0">

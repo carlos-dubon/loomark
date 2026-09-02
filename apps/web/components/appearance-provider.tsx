@@ -7,6 +7,8 @@ import type { AppearanceDTO } from "@/lib/themes/appearance"
 import {
   appearanceAtom,
   fontHrefAtom,
+  sidebarNoiseAtom,
+  sidebarSideAtom,
   sortOrderAtom,
   themeCssAtom,
   viewModeAtom,
@@ -27,6 +29,8 @@ export const AppearanceProvider = ({
     [appearanceAtom, appearance],
     [viewModeAtom, appearance.viewMode],
     [sortOrderAtom, appearance.sortOrder],
+    [sidebarSideAtom, appearance.sidebarSide],
+    [sidebarNoiseAtom, appearance.sidebarNoise],
     [themeCssAtom, themeCss],
     [fontHrefAtom, fontHref],
   ])
