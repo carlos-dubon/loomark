@@ -23,6 +23,24 @@ export default defineConfig([
     settings: { next: { rootDir: "apps/web" } },
   },
   {
+    files: ["apps/web/**/*.{ts,tsx}"],
+    ignores: ["apps/web/components/link.tsx"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "next/link",
+              message:
+                "Import { Link } from \"@/components/link\" so links follow the open in new tab setting.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ["apps/extension/**/*.{ts,tsx}", "packages/**/*.{ts,tsx}"],
     rules: { "@next/next/no-html-link-for-pages": "off" },
   },

@@ -3,7 +3,6 @@
 import { useSortable } from "@dnd-kit/react/sortable"
 import { useSetAtom } from "jotai"
 import { PinIcon, PlusIcon, UploadIcon } from "lucide-react"
-import Link from "next/link"
 import { useMemo } from "react"
 
 import type { BookmarkDTO } from "@loomark/core/types"
@@ -14,6 +13,7 @@ import { Button } from "@loomark/ui/components/button"
 import { BookmarkMenu } from "@/components/bookmark-menu"
 import { EmptyState } from "@/components/empty-state"
 import { FaviconImage } from "@/components/favicon-image"
+import { Link } from "@/components/link"
 import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
@@ -69,15 +69,13 @@ const PinnedItem = ({
           className="absolute -top-1.5 -right-1.5 z-20 size-6 rounded-full border bg-card shadow-sm sm:size-6 md:opacity-0 md:group-focus-within/pin:opacity-100 md:group-hover/pin:opacity-100"
         />
       </div>
-      <a
+      <Link
         href={bookmark.url}
-        target="_blank"
-        rel="noopener noreferrer"
         className="w-full rounded-sm text-center text-xs leading-tight text-muted-foreground transition-colors outline-none group-focus-within/pin:text-foreground group-hover/pin:text-foreground after:absolute after:inset-0 after:rounded-xl focus-visible:ring-3 focus-visible:ring-ring/50 sm:text-[13px]"
         title={label}
       >
         <span className="block truncate">{label}</span>
-      </a>
+      </Link>
     </div>
   )
 }

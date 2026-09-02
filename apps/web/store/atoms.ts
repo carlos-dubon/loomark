@@ -121,6 +121,8 @@ export const viewModeAtom = atom<ViewMode>("grid")
 
 export const sortOrderAtom = atom<SortOrder>("newest")
 
+export const openInNewTabAtom = atom(true)
+
 export const bookmarkDialogAtom = atom<BookmarkDialogState>({
   open: false,
   bookmark: null,

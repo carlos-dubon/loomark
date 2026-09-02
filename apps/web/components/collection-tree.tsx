@@ -4,7 +4,6 @@ import { pointerIntersection } from "@dnd-kit/collision"
 import { useDragOperation, useDraggable, useDroppable } from "@dnd-kit/react"
 import { useAtomValue } from "jotai"
 import { CornerLeftUpIcon, LibraryIcon } from "lucide-react"
-import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useCallback, useMemo } from "react"
 
@@ -17,6 +16,7 @@ import {
   SidebarMenuItem,
 } from "@loomark/ui/components/sidebar"
 
+import { Link } from "@/components/link"
 import { useCollectionItems } from "@/hooks/use-collection-items"
 import { DRAG_TYPE, DROP_PRIORITY, type DropTargetData } from "@/lib/dnd"
 import { collectionsAtom } from "@/store/atoms"

@@ -31,7 +31,9 @@ import {
   DropzoneTitle,
 } from "@loomark/ui/components/dropzone"
 
+import { Link } from "@/components/link"
 import { PageHeader } from "@/components/page-header"
+import { LinkSettings } from "@/components/settings/link-settings"
 import { ThemePicker } from "@/components/settings/theme-picker"
 import { api } from "@/lib/client-api"
 import { collectionsAtom } from "@/store/atoms"
@@ -118,6 +120,20 @@ export const SettingsView = ({
           </CardHeader>
           <CardContent>
             <ThemePicker />
+          </CardContent>
+        </Card>
+        <Card className="w-full max-w-2xl shrink-0">
+          <CardHeader>
+            <CardTitle>Links</CardTitle>
+            <CardDescription>
+              Bookmarks and other outside links open in a new tab by default. If
+              Loomark is your new tab page, turn this off so they load in the
+              tab you are already in and the back button brings you home. Kept
+              in a cookie on this browser, not on your account.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <LinkSettings />
           </CardContent>
         </Card>
         <Card className="w-full max-w-2xl shrink-0">
@@ -217,14 +233,12 @@ export const SettingsView = ({
               Running Loomark{" "}
               <span className="font-mono text-foreground">{version}</span>.
               Check{" "}
-              <a
+              <Link
                 className="underline underline-offset-4 hover:text-foreground"
                 href="https://github.com/carlos-dubon/loomark/releases"
-                target="_blank"
-                rel="noreferrer"
               >
                 the releases page
-              </a>{" "}
+              </Link>{" "}
               for what is new.
             </CardDescription>
           </CardHeader>

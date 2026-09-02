@@ -29,6 +29,7 @@ import {
 } from "@loomark/ui/components/dropdown-menu"
 
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
+import { useOpenInNewTab } from "@/hooks/use-open-in-new-tab"
 import {
   bookmarkDialogAtom,
   collectionsAtom,
@@ -46,6 +47,7 @@ export const BookmarkMenu = ({
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const confirmDelete = useSetAtom(deleteDialogAtom)
   const { togglePin, move, copyLink } = useBookmarkActions()
+  const { open } = useOpenInNewTab()
 
   const flat = useMemo(
     () => flattenTree(buildCollectionTree(collections)),
@@ -70,9 +72,7 @@ export const BookmarkMenu = ({
         <MoreHorizontalIcon />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52 min-w-52">
-        <DropdownMenuItem
-          onClick={() => window.open(bookmark.url, "_blank", "noopener")}
-        >
+        <DropdownMenuItem onClick={() => open(bookmark.url)}>
           <ExternalLinkIcon />
           Open
         </DropdownMenuItem>

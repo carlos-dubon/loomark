@@ -16,6 +16,7 @@ import { getUserRole } from "@/lib/admin"
 import { getAppearance } from "@/lib/appearance"
 import { auth } from "@/lib/auth"
 import { ensureUnsortedCollection } from "@/lib/collections"
+import { NEW_TAB_COOKIE_NAME, toOpenInNewTab } from "@/lib/open-target"
 import { getCollections } from "@/lib/queries"
 import { THEME_PRESETS } from "@/lib/themes/presets"
 import { findPreset, fontStylesheetFor, presetToCss } from "@/lib/themes/theme"
@@ -48,6 +49,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
       appearance={appearance}
       themeCss={presetToCss(preset)}
       fontHref={fontStylesheetFor(preset)}
+      openInNewTab={toOpenInNewTab(cookieStore.get(NEW_TAB_COOKIE_NAME)?.value)}
     >
       <SidebarProvider
         className="h-svh overflow-hidden"
