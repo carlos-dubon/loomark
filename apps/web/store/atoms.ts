@@ -66,6 +66,8 @@ export const deleteDialogAtom = atom<BookmarkDTO[]>([])
 
 export const collectionDeleteDialogAtom = atom<CollectionDTO | null>(null)
 
+export const collectionShareDialogAtom = atom<CollectionDTO | null>(null)
+
 export const bookmarkListAtom = atom<BookmarkListState>({
   source: [],
   items: [],
@@ -237,6 +239,18 @@ export const upsertCollectionAtom = atom(
             item.id === collection.id ? collection : item
           )
         : [...collections, collection]
+    )
+  }
+)
+
+export const setCollectionShareAtom = atom(
+  null,
+  (get, set, id: string, shareToken: string | null) => {
+    set(
+      collectionsAtom,
+      get(collectionsAtom).map((collection) =>
+        collection.id === id ? { ...collection, shareToken } : collection
+      )
     )
   }
 )
