@@ -60,7 +60,8 @@ const ServerStep = ({
 
     setPending(true)
 
-    requestHostPermission(normalized)
+    writeDraftServerUrl(normalized)
+      .then(() => requestHostPermission(normalized))
       .then((granted) => {
         if (!granted) {
           setError("serverUrl", {
@@ -70,7 +71,7 @@ const ServerStep = ({
           return
         }
 
-        return writeDraftServerUrl(normalized).then(() => onNext(normalized))
+        onNext(normalized)
       })
       .catch(() =>
         setError("serverUrl", { message: "Could not request permission" })
