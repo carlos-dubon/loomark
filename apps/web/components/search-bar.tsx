@@ -6,14 +6,6 @@ import { useEffect, useRef } from "react"
 
 import { Button } from "@loomark/ui/components/button"
 import { Input } from "@loomark/ui/components/input"
-import { Kbd } from "@loomark/ui/components/kbd"
-
-const isTypingTarget = (target: EventTarget | null) =>
-  target instanceof HTMLElement &&
-  (target.isContentEditable ||
-    target.tagName === "INPUT" ||
-    target.tagName === "TEXTAREA" ||
-    target.tagName === "SELECT")
 
 export const SearchBar = ({
   value,
@@ -28,11 +20,6 @@ export const SearchBar = ({
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "/" && !isTypingTarget(event.target)) {
-        event.preventDefault()
-        inputRef.current?.focus()
-      }
-
       if (
         event.key === "Escape" &&
         document.activeElement === inputRef.current
@@ -57,7 +44,7 @@ export const SearchBar = ({
         }
         placeholder="Search bookmarks by title or url…"
         aria-label="Search bookmarks"
-        className="h-11 rounded-xl pr-20 pl-9 text-base"
+        className="h-11 rounded-xl pr-10 pl-9 text-base"
       />
       <div className="absolute top-1/2 right-2 flex -translate-y-1/2 items-center gap-1">
         {pending ? (
@@ -72,9 +59,7 @@ export const SearchBar = ({
           >
             <XIcon />
           </Button>
-        ) : (
-          <Kbd>/</Kbd>
-        )}
+        ) : null}
       </div>
     </div>
   )

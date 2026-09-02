@@ -231,7 +231,6 @@ All routes require a session cookie except `POST /api/register` and `GET /api/he
 
 | Key             | Action                               |
 | --------------- | ------------------------------------ |
-| `/`             | Focus search                         |
 | `⌘B` / `Ctrl+B` | Toggle the sidebar                   |
 | `D`             | Toggle dark mode                     |
 | `Esc`           | Clear the current bookmark selection |
