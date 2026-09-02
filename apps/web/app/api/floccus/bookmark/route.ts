@@ -1,5 +1,8 @@
+import { after } from "next/server"
+
 import { safeNormalizeUrl } from "@loomark/core/url"
 
+import { enqueueForUser } from "@/lib/archives/queue"
 import { floccusError, floccusOk } from "@/lib/floccus/respond"
 import { floccusBookmarkSchema, parseFloccusBody } from "@/lib/floccus/schemas"
 import { floccusSession } from "@/lib/floccus/session"
@@ -106,6 +109,8 @@ export const POST = async (request: Request) => {
     },
     select: { id: true, title: true, url: true, collectionId: true },
   })
+
+  after(() => enqueueForUser(session.userId, [bookmark.id]))
 
   return floccusOk(session, { item: bookmarkItem(bookmark, unsortedId) })
 }

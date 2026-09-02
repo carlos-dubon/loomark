@@ -32,6 +32,12 @@ model User {
   sortOrder     String       @default("newest")
   sidebarSide   String       @default("left")
   sidebarNoise  String       @default("off")
+  archives      Archive[]
+
+  archiveScreenshot Boolean @default(false)
+  archiveWebpage    Boolean @default(false)
+  archivePdf        Boolean @default(false)
+  archiveMarkdown   Boolean @default(false)
 }
 
 model Account {
@@ -83,6 +89,20 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
+enum ArchiveFormat {
+  SCREENSHOT
+  WEBPAGE
+  PDF
+  MARKDOWN
+}
+
+enum ArchiveStatus {
+  PENDING
+  RUNNING
+  READY
+  FAILED
+}
+
 enum CollectionKind {
   USER
   UNSORTED
@@ -127,6 +147,7 @@ model Bookmark {
   updatedAt    DateTime   @updatedAt
   collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Restrict)
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  archives     Archive[]
 
   @@index([userId])
   @@index([collectionId])
@@ -136,3 +157,22 @@ model Bookmark {
   @@index([collectionId, position])
 }
 
+model Archive {
+  id         String        @id @default(cuid())
+  format     ArchiveFormat
+  status     ArchiveStatus @default(PENDING)
+  path       String?
+  bytes      Int           @default(0)
+  attempts   Int           @default(0)
+  error      String?
+  bookmarkId String
+  userId     String
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  bookmark   Bookmark      @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([bookmarkId, format])
+  @@index([userId])
+  @@index([status, createdAt])
+}

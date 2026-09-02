@@ -1,3 +1,5 @@
+import type { ArchiveFormat, ArchiveStatus } from "./archive"
+
 export type BookmarkDTO = {
   id: string
   url: string
@@ -119,4 +121,12 @@ export type ActiveTab = {
   url: string
   title: string
   faviconUrl: string | null
+}
+
+export type ArchiveDTO = {
+  format: ArchiveFormat
+  status: ArchiveStatus
+  bytes: number
+  error: string | null
+  updatedAt: string
 }

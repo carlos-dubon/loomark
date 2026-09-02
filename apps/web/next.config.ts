@@ -4,7 +4,12 @@ const FLOCCUS_REST = "/apps/bookmarks/public/rest/v2"
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@loomark/core", "@loomark/ui"],
-  serverExternalPackages: ["@prisma/adapter-pg", "bcryptjs"],
+  serverExternalPackages: [
+    "@prisma/adapter-pg",
+    "bcryptjs",
+    "playwright-core",
+    "turndown",
+  ],
   headers: async () => [
     {
       source: "/sw.js",

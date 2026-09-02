@@ -1,11 +1,24 @@
 import type {
+  ArchiveDTO,
   BookmarkDTO,
   CollectionDTO,
   SharedBookmarkDTO,
   SharedCollectionDTO,
 } from "@loomark/core/types"
 
-import type { Bookmark, Collection } from "@/lib/generated/prisma/client"
+import type {
+  Archive,
+  Bookmark,
+  Collection,
+} from "@/lib/generated/prisma/client"
+
+export const serializeArchive = (archive: Archive): ArchiveDTO => ({
+  format: archive.format,
+  status: archive.status,
+  bytes: archive.bytes,
+  error: archive.error,
+  updatedAt: archive.updatedAt.toISOString(),
+})
 
 export const serializeBookmark = (bookmark: Bookmark): BookmarkDTO => ({
   id: bookmark.id,
