@@ -1,6 +1,18 @@
 {
   "name": "loomark-extension",
   "version": "0.0.1",
+  "description": "The Loomark browser extension for Chrome and Firefox, built with WXT.",
+  "homepage": "https://github.com/carlos-dubon/loomark#readme",
+  "bugs": {
+    "url": "https://github.com/carlos-dubon/loomark/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlos-dubon/loomark.git",
+    "directory": "apps/extension"
+  },
+  "license": "MIT",
+  "author": "Carlos Daniel Dubón <holacarlosdubon@gmail.com>",
   "private": true,
   "type": "module",
   "scripts": {
