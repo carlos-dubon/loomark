@@ -12,10 +12,10 @@
   <img src="docs/screenshots/collection-grid-light.png" alt="A Loomark collection in grid view" width="900">
 </p>
 
-- Pinned sites
-- Search with `⌘K`
+- Pinned sites in the homepage
+- Search your bookmarks with `⌘K`
 - [tweakcn](https://tweakcn.com) themes, light and dark. Press `D` to switch
-- A browser extension for Chrome and Firefox
+- A browser extension for Chromium based browsers and Firefox
 - Import from any browser or from [Linkwarden](https://linkwarden.app)
 - Installable as a PWA
 
