@@ -5,10 +5,19 @@ import { isBookmarkable } from "@loomark/core/url"
 
 import { lookupBookmark, type Auth } from "@/lib/api"
 import type { ExtensionMessage } from "@/lib/messages"
-import { readConnection, watchConnection } from "@/lib/storage"
+import {
+  readConnection,
+  readSyncSettings,
+  watchConnection,
+  watchSyncSettings,
+  writeSyncSettings,
+} from "@/lib/storage"
+import { runSync } from "@/lib/sync"
 
 const CACHE_TTL = 5 * 60 * 1000
 const BADGE_COLOR = "#16a34a"
+const SYNC_ALARM = "loomark-sync"
+const SYNC_PERIOD_MINUTES = 3
 
 type CacheEntry = { saved: boolean; at: number }
 
@@ -81,10 +90,46 @@ export default defineBackground(() => {
     }
   })
 
+  const scheduleSync = async () => {
+    const { enabled, rootId } = await readSyncSettings()
+
+    if (!enabled || !rootId) {
+      await browser.alarms.clear(SYNC_ALARM)
+      return
+    }
+
+    if (!(await browser.alarms.get(SYNC_ALARM))) {
+      browser.alarms.create(SYNC_ALARM, {
+        periodInMinutes: SYNC_PERIOD_MINUTES,
+      })
+    }
+  }
+
+  browser.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name === SYNC_ALARM) {
+      void runSync()
+    }
+  })
+
+  browser.permissions.onRemoved.addListener((permissions) => {
+    if (permissions.permissions?.includes("bookmarks")) {
+      void readSyncSettings().then((settings) =>
+        settings.enabled
+          ? writeSyncSettings({ ...settings, enabled: false })
+          : null
+      )
+    }
+  })
+
   browser.runtime.onMessage.addListener((message: ExtensionMessage) => {
     if (message?.type === "bookmarks-changed") {
       cache.clear()
       void refreshVisibleTabs()
+      void runSync()
+    }
+
+    if (message?.type === "sync-now") {
+      void runSync()
     }
   })
 
@@ -93,5 +138,10 @@ export default defineBackground(() => {
     void refreshVisibleTabs()
   })
 
+  watchSyncSettings(() => {
+    void scheduleSync()
+  })
+
   void refreshVisibleTabs()
+  void scheduleSync()
 })
