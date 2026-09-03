@@ -111,6 +111,12 @@ export default defineBackground(() => {
     }
   })
 
+  browser.permissions.onAdded.addListener((permissions) => {
+    if (permissions.permissions?.includes("bookmarks")) {
+      void runSync()
+    }
+  })
+
   browser.permissions.onRemoved.addListener((permissions) => {
     if (permissions.permissions?.includes("bookmarks")) {
       void readSyncSettings().then((settings) =>
