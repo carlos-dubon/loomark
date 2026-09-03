@@ -16,6 +16,7 @@
 - Search your bookmarks with `⌘K`
 - [tweakcn](https://tweakcn.com) themes, light and dark. Press `D` to switch
 - A browser extension for Chromium based browsers and Firefox
+- Two-way sync with your browser's own bookmarks
 - Import from any browser or from [Linkwarden](https://linkwarden.app)
 - Share links for any collection
 - Page archiving: screenshot, HTML, PDF, markdown

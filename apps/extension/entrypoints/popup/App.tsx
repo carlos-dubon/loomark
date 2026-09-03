@@ -4,6 +4,7 @@ import {
   GlobeIcon,
   Loader2Icon,
   LogOutIcon,
+  RefreshCwIcon,
 } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 
@@ -21,6 +22,7 @@ import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 import { BookmarkForm } from "@/components/bookmark-form"
 import { CollectionForm } from "@/components/collection-form"
 import { SetupForm } from "@/components/setup-form"
+import { SyncPanel } from "@/components/sync-panel"
 import {
   disconnect,
   isOffline,
@@ -78,11 +80,13 @@ const StatusBar = ({
   collection,
   saved,
   onDisconnect,
+  onOpenSync,
 }: {
   connection: Connection
   collection: CollectionDTO | null
   saved: boolean
   onDisconnect: () => void
+  onOpenSync: () => void
 }) => (
   <footer className="flex items-center justify-between gap-2 border-t px-3 py-2">
     <button
@@ -114,6 +118,16 @@ const StatusBar = ({
         Not saved yet
       </span>
     )}
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon-xs"
+      aria-label="Bookmark sync"
+      title="Bookmark sync"
+      onClick={onOpenSync}
+    >
+      <RefreshCwIcon className="text-muted-foreground" />
+    </Button>
   </footer>
 )
 
@@ -142,6 +156,7 @@ const Workspace = ({
   const [error, setError] = useState<string | null>(null)
   const [offline, setOffline] = useState(false)
   const [creating, setCreating] = useState(false)
+  const [syncing, setSyncing] = useState(false)
 
   const clearPendingCollection = useCallback(() => {
     setPendingCollectionId(null)
@@ -263,6 +278,14 @@ const Workspace = ({
     )
   }
 
+  if (syncing) {
+    return (
+      <Shell>
+        <SyncPanel onClose={() => setSyncing(false)} />
+      </Shell>
+    )
+  }
+
   return (
     <Shell>
       <Header tab={tab} />
@@ -271,6 +294,7 @@ const Workspace = ({
         connection={connection}
         collection={savedIn}
         saved={Boolean(bookmark)}
+        onOpenSync={() => setSyncing(true)}
         onDisconnect={() => {
           void disconnect(auth).catch(() => null)
           onDisconnect()

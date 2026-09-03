@@ -116,6 +116,33 @@ export type Connection = {
   user: Account
 }
 
+export type SyncCollection = {
+  id: string
+  name: string
+  parentId: string | null
+  kind: CollectionKind
+  position: number
+}
+
+export type SyncBookmark = {
+  id: string
+  url: string
+  title: string
+  collectionId: string
+  position: number
+}
+
+export type SyncOrderGroup = {
+  collectionId: string | null
+  type: "collection" | "bookmark" | "all"
+  ids: string[]
+}
+
+export type SyncSnapshot = {
+  collections: SyncCollection[]
+  bookmarks: SyncBookmark[]
+}
+
 export type ActiveTab = {
   id: number | null
   url: string

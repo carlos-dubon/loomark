@@ -2,7 +2,10 @@ import { routes } from "@loomark/core/routes"
 import type {
   Account,
   BookmarkDTO,
+  CollectionDeletion,
   CollectionDTO,
+  SyncOrderGroup,
+  SyncSnapshot,
   UrlMetadata,
 } from "@loomark/core/types"
 export type Auth = { serverUrl: string; token: string }
@@ -96,6 +99,28 @@ export const createCollection = (
     body: JSON.stringify(input),
   })
 
+export const updateCollection = (
+  auth: Auth,
+  id: string,
+  input: { name?: string; parentId?: string | null }
+) =>
+  authed<CollectionDTO>(auth, routes.collection(id), {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  })
+
+export const deleteCollection = (auth: Auth, id: string) =>
+  authed<CollectionDeletion>(auth, routes.collection(id), { method: "DELETE" })
+
+export const fetchSyncSnapshot = (auth: Auth) =>
+  authed<SyncSnapshot>(auth, routes.sync)
+
+export const pushSyncOrder = (auth: Auth, groups: SyncOrderGroup[]) =>
+  authed<void>(auth, routes.sync, {
+    method: "POST",
+    body: JSON.stringify({ groups }),
+  })
+
 export const lookupBookmark = (auth: Auth, url: string) =>
   authed<BookmarkDTO | null>(auth, routes.bookmarkLookup(url))
 
@@ -118,6 +143,7 @@ export const updateBookmark = (
   auth: Auth,
   id: string,
   input: {
+    url?: string
     title?: string
     description?: string | null
     collectionId?: string | null
