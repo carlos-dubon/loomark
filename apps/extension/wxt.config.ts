@@ -23,7 +23,8 @@ export default defineConfig({
     short_name: "Loomark",
     version: manifestVersion,
     description: "Save the page you are on to your Loomark collections.",
-    permissions: ["storage", "tabs"],
+    permissions: ["storage", "tabs", "alarms"],
+    optional_permissions: ["bookmarks"],
     optional_host_permissions: ["*://*/*"],
     action: { default_title: "Save to Loomark" },
     ...(browser === "firefox"

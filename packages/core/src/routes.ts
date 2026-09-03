@@ -25,6 +25,7 @@ export const routes = {
   archiveSettings: "/api/archives/settings",
   archiveBackfill: "/api/archives/backfill",
   archiveStorage: "/api/archives/storage",
+  sync: "/api/sync",
   register: "/api/register",
   extensionToken: "/api/extension/token",
   adminUser: (id: string) => `/api/admin/users/${id}`,

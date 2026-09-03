@@ -79,6 +79,19 @@ export const collectionMoveSchema = z.object({
   index: z.number().int().min(0),
 })
 
+export const syncReorderSchema = z.object({
+  groups: z
+    .array(
+      z.object({
+        collectionId: idField.nullable(),
+        type: z.enum(["collection", "bookmark", "all"]),
+        ids: z.array(idField).min(1).max(1000),
+      })
+    )
+    .min(1)
+    .max(400),
+})
+
 export const metadataQuerySchema = z.object({
   url: z.url(),
 })
@@ -156,6 +169,7 @@ export type BookmarkUpdateInput = z.infer<typeof bookmarkUpdateSchema>
 export type CollectionCreateInput = z.infer<typeof collectionCreateSchema>
 export type CollectionUpdateInput = z.infer<typeof collectionUpdateSchema>
 export type CollectionMoveInput = z.infer<typeof collectionMoveSchema>
+export type SyncReorderInput = z.infer<typeof syncReorderSchema>
 export type AppearanceUpdateInput = z.infer<typeof appearanceUpdateSchema>
 export type ArchiveSettingsInput = z.infer<typeof archiveSettingsSchema>
 export type ArchiveRunInput = z.infer<typeof archiveRunSchema>
