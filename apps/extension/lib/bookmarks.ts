@@ -75,6 +75,19 @@ export const readSubtree = async (rootId: string) => {
   return nodes
 }
 
+const TOOLBAR_IDS = ["1", "toolbar_____"]
+
+export const defaultRootId = async () => {
+  const [root] = await browser.bookmarks.getTree()
+  const shelves = (root?.children ?? []).filter(isFolder)
+
+  return (
+    shelves.find((node) => TOOLBAR_IDS.includes(node.id))?.id ??
+    shelves[0]?.id ??
+    null
+  )
+}
+
 export const listFolders = async () => {
   const tree = await browser.bookmarks.getTree()
   const folders: NativeFolder[] = []
