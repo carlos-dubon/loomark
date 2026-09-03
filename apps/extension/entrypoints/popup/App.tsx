@@ -4,7 +4,7 @@ import {
   GlobeIcon,
   Loader2Icon,
   LogOutIcon,
-  RefreshCwIcon,
+  SettingsIcon,
 } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 
@@ -21,8 +21,9 @@ import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
 import { BookmarkForm } from "@/components/bookmark-form"
 import { CollectionForm } from "@/components/collection-form"
+import { useSyncStatus } from "@/hooks/use-sync-status"
+import { SettingsPanel } from "@/components/settings-panel"
 import { SetupForm } from "@/components/setup-form"
-import { SyncPanel } from "@/components/sync-panel"
 import {
   disconnect,
   isOffline,
@@ -80,56 +81,64 @@ const StatusBar = ({
   collection,
   saved,
   onDisconnect,
-  onOpenSync,
+  onOpenSettings,
 }: {
   connection: Connection
   collection: CollectionDTO | null
   saved: boolean
   onDisconnect: () => void
-  onOpenSync: () => void
-}) => (
-  <footer className="flex items-center justify-between gap-2 border-t px-3 py-2">
-    <button
-      type="button"
-      onClick={onDisconnect}
-      title="Disconnect this browser"
-      className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
-    >
-      <LogOutIcon className="size-3.5 shrink-0" />
-      <span className="truncate">{connection.user.email}</span>
-    </button>
-    {saved ? (
-      <span className="flex shrink-0 items-center gap-1.5 text-xs font-medium text-success">
-        <CheckIcon className="size-4" />
-        <span className="flex items-center gap-1">
-          Saved in
-          {collection ? (
-            <>
-              <CollectionIcon name={collection.icon} className="size-3.5" />
-              <span className="max-w-28 truncate">{collection.name}</span>
-            </>
-          ) : (
-            "Loomark"
-          )}
+  onOpenSettings: () => void
+}) => {
+  const { syncing } = useSyncStatus()
+
+  return (
+    <footer className="flex items-center justify-between gap-2 border-t px-3 py-2">
+      <button
+        type="button"
+        onClick={onDisconnect}
+        title="Disconnect this browser"
+        className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <LogOutIcon className="size-3.5 shrink-0" />
+        <span className="truncate">{connection.user.email}</span>
+      </button>
+      {saved ? (
+        <span className="flex shrink-0 items-center gap-1.5 text-xs font-medium text-success">
+          <CheckIcon className="size-4" />
+          <span className="flex items-center gap-1">
+            Saved in
+            {collection ? (
+              <>
+                <CollectionIcon name={collection.icon} className="size-3.5" />
+                <span className="max-w-28 truncate">{collection.name}</span>
+              </>
+            ) : (
+              "Loomark"
+            )}
+          </span>
         </span>
-      </span>
-    ) : (
-      <span className="shrink-0 text-xs text-muted-foreground">
-        Not saved yet
-      </span>
-    )}
-    <Button
-      type="button"
-      variant="ghost"
-      size="icon-xs"
-      aria-label="Bookmark sync"
-      title="Bookmark sync"
-      onClick={onOpenSync}
-    >
-      <RefreshCwIcon className="text-muted-foreground" />
-    </Button>
-  </footer>
-)
+      ) : (
+        <span className="shrink-0 text-xs text-muted-foreground">
+          Not saved yet
+        </span>
+      )}
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-xs"
+        aria-label={syncing ? "Syncing" : "Settings"}
+        title={syncing ? "Syncing…" : "Settings"}
+        onClick={onOpenSettings}
+      >
+        {syncing ? (
+          <Loader2Icon className="animate-spin text-muted-foreground" />
+        ) : (
+          <SettingsIcon className="text-muted-foreground" />
+        )}
+      </Button>
+    </footer>
+  )
+}
 
 const Workspace = ({
   connection,
@@ -156,7 +165,7 @@ const Workspace = ({
   const [error, setError] = useState<string | null>(null)
   const [offline, setOffline] = useState(false)
   const [creating, setCreating] = useState(false)
-  const [syncing, setSyncing] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
 
   const clearPendingCollection = useCallback(() => {
     setPendingCollectionId(null)
@@ -278,10 +287,10 @@ const Workspace = ({
     )
   }
 
-  if (syncing) {
+  if (showSettings) {
     return (
       <Shell>
-        <SyncPanel onClose={() => setSyncing(false)} />
+        <SettingsPanel onClose={() => setShowSettings(false)} />
       </Shell>
     )
   }
@@ -294,7 +303,7 @@ const Workspace = ({
         connection={connection}
         collection={savedIn}
         saved={Boolean(bookmark)}
-        onOpenSync={() => setSyncing(true)}
+        onOpenSettings={() => setShowSettings(true)}
         onDisconnect={() => {
           void disconnect(auth).catch(() => null)
           onDisconnect()

@@ -22,6 +22,7 @@ import {
 import {
   createFolder,
   createLink,
+  defaultRootId,
   hasBookmarksPermission,
   moveNode,
   readSubtree,
@@ -37,6 +38,7 @@ import {
   readSyncSettings,
   readSyncStatus,
   writeSyncLinks,
+  writeSyncSettings,
   writeSyncStatus,
   type SyncLink,
   type SyncStatus,
@@ -774,6 +776,19 @@ const reconcile = async (
       }
     }
 
+    const moved = await readSubtree(rootId)
+
+    if (moved) {
+      for (const fresh of moved) {
+        const node = nodes.get(fresh.id)
+
+        if (node) {
+          node.index = fresh.index
+          node.parentId = fresh.parentId
+        }
+      }
+    }
+
     const folders = new Map<string, SyncLink[]>()
 
     for (const link of links.values()) {
@@ -912,7 +927,7 @@ let running = false
 export const runSync = async (): Promise<SyncStatus> => {
   const settings = await readSyncSettings()
 
-  if (!settings.enabled || !settings.rootId) {
+  if (!settings.enabled) {
     return readSyncStatus()
   }
 
@@ -956,7 +971,17 @@ export const runSync = async (): Promise<SyncStatus> => {
       token: connection.token,
     }
 
-    const nodeList = await readSubtree(settings.rootId)
+    const rootId = settings.rootId ?? (await defaultRootId())
+
+    if (!rootId) {
+      return await finish("Could not find a bookmarks folder to sync")
+    }
+
+    if (rootId !== settings.rootId) {
+      await writeSyncSettings({ ...settings, rootId })
+    }
+
+    const nodeList = await readSubtree(rootId)
 
     if (!nodeList) {
       return await finish("The sync folder is gone. Pick another one.")
@@ -967,7 +992,7 @@ export const runSync = async (): Promise<SyncStatus> => {
 
     const { links, failure } = await reconcile(
       auth,
-      settings.rootId,
+      rootId,
       remote,
       nodeList,
       stored
