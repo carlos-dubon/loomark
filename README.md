@@ -16,7 +16,6 @@
 - Search your bookmarks with `⌘K`
 - [tweakcn](https://tweakcn.com) themes, light and dark. Press `D` to switch
 - A browser extension for Chromium based browsers and Firefox
-- Two-way browser sync through [floccus](https://floccus.org)
 - Import from any browser or from [Linkwarden](https://linkwarden.app)
 - Share links for any collection
 - Page archiving: screenshot, HTML, PDF, markdown
@@ -47,10 +46,6 @@ No store listing yet, so you sideload it from the [latest release](https://githu
 **Chromium**: unzip `loomark-extension-<version>-chrome.zip`, then load the folder at `chrome://extensions` with developer mode on.
 
 **Firefox**: load `loomark-extension-<version>-firefox.zip` at `about:debugging#/runtime/this-firefox` as a temporary add-on.
-
-## Floccus
-
-Add an account of type _*Nextcloud Bookmarks*_ and enter your Loomark URL
 
 ## Updating
 

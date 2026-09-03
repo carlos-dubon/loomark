@@ -12,7 +12,10 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
-import type { ArchiveSettings as ArchiveSettingsValue } from "@loomark/core/archive"
+import type {
+  ArchiveSettings as ArchiveSettingsValue,
+  ArchiveUsage,
+} from "@loomark/core/archive"
 import type { ImportSummary } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import {
@@ -35,12 +38,16 @@ import {
 
 import { Link } from "@/components/link"
 import { PageHeader } from "@/components/page-header"
+import { ArchiveClearDialog } from "@/components/settings/archive-clear-dialog"
 import { ArchiveSettings } from "@/components/settings/archive-settings"
 import { LinkSettings } from "@/components/settings/link-settings"
-import { SidebarSettings } from "@/components/settings/sidebar-settings"
 import { ThemePicker } from "@/components/settings/theme-picker"
 import { api } from "@/lib/client-api"
-import { archiveSettingsAtom, collectionsAtom } from "@/store/atoms"
+import {
+  archiveSettingsAtom,
+  archiveUsageAtom,
+  collectionsAtom,
+} from "@/store/atoms"
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 
@@ -63,16 +70,21 @@ const summaryLines = (summary: ImportSummary) =>
 
 export const SettingsView = ({
   archiveSettings,
+  archiveUsage,
   bookmarkCount,
   collectionCount,
   version,
 }: {
   archiveSettings: ArchiveSettingsValue
+  archiveUsage: ArchiveUsage
   bookmarkCount: number
   collectionCount: number
   version: string
 }) => {
-  useHydrateAtoms([[archiveSettingsAtom, archiveSettings]])
+  useHydrateAtoms([
+    [archiveSettingsAtom, archiveSettings],
+    [archiveUsageAtom, archiveUsage],
+  ])
 
   const router = useRouter()
   const setCollections = useSetAtom(collectionsAtom)
@@ -132,19 +144,6 @@ export const SettingsView = ({
         </Card>
         <Card className="w-full max-w-2xl shrink-0">
           <CardHeader>
-            <CardTitle>Sidebar</CardTitle>
-            <CardDescription>
-              Park the sidebar on either edge of the window, and dial in a film
-              grain over it. The grain is purely decorative and follows whatever
-              theme you picked above.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <SidebarSettings />
-          </CardContent>
-        </Card>
-        <Card className="w-full max-w-2xl shrink-0">
-          <CardHeader>
             <CardTitle>Links</CardTitle>
             <CardDescription>
               Bookmarks and other outside links open in a new tab by default. If
@@ -165,7 +164,8 @@ export const SettingsView = ({
               means something once the site goes down or quietly rewrites the
               article. Formats you turn on here are captured for every new
               bookmark; existing ones are left alone until you ask for them.
-              Archives live on the server disk, so watch the space.
+              Archives live on the server disk, so watch the space and clear
+              them when they outgrow it.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -280,6 +280,7 @@ export const SettingsView = ({
           </CardHeader>
         </Card>
       </div>
+      <ArchiveClearDialog />
     </>
   )
 }

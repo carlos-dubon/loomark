@@ -7,7 +7,7 @@ import { toast } from "sonner"
 import type { ArchiveFormat } from "@loomark/core/archive"
 
 import { api } from "@/lib/client-api"
-import { archiveSettingsAtom } from "@/store/atoms"
+import { archiveSettingsAtom, archiveUsageAtom } from "@/store/atoms"
 
 export const useArchiveSettings = () => {
   const [settings, setSettings] = useAtom(archiveSettingsAtom)
@@ -49,4 +49,30 @@ export const useArchiveSettings = () => {
   }
 
   return { settings, toggle, backfill, backfilling }
+}
+
+export const useArchiveUsage = () => {
+  const [usage, setUsage] = useAtom(archiveUsageAtom)
+  const [clearing, setClearing] = useState(false)
+
+  const clear = async () => {
+    setClearing(true)
+
+    try {
+      const { cleared, ...next } = await api.clearArchives()
+
+      setUsage(next)
+      toast.success(
+        cleared === 0
+          ? "There was nothing archived to clear"
+          : `${cleared} ${cleared === 1 ? "archive" : "archives"} cleared`
+      )
+    } catch (cause) {
+      toast.error(cause instanceof Error ? cause.message : "Could not clear")
+    } finally {
+      setClearing(false)
+    }
+  }
+
+  return { usage, clear, clearing }
 }

@@ -5,6 +5,7 @@ import { DEFAULT_ARCHIVE_SETTINGS } from "@loomark/core/archive"
 
 import { SettingsView } from "@/components/settings-view"
 import { getArchiveSettings } from "@/lib/archives/queue"
+import { archiveBytesFor } from "@/lib/archives/storage"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
@@ -17,15 +18,19 @@ const SettingsPage = async () => {
     redirect("/login")
   }
 
-  const [bookmarkCount, collectionCount, archiveSettings] = await Promise.all([
-    prisma.bookmark.count({ where: { userId: session.user.id } }),
-    prisma.collection.count({ where: { userId: session.user.id } }),
-    getArchiveSettings(session.user.id),
-  ])
+  const [bookmarkCount, collectionCount, archiveSettings, bytes, archives] =
+    await Promise.all([
+      prisma.bookmark.count({ where: { userId: session.user.id } }),
+      prisma.collection.count({ where: { userId: session.user.id } }),
+      getArchiveSettings(session.user.id),
+      archiveBytesFor(session.user.id),
+      prisma.archive.count({ where: { userId: session.user.id } }),
+    ])
 
   return (
     <SettingsView
       archiveSettings={archiveSettings ?? DEFAULT_ARCHIVE_SETTINGS}
+      archiveUsage={{ bytes, archives }}
       bookmarkCount={bookmarkCount}
       collectionCount={collectionCount}
       version={process.env.APP_VERSION ?? "dev"}

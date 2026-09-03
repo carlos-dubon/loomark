@@ -1,4 +1,3 @@
-import { toNoiseLevel, toSidebarSide } from "@loomark/core/sidebar"
 import { toSortOrder } from "@loomark/core/sort"
 import { toViewMode } from "@loomark/core/view-mode"
 
@@ -13,8 +12,6 @@ export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
       themePreset: true,
       viewMode: true,
       sortOrder: true,
-      sidebarSide: true,
-      sidebarNoise: true,
     },
   })
 
@@ -26,7 +23,5 @@ export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
     themePreset: user.themePreset,
     viewMode: toViewMode(user.viewMode),
     sortOrder: toSortOrder(user.sortOrder),
-    sidebarSide: toSidebarSide(user.sidebarSide),
-    sidebarNoise: toNoiseLevel(user.sidebarNoise),
   }
 }

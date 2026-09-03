@@ -24,6 +24,7 @@ export const routes = {
   appearance: "/api/appearance",
   archiveSettings: "/api/archives/settings",
   archiveBackfill: "/api/archives/backfill",
+  archiveStorage: "/api/archives/storage",
   register: "/api/register",
   extensionToken: "/api/extension/token",
   adminUser: (id: string) => `/api/admin/users/${id}`,
