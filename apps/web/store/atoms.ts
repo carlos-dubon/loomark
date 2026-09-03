@@ -3,9 +3,10 @@ import { atomWithStorage } from "jotai/utils"
 
 import {
   DEFAULT_ARCHIVE_SETTINGS,
+  EMPTY_ARCHIVE_USAGE,
   type ArchiveSettings,
+  type ArchiveUsage,
 } from "@loomark/core/archive"
-import type { NoiseLevel, SidebarSide } from "@loomark/core/sidebar"
 import type { SortOrder } from "@loomark/core/sort"
 import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import type { ViewMode } from "@loomark/core/view-mode"
@@ -78,6 +79,10 @@ export const archiveSettingsAtom = atom<ArchiveSettings>(
   DEFAULT_ARCHIVE_SETTINGS
 )
 
+export const archiveUsageAtom = atom<ArchiveUsage>(EMPTY_ARCHIVE_USAGE)
+
+export const archiveClearDialogAtom = atom(false)
+
 export const bookmarkListAtom = atom<BookmarkListState>({
   source: [],
   items: [],
@@ -133,10 +138,6 @@ export const clearRecentSearchesAtom = atom(null, (_get, set) => {
 export const viewModeAtom = atom<ViewMode>("grid")
 
 export const sortOrderAtom = atom<SortOrder>("newest")
-
-export const sidebarSideAtom = atom<SidebarSide>("left")
-
-export const sidebarNoiseAtom = atom<NoiseLevel>("off")
 
 export const openInNewTabAtom = atom(true)
 

@@ -1,12 +1,11 @@
 "use client"
 
-import { useAtomValue, useSetAtom } from "jotai"
+import { useSetAtom } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
 import { HouseIcon, PlusIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
-import { NOISE_OPACITY } from "@loomark/core/sidebar"
 import type { CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import {
@@ -33,29 +32,7 @@ import {
   bookmarkDialogAtom,
   collectionDialogAtom,
   collectionsAtom,
-  sidebarNoiseAtom,
-  sidebarSideAtom,
 } from "@/store/atoms"
-
-const SidebarNoise = () => {
-  const noise = useAtomValue(sidebarNoiseAtom)
-
-  if (noise === "off") {
-    return null
-  }
-
-  return (
-    <div
-      aria-hidden
-      className="sidebar-noise"
-      style={
-        {
-          "--sidebar-noise-opacity": NOISE_OPACITY[noise],
-        } as React.CSSProperties
-      }
-    />
-  )
-}
 
 export const AppSidebar = ({
   user,
@@ -69,7 +46,6 @@ export const AppSidebar = ({
   useHydrateAtoms([[collectionsAtom, initialCollections]])
 
   const pathname = usePathname()
-  const side = useAtomValue(sidebarSideAtom)
   const setCollections = useSetAtom(collectionsAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const openCollectionDialog = useSetAtom(collectionDialogAtom)
@@ -79,7 +55,7 @@ export const AppSidebar = ({
   }, [initialCollections, setCollections])
 
   return (
-    <Sidebar collapsible="icon" side={side}>
+    <Sidebar collapsible="icon">
       <SidebarHeader className="gap-2">
         <SearchTrigger />
         <Button
@@ -143,7 +119,6 @@ export const AppSidebar = ({
         </SidebarMenu>
       </SidebarFooter>
       <SidebarRail />
-      <SidebarNoise />
     </Sidebar>
   )
 }

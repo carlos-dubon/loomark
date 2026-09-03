@@ -1,6 +1,14 @@
 "use client"
 
-import { CameraIcon, FileTextIcon, GlobeIcon, Loader2Icon } from "lucide-react"
+import { useSetAtom } from "jotai"
+import {
+  CameraIcon,
+  FileTextIcon,
+  GlobeIcon,
+  HardDriveIcon,
+  Loader2Icon,
+  Trash2Icon,
+} from "lucide-react"
 
 import {
   ARCHIVE_DESCRIPTIONS,
@@ -9,17 +17,53 @@ import {
   ARCHIVE_SLUGS,
   type ArchiveFormat,
 } from "@loomark/core/archive"
+import { formatBytes } from "@loomark/core/format"
 import { Button } from "@loomark/ui/components/button"
 import { Label } from "@loomark/ui/components/label"
 import { Switch } from "@loomark/ui/components/switch"
 
-import { useArchiveSettings } from "@/hooks/use-archive-settings"
+import {
+  useArchiveSettings,
+  useArchiveUsage,
+} from "@/hooks/use-archive-settings"
+import { archiveClearDialogAtom } from "@/store/atoms"
 
 const ICONS: Record<ArchiveFormat, typeof CameraIcon> = {
   SCREENSHOT: CameraIcon,
   WEBPAGE: GlobeIcon,
   PDF: FileTextIcon,
   MARKDOWN: FileTextIcon,
+}
+
+const Usage = () => {
+  const { usage } = useArchiveUsage()
+  const openClearDialog = useSetAtom(archiveClearDialogAtom)
+
+  return (
+    <div className="flex items-center justify-between gap-4 rounded-lg border border-dashed px-3 py-2">
+      <div className="flex min-w-0 items-center gap-3">
+        <HardDriveIcon className="size-4 shrink-0 text-muted-foreground" />
+        <div className="flex min-w-0 flex-col">
+          <span className="text-sm font-medium">
+            {formatBytes(usage.bytes)} on disk
+          </span>
+          <span className="text-xs text-muted-foreground">
+            {usage.archives === 1
+              ? "1 saved copy"
+              : `${usage.archives} saved copies`}
+          </span>
+        </div>
+      </div>
+      <Button
+        variant="outline"
+        disabled={usage.archives === 0 && usage.bytes === 0}
+        onClick={() => openClearDialog(true)}
+      >
+        <Trash2Icon />
+        Clear
+      </Button>
+    </div>
+  )
 }
 
 export const ArchiveSettings = () => {
@@ -56,6 +100,7 @@ export const ArchiveSettings = () => {
           )
         })}
       </div>
+      <Usage />
       <div className="flex items-center gap-3">
         <Button
           variant="outline"

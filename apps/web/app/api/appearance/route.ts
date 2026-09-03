@@ -32,8 +32,6 @@ export const PATCH = async (request: Request) => {
       themePreset: data.themePreset,
       viewMode: data.viewMode,
       sortOrder: data.sortOrder,
-      sidebarSide: data.sidebarSide,
-      sidebarNoise: data.sidebarNoise,
     },
   })
 

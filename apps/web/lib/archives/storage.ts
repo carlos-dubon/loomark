@@ -80,6 +80,31 @@ const removeRelative = async (relative: string) => {
 
 export const removeArchive = (relative: string) => removeRelative(relative)
 
+export const removeUserArchives = (userId: string) => removeRelative(userId)
+
+const directoryBytes = async (dir: string): Promise<number> => {
+  const entries = await readdir(dir, { withFileTypes: true }).catch(() => [])
+  const sizes = await Promise.all(
+    entries.map((entry) => {
+      const full = path.join(dir, entry.name)
+
+      return entry.isDirectory()
+        ? directoryBytes(full)
+        : stat(full)
+            .then((info) => info.size)
+            .catch(() => 0)
+    })
+  )
+
+  return sizes.reduce((total, size) => total + size, 0)
+}
+
+export const archiveBytesFor = async (userId: string) => {
+  const full = resolveInsideRoot(userId)
+
+  return full ? directoryBytes(full) : 0
+}
+
 export const removeBookmarkArchives = (userId: string, bookmarkId: string) =>
   removeRelative(path.posix.join(userId, bookmarkId))
 

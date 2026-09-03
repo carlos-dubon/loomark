@@ -18,6 +18,12 @@ export type ArchiveStatus = (typeof ARCHIVE_STATUSES)[number]
 
 export type ArchiveSettings = Record<ArchiveFormat, boolean>
 
+export type ArchiveUsage = { bytes: number; archives: number }
+
+export type ArchiveClearResult = ArchiveUsage & { cleared: number }
+
+export const EMPTY_ARCHIVE_USAGE: ArchiveUsage = { bytes: 0, archives: 0 }
+
 export const DEFAULT_ARCHIVE_SETTINGS: ArchiveSettings = {
   SCREENSHOT: false,
   WEBPAGE: false,

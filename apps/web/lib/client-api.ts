@@ -1,4 +1,8 @@
-import type { ArchiveSettings } from "@loomark/core/archive"
+import type {
+  ArchiveClearResult,
+  ArchiveSettings,
+  ArchiveUsage,
+} from "@loomark/core/archive"
 import { routes } from "@loomark/core/routes"
 import type {
   ArchiveDTO,
@@ -113,6 +117,9 @@ export const api = {
     }),
   backfillArchives: () =>
     request<{ queued: number }>(routes.archiveBackfill, { method: "POST" }),
+  archiveUsage: () => request<ArchiveUsage>(routes.archiveStorage),
+  clearArchives: () =>
+    request<ArchiveClearResult>(routes.archiveStorage, { method: "DELETE" }),
   listCollections: () => request<CollectionDTO[]>(routes.collections),
   createCollection: (input: CollectionCreateInput) =>
     request<CollectionDTO>(routes.collections, {

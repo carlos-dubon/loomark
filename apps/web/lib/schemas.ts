@@ -12,7 +12,6 @@ import {
   passwordField,
   urlString,
 } from "@loomark/core/schemas"
-import { NOISE_LEVELS, SIDEBAR_SIDES } from "@loomark/core/sidebar"
 import { ORDER_SCOPES, SORT_ORDERS } from "@loomark/core/sort"
 import { VIEW_MODES } from "@loomark/core/view-mode"
 
@@ -91,8 +90,6 @@ export const appearanceUpdateSchema = z
     themePreset: slug,
     viewMode: z.enum(VIEW_MODES),
     sortOrder: z.enum(SORT_ORDERS),
-    sidebarSide: z.enum(SIDEBAR_SIDES),
-    sidebarNoise: z.enum(NOISE_LEVELS),
   })
   .partial()
 
