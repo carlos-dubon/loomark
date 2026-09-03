@@ -12,10 +12,10 @@
   <img src="docs/screenshots/collection-grid-light.png" alt="A Loomark collection in grid view" width="900">
 </p>
 
-- Pinned sites
-- Search with `⌘K`
+- Pinned sites in the homepage
+- Search your bookmarks with `⌘K`
 - [tweakcn](https://tweakcn.com) themes, light and dark. Press `D` to switch
-- A browser extension for Chrome and Firefox
+- A browser extension for Chromium based browsers and Firefox
 - Two-way browser sync through [floccus](https://floccus.org)
 - Import from any browser or from [Linkwarden](https://linkwarden.app)
 - Share links for any collection
@@ -50,7 +50,7 @@ No store listing yet, so you sideload it from the [latest release](https://githu
 
 ## Floccus
 
-Add an account of type *_Nextcloud Bookmarks_ and enter your Loomark URL
+Add an account of type _*Nextcloud Bookmarks*_ and enter your Loomark URL
 
 ## Updating
 
