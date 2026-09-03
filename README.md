@@ -28,8 +28,13 @@ I built Loomark to be the bookmark manager I'd actually open every day. Quick to
 - Installable as a PWA
 
 <p align="center">
-  <img src="docs/screenshots/home-dark.png" alt="Loomark in dark mode" width="49%">
+  <img src="docs/screenshots/collection-grid-dark.png" alt="A collection in grid view, dark mode" width="49%">
   <img src="docs/screenshots/settings-themes.png" alt="The theme picker" width="49%">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/collection-list.png" alt="A collection in list view" width="49%">
+  <img src="docs/screenshots/collection-grid-light.png" alt="A collection in grid view, light mode" width="49%">
 </p>
 
 ## Install
