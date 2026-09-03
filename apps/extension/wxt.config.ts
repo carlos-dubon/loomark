@@ -13,6 +13,11 @@ const manifestVersion = version.match(/^\d+(\.\d+){0,3}/)?.[0] ?? "0.0.0"
 export default defineConfig({
   outDir: "output",
   manifestVersion: 3,
+  zip: {
+    name: "loomark-extension",
+    artifactTemplate: "{{name}}-{{version}}-{{browser}}{{modeSuffix}}.zip",
+    sourcesTemplate: "{{name}}-{{version}}-sources{{modeSuffix}}.zip",
+  },
   manifest: ({ browser }) => ({
     name: "Loomark",
     short_name: "Loomark",

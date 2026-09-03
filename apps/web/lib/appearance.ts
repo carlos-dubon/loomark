@@ -8,7 +8,11 @@ import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
 export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { themePreset: true, viewMode: true, sortOrder: true },
+    select: {
+      themePreset: true,
+      viewMode: true,
+      sortOrder: true,
+    },
   })
 
   if (!user) {
