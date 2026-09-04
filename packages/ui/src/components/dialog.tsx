@@ -29,9 +29,26 @@ function DialogOverlay({
 }: DialogPrimitive.Backdrop.Props) {
   return (
     <DialogPrimitive.Backdrop
+      forceRender
       data-slot="dialog-overlay"
       className={cn(
-        "dialog-backdrop fixed inset-0 z-50 transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+        "fixed inset-0 z-50 dialog-backdrop transition-all duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function DialogViewport({
+  className,
+  ...props
+}: DialogPrimitive.Viewport.Props) {
+  return (
+    <DialogPrimitive.Viewport
+      data-slot="dialog-viewport"
+      className={cn(
+        "fixed inset-0 z-50 grid grid-rows-[1fr_auto_1fr] justify-items-center p-4 max-sm:grid-rows-[1fr_auto] max-sm:p-0 max-sm:pt-12",
         className
       )}
       {...props}
@@ -50,14 +67,11 @@ function DialogContent({
   return (
     <DialogPortal>
       <DialogOverlay />
-      <div
-        data-slot="dialog-viewport"
-        className="pointer-events-none fixed inset-0 z-50 grid grid-rows-[1fr_auto_1fr] justify-items-center p-4 max-sm:grid-rows-[1fr_auto] max-sm:p-0 max-sm:pt-12"
-      >
+      <DialogViewport>
         <DialogPrimitive.Popup
           data-slot="dialog-content"
           className={cn(
-            "dialog-glass pointer-events-auto relative row-start-2 flex max-h-full w-full max-w-sm min-w-0 flex-col gap-4 rounded-2xl border p-4 text-sm text-popover-foreground transition-[scale,opacity,translate] duration-200 ease-in-out outline-none will-change-transform data-ending-style:scale-98 data-ending-style:opacity-0 data-starting-style:scale-98 data-starting-style:opacity-0 max-sm:max-w-none max-sm:rounded-none max-sm:border-x-0 max-sm:border-b-0 max-sm:data-ending-style:translate-y-4 max-sm:data-starting-style:translate-y-4",
+            "relative row-start-2 flex max-h-full min-h-0 w-full max-w-sm min-w-0 -translate-y-[calc(1.25rem*var(--nested-dialogs))] scale-[calc(1-0.1*var(--nested-dialogs))] flex-col gap-4 rounded-2xl border dialog-glass p-4 text-sm text-popover-foreground opacity-[calc(1-0.1*var(--nested-dialogs))] transition-[scale,opacity,translate] duration-200 ease-in-out will-change-transform outline-none data-ending-style:scale-98 data-ending-style:opacity-0 data-nested:data-ending-style:translate-y-8 data-nested-dialog-open:origin-top data-starting-style:scale-98 data-starting-style:opacity-0 data-nested:data-starting-style:translate-y-8 max-sm:max-w-none max-sm:rounded-none max-sm:border-x-0 max-sm:border-t max-sm:border-b-0 max-sm:opacity-[calc(1-min(var(--nested-dialogs),1))] max-sm:data-ending-style:translate-y-4 max-sm:data-starting-style:translate-y-4",
             className
           )}
           {...props}
@@ -79,7 +93,7 @@ function DialogContent({
             </DialogPrimitive.Close>
           )}
         </DialogPrimitive.Popup>
-      </div>
+      </DialogViewport>
     </DialogPortal>
   )
 }
@@ -106,7 +120,7 @@ function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        "-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-[calc(var(--radius-2xl)-1px)] border-t bg-muted/72 p-4 sm:flex-row sm:justify-end max-sm:rounded-none",
+        "-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-[calc(var(--radius-2xl)-1px)] border-t bg-muted/72 p-4 max-sm:rounded-none sm:flex-row sm:justify-end",
         className
       )}
       {...props}
@@ -158,4 +172,5 @@ export {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
+  DialogViewport,
 }
