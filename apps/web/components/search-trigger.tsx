@@ -11,6 +11,7 @@ import {
   SidebarMenuItem,
 } from "@loomark/ui/components/sidebar"
 
+import { useCloseSidebar } from "@/hooks/use-close-sidebar"
 import { searchDialogAtom } from "@/store/atoms"
 
 const subscribe = () => () => {}
@@ -19,6 +20,7 @@ const getIsMacOnServer = () => false
 
 export const SearchTrigger = () => {
   const setOpen = useSetAtom(searchDialogAtom)
+  const closeSidebar = useCloseSidebar()
   const isMac = useSyncExternalStore(subscribe, getIsMac, getIsMacOnServer)
 
   return (
@@ -28,7 +30,10 @@ export const SearchTrigger = () => {
           variant="outline"
           tooltip="Search for bookmarks"
           aria-label="Search for bookmarks"
-          onClick={() => setOpen(true)}
+          onClick={() => {
+            closeSidebar()
+            setOpen(true)
+          }}
           className="text-muted-foreground hover:text-foreground"
         >
           <SearchIcon />

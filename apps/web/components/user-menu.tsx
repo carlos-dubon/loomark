@@ -28,6 +28,7 @@ import {
 import { SidebarMenuButton } from "@loomark/ui/components/sidebar"
 
 import { Link } from "@/components/link"
+import { useCloseSidebar } from "@/hooks/use-close-sidebar"
 import { useThemeToggle } from "@/hooks/use-theme-toggle"
 
 export type SessionUser = {
@@ -45,6 +46,7 @@ export const UserMenu = ({
 }) => {
   const { resolvedTheme } = useTheme()
   const toggleTheme = useThemeToggle()
+  const closeSidebar = useCloseSidebar()
   const label = user.name ?? user.email
   const initials = label.slice(0, 2).toUpperCase()
 
@@ -71,12 +73,18 @@ export const UserMenu = ({
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {isOwner ? (
-          <DropdownMenuItem render={<Link href="/admin" />}>
+          <DropdownMenuItem
+            onClick={closeSidebar}
+            render={<Link href="/admin" />}
+          >
             <ServerIcon />
             Server administration
           </DropdownMenuItem>
         ) : null}
-        <DropdownMenuItem render={<Link href="/settings" />}>
+        <DropdownMenuItem
+          onClick={closeSidebar}
+          render={<Link href="/settings" />}
+        >
           <SettingsIcon />
           Settings
         </DropdownMenuItem>

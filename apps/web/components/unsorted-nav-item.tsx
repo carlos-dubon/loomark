@@ -13,12 +13,14 @@ import {
 } from "@loomark/ui/components/sidebar"
 
 import { Link } from "@/components/link"
+import { useCloseSidebar } from "@/hooks/use-close-sidebar"
 import { useCollectionItems } from "@/hooks/use-collection-items"
 import { DRAG_TYPE, DROP_PRIORITY, type DropTargetData } from "@/lib/dnd"
 
 export const UnsortedNavItem = () => {
   const pathname = usePathname()
   const { unsorted } = useCollectionItems()
+  const closeSidebar = useCloseSidebar()
 
   const data = useMemo<DropTargetData>(
     () => ({ zone: "into", collectionId: unsorted?.id }),
@@ -52,6 +54,7 @@ export const UnsortedNavItem = () => {
       <SidebarMenuButton
         isActive={pathname === href}
         tooltip={unsorted.name}
+        onClick={closeSidebar}
         render={<Link href={href} />}
       >
         <InboxIcon />

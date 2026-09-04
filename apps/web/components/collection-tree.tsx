@@ -17,6 +17,7 @@ import {
 } from "@loomark/ui/components/sidebar"
 
 import { Link } from "@/components/link"
+import { useCloseSidebar } from "@/hooks/use-close-sidebar"
 import { useCollectionItems } from "@/hooks/use-collection-items"
 import { DRAG_TYPE, DROP_PRIORITY, type DropTargetData } from "@/lib/dnd"
 import { collectionsAtom } from "@/store/atoms"
@@ -66,6 +67,7 @@ const CollectionRow = ({
   excluded: boolean
 }) => {
   const pathname = usePathname()
+  const closeSidebar = useCloseSidebar()
   const href = `/collections/${item.id}`
 
   const beforeData = useMemo<DropTargetData>(
@@ -124,6 +126,7 @@ const CollectionRow = ({
             isActive={pathname === href}
             tooltip={item.name}
             className="w-full min-w-0 pr-8"
+            onClick={closeSidebar}
             render={<Link href={href} />}
           >
             <CollectionIcon name={item.icon} />
@@ -155,9 +158,7 @@ const RootDropZone = () => {
         ref={ref}
         className={cn(
           "pointer-events-none mt-1 flex h-8 items-center justify-center gap-1.5 rounded-md border border-dashed text-xs transition-colors",
-          isDropTarget
-            ? "border-primary text-primary"
-            : "text-muted-foreground"
+          isDropTarget ? "border-primary text-primary" : "text-muted-foreground"
         )}
       >
         <CornerLeftUpIcon className="size-(--sidebar-icon-size)" />
@@ -169,6 +170,7 @@ const RootDropZone = () => {
 
 export const CollectionTree = () => {
   const pathname = usePathname()
+  const closeSidebar = useCloseSidebar()
   const { items } = useCollectionItems()
   const collections = useAtomValue(collectionsAtom)
   const { source } = useDragOperation()
@@ -208,6 +210,7 @@ export const CollectionTree = () => {
           <SidebarMenuButton
             isActive={pathname === "/collections"}
             tooltip="Collections"
+            onClick={closeSidebar}
             render={<Link href="/collections" />}
           >
             <LibraryIcon />
