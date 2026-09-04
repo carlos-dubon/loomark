@@ -16,6 +16,16 @@ export const ARCHIVE_STATUSES = [
 
 export type ArchiveStatus = (typeof ARCHIVE_STATUSES)[number]
 
+export const ARCHIVE_STAGES = [
+  "STARTING",
+  "LOADING",
+  "SETTLING",
+  "CAPTURING",
+  "SAVING",
+] as const
+
+export type ArchiveStage = (typeof ARCHIVE_STAGES)[number]
+
 export type ArchiveSettings = Record<ArchiveFormat, boolean>
 
 export type ArchiveUsage = { bytes: number; archives: number }
@@ -75,3 +85,39 @@ export const toArchiveFormat = (value: string): ArchiveFormat | null =>
 
 export const enabledArchiveFormats = (settings: ArchiveSettings) =>
   ARCHIVE_FORMATS.filter((format) => settings[format])
+
+export const ARCHIVE_STAGE_LABELS: Record<ArchiveStage, string> = {
+  STARTING: "Starting the browser",
+  LOADING: "Loading the page",
+  SETTLING: "Waiting for the page to settle",
+  CAPTURING: "Capturing",
+  SAVING: "Saving to disk",
+}
+
+const STAGE_PROGRESS: Record<ArchiveStage, number> = {
+  STARTING: 5,
+  LOADING: 20,
+  SETTLING: 45,
+  CAPTURING: 70,
+  SAVING: 90,
+}
+
+export const archiveProgress = (
+  status: ArchiveStatus,
+  stage: ArchiveStage | null
+) => {
+  if (status === "READY") {
+    return 100
+  }
+
+  if (status === "PENDING") {
+    return 0
+  }
+
+  return stage ? STAGE_PROGRESS[stage] : 0
+}
+
+export const isArchiveActive = (status: ArchiveStatus) =>
+  status === "PENDING" || status === "RUNNING"
+
+export const ARCHIVE_QUEUE_GROUPS = 50

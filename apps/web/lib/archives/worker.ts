@@ -8,11 +8,14 @@ import {
   claimArchiveJobs,
   MAX_ATTEMPTS,
   releaseStaleJobs,
+  runningFormatsFor,
+  setArchiveStage,
 } from "@/lib/archives/queue"
 import {
   archiveRelativePath,
   listStoredBookmarkIds,
   listStoredUserIds,
+  removeArchive,
   removeBookmarkArchives,
   writeArchive,
 } from "@/lib/archives/storage"
@@ -35,9 +38,10 @@ type Job = {
 const log = (message: string) => console.log(`loomark archive: ${message}`)
 
 const fail = (job: Job, error: string) =>
-  prisma.archive.update({
-    where: { id: job.id },
+  prisma.archive.updateMany({
+    where: { id: job.id, status: "RUNNING" },
     data: {
+      stage: null,
       attempts: job.attempts + 1,
       error: error.slice(0, 500),
       status: job.attempts + 1 >= MAX_ATTEMPTS ? "FAILED" : "PENDING",
@@ -46,27 +50,41 @@ const fail = (job: Job, error: string) =>
 
 const succeed = async (job: Job, data: Buffer) => {
   const path = archiveRelativePath(job.userId, job.bookmarkId, job.format)
-  const bytes = await writeArchive(path, data)
 
-  await prisma.archive.update({
+  await setArchiveStage([job.id], "SAVING")
+
+  const bytes = await writeArchive(path, data)
+  const { count } = await prisma.archive.updateMany({
     where: { id: job.id },
     data: {
       path,
       bytes,
+      stage: null,
       status: "READY",
       error: null,
       attempts: job.attempts + 1,
     },
   })
+
+  if (count === 0) {
+    await removeArchive(path)
+  }
 }
 
 const runBookmark = async (browser: Browser, jobs: Job[]) => {
   const [first] = jobs
-  const outcomes = await captureBookmark(
-    browser,
-    first.bookmark.url,
-    jobs.map((job) => job.format)
-  )
+  const byFormat = new Map(jobs.map((job) => [job.format, job]))
+  const idsFor = (formats: ArchiveFormat[]) =>
+    formats
+      .map((format) => byFormat.get(format)?.id)
+      .filter((id) => id !== undefined)
+
+  const outcomes = await captureBookmark(browser, {
+    url: first.bookmark.url,
+    formats: [...byFormat.keys()],
+    onStage: (formats, stage) => setArchiveStage(idsFor(formats), stage),
+    stillWanted: () => runningFormatsFor(first.bookmarkId),
+  })
 
   for (const job of jobs) {
     const outcome = outcomes.find((item) => item.format === job.format)
@@ -105,8 +123,8 @@ const groupByBookmark = (jobs: Job[]) => {
 
 const release = (jobs: Job[]) =>
   prisma.archive.updateMany({
-    where: { id: { in: jobs.map((job) => job.id) } },
-    data: { status: "PENDING" },
+    where: { id: { in: jobs.map((job) => job.id) }, status: "RUNNING" },
+    data: { status: "PENDING", stage: null },
   })
 
 const drain = async () => {
@@ -117,6 +135,11 @@ const drain = async () => {
   if (jobs.length === 0) {
     return false
   }
+
+  await setArchiveStage(
+    jobs.map((job) => job.id),
+    "STARTING"
+  )
 
   let browser: Browser
 

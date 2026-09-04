@@ -6,7 +6,11 @@ import { pathToFileURL } from "node:url"
 import type { Browser, Page } from "playwright-core"
 import TurndownService from "turndown"
 
-import { ARCHIVE_FORMATS, type ArchiveFormat } from "@loomark/core/archive"
+import {
+  ARCHIVE_FORMATS,
+  type ArchiveFormat,
+  type ArchiveStage,
+} from "@loomark/core/archive"
 
 import {
   AUTO_SCROLL,
@@ -33,6 +37,13 @@ const CAPTURE_ORDER: ArchiveFormat[] = [
 export type CaptureOutcome =
   | { format: ArchiveFormat; data: Buffer }
   | { format: ArchiveFormat; error: string }
+
+export type CaptureRequest = {
+  url: string
+  formats: ArchiveFormat[]
+  onStage: (formats: ArchiveFormat[], stage: ArchiveStage) => Promise<unknown>
+  stillWanted: () => Promise<ArchiveFormat[]>
+}
 
 let readability: string | null = null
 
@@ -131,8 +142,7 @@ const captureOne = async (page: Page, url: string, format: ArchiveFormat) => {
 
 export const captureBookmark = async (
   browser: Browser,
-  url: string,
-  formats: ArchiveFormat[]
+  { url, formats, onStage, stillWanted }: CaptureRequest
 ): Promise<CaptureOutcome[]> => {
   const wanted = CAPTURE_ORDER.filter((format) => formats.includes(format))
 
@@ -154,10 +164,20 @@ export const captureBookmark = async (
 
     page.setDefaultTimeout(NAVIGATION_TIMEOUT)
 
+    await onStage(wanted, "LOADING")
+
     await page.goto(url, {
       waitUntil: "domcontentloaded",
       timeout: NAVIGATION_TIMEOUT,
     })
+
+    const settling = await stillWanted()
+
+    if (settling.length === 0) {
+      return []
+    }
+
+    await onStage(settling, "SETTLING")
 
     await page
       .waitForLoadState("networkidle", { timeout: SETTLE_TIMEOUT })
@@ -168,6 +188,12 @@ export const captureBookmark = async (
     const outcomes: CaptureOutcome[] = []
 
     for (const format of wanted) {
+      if (!(await stillWanted()).includes(format)) {
+        continue
+      }
+
+      await onStage([format], "CAPTURING")
+
       try {
         outcomes.push({ format, data: await captureOne(page, url, format) })
       } catch (cause) {

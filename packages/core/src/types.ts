@@ -1,4 +1,4 @@
-import type { ArchiveFormat, ArchiveStatus } from "./archive"
+import type { ArchiveFormat, ArchiveStage, ArchiveStatus } from "./archive"
 
 export type BookmarkDTO = {
   id: string
@@ -155,7 +155,31 @@ export type ActiveTab = {
 export type ArchiveDTO = {
   format: ArchiveFormat
   status: ArchiveStatus
+  stage: ArchiveStage | null
   bytes: number
   error: string | null
   updatedAt: string
+}
+
+export type ArchiveQueueGroup = {
+  bookmarkId: string
+  title: string
+  url: string
+  faviconUrl: string | null
+  queuedAt: string
+  archives: ArchiveDTO[]
+}
+
+export type ArchiveQueue = {
+  groups: ArchiveQueueGroup[]
+  bookmarks: number
+  pending: number
+  running: number
+}
+
+export const EMPTY_ARCHIVE_QUEUE: ArchiveQueue = {
+  groups: [],
+  bookmarks: 0,
+  pending: 0,
+  running: 0,
 }

@@ -1,9 +1,13 @@
 import { ARCHIVE_FORMATS } from "@loomark/core/archive"
 
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
-import { enabledFormatsFor, requeueArchives } from "@/lib/archives/queue"
+import { jsonError, parseBody, parseQuery, requireUserId } from "@/lib/api"
+import {
+  cancelArchives,
+  enabledFormatsFor,
+  requeueArchives,
+} from "@/lib/archives/queue"
 import { prisma } from "@/lib/prisma"
-import { archiveRunSchema } from "@/lib/schemas"
+import { archiveCancelSchema, archiveRunSchema } from "@/lib/schemas"
 import { serializeArchive } from "@/lib/serialize"
 
 type Context = { params: Promise<{ id: string }> }
@@ -63,6 +67,25 @@ export const POST = async (request: Request, { params }: Context) => {
     data.formats ?? (enabled.length > 0 ? enabled : ARCHIVE_FORMATS.slice())
 
   await requeueArchives(userId, id, formats)
+
+  return Response.json(await listArchives(userId, id))
+}
+
+export const DELETE = async (request: Request, { params }: Context) => {
+  const userId = await requireUserId()
+
+  if (!userId) {
+    return jsonError("Unauthorized", 401)
+  }
+
+  const { id } = await params
+  const { data, response } = parseQuery(request, archiveCancelSchema)
+
+  if (!data) {
+    return response
+  }
+
+  await cancelArchives(userId, { bookmarkId: id, formats: data.formats })
 
   return Response.json(await listArchives(userId, id))
 }
