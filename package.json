@@ -1,6 +1,6 @@
 {
   "name": "loomark-monorepo",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Self-hosted bookmark manager that ships a Chrome and Firefox extension.",
   "keywords": [
     "bookmarks",
