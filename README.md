@@ -8,10 +8,6 @@
   <b>A modern self-hosted bookmark manager built with shadcn.</b>
 </p>
 
-<p align="center">
-  <img src="docs/screenshots/collection-grid-light.png" alt="A Loomark collection in grid view" width="900">
-</p>
-
 - Pinned sites in the homepage
 - Search your bookmarks with `⌘K`
 - Themes, each tuned for light and dark. Press `D` to switch modes
