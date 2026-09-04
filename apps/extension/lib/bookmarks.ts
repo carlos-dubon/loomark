@@ -18,12 +18,6 @@ export type NativeNode = {
   index: number
 }
 
-export type NativeFolder = {
-  id: string
-  title: string
-  depth: number
-}
-
 const isFolder = (node: TreeNode) =>
   node.url === undefined && node.type !== "separator"
 
@@ -77,7 +71,7 @@ export const readSubtree = async (rootId: string) => {
 
 const TOOLBAR_IDS = ["1", "toolbar_____"]
 
-export const defaultRootId = async () => {
+export const bookmarksBarId = async () => {
   const [root] = await browser.bookmarks.getTree()
   const shelves = (root?.children ?? []).filter(isFolder)
 
@@ -86,52 +80,6 @@ export const defaultRootId = async () => {
     shelves[0]?.id ??
     null
   )
-}
-
-export const listFolders = async () => {
-  const tree = await browser.bookmarks.getTree()
-  const folders: NativeFolder[] = []
-
-  const walk = (nodes: TreeNode[], depth: number) => {
-    for (const node of nodes) {
-      if (!isFolder(node)) {
-        continue
-      }
-
-      folders.push({ id: node.id, title: node.title, depth })
-      walk(node.children ?? [], depth + 1)
-    }
-  }
-
-  walk(tree[0]?.children ?? [], 0)
-
-  return folders
-}
-
-export const ensureNamedFolder = async (name: string) => {
-  const [root] = await browser.bookmarks.getTree()
-  const shelves = (root?.children ?? []).filter(isFolder)
-  const parent = shelves.at(-1) ?? shelves[0]
-
-  if (!parent) {
-    return null
-  }
-
-  const siblings = await browser.bookmarks.getChildren(parent.id)
-  const existing = siblings.find(
-    (node) => isFolder(node) && node.title === name
-  )
-
-  if (existing) {
-    return existing.id
-  }
-
-  const created = await browser.bookmarks.create({
-    parentId: parent.id,
-    title: name,
-  })
-
-  return created.id
 }
 
 export const createFolder = async (parentId: string, title: string) =>

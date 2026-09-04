@@ -91,9 +91,9 @@ export default defineBackground(() => {
   })
 
   const scheduleSync = async () => {
-    const { enabled, rootId } = await readSyncSettings()
+    const { enabled } = await readSyncSettings()
 
-    if (!enabled || !rootId) {
+    if (!enabled) {
       await browser.alarms.clear(SYNC_ALARM)
       return
     }
