@@ -14,7 +14,7 @@
 
 - Pinned sites in the homepage
 - Search your bookmarks with `⌘K`
-- [tweakcn](https://tweakcn.com) themes, light and dark. Press `D` to switch
+- Themes, each tuned for light and dark. Press `D` to switch modes
 - A browser extension for Chromium based browsers and Firefox
 - Two-way sync with your browser's bookmarks bar
 - Import from any browser or from [Linkwarden](https://linkwarden.app)

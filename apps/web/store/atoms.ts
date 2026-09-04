@@ -37,8 +37,6 @@ export const appearanceAtom = atom<AppearanceDTO>(DEFAULT_APPEARANCE)
 
 export const themeCssAtom = atom("")
 
-export const fontHrefAtom = atom<string | null>(null)
-
 export const selectedBookmarkIdsAtom = atom<ReadonlySet<string>>(
   new Set<string>()
 )

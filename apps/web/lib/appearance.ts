@@ -9,7 +9,7 @@ export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
-      themePreset: true,
+      themeId: true,
       viewMode: true,
       sortOrder: true,
     },
@@ -20,7 +20,7 @@ export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
   }
 
   return {
-    themePreset: user.themePreset,
+    themeId: user.themeId,
     viewMode: toViewMode(user.viewMode),
     sortOrder: toSortOrder(user.sortOrder),
   }

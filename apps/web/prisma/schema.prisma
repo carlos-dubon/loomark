@@ -27,7 +27,7 @@ model User {
   collections   Collection[]
   bookmarks     Bookmark[]
   apiTokens     ApiToken[]
-  themePreset   String       @default("default")
+  themeId       String       @default("default") @map("themePreset")
   viewMode      String       @default("grid")
   sortOrder     String       @default("newest")
   archives      Archive[]

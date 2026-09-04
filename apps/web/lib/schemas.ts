@@ -100,7 +100,7 @@ const slug = z.string().trim().max(64).regex(ICON_SLUG, "Unknown preset")
 
 export const appearanceUpdateSchema = z
   .object({
-    themePreset: slug,
+    themeId: slug,
     viewMode: z.enum(VIEW_MODES),
     sortOrder: z.enum(SORT_ORDERS),
   })

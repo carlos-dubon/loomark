@@ -100,7 +100,7 @@ export const getSharedCollection = cache(
       trail: trailTo(owned, root.id, collection),
       ownerName: root.user.name,
       sharedAt: root.sharedAt.toISOString(),
-      themePreset: appearance.themePreset,
+      themeId: appearance.themeId,
       bookmarks: sortBookmarks(
         bookmarks.map(serializeBookmark),
         appearance.sortOrder

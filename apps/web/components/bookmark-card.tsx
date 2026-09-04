@@ -229,7 +229,7 @@ const GridCard = ({
         />
         <Link
           href={bookmark.url}
-          className="min-w-0 flex-1 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="min-w-0 flex-1 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
         >
           <span className="line-clamp-2">{bookmarkLabel(bookmark)}</span>
         </Link>
@@ -265,7 +265,7 @@ const ListRow = ({
     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
       <Link
         href={bookmark.url}
-        className="min-w-0 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="min-w-0 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
       >
         <span className="block truncate">{bookmarkLabel(bookmark)}</span>
       </Link>

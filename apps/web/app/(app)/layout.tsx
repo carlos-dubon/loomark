@@ -20,8 +20,8 @@ import { auth } from "@/lib/auth"
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { NEW_TAB_COOKIE_NAME, toOpenInNewTab } from "@/lib/open-target"
 import { getCollections } from "@/lib/queries"
-import { THEME_PRESETS } from "@/lib/themes/presets"
-import { findPreset, fontStylesheetFor, presetToCss } from "@/lib/themes/theme"
+import { THEMES } from "@/lib/themes/palettes"
+import { findTheme, themeToCss } from "@/lib/themes/theme"
 
 const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth()
@@ -44,13 +44,10 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
     getAppearance(session.user.id),
   ])
 
-  const preset = findPreset(THEME_PRESETS, appearance.themePreset)
-
   return (
     <AppearanceProvider
       appearance={appearance}
-      themeCss={presetToCss(preset)}
-      fontHref={fontStylesheetFor(preset)}
+      themeCss={themeToCss(findTheme(THEMES, appearance.themeId))}
       openInNewTab={toOpenInNewTab(cookieStore.get(NEW_TAB_COOKIE_NAME)?.value)}
     >
       <SidebarProvider
