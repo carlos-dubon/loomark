@@ -23,7 +23,7 @@ export const SortOrderSelect = () => {
     >
       <SelectTrigger
         aria-label="Sort bookmarks"
-        className="max-sm:w-8 max-sm:justify-center max-sm:gap-0 max-sm:px-0 max-sm:[&_[data-slot=select-icon]]:hidden max-sm:[&_[data-slot=select-value]]:flex-none"
+        className="max-sm:w-9 max-sm:justify-center max-sm:gap-0 max-sm:px-0 max-sm:[&_[data-slot=select-icon]]:hidden max-sm:[&_[data-slot=select-value]]:flex-none"
       >
         <ArrowUpDownIcon className="text-muted-foreground" />
         <SelectValue>
