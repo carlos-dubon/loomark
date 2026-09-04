@@ -74,7 +74,7 @@ export const AdminView = ({
         title="Server administration"
         description="Accounts on this instance"
       />
-      <div className="flex min-h-0 flex-1 scroll-fade-b flex-col gap-4 overflow-y-auto p-4 md:p-6">
+      <div className="flex min-h-0 flex-1 scroll-fade-y flex-col gap-4 overflow-y-auto p-4 md:p-6">
         <Card className="w-full max-w-3xl shrink-0">
           <CardHeader>
             <CardTitle>This instance</CardTitle>

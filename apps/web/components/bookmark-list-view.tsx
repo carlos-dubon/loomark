@@ -115,7 +115,7 @@ export const BookmarkListView = ({
           <CollectionMenu collection={collection} />
         ) : null}
       </PageHeader>
-      <div className="@container flex min-h-0 flex-1 scroll-fade-b flex-col gap-6 overflow-y-auto p-4 md:p-6">
+      <div className="@container flex min-h-0 flex-1 scroll-fade-y flex-col gap-6 overflow-y-auto p-4 md:p-6">
         {hasCollections ? (
           <section className="flex flex-col gap-3">
             <h2 className="text-sm font-semibold">Collections</h2>

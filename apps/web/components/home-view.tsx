@@ -56,13 +56,11 @@ const PinnedItem = ({
       )}
     >
       <div className="relative">
-        <div className="flex size-14 items-center justify-center rounded-xl bg-muted ring-1 ring-transparent transition group-focus-within/pin:bg-accent group-focus-within/pin:ring-foreground/20 group-hover/pin:bg-accent group-hover/pin:ring-foreground/20 sm:size-16">
-          <span className="flex size-9 items-center justify-center rounded-[10px] bg-card shadow-sm sm:size-10">
-            <FaviconImage
-              src={bookmark.faviconUrl}
-              className="size-6 rounded-sm sm:size-7"
-            />
-          </span>
+        <div className="relative flex size-14 items-center justify-center rounded-xl border border-input bg-background shadow-xs/5 transition-[box-shadow,scale,background-color] not-dark:bg-clip-padding group-focus-within/pin:bg-accent/50 group-hover/pin:bg-accent/50 group-active/pin:scale-[0.97] group-active/pin:shadow-none before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-xl)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] group-active/pin:before:shadow-none sm:size-16 dark:bg-input/32 dark:group-focus-within/pin:bg-input/64 dark:group-hover/pin:bg-input/64 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]">
+          <FaviconImage
+            src={bookmark.faviconUrl}
+            className="size-7 rounded-sm sm:size-8"
+          />
         </div>
         <BookmarkMenu
           bookmark={bookmark}
