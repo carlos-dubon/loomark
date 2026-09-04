@@ -6,7 +6,6 @@ import { useHydrateAtoms } from "jotai/utils"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
 import {
   appearanceAtom,
-  fontHrefAtom,
   openInNewTabAtom,
   sortOrderAtom,
   themeCssAtom,
@@ -16,13 +15,11 @@ import {
 export const AppearanceProvider = ({
   appearance,
   themeCss,
-  fontHref,
   openInNewTab,
   children,
 }: {
   appearance: AppearanceDTO
   themeCss: string
-  fontHref: string | null
   openInNewTab: boolean
   children: React.ReactNode
 }) => {
@@ -31,7 +28,6 @@ export const AppearanceProvider = ({
     [viewModeAtom, appearance.viewMode],
     [sortOrderAtom, appearance.sortOrder],
     [themeCssAtom, themeCss],
-    [fontHrefAtom, fontHref],
     [openInNewTabAtom, openInNewTab],
   ])
 
@@ -45,14 +41,6 @@ export const AppearanceProvider = ({
 
 const ThemeStyle = () => {
   const css = useAtomValue(themeCssAtom)
-  const href = useAtomValue(fontHrefAtom)
 
-  return (
-    <>
-      {href ? (
-        <link rel="stylesheet" href={href} precedence="loomark-theme-font" />
-      ) : null}
-      <style dangerouslySetInnerHTML={{ __html: css }} />
-    </>
-  )
+  return css ? <style dangerouslySetInnerHTML={{ __html: css }} /> : null
 }

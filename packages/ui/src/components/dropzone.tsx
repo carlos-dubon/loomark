@@ -225,7 +225,7 @@ const DropzoneArea = ({
         onFiles(Array.from(event.dataTransfer.files))
       }}
       className={cn(
-        "group/dropzone flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-input px-6 py-10 text-center transition-colors outline-none select-none hover:border-ring/60 hover:bg-accent/40 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 data-dragging:border-primary data-dragging:bg-accent/60 data-disabled:pointer-events-none data-disabled:opacity-60",
+        "group/dropzone flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-input px-6 py-10 text-center transition-colors outline-none select-none hover:border-ring/60 hover:bg-accent/40 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background data-dragging:border-primary data-dragging:bg-accent/60 data-disabled:pointer-events-none data-disabled:opacity-60",
         className
       )}
       {...props}

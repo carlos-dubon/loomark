@@ -52,7 +52,7 @@ const DropEdge = ({
       )}
     >
       {isDropTarget ? (
-        <div className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-sidebar-primary" />
+        <div className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-primary" />
       ) : null}
     </div>
   )
@@ -117,7 +117,7 @@ const CollectionRow = ({
             "relative rounded-md transition-opacity",
             isDragSource && "opacity-40",
             isDropTarget &&
-              "ring-2 ring-sidebar-primary/70 ring-offset-1 ring-offset-sidebar"
+              "ring-2 ring-primary/70 ring-offset-1 ring-offset-sidebar"
           )}
         >
           <SidebarMenuButton
@@ -156,7 +156,7 @@ const RootDropZone = () => {
         className={cn(
           "pointer-events-none mt-1 flex h-8 items-center justify-center gap-1.5 rounded-md border border-dashed text-xs transition-colors",
           isDropTarget
-            ? "border-sidebar-primary text-sidebar-primary"
+            ? "border-primary text-primary"
             : "text-muted-foreground"
         )}
       >
