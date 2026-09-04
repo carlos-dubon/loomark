@@ -66,7 +66,7 @@ export const CollectionsView = () => {
           New collection
         </Button>
       </PageHeader>
-      <div className="flex min-h-0 flex-1 scroll-fade-b flex-col gap-6 overflow-y-auto p-4 md:p-6">
+      <div className="flex min-h-0 flex-1 scroll-fade-y flex-col gap-6 overflow-y-auto p-4 md:p-6">
         {items.length === 0 ? (
           <EmptyState
             icon={FolderTreeIcon}
