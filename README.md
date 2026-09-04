@@ -16,7 +16,7 @@
 - Search your bookmarks with `⌘K`
 - [tweakcn](https://tweakcn.com) themes, light and dark. Press `D` to switch
 - A browser extension for Chromium based browsers and Firefox
-- Two-way sync with your browser's own bookmarks
+- Two-way sync with your browser's bookmarks bar
 - Import from any browser or from [Linkwarden](https://linkwarden.app)
 - Share links for any collection
 - Page archiving: screenshot, HTML, PDF, markdown
@@ -63,6 +63,7 @@ docker compose pull && docker compose up -d
 | `LOOMARK_VERSION`                                 | optional     | Image tag to run, defaults to `latest` |
 | `ALLOW_REGISTRATION`                              | optional     | `false` closes signups                 |
 | `APP_PORT`                                        | optional     | Host port, defaults to `3000`          |
+| `DB_WAIT_TIMEOUT`                                 | optional     | Seconds to wait for Postgres at boot   |
 | `POSTGRES_USER` `POSTGRES_PASSWORD` `POSTGRES_DB` | optional     | Database credentials                   |
 
 Archives live on disk in the `loomark-archives` volume, so keep an eye on space.
