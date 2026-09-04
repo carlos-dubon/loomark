@@ -5,6 +5,7 @@ import { ClockIcon, Loader2Icon, XIcon } from "lucide-react"
 import { useEffect } from "react"
 
 import { hostFromUrl } from "@loomark/core/url"
+import { Button } from "@loomark/ui/components/button"
 import {
   CommandDialog,
   CommandEmpty,
@@ -136,17 +137,19 @@ export const BookmarkSearchDialog = () => {
                 >
                   <ClockIcon className="text-muted-foreground" />
                   <span className="truncate">{recent}</span>
-                  <button
+                  <Button
+                    variant="ghost-muted"
+                    size="icon-micro"
                     aria-label={`Remove ${recent} from recent searches`}
-                    className="ml-auto rounded-sm p-0.5 text-muted-foreground opacity-0 group-data-[selected=true]/recent:opacity-100 hover:text-foreground focus-visible:opacity-100"
+                    className="ml-auto opacity-0 group-data-[selected=true]/recent:opacity-100 focus-visible:opacity-100"
                     onPointerDown={(event) => event.preventDefault()}
                     onClick={(event) => {
                       event.stopPropagation()
                       removeRecent(recent)
                     }}
                   >
-                    <XIcon className="size-3.5" />
-                  </button>
+                    <XIcon />
+                  </Button>
                 </CommandItem>
               ))}
               <CommandItem

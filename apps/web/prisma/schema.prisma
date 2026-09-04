@@ -30,6 +30,17 @@ model User {
   themeId       String       @default("default") @map("themePreset")
   viewMode      String       @default("grid")
   sortOrder     String       @default("newest")
+  avatar        Avatar?
+}
+
+model Avatar {
+  userId      String   @id
+  contentType String
+  bytes       Int      @default(0)
+  data        Bytes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {

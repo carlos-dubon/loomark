@@ -13,6 +13,13 @@ type BookmarkFilters = {
   skip?: number
 }
 
+export const getProfile = cache((userId: string) =>
+  prisma.user.findUnique({
+    where: { id: userId },
+    select: { name: true, email: true, image: true, role: true },
+  })
+)
+
 export const getCollections = async (userId: string) => {
   const collections = await prisma.collection.findMany({
     where: { userId },

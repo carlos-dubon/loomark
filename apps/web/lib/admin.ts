@@ -3,7 +3,14 @@ import type { InstanceUserDTO } from "@loomark/core/types"
 import { requireUserId } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 
-type StorageRow = { id: string; bytes: bigint | number | string | null }
+type Numeric = bigint | number | string | null
+
+type StorageRow = {
+  id: string
+  rowBytes: Numeric
+}
+
+const toNumber = (value: Numeric) => Number(value ?? 0)
 
 export const getUserRole = async (userId: string) => {
   const user = await prisma.user.findUnique({
@@ -41,7 +48,9 @@ export const getInstanceUsers = async (): Promise<InstanceUserDTO[]> => {
     prisma.$queryRaw<StorageRow[]>`
       SELECT
         u."id" AS "id",
-        COALESCE(b."bytes", 0) + COALESCE(c."bytes", 0) AS "bytes"
+        COALESCE(b."bytes", 0)
+          + COALESCE(c."bytes", 0)
+          + COALESCE(v."bytes", 0) AS "rowBytes"
       FROM "User" u
       LEFT JOIN (
         SELECT "userId", SUM(pg_column_size(bookmark.*)) AS "bytes"
@@ -53,12 +62,15 @@ export const getInstanceUsers = async (): Promise<InstanceUserDTO[]> => {
         FROM "Collection" collection
         GROUP BY "userId"
       ) c ON c."userId" = u."id"
+      LEFT JOIN (
+        SELECT "userId", SUM(pg_column_size(avatar.*)) AS "bytes"
+        FROM "Avatar" avatar
+        GROUP BY "userId"
+      ) v ON v."userId" = u."id"
     `,
   ])
 
-  const bytesByUser = new Map(
-    storage.map((row) => [row.id, Number(row.bytes ?? 0)])
-  )
+  const storageByUser = new Map(storage.map((row) => [row.id, row]))
 
   return users.map((user) => ({
     id: user.id,
@@ -69,13 +81,14 @@ export const getInstanceUsers = async (): Promise<InstanceUserDTO[]> => {
     createdAt: user.createdAt.toISOString(),
     bookmarkCount: user._count.bookmarks,
     collectionCount: user._count.collections,
-    bytes: bytesByUser.get(user.id) ?? 0,
+    bytes: toNumber(storageByUser.get(user.id)?.rowBytes ?? 0),
   }))
 }
 
-export const deleteInstanceUser = (userId: string) =>
-  prisma.$transaction([
+export const deleteInstanceUser = async (userId: string) => {
+  await prisma.$transaction([
     prisma.bookmark.deleteMany({ where: { userId } }),
     prisma.collection.deleteMany({ where: { userId } }),
     prisma.user.delete({ where: { id: userId } }),
   ])
+}

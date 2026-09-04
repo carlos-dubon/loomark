@@ -81,8 +81,8 @@ export const AdminView = ({
             <CardDescription>
               {users.length} {users.length === 1 ? "account" : "accounts"},{" "}
               {totalBookmarks} {totalBookmarks === 1 ? "bookmark" : "bookmarks"}
-              , about {formatBytes(totalBytes)} of stored rows. Storage counts
-              bookmark and collection rows only, so indexes and backups sit
+              , about {formatBytes(totalBytes)} in total. Storage counts
+              bookmark, collection and profile rows, so indexes and backups sit
               outside it.
             </CardDescription>
           </CardHeader>
@@ -144,7 +144,7 @@ export const AdminView = ({
                       />
                       <Stat
                         icon={HardDriveIcon}
-                        label={formatBytes(user.bytes)}
+                        label={`${formatBytes(user.bytes)} total`}
                       />
                     </div>
                   </div>

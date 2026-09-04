@@ -16,6 +16,8 @@ export const routes = {
   favicon: (url: string) => withUrl("/api/favicon", url),
   metadata: (url: string) => withUrl("/api/metadata", url),
   appearance: "/api/appearance",
+  profileAvatar: "/api/profile/avatar",
+  userAvatar: (id: string) => `/api/users/${id}/avatar`,
   sync: "/api/sync",
   register: "/api/register",
   extensionToken: "/api/extension/token",
