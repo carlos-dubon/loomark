@@ -10,6 +10,7 @@ import { hostFromUrl } from "@loomark/core/url"
 import { cn } from "@loomark/core/utils"
 import type { ViewMode } from "@loomark/core/view-mode"
 import { Button } from "@loomark/ui/components/button"
+import { Card, CardContent, CardFooter } from "@loomark/ui/components/card"
 import { Checkbox } from "@loomark/ui/components/checkbox"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
@@ -172,7 +173,7 @@ const BookmarkPreview = ({
   const src = failed ? null : bookmark.previewUrl
 
   return (
-    <div className="aspect-[16/9] shrink-0 overflow-hidden border-b bg-muted/50">
+    <div className="aspect-[16/9] shrink-0 overflow-hidden border-b bg-muted/40">
       {src ? (
         <img
           src={src}
@@ -206,22 +207,24 @@ const GridCard = ({
   ...select
 }: { bookmark: BookmarkDTO; pendingPreview: boolean } & DragProps &
   SelectProps) => (
-  <article
+  <Card
+    size="sm"
     ref={ref}
+    render={<article />}
     data-selected={select.selected || undefined}
     className={cn(
-      "group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:border-foreground/20 pointer-fine:touch-none",
+      "group pt-0 transition-colors hover:border-input hover:bg-accent/40 pointer-fine:touch-none",
       isDragSource && "opacity-40",
-      select.selected && "border-primary ring-1 ring-primary"
+      select.selected && "border-ring ring-2 ring-ring/24"
     )}
   >
     <SelectToggle
       bookmark={bookmark}
       {...select}
-      className="absolute top-2 left-2 rounded-[min(var(--radius-sm),6px)] bg-background/80 p-1 backdrop-blur"
+      className="absolute top-(--card-spacing) left-(--card-spacing)"
     />
     <BookmarkPreview bookmark={bookmark} pending={pendingPreview} />
-    <div className="flex flex-1 flex-col gap-2 p-3">
+    <CardContent className="flex flex-1 flex-col gap-2">
       <div className="flex items-start gap-2">
         <FaviconImage
           src={bookmark.faviconUrl}
@@ -229,7 +232,7 @@ const GridCard = ({
         />
         <Link
           href={bookmark.url}
-          className="min-w-0 flex-1 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
+          className="min-w-0 flex-1 rounded-sm text-sm leading-snug font-medium outline-none after:absolute after:inset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
         >
           <span className="line-clamp-2">{bookmarkLabel(bookmark)}</span>
         </Link>
@@ -240,9 +243,11 @@ const GridCard = ({
           {bookmark.description}
         </p>
       ) : null}
-      <BookmarkMeta bookmark={bookmark} wrap className="mt-auto pt-1" />
-    </div>
-  </article>
+    </CardContent>
+    <CardFooter className="mt-auto">
+      <BookmarkMeta bookmark={bookmark} wrap />
+    </CardFooter>
+  </Card>
 )
 
 const ListRow = ({
@@ -251,13 +256,15 @@ const ListRow = ({
   isDragSource,
   ...select
 }: { bookmark: BookmarkDTO } & DragProps & SelectProps) => (
-  <article
+  <Card
+    size="sm"
     ref={ref}
+    render={<article />}
     data-selected={select.selected || undefined}
     className={cn(
-      "group relative flex items-center gap-2.5 rounded-lg border bg-card px-3 py-2 transition-colors hover:border-foreground/20 sm:gap-3 pointer-fine:touch-none",
+      "group flex-row items-center gap-2.5 rounded-lg px-(--card-spacing) transition-colors hover:border-input hover:bg-accent/40 sm:gap-3 pointer-fine:touch-none",
       isDragSource && "opacity-40",
-      select.selected && "border-primary ring-1 ring-primary"
+      select.selected && "border-ring ring-2 ring-ring/24"
     )}
   >
     <SelectToggle bookmark={bookmark} {...select} />
@@ -272,7 +279,7 @@ const ListRow = ({
       <BookmarkMeta bookmark={bookmark} />
     </div>
     <BookmarkActions bookmark={bookmark} />
-  </article>
+  </Card>
 )
 
 export const BookmarkCard = ({

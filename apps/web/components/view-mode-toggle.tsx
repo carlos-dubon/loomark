@@ -2,33 +2,47 @@
 
 import { LayoutGridIcon, ListIcon } from "lucide-react"
 
-import { Button } from "@loomark/ui/components/button"
+import { VIEW_MODES, type ViewMode } from "@loomark/core/view-mode"
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@loomark/ui/components/toggle-group"
 
 import { useViewMode } from "@/hooks/use-view-mode"
+
+const ICONS: Record<ViewMode, typeof LayoutGridIcon> = {
+  grid: LayoutGridIcon,
+  list: ListIcon,
+}
+
+const LABELS: Record<ViewMode, string> = {
+  grid: "Grid view",
+  list: "List view",
+}
 
 export const ViewModeToggle = () => {
   const { mode, select } = useViewMode()
 
   return (
-    <div className="flex h-8 items-center rounded-lg border p-px">
-      <Button
-        variant={mode === "grid" ? "secondary" : "ghost"}
-        size="icon-sm"
-        aria-label="Grid view"
-        aria-pressed={mode === "grid"}
-        onClick={() => select("grid")}
-      >
-        <LayoutGridIcon />
-      </Button>
-      <Button
-        variant={mode === "list" ? "secondary" : "ghost"}
-        size="icon-sm"
-        aria-label="List view"
-        aria-pressed={mode === "list"}
-        onClick={() => select("list")}
-      >
-        <ListIcon />
-      </Button>
-    </div>
+    <ToggleGroup
+      variant="segmented"
+      size="sm"
+      value={[mode]}
+      onValueChange={([next]) => {
+        if (next) {
+          void select(next as ViewMode)
+        }
+      }}
+    >
+      {VIEW_MODES.map((value) => {
+        const Icon = ICONS[value]
+
+        return (
+          <ToggleGroupItem key={value} value={value} aria-label={LABELS[value]}>
+            <Icon />
+          </ToggleGroupItem>
+        )
+      })}
+    </ToggleGroup>
   )
 }
