@@ -29,7 +29,7 @@ export const PATCH = async (request: Request) => {
   await prisma.user.update({
     where: { id: userId },
     data: {
-      themePreset: data.themePreset,
+      themeId: data.themeId,
       viewMode: data.viewMode,
       sortOrder: data.sortOrder,
     },

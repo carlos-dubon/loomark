@@ -65,7 +65,7 @@ export const SharedBookmarkCard = ({
             href={bookmark.url}
             target="_blank"
             rel="noopener noreferrer nofollow"
-            className="min-w-0 flex-1 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="min-w-0 flex-1 rounded-sm text-sm font-medium outline-none after:absolute after:inset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
           >
             <span className="line-clamp-2">
               {bookmark.title?.trim() || hostFromUrl(bookmark.url)}

@@ -8,8 +8,8 @@ import { EmptyState } from "@/components/empty-state"
 import { Link } from "@/components/link"
 import { LoomarkMark } from "@/components/loomark-mark"
 import { SharedBookmarkCard } from "@/components/shared-bookmark-card"
-import { THEME_PRESETS } from "@/lib/themes/presets"
-import { findPreset, fontStylesheetFor, presetToCss } from "@/lib/themes/theme"
+import { THEMES } from "@/lib/themes/palettes"
+import { findTheme, themeToCss } from "@/lib/themes/theme"
 
 const plural = (count: number, noun: string) =>
   `${count} ${noun}${count === 1 ? "" : "s"}`
@@ -26,7 +26,7 @@ const Breadcrumb = ({ page }: { page: SharedCollectionPage }) => (
             page.token,
             ancestor.id === page.root.id ? null : ancestor.id
           )}
-          className="truncate rounded-sm hover:text-foreground hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+          className="truncate rounded-sm hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background focus-visible:outline-none"
         >
           {ancestor.name}
         </Link>
@@ -69,19 +69,13 @@ export const SharedCollectionView = ({
 }) => {
   const hasCollections = page.subcollections.length > 0
   const hasBookmarks = page.bookmarks.length > 0
-  const preset = findPreset(THEME_PRESETS, page.themePreset)
-  const fontHref = fontStylesheetFor(preset)
+  const themeCss = themeToCss(findTheme(THEMES, page.themeId))
 
   return (
     <div className="flex min-h-svh flex-col bg-background">
-      {fontHref ? (
-        <link
-          rel="stylesheet"
-          href={fontHref}
-          precedence="loomark-theme-font"
-        />
+      {themeCss ? (
+        <style dangerouslySetInnerHTML={{ __html: themeCss }} />
       ) : null}
-      <style dangerouslySetInnerHTML={{ __html: presetToCss(preset) }} />
       <header className="border-b">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-4 py-6 md:px-6 md:py-8">
           {page.trail.length > 0 ? <Breadcrumb page={page} /> : null}

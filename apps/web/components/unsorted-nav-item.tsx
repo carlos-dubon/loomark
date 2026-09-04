@@ -46,7 +46,7 @@ export const UnsortedNavItem = () => {
       className={cn(
         "rounded-md",
         isDropTarget &&
-          "ring-2 ring-sidebar-primary/70 ring-offset-1 ring-offset-sidebar"
+          "ring-2 ring-primary/70 ring-offset-1 ring-offset-sidebar"
       )}
     >
       <SidebarMenuButton

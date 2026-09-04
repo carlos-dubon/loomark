@@ -71,7 +71,7 @@ const PinnedItem = ({
       </div>
       <Link
         href={bookmark.url}
-        className="w-full rounded-sm text-center text-xs leading-tight text-muted-foreground transition-colors outline-none group-focus-within/pin:text-foreground group-hover/pin:text-foreground after:absolute after:inset-0 after:rounded-xl focus-visible:ring-3 focus-visible:ring-ring/50 sm:text-[13px]"
+        className="w-full rounded-sm text-center text-xs leading-tight text-muted-foreground transition-colors outline-none group-focus-within/pin:text-foreground group-hover/pin:text-foreground after:absolute after:inset-0 after:rounded-xl focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background sm:text-[13px]"
         title={label}
       >
         <span className="block truncate">{label}</span>

@@ -52,7 +52,7 @@ export type SharedCollectionPage = {
   trail: SharedCollectionDTO[]
   ownerName: string | null
   sharedAt: string
-  themePreset: string
+  themeId: string
   bookmarks: SharedBookmarkDTO[]
   subcollections: SharedCollectionDTO[]
 }

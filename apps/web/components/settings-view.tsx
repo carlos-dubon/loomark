@@ -133,9 +133,8 @@ export const SettingsView = ({
           <CardHeader>
             <CardTitle>Theme</CardTitle>
             <CardDescription>
-              Every preset from tweakcn, colours, radius, shadows and fonts
-              included. Light and dark both come along, so the mode toggle keeps
-              working. Press D to switch modes.
+              Six palettes, each tuned for light and dark, so the mode toggle
+              keeps working whichever one you pick. Press D to switch modes.
             </CardDescription>
           </CardHeader>
           <CardContent>

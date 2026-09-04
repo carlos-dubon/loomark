@@ -26,7 +26,7 @@ function ScrollAreaViewport({
     <ScrollAreaPrimitive.Viewport
       data-slot="scroll-area-viewport"
       className={cn(
-        "size-full overscroll-contain focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
+        "size-full overscroll-contain focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
         className
       )}
       {...props}
@@ -53,7 +53,7 @@ function ScrollAreaScrollbar({
     >
       <ScrollAreaPrimitive.Thumb
         data-slot="scroll-area-thumb"
-        className="relative flex-1 rounded-full bg-foreground/25"
+        className="relative flex-1 rounded-full bg-foreground/20 transition-colors hover:bg-foreground/30"
       />
     </ScrollAreaPrimitive.Scrollbar>
   )
