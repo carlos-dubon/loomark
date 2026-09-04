@@ -28,6 +28,7 @@ import { Link } from "@/components/link"
 import { SearchTrigger } from "@/components/search-trigger"
 import { UnsortedNavItem } from "@/components/unsorted-nav-item"
 import { UserMenu, type SessionUser } from "@/components/user-menu"
+import { useCloseSidebar } from "@/hooks/use-close-sidebar"
 import {
   bookmarkDialogAtom,
   collectionDialogAtom,
@@ -49,6 +50,7 @@ export const AppSidebar = ({
   const setCollections = useSetAtom(collectionsAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const openCollectionDialog = useSetAtom(collectionDialogAtom)
+  const closeSidebar = useCloseSidebar()
 
   useEffect(() => {
     setCollections(initialCollections)
@@ -60,13 +62,14 @@ export const AppSidebar = ({
         <SearchTrigger />
         <Button
           className="w-full justify-start group-data-[collapsible=icon]:size-(--sidebar-icon-tile) group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:bg-clip-border group-data-[collapsible=icon]:px-0"
-          onClick={() =>
+          onClick={() => {
+            closeSidebar()
             openBookmarkDialog({
               open: true,
               bookmark: null,
               collectionId: null,
             })
-          }
+          }}
         >
           <PlusIcon className="size-(--sidebar-icon-size)" />
           <span className="group-data-[collapsible=icon]:hidden">
@@ -82,6 +85,7 @@ export const AppSidebar = ({
                 <SidebarMenuButton
                   isActive={pathname === "/"}
                   tooltip="Homepage"
+                  onClick={closeSidebar}
                   render={<Link href="/" />}
                 >
                   <HouseIcon />
@@ -96,13 +100,14 @@ export const AppSidebar = ({
           <SidebarGroupLabel>Collections</SidebarGroupLabel>
           <SidebarGroupAction
             aria-label="New collection"
-            onClick={() =>
+            onClick={() => {
+              closeSidebar()
               openCollectionDialog({
                 open: true,
                 collection: null,
                 parentId: null,
               })
-            }
+            }}
           >
             <PlusIcon />
           </SidebarGroupAction>
