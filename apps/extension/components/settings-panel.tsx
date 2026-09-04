@@ -1,18 +1,13 @@
 import { ArrowLeftIcon, Loader2Icon, RefreshCwIcon } from "lucide-react"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { Button } from "@loomark/ui/components/button"
-import { Field, FieldSelect } from "@loomark/ui/components/field"
 import { Switch } from "@loomark/ui/components/switch"
 
 import { useSyncStatus } from "@/hooks/use-sync-status"
 import {
-  defaultRootId,
-  ensureNamedFolder,
   hasBookmarksPermission,
-  listFolders,
   requestBookmarksPermission,
-  type NativeFolder,
 } from "@/lib/bookmarks"
 import { requestSync } from "@/lib/messages"
 import {
@@ -23,8 +18,6 @@ import {
   type SyncSettings,
 } from "@/lib/storage"
 
-const NEW_FOLDER = "__new__"
-const FOLDER_NAME = "Loomark"
 const DENIED = "Loomark needs access to your bookmarks to sync"
 
 const relative = (at: number, now: number) => {
@@ -60,15 +53,10 @@ const Section = ({
 
 export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
   const [settings, setSettings] = useState<SyncSettings | null>(null)
-  const [folders, setFolders] = useState<NativeFolder[]>([])
   const [granted, setGranted] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { status, now, syncing } = useSyncStatus()
-
-  const loadFolders = useCallback(async () => {
-    setFolders(await listFolders().catch(() => []))
-  }, [])
 
   useEffect(() => {
     void (async () => {
@@ -81,7 +69,6 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
 
       if (permitted) {
         setSettings(stored)
-        await loadFolders()
         return
       }
 
@@ -92,7 +79,7 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
 
       setSettings({ ...stored, enabled: false })
     })()
-  }, [loadFolders])
+  }, [])
 
   useEffect(() => watchSyncSettings(setSettings), [])
 
@@ -127,47 +114,10 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
 
     setGranted(true)
     setBusy(true)
-    await loadFolders()
-
-    const current = await readSyncSettings()
-    const rootId = current.rootId ?? (await defaultRootId())
-    const next = rootId ? { ...current, rootId } : current
-
-    if (rootId && rootId !== current.rootId) {
-      await writeSyncSettings(next)
-    }
-
-    setSettings(next)
     await requestSync()
     setBusy(false)
   }
 
-  const pickFolder = async (value: string) => {
-    if (!settings || busy) {
-      return
-    }
-
-    setBusy(true)
-    setError(null)
-
-    const rootId =
-      value === NEW_FOLDER ? await ensureNamedFolder(FOLDER_NAME) : value
-
-    if (!rootId) {
-      setError("Could not create a sync folder")
-      setBusy(false)
-      return
-    }
-
-    await clearSyncLinks()
-    await writeSyncSettings({ ...settings, rootId })
-    setSettings({ ...settings, rootId })
-    await loadFolders()
-    await requestSync()
-    setBusy(false)
-  }
-
-  const known = folders.some((folder) => folder.id === settings?.rootId)
   const busyish = busy || syncing
 
   return (
@@ -188,9 +138,11 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
       <Section title="Bookmark sync">
         <label className="flex items-start justify-between gap-3">
           <span className="flex flex-col gap-0.5">
-            <span className="text-sm font-medium">Mirror this browser</span>
+            <span className="text-sm font-medium">
+              Mirror the bookmarks bar
+            </span>
             <span className="text-xs text-muted-foreground">
-              Loomark and your browser bookmarks stay in step every 3 minutes.
+              Loomark and your bookmarks bar stay in step every 3 minutes.
             </span>
           </span>
           <Switch
@@ -203,32 +155,10 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
         </label>
 
         {settings?.enabled ? (
-          <>
-            <Field label="Sync folder" htmlFor="sync-folder">
-              <FieldSelect
-                id="sync-folder"
-                value={known ? (settings.rootId ?? "") : ""}
-                disabled={busyish}
-                onChange={(event) => {
-                  void pickFolder(event.target.value)
-                }}
-              >
-                {known ? null : <option value="">Choosing…</option>}
-                {folders.map((folder) => (
-                  <option key={folder.id} value={folder.id}>
-                    {`${"  ".repeat(folder.depth)}${folder.title}`}
-                  </option>
-                ))}
-                <option
-                  value={NEW_FOLDER}
-                >{`New ${FOLDER_NAME} folder`}</option>
-              </FieldSelect>
-            </Field>
-            <p className="text-xs text-muted-foreground">
-              Everything inside this folder mirrors your Loomark collections,
-              both ways. Deleting on either side deletes on the other.
-            </p>
-          </>
+          <p className="text-xs text-muted-foreground">
+            Everything on your bookmarks bar mirrors your Loomark collections,
+            both ways. Deleting on either side deletes on the other.
+          </p>
         ) : null}
 
         {error ? (

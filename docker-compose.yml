@@ -32,6 +32,7 @@ services:
       AUTH_TRUST_HOST: "true"
       ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-true}
       ARCHIVE_DIR: /data/archives
+      DB_WAIT_TIMEOUT: ${DB_WAIT_TIMEOUT:-180}
     volumes:
       - loomark-archives:/data/archives
     ports:

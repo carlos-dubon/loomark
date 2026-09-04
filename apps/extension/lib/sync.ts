@@ -20,9 +20,9 @@ import {
   type Auth,
 } from "@/lib/api"
 import {
+  bookmarksBarId,
   createFolder,
   createLink,
-  defaultRootId,
   hasBookmarksPermission,
   moveNode,
   readSubtree,
@@ -33,6 +33,7 @@ import {
   type NativeNode,
 } from "@/lib/bookmarks"
 import {
+  clearSyncLinks,
   readConnection,
   readSyncLinks,
   readSyncSettings,
@@ -971,20 +972,21 @@ export const runSync = async (): Promise<SyncStatus> => {
       token: connection.token,
     }
 
-    const rootId = settings.rootId ?? (await defaultRootId())
+    const rootId = await bookmarksBarId()
 
     if (!rootId) {
-      return await finish("Could not find a bookmarks folder to sync")
+      return await finish("Could not find your bookmarks bar")
     }
 
     if (rootId !== settings.rootId) {
+      await clearSyncLinks()
       await writeSyncSettings({ ...settings, rootId })
     }
 
     const nodeList = await readSubtree(rootId)
 
     if (!nodeList) {
-      return await finish("The sync folder is gone. Pick another one.")
+      return await finish("Could not read your bookmarks bar")
     }
 
     const remote = await fetchSyncSnapshot(auth)
