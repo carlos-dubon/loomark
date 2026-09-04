@@ -6,3 +6,5 @@ allowBuilds:
   '@prisma/engines': true
   prisma: true
   unrs-resolver: true
+
+message: 'chore(release): %s'
