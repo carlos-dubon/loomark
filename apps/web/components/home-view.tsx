@@ -14,6 +14,7 @@ import { BookmarkMenu } from "@/components/bookmark-menu"
 import { EmptyState } from "@/components/empty-state"
 import { FaviconImage } from "@/components/favicon-image"
 import { Link } from "@/components/link"
+import { MobileSearchBar } from "@/components/mobile-search-bar"
 import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
@@ -99,7 +100,7 @@ export const HomeView = ({
       <PageHeader title="Homepage">
         <SortOrderSelect />
       </PageHeader>
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-4 md:p-6 lg:p-8">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-4 pb-28 md:p-6 md:pb-6 lg:p-8 lg:pb-8">
         {items.length === 0 ? (
           <div className="my-auto">
             {isEmptyLibrary ? (
@@ -145,6 +146,7 @@ export const HomeView = ({
           </div>
         )}
       </div>
+      <MobileSearchBar />
     </>
   )
 }
