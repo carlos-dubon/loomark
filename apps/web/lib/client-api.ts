@@ -164,6 +164,17 @@ export const api = {
       body,
     })
   },
+  uploadAvatar: (file: File) => {
+    const body = new FormData()
+    body.append("file", file)
+
+    return request<{ image: string }>(routes.profileAvatar, {
+      method: "POST",
+      body,
+    })
+  },
+  removeAvatar: () =>
+    request<{ image: null }>(routes.profileAvatar, { method: "DELETE" }),
   updateAppearance: (input: AppearanceUpdateInput) =>
     request<AppearanceDTO>(routes.appearance, {
       method: "PATCH",

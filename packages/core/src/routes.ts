@@ -22,6 +22,8 @@ export const routes = {
   favicon: (url: string) => withUrl("/api/favicon", url),
   metadata: (url: string) => withUrl("/api/metadata", url),
   appearance: "/api/appearance",
+  profileAvatar: "/api/profile/avatar",
+  userAvatar: (id: string) => `/api/users/${id}/avatar`,
   archiveSettings: "/api/archives/settings",
   archiveBackfill: "/api/archives/backfill",
   archiveStorage: "/api/archives/storage",

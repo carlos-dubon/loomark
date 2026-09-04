@@ -55,7 +55,7 @@ const Usage = () => {
         </div>
       </div>
       <Button
-        variant="outline"
+        variant="destructive-outline"
         disabled={usage.archives === 0 && usage.bytes === 0}
         onClick={() => openClearDialog(true)}
       >

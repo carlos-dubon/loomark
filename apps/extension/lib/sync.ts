@@ -69,7 +69,6 @@ const sameUrl = (a: string, b: string) => {
 const clamp = (value: string, max: number) => value.trim().slice(0, max)
 
 const UNRANKED = Number.MAX_SAFE_INTEGER
-const PINNED = Number.MIN_SAFE_INTEGER
 const KINDS = ["collection", "bookmark"] as const
 
 const compareText = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
@@ -109,6 +108,18 @@ const reconcile = async (
     childrenOf.set(node.parentId, siblings)
   }
 
+  const relocate = (node: NativeNode, parentId: string) => {
+    childrenOf.set(
+      node.parentId,
+      (childrenOf.get(node.parentId) ?? []).filter(
+        (sibling) => sibling.id !== node.id
+      )
+    )
+
+    node.parentId = parentId
+    track(node)
+  }
+
   for (const node of nodeList) {
     track(node)
   }
@@ -135,8 +146,11 @@ const reconcile = async (
     byNode.set(link.nodeId, link)
   }
 
+  const isUnsorted = (id: string | null) =>
+    id !== null && collections.get(id)?.kind === "UNSORTED"
+
   const folderFor = (parentLoomarkId: string | null) =>
-    parentLoomarkId === null
+    parentLoomarkId === null || isUnsorted(parentLoomarkId)
       ? rootId
       : (links.get(keyOf("collection", parentLoomarkId))?.nodeId ?? null)
 
@@ -149,9 +163,6 @@ const reconcile = async (
 
     return link?.kind === "collection" ? link.loomarkId : undefined
   }
-
-  const isUnsorted = (id: string | null) =>
-    id !== null && collections.get(id)?.kind === "UNSORTED"
 
   const depthOf = (collection: SyncCollection) => {
     const seen = new Set<string>()
@@ -167,7 +178,46 @@ const reconcile = async (
     return depth
   }
 
+  const dissolveUnsortedFolder = async () => {
+    const legacy = unsortedId
+      ? links.get(keyOf("collection", unsortedId))
+      : undefined
+    const folder = legacy ? nodes.get(legacy.nodeId) : undefined
+
+    if (!legacy || !folder) {
+      return
+    }
+
+    for (const child of [...(childrenOf.get(folder.id) ?? [])]) {
+      if (!nodes.has(child.id)) {
+        continue
+      }
+
+      try {
+        await moveNode(child.id, rootId)
+        relocate(child, rootId)
+      } catch {
+        return
+      }
+    }
+
+    try {
+      await removeFolder(folder.id)
+    } catch {
+      return
+    }
+
+    nodes.delete(folder.id)
+    childrenOf.set(
+      rootId,
+      (childrenOf.get(rootId) ?? []).filter((node) => node.id !== folder.id)
+    )
+    drop(legacy)
+  }
+
   const pass = async () => {
+    await dissolveUnsortedFolder()
+
     const nativeDoomed = new Set<string>()
     const doomedCollections = new Set<string>()
     const doomedBookmarks = new Set<string>()
@@ -358,7 +408,11 @@ const reconcile = async (
       )
 
     const pendingCollections = [...collections.values()]
-      .filter((collection) => !links.has(keyOf("collection", collection.id)))
+      .filter(
+        (collection) =>
+          !isUnsorted(collection.id) &&
+          !links.has(keyOf("collection", collection.id))
+      )
       .sort((a, b) => depthOf(a) - depthOf(b))
 
     for (const collection of pendingCollections) {
@@ -428,9 +482,6 @@ const reconcile = async (
         continue
       }
 
-      const nested = isUnsorted(parent)
-      const parentId = nested ? null : parent
-
       if (!spend()) {
         break
       }
@@ -439,7 +490,7 @@ const reconcile = async (
         const created = await createRemoteCollection(auth, {
           name: clamp(node.title, MAX_NAME) || "Folder",
           icon: null,
-          parentId,
+          parentId: parent,
         })
 
         collections.set(created.id, {
@@ -449,11 +500,6 @@ const reconcile = async (
           kind: created.kind,
           position: created.position,
         })
-
-        if (nested) {
-          await moveNode(node.id, rootId).catch(() => null)
-          node.parentId = rootId
-        }
 
         if (created.name !== node.title) {
           await renameNode(node.id, created.name).catch(() => null)
@@ -479,9 +525,7 @@ const reconcile = async (
         continue
       }
 
-      const parentNodeId = links.get(
-        keyOf("collection", bookmark.collectionId)
-      )?.nodeId
+      const parentNodeId = folderFor(bookmark.collectionId)
 
       if (!parentNodeId) {
         continue
@@ -646,7 +690,7 @@ const reconcile = async (
       if (target && target !== node.id && node.parentId !== target) {
         try {
           await moveNode(node.id, target)
-          node.parentId = target
+          relocate(node, target)
         } catch {
           return
         }
@@ -732,14 +776,12 @@ const reconcile = async (
         }
       }
 
-      const target = links.get(
-        keyOf("collection", bookmark.collectionId)
-      )?.nodeId
+      const target = folderFor(bookmark.collectionId)
 
       if (target && node.parentId !== target) {
         try {
           await moveNode(node.id, target)
-          node.parentId = target
+          relocate(node, target)
         } catch {
           return
         }
@@ -805,24 +847,40 @@ const reconcile = async (
       folders.set(node.parentId, siblings)
     }
 
-    const rankOf = (link: SyncLink) => {
-      if (link.kind === "bookmark") {
-        return bookmarks.get(link.loomarkId)?.position ?? UNRANKED
-      }
-
-      const collection = collections.get(link.loomarkId)
-
-      if (!collection) {
-        return UNRANKED
-      }
-
-      return collection.kind === "UNSORTED" ? PINNED : collection.position
-    }
+    const rankOf = (link: SyncLink) =>
+      (link.kind === "bookmark"
+        ? bookmarks.get(link.loomarkId)?.position
+        : collections.get(link.loomarkId)?.position) ?? UNRANKED
 
     const byRank = (a: SyncLink, b: SyncLink) =>
       rankOf(a) - rankOf(b) ||
       compareText(a.title, b.title) ||
       compareText(a.loomarkId, b.loomarkId)
+
+    const kindRank = (link: SyncLink) => (link.kind === "collection" ? 0 : 1)
+
+    const byShelfRank = (a: SyncLink, b: SyncLink) =>
+      kindRank(a) - kindRank(b) || byRank(a, b)
+
+    const byIndex = (a: SyncLink, b: SyncLink) =>
+      (nodes.get(a.nodeId)?.index ?? 0) - (nodes.get(b.nodeId)?.index ?? 0)
+
+    const grouped = (members: SyncLink[]) => {
+      let loose = false
+
+      for (const link of [...members].sort(byIndex)) {
+        if (link.kind === "bookmark") {
+          loose = true
+          continue
+        }
+
+        if (loose) {
+          return false
+        }
+      }
+
+      return true
+    }
 
     const groups: SyncOrderGroup[] = []
 
@@ -831,11 +889,10 @@ const reconcile = async (
         continue
       }
 
-      const mapped =
+      const container =
         parentNodeId === rootId
           ? null
           : (byNode.get(parentNodeId)?.loomarkId ?? null)
-      const container = isUnsorted(mapped) ? null : mapped
 
       let restack = false
       let pushed = false
@@ -845,13 +902,7 @@ const reconcile = async (
           return
         }
 
-        const local = sequence(
-          [...typed].sort(
-            (a, b) =>
-              (nodes.get(a.nodeId)?.index ?? 0) -
-              (nodes.get(b.nodeId)?.index ?? 0)
-          )
-        )
+        const local = sequence([...typed].sort(byIndex))
         const base = sequence([...typed].sort((a, b) => a.index - b.index))
         const remote = sequence([...typed].sort(byRank))
 
@@ -876,6 +927,8 @@ const reconcile = async (
             kind
           )
         }
+
+        restack = restack || !grouped(members)
       } else {
         settle(members, "all")
       }
@@ -884,7 +937,9 @@ const reconcile = async (
         continue
       }
 
-      for (const link of [...members].sort(byRank)) {
+      const order = container === null ? byShelfRank : byRank
+
+      for (const link of [...members].sort(order)) {
         await moveNode(link.nodeId, parentNodeId).catch(() => null)
       }
     }

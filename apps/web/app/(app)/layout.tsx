@@ -14,12 +14,11 @@ import { CollectionDeleteDialog } from "@/components/collection-delete-dialog"
 import { CollectionDialog } from "@/components/collection-dialog"
 import { CollectionShareDialog } from "@/components/collection-share-dialog"
 import { DndProvider } from "@/components/dnd-provider"
-import { getUserRole } from "@/lib/admin"
 import { getAppearance } from "@/lib/appearance"
 import { auth } from "@/lib/auth"
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { NEW_TAB_COOKIE_NAME, toOpenInNewTab } from "@/lib/open-target"
-import { getCollections } from "@/lib/queries"
+import { getCollections, getProfile } from "@/lib/queries"
 import { THEMES } from "@/lib/themes/palettes"
 import { findTheme, themeToCss } from "@/lib/themes/theme"
 
@@ -30,9 +29,9 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
     redirect("/login")
   }
 
-  const role = await getUserRole(session.user.id)
+  const profile = await getProfile(session.user.id)
 
-  if (!role) {
+  if (!profile) {
     redirect("/login")
   }
 
@@ -57,11 +56,11 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
         <DndProvider>
           <AppSidebar
             collections={collections}
-            isOwner={role === "OWNER"}
+            isOwner={profile.role === "OWNER"}
             user={{
-              name: session.user.name ?? null,
-              email: session.user.email ?? "",
-              image: session.user.image ?? null,
+              name: profile.name,
+              email: profile.email,
+              image: profile.image,
             }}
           />
           <SidebarInset>{children}</SidebarInset>

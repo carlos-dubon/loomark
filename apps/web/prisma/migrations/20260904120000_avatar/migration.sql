@@ -1,0 +1,12 @@
+CREATE TABLE "Avatar" (
+  "userId" TEXT NOT NULL,
+  "contentType" TEXT NOT NULL,
+  "bytes" INTEGER NOT NULL DEFAULT 0,
+  "data" BYTEA NOT NULL,
+  "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMP(3) NOT NULL,
+
+  CONSTRAINT "Avatar_pkey" PRIMARY KEY ("userId")
+);
+
+ALTER TABLE "Avatar" ADD CONSTRAINT "Avatar_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

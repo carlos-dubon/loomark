@@ -31,11 +31,22 @@ model User {
   viewMode      String       @default("grid")
   sortOrder     String       @default("newest")
   archives      Archive[]
+  avatar        Avatar?
 
   archiveScreenshot Boolean @default(false)
   archiveWebpage    Boolean @default(false)
   archivePdf        Boolean @default(false)
   archiveMarkdown   Boolean @default(false)
+}
+
+model Avatar {
+  userId      String   @id
+  contentType String
+  bytes       Int      @default(0)
+  data        Bytes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Account {
