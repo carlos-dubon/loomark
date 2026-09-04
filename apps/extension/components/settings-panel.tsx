@@ -126,7 +126,7 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
         <Button
           type="button"
           variant="ghost"
-          size="iconSm"
+          size="icon-sm"
           aria-label="Back"
           onClick={onClose}
         >

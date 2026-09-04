@@ -41,6 +41,10 @@ import { PageHeader } from "@/components/page-header"
 import { ArchiveClearDialog } from "@/components/settings/archive-clear-dialog"
 import { ArchiveSettings } from "@/components/settings/archive-settings"
 import { LinkSettings } from "@/components/settings/link-settings"
+import {
+  ProfileSettings,
+  type Profile,
+} from "@/components/settings/profile-settings"
 import { ThemePicker } from "@/components/settings/theme-picker"
 import { api } from "@/lib/client-api"
 import {
@@ -73,12 +77,14 @@ export const SettingsView = ({
   archiveUsage,
   bookmarkCount,
   collectionCount,
+  profile,
   version,
 }: {
   archiveSettings: ArchiveSettingsValue
   archiveUsage: ArchiveUsage
   bookmarkCount: number
   collectionCount: number
+  profile: Profile
   version: string
 }) => {
   useHydrateAtoms([
@@ -129,6 +135,19 @@ export const SettingsView = ({
         description="Appearance, import and export"
       />
       <div className="flex min-h-0 flex-1 scroll-fade-y flex-col gap-4 overflow-y-auto p-4 md:p-6">
+        <Card className="w-full max-w-2xl shrink-0">
+          <CardHeader>
+            <CardTitle>Profile picture</CardTitle>
+            <CardDescription>
+              Shown next to your name in the sidebar and, if this instance has
+              more than one account, on the server administration page. Pictures
+              are cropped to a square and scaled down before they are saved.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ProfileSettings profile={profile} />
+          </CardContent>
+        </Card>
         <Card className="w-full max-w-2xl shrink-0">
           <CardHeader>
             <CardTitle>Theme</CardTitle>

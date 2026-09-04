@@ -101,6 +101,8 @@ export type InstanceUserDTO = {
   createdAt: string
   bookmarkCount: number
   collectionCount: number
+  archiveCount: number
+  archiveBytes: number
   bytes: number
 }
 

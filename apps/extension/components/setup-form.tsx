@@ -152,7 +152,7 @@ const CredentialsStep = ({
         <Button
           type="button"
           variant="ghost"
-          size="iconSm"
+          size="icon-sm"
           aria-label="Change server"
           onClick={onBack}
         >

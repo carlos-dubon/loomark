@@ -1,6 +1,7 @@
 "use client"
 
 import {
+  ArchiveIcon,
   BookmarkIcon,
   CrownIcon,
   FolderIcon,
@@ -67,6 +68,7 @@ export const AdminView = ({
     (sum, user) => sum + user.bookmarkCount,
     0
   )
+  const totalArchives = users.reduce((sum, user) => sum + user.archiveCount, 0)
 
   return (
     <>
@@ -80,10 +82,12 @@ export const AdminView = ({
             <CardTitle>This instance</CardTitle>
             <CardDescription>
               {users.length} {users.length === 1 ? "account" : "accounts"},{" "}
-              {totalBookmarks} {totalBookmarks === 1 ? "bookmark" : "bookmarks"}
-              , about {formatBytes(totalBytes)} of stored rows. Storage counts
-              bookmark and collection rows only, so indexes and backups sit
-              outside it.
+              {totalBookmarks} {totalBookmarks === 1 ? "bookmark" : "bookmarks"}{" "}
+              and {totalArchives}{" "}
+              {totalArchives === 1 ? "saved copy" : "saved copies"}, about{" "}
+              {formatBytes(totalBytes)} in total. Storage counts bookmark,
+              collection and profile rows plus the archive files each account
+              keeps on disk, so indexes and backups sit outside it.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -143,8 +147,14 @@ export const AdminView = ({
                         label={`${user.collectionCount} collections`}
                       />
                       <Stat
+                        icon={ArchiveIcon}
+                        label={`${user.archiveCount} archived (${formatBytes(
+                          user.archiveBytes
+                        )})`}
+                      />
+                      <Stat
                         icon={HardDriveIcon}
-                        label={formatBytes(user.bytes)}
+                        label={`${formatBytes(user.bytes)} total`}
                       />
                     </div>
                   </div>
