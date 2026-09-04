@@ -16,7 +16,10 @@ import type {
   ArchiveSettings as ArchiveSettingsValue,
   ArchiveUsage,
 } from "@loomark/core/archive"
-import type { ImportSummary } from "@loomark/core/types"
+import type {
+  ArchiveQueue as ArchiveQueueValue,
+  ImportSummary,
+} from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import {
   Card,
@@ -39,6 +42,7 @@ import {
 import { Link } from "@/components/link"
 import { PageHeader } from "@/components/page-header"
 import { ArchiveClearDialog } from "@/components/settings/archive-clear-dialog"
+import { ArchiveQueue } from "@/components/settings/archive-queue"
 import { ArchiveSettings } from "@/components/settings/archive-settings"
 import { LinkSettings } from "@/components/settings/link-settings"
 import {
@@ -48,6 +52,7 @@ import {
 import { ThemePicker } from "@/components/settings/theme-picker"
 import { api } from "@/lib/client-api"
 import {
+  archiveQueueAtom,
   archiveSettingsAtom,
   archiveUsageAtom,
   collectionsAtom,
@@ -73,6 +78,7 @@ const summaryLines = (summary: ImportSummary) =>
   ].filter((line) => line !== null)
 
 export const SettingsView = ({
+  archiveQueue,
   archiveSettings,
   archiveUsage,
   bookmarkCount,
@@ -80,6 +86,7 @@ export const SettingsView = ({
   profile,
   version,
 }: {
+  archiveQueue: ArchiveQueueValue
   archiveSettings: ArchiveSettingsValue
   archiveUsage: ArchiveUsage
   bookmarkCount: number
@@ -88,6 +95,7 @@ export const SettingsView = ({
   version: string
 }) => {
   useHydrateAtoms([
+    [archiveQueueAtom, archiveQueue],
     [archiveSettingsAtom, archiveSettings],
     [archiveUsageAtom, archiveUsage],
   ])
@@ -188,6 +196,21 @@ export const SettingsView = ({
           </CardHeader>
           <CardContent>
             <ArchiveSettings />
+          </CardContent>
+        </Card>
+        <Card className="w-full max-w-2xl shrink-0">
+          <CardHeader>
+            <CardTitle>Archive queue</CardTitle>
+            <CardDescription>
+              What the archiver is working on right now, grouped by bookmark.
+              Every capture opens the page once and then saves each format from
+              it, so the formats under a bookmark move together until the last
+              one is written. Cancel a single format, a whole bookmark, or the
+              rest of the queue; anything already saved to disk is kept.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ArchiveQueue />
           </CardContent>
         </Card>
         <Card className="w-full max-w-2xl shrink-0">

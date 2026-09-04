@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { DEFAULT_ARCHIVE_SETTINGS } from "@loomark/core/archive"
 
 import { SettingsView } from "@/components/settings-view"
-import { getArchiveSettings } from "@/lib/archives/queue"
+import { archiveQueueFor, getArchiveSettings } from "@/lib/archives/queue"
 import { archiveBytesFor } from "@/lib/archives/storage"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
@@ -23,6 +23,7 @@ const SettingsPage = async () => {
     bookmarkCount,
     collectionCount,
     archiveSettings,
+    archiveQueue,
     bytes,
     archives,
     profile,
@@ -30,6 +31,7 @@ const SettingsPage = async () => {
     prisma.bookmark.count({ where: { userId: session.user.id } }),
     prisma.collection.count({ where: { userId: session.user.id } }),
     getArchiveSettings(session.user.id),
+    archiveQueueFor(session.user.id),
     archiveBytesFor(session.user.id),
     prisma.archive.count({ where: { userId: session.user.id } }),
     getProfile(session.user.id),
@@ -41,6 +43,7 @@ const SettingsPage = async () => {
 
   return (
     <SettingsView
+      archiveQueue={archiveQueue}
       archiveSettings={archiveSettings ?? DEFAULT_ARCHIVE_SETTINGS}
       archiveUsage={{ bytes, archives }}
       bookmarkCount={bookmarkCount}

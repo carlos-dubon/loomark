@@ -8,7 +8,12 @@ import {
   type ArchiveUsage,
 } from "@loomark/core/archive"
 import type { SortOrder } from "@loomark/core/sort"
-import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
+import {
+  EMPTY_ARCHIVE_QUEUE,
+  type ArchiveQueue,
+  type BookmarkDTO,
+  type CollectionDTO,
+} from "@loomark/core/types"
 import type { ViewMode } from "@loomark/core/view-mode"
 
 import type { AppearanceDTO } from "@/lib/themes/appearance"
@@ -80,6 +85,8 @@ export const archiveSettingsAtom = atom<ArchiveSettings>(
 export const archiveUsageAtom = atom<ArchiveUsage>(EMPTY_ARCHIVE_USAGE)
 
 export const archiveClearDialogAtom = atom(false)
+
+export const archiveQueueAtom = atom<ArchiveQueue>(EMPTY_ARCHIVE_QUEUE)
 
 export const bookmarkListAtom = atom<BookmarkListState>({
   source: [],
