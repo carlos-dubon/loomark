@@ -22,6 +22,17 @@ export const AUTO_SCROLL = () =>
     tick()
   })
 
+export const STOP_MEDIA = () => {
+  for (const media of [
+    ...document.querySelectorAll<HTMLMediaElement>("video, audio"),
+  ]) {
+    media.pause()
+    media.autoplay = false
+    media.removeAttribute("src")
+    media.load()
+  }
+}
+
 export const PAGE_METRICS = () => ({
   width: Math.max(
     document.documentElement.scrollWidth,
@@ -211,10 +222,10 @@ export const INLINE_PAGE = async (budget: number) => {
     image.setAttribute("src", (await toDataUri(source)) ?? absolutize(source))
   }
 
-  for (const source of [
-    ...document.querySelectorAll<HTMLSourceElement>("source"),
+  for (const node of [
+    ...document.querySelectorAll("source, video, audio, iframe, embed, object"),
   ]) {
-    source.remove()
+    node.remove()
   }
 
   for (const anchor of [
