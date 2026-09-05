@@ -15,6 +15,7 @@ import type {
 export const serializeArchive = (archive: Archive): ArchiveDTO => ({
   format: archive.format,
   status: archive.status,
+  stage: archive.stage,
   bytes: archive.bytes,
   error: archive.error,
   updatedAt: archive.updatedAt.toISOString(),
