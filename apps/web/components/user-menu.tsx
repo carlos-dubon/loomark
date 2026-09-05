@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import { signOut } from "next-auth/react"
 import { useTheme } from "next-themes"
+import { useRouter } from "next/navigation"
 
 import {
   Avatar,
@@ -29,6 +30,8 @@ import { SidebarMenuButton } from "@loomark/ui/components/sidebar"
 import { Link } from "@/components/link"
 import { useCloseSidebar } from "@/hooks/use-close-sidebar"
 import { useThemeToggle } from "@/hooks/use-theme-toggle"
+import { isDemo } from "@/lib/demo/config"
+import { signOut as demoSignOut } from "@/lib/demo/store"
 
 export type SessionUser = {
   name: string | null
@@ -37,6 +40,7 @@ export type SessionUser = {
 }
 
 export const UserMenu = ({ user }: { user: SessionUser }) => {
+  const router = useRouter()
   const { resolvedTheme } = useTheme()
   const toggleTheme = useThemeToggle()
   const closeSidebar = useCloseSidebar()
@@ -78,7 +82,16 @@ export const UserMenu = ({ user }: { user: SessionUser }) => {
         </DropdownMenuItem>
         <DropdownMenuItem
           variant="destructive"
-          onClick={() => signOut({ redirectTo: "/login" })}
+          onClick={() => {
+            if (isDemo) {
+              demoSignOut()
+              router.push("/login")
+
+              return
+            }
+
+            void signOut({ redirectTo: "/login" })
+          }}
         >
           <LogOutIcon />
           Sign out

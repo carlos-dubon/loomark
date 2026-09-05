@@ -16,6 +16,7 @@ import type {
   CollectionMoveInput,
   CollectionUpdateInput,
 } from "@/lib/schemas"
+import { demoApi } from "@/lib/demo/api"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
 
 const request = async <T>(url: string, init?: RequestInit): Promise<T> => {
@@ -63,7 +64,7 @@ const toSearchParams = (query: BookmarkQuery) => {
   return params.toString()
 }
 
-export const api = {
+const serverApi = {
   listBookmarks: (query: BookmarkQuery = {}, signal?: AbortSignal) =>
     request<BookmarkDTO[]>(`${routes.bookmarks}?${toSearchParams(query)}`, {
       signal,
@@ -160,3 +161,8 @@ export const api = {
       body: JSON.stringify(input),
     }),
 }
+
+export const api: typeof serverApi =
+  process.env.NEXT_PUBLIC_DEMO === "true"
+    ? (demoApi as unknown as typeof serverApi)
+    : serverApi

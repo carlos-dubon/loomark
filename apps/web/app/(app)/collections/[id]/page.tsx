@@ -2,7 +2,9 @@ import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 
 import { BookmarkListView } from "@/components/bookmark-list-view"
+import { DemoCollection } from "@/components/demo/demo-collection"
 import { auth } from "@/lib/auth"
+import { isDemo } from "@/lib/demo/config"
 import { getBookmarks, getChildCollections, getCollection } from "@/lib/queries"
 
 export const generateMetadata = async ({
@@ -10,6 +12,10 @@ export const generateMetadata = async ({
 }: {
   params: Promise<{ id: string }>
 }): Promise<Metadata> => {
+  if (isDemo) {
+    return { title: "Collection" }
+  }
+
   const session = await auth()
 
   if (!session?.user?.id) {
@@ -27,6 +33,10 @@ const CollectionPage = async ({
 }: {
   params: Promise<{ id: string }>
 }) => {
+  if (isDemo) {
+    return <DemoCollection id={(await params).id} />
+  }
+
   const session = await auth()
 
   if (!session?.user?.id) {
