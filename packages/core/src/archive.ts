@@ -17,9 +17,11 @@ export const ARCHIVE_STATUSES = [
 export type ArchiveStatus = (typeof ARCHIVE_STATUSES)[number]
 
 export const ARCHIVE_STAGES = [
-  "STARTING",
+  "LAUNCHING",
+  "OPENING",
   "LOADING",
   "SETTLING",
+  "EXPANDING",
   "CAPTURING",
   "SAVING",
 ] as const
@@ -87,34 +89,46 @@ export const enabledArchiveFormats = (settings: ArchiveSettings) =>
   ARCHIVE_FORMATS.filter((format) => settings[format])
 
 export const ARCHIVE_STAGE_LABELS: Record<ArchiveStage, string> = {
-  STARTING: "Starting the browser",
+  LAUNCHING: "Launching the browser",
+  OPENING: "Opening a page",
   LOADING: "Loading the page",
   SETTLING: "Waiting for the page to settle",
+  EXPANDING: "Scrolling to load the rest",
   CAPTURING: "Capturing",
   SAVING: "Saving to disk",
 }
 
-const STAGE_PROGRESS: Record<ArchiveStage, number> = {
-  STARTING: 5,
-  LOADING: 20,
-  SETTLING: 45,
-  CAPTURING: 70,
-  SAVING: 90,
+type Band = { from: number; to: number; pace: number }
+
+const QUEUED_BAND: Band = { from: 0, to: 4, pace: 30000 }
+
+const STAGE_BANDS: Record<ArchiveStage, Band> = {
+  LAUNCHING: { from: 4, to: 12, pace: 4000 },
+  OPENING: { from: 12, to: 20, pace: 1500 },
+  LOADING: { from: 20, to: 38, pace: 6000 },
+  SETTLING: { from: 38, to: 50, pace: 5000 },
+  EXPANDING: { from: 50, to: 62, pace: 5000 },
+  CAPTURING: { from: 62, to: 88, pace: 8000 },
+  SAVING: { from: 88, to: 100, pace: 1500 },
 }
+
+const ease = ({ from, to, pace }: Band, elapsed: number) =>
+  from + (to - from) * (1 - Math.exp(-Math.max(elapsed, 0) / pace))
 
 export const archiveProgress = (
   status: ArchiveStatus,
-  stage: ArchiveStage | null
+  stage: ArchiveStage | null,
+  elapsed = 0
 ) => {
-  if (status === "READY") {
+  if (status === "READY" || status === "FAILED") {
     return 100
   }
 
   if (status === "PENDING") {
-    return 0
+    return ease(QUEUED_BAND, elapsed)
   }
 
-  return stage ? STAGE_PROGRESS[stage] : 0
+  return ease(stage ? STAGE_BANDS[stage] : QUEUED_BAND, elapsed)
 }
 
 export const isArchiveActive = (status: ArchiveStatus) =>

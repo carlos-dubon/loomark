@@ -37,14 +37,14 @@ type Job = {
 
 const log = (message: string) => console.log(`loomark archive: ${message}`)
 
-const fail = (job: Job, error: string) =>
+const fail = (job: Job, error: string, fatal = false) =>
   prisma.archive.updateMany({
     where: { id: job.id, status: "RUNNING" },
     data: {
       stage: null,
       attempts: job.attempts + 1,
       error: error.slice(0, 500),
-      status: job.attempts + 1 >= MAX_ATTEMPTS ? "FAILED" : "PENDING",
+      status: fatal || job.attempts + 1 >= MAX_ATTEMPTS ? "FAILED" : "PENDING",
     },
   })
 
@@ -96,7 +96,7 @@ const runBookmark = async (browser: Browser, jobs: Job[]) => {
     }
 
     if ("error" in outcome) {
-      await fail(job, outcome.error)
+      await fail(job, outcome.error, outcome.fatal)
 
       continue
     }
@@ -138,7 +138,7 @@ const drain = async () => {
 
   await setArchiveStage(
     jobs.map((job) => job.id),
-    "STARTING"
+    "LAUNCHING"
   )
 
   let browser: Browser

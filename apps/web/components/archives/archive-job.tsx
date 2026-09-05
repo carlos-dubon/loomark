@@ -28,6 +28,7 @@ import {
 } from "@loomark/ui/components/progress"
 
 import { ArchiveFormatIcon } from "@/components/archives/archive-format-icon"
+import { useStageClock } from "@/hooks/use-stage-clock"
 
 const detail = (archive: ArchiveDTO | undefined, queued: boolean) => {
   if (queued || archive?.status === "PENDING") {
@@ -71,11 +72,14 @@ export const ArchiveJob = ({
   const status = archive?.status
   const active = queued || (status !== undefined && isArchiveActive(status))
   const failed = status === "FAILED"
-  const progress = queued
-    ? 0
-    : archive
-      ? archiveProgress(archive.status, archive.stage)
-      : 0
+  const elapsed = useStageClock(
+    `${queued}:${status ?? "NEW"}:${archive?.stage}`,
+    active
+  )
+  const progress =
+    archive && !queued
+      ? archiveProgress(archive.status, archive.stage, elapsed)
+      : archiveProgress("PENDING", null, elapsed)
 
   return (
     <div

@@ -17,6 +17,7 @@ import {
   INLINE_PAGE,
   PAGE_METRICS,
   READ_ARTICLE,
+  STOP_MEDIA,
 } from "@/lib/archives/page-scripts"
 
 const USER_AGENT =
@@ -27,6 +28,21 @@ const SETTLE_TIMEOUT = 8000
 const MAX_SCREENSHOT_HEIGHT = 20000
 const INLINE_BUDGET = 24 * 1024 * 1024
 
+const BLOCKED_RESOURCES = new Set(["media", "websocket", "eventsource"])
+
+const CRASH_SIGNS = [
+  "target crashed",
+  "target closed",
+  "page has been closed",
+  "browser has been closed",
+]
+
+const CRASH_MESSAGE =
+  "The page crashed the browser before it could be captured. It is usually too heavy to archive."
+
+const isCrash = (message: string) =>
+  CRASH_SIGNS.some((sign) => message.toLowerCase().includes(sign))
+
 const CAPTURE_ORDER: ArchiveFormat[] = [
   "SCREENSHOT",
   "PDF",
@@ -36,7 +52,7 @@ const CAPTURE_ORDER: ArchiveFormat[] = [
 
 export type CaptureOutcome =
   | { format: ArchiveFormat; data: Buffer }
-  | { format: ArchiveFormat; error: string }
+  | { format: ArchiveFormat; error: string; fatal?: boolean }
 
 export type CaptureRequest = {
   url: string
@@ -150,6 +166,8 @@ export const captureBookmark = async (
     return []
   }
 
+  await onStage(wanted, "OPENING")
+
   const context = await browser.newContext({
     userAgent: USER_AGENT,
     viewport: { width: 1440, height: 1080 },
@@ -157,7 +175,14 @@ export const captureBookmark = async (
     ignoreHTTPSErrors: true,
     locale: "en-US",
     javaScriptEnabled: true,
+    reducedMotion: "reduce",
   })
+
+  await context.route("**/*", (route) =>
+    BLOCKED_RESOURCES.has(route.request().resourceType())
+      ? route.abort()
+      : route.continue()
+  )
 
   try {
     const page = await context.newPage()
@@ -183,11 +208,21 @@ export const captureBookmark = async (
       .waitForLoadState("networkidle", { timeout: SETTLE_TIMEOUT })
       .catch(() => undefined)
 
+    await onStage(settling, "EXPANDING")
+
+    await page.evaluate(STOP_MEDIA).catch(() => undefined)
     await page.evaluate(AUTO_SCROLL).catch(() => undefined)
 
     const outcomes: CaptureOutcome[] = []
+    let crashed = false
 
     for (const format of wanted) {
+      if (crashed) {
+        outcomes.push({ format, error: CRASH_MESSAGE, fatal: true })
+
+        continue
+      }
+
       if (!(await stillWanted()).includes(format)) {
         continue
       }
@@ -197,10 +232,16 @@ export const captureBookmark = async (
       try {
         outcomes.push({ format, data: await captureOne(page, url, format) })
       } catch (cause) {
-        outcomes.push({
-          format,
-          error: cause instanceof Error ? cause.message : "Capture failed",
-        })
+        const message =
+          cause instanceof Error ? cause.message : "Capture failed"
+
+        crashed = isCrash(message)
+
+        outcomes.push(
+          crashed
+            ? { format, error: CRASH_MESSAGE, fatal: true }
+            : { format, error: message }
+        )
       }
     }
 

@@ -113,9 +113,11 @@ enum ArchiveStatus {
 }
 
 enum ArchiveStage {
-  STARTING
+  LAUNCHING
+  OPENING
   LOADING
   SETTLING
+  EXPANDING
   CAPTURING
   SAVING
 }
