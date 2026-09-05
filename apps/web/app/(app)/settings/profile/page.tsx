@@ -1,13 +1,19 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
+import { DemoProfile } from "@/components/demo/demo-profile"
 import { ProfileView } from "@/components/settings/profile-view"
 import { auth } from "@/lib/auth"
+import { isDemo } from "@/lib/demo/config"
 import { getProfile } from "@/lib/queries"
 
 export const metadata: Metadata = { title: "Your profile" }
 
 const ProfilePage = async () => {
+  if (isDemo) {
+    return <DemoProfile />
+  }
+
   const session = await auth()
 
   if (!session?.user?.id) {

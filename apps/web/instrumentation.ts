@@ -3,6 +3,10 @@ export const register = async () => {
     return
   }
 
+  if (process.env.NEXT_PUBLIC_DEMO === "true") {
+    return
+  }
+
   const { startArchiveWorker } = await import("@/lib/archives/worker")
 
   startArchiveWorker()

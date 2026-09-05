@@ -6,6 +6,8 @@ import { useState } from "react"
 import { routes } from "@loomark/core/routes"
 import { cn } from "@loomark/core/utils"
 
+import { isDemo } from "@/lib/demo/config"
+
 export const FaviconImage = ({
   src,
   className,
@@ -27,6 +29,7 @@ export const FaviconImage = ({
     if (!src) return null
     if (src.startsWith("data:")) return src
     if (src.startsWith("/api/")) return src
+    if (isDemo) return src
     return proxy(src)
   })()
 

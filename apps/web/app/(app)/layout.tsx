@@ -13,8 +13,10 @@ import { BookmarkSelectionBar } from "@/components/bookmark-selection-bar"
 import { CollectionDeleteDialog } from "@/components/collection-delete-dialog"
 import { CollectionDialog } from "@/components/collection-dialog"
 import { CollectionShareDialog } from "@/components/collection-share-dialog"
+import { DemoShell } from "@/components/demo/demo-shell"
 import { DndProvider } from "@/components/dnd-provider"
 import { getAppearance } from "@/lib/appearance"
+import { isDemo } from "@/lib/demo/config"
 import { auth } from "@/lib/auth"
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { NEW_TAB_COOKIE_NAME, toOpenInNewTab } from "@/lib/open-target"
@@ -23,6 +25,10 @@ import { THEMES } from "@/lib/themes/palettes"
 import { findTheme, themeToCss } from "@/lib/themes/theme"
 
 const AppLayout = async ({ children }: { children: React.ReactNode }) => {
+  if (isDemo) {
+    return <DemoShell>{children}</DemoShell>
+  }
+
   const session = await auth()
 
   if (!session?.user?.id) {
