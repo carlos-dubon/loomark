@@ -16,6 +16,18 @@ export const ARCHIVE_STATUSES = [
 
 export type ArchiveStatus = (typeof ARCHIVE_STATUSES)[number]
 
+export const ARCHIVE_STAGES = [
+  "LAUNCHING",
+  "OPENING",
+  "LOADING",
+  "SETTLING",
+  "EXPANDING",
+  "CAPTURING",
+  "SAVING",
+] as const
+
+export type ArchiveStage = (typeof ARCHIVE_STAGES)[number]
+
 export type ArchiveSettings = Record<ArchiveFormat, boolean>
 
 export type ArchiveUsage = { bytes: number; archives: number }
@@ -75,3 +87,51 @@ export const toArchiveFormat = (value: string): ArchiveFormat | null =>
 
 export const enabledArchiveFormats = (settings: ArchiveSettings) =>
   ARCHIVE_FORMATS.filter((format) => settings[format])
+
+export const ARCHIVE_STAGE_LABELS: Record<ArchiveStage, string> = {
+  LAUNCHING: "Launching the browser",
+  OPENING: "Opening a page",
+  LOADING: "Loading the page",
+  SETTLING: "Waiting for the page to settle",
+  EXPANDING: "Scrolling to load the rest",
+  CAPTURING: "Capturing",
+  SAVING: "Saving to disk",
+}
+
+type Band = { from: number; to: number; pace: number }
+
+const QUEUED_BAND: Band = { from: 0, to: 4, pace: 30000 }
+
+const STAGE_BANDS: Record<ArchiveStage, Band> = {
+  LAUNCHING: { from: 4, to: 12, pace: 4000 },
+  OPENING: { from: 12, to: 20, pace: 1500 },
+  LOADING: { from: 20, to: 38, pace: 6000 },
+  SETTLING: { from: 38, to: 50, pace: 5000 },
+  EXPANDING: { from: 50, to: 62, pace: 5000 },
+  CAPTURING: { from: 62, to: 88, pace: 8000 },
+  SAVING: { from: 88, to: 100, pace: 1500 },
+}
+
+const ease = ({ from, to, pace }: Band, elapsed: number) =>
+  from + (to - from) * (1 - Math.exp(-Math.max(elapsed, 0) / pace))
+
+export const archiveProgress = (
+  status: ArchiveStatus,
+  stage: ArchiveStage | null,
+  elapsed = 0
+) => {
+  if (status === "READY" || status === "FAILED") {
+    return 100
+  }
+
+  if (status === "PENDING") {
+    return ease(QUEUED_BAND, elapsed)
+  }
+
+  return ease(stage ? STAGE_BANDS[stage] : QUEUED_BAND, elapsed)
+}
+
+export const isArchiveActive = (status: ArchiveStatus) =>
+  status === "PENDING" || status === "RUNNING"
+
+export const ARCHIVE_QUEUE_GROUPS = 50

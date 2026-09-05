@@ -1,11 +1,13 @@
 import type {
   ArchiveClearResult,
+  ArchiveFormat,
   ArchiveSettings,
   ArchiveUsage,
 } from "@loomark/core/archive"
 import { routes } from "@loomark/core/routes"
 import type {
   ArchiveDTO,
+  ArchiveQueue,
   BookmarkDTO,
   CollectionDeletion,
   CollectionDTO,
@@ -109,6 +111,19 @@ export const api = {
     request<ArchiveDTO[]>(routes.bookmarkArchives(id), {
       method: "POST",
       body: JSON.stringify(input),
+    }),
+  cancelArchives: (id: string, formats?: ArchiveFormat[]) =>
+    request<ArchiveDTO[]>(
+      formats
+        ? `${routes.bookmarkArchives(id)}?formats=${formats.join(",")}`
+        : routes.bookmarkArchives(id),
+      { method: "DELETE" }
+    ),
+  archiveQueue: (signal?: AbortSignal) =>
+    request<ArchiveQueue>(routes.archiveQueue, { signal }),
+  clearArchiveQueue: () =>
+    request<ArchiveQueue & { canceled: number }>(routes.archiveQueue, {
+      method: "DELETE",
     }),
   updateArchiveSettings: (input: Partial<ArchiveSettings>) =>
     request<ArchiveSettings>(routes.archiveSettings, {

@@ -1,39 +1,25 @@
 "use client"
 
 import { useSetAtom } from "jotai"
-import {
-  CameraIcon,
-  FileTextIcon,
-  GlobeIcon,
-  HardDriveIcon,
-  Loader2Icon,
-  Trash2Icon,
-} from "lucide-react"
+import { HardDriveIcon, Loader2Icon, Trash2Icon } from "lucide-react"
 
 import {
   ARCHIVE_DESCRIPTIONS,
   ARCHIVE_FORMATS,
   ARCHIVE_LABELS,
   ARCHIVE_SLUGS,
-  type ArchiveFormat,
 } from "@loomark/core/archive"
 import { formatBytes } from "@loomark/core/format"
 import { Button } from "@loomark/ui/components/button"
 import { Label } from "@loomark/ui/components/label"
 import { Switch } from "@loomark/ui/components/switch"
 
+import { ArchiveFormatIcon } from "@/components/archives/archive-format-icon"
 import {
   useArchiveSettings,
   useArchiveUsage,
 } from "@/hooks/use-archive-settings"
 import { archiveClearDialogAtom } from "@/store/atoms"
-
-const ICONS: Record<ArchiveFormat, typeof CameraIcon> = {
-  SCREENSHOT: CameraIcon,
-  WEBPAGE: GlobeIcon,
-  PDF: FileTextIcon,
-  MARKDOWN: FileTextIcon,
-}
 
 const Usage = () => {
   const { usage } = useArchiveUsage()
@@ -74,7 +60,6 @@ export const ArchiveSettings = () => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         {ARCHIVE_FORMATS.map((format) => {
-          const Icon = ICONS[format]
           const id = `archive-${ARCHIVE_SLUGS[format]}`
 
           return (
@@ -83,7 +68,7 @@ export const ArchiveSettings = () => {
               className="flex items-center justify-between gap-4 rounded-lg border px-3 py-2"
             >
               <div className="flex min-w-0 items-center gap-3">
-                <Icon className="size-4 shrink-0 text-muted-foreground" />
+                <ArchiveFormatIcon format={format} />
                 <div className="flex min-w-0 flex-col">
                   <Label htmlFor={id}>{ARCHIVE_LABELS[format]}</Label>
                   <span className="text-xs text-muted-foreground">

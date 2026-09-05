@@ -26,6 +26,7 @@ import {
 import { CollectionTree } from "@/components/collection-tree"
 import { Link } from "@/components/link"
 import { SearchTrigger } from "@/components/search-trigger"
+import { isSettingsRoute, SettingsNav } from "@/components/settings-nav"
 import { UnsortedNavItem } from "@/components/unsorted-nav-item"
 import { UserMenu, type SessionUser } from "@/components/user-menu"
 import { useCloseSidebar } from "@/hooks/use-close-sidebar"
@@ -78,48 +79,54 @@ export const AppSidebar = ({
         </Button>
       </SidebarHeader>
       <SidebarContent className="scroll-fade-y">
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={pathname === "/"}
-                  tooltip="Homepage"
-                  onClick={closeSidebar}
-                  render={<Link href="/" />}
-                >
-                  <HouseIcon />
-                  <span>Homepage</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <UnsortedNavItem />
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Collections</SidebarGroupLabel>
-          <SidebarGroupAction
-            aria-label="New collection"
-            onClick={() => {
-              closeSidebar()
-              openCollectionDialog({
-                open: true,
-                collection: null,
-                parentId: null,
-              })
-            }}
-          >
-            <PlusIcon />
-          </SidebarGroupAction>
-          <SidebarGroupContent>
-            <CollectionTree />
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {isSettingsRoute(pathname) ? (
+          <SettingsNav isOwner={isOwner} />
+        ) : (
+          <>
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      isActive={pathname === "/"}
+                      tooltip="Homepage"
+                      onClick={closeSidebar}
+                      render={<Link href="/" />}
+                    >
+                      <HouseIcon />
+                      <span>Homepage</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <UnsortedNavItem />
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup>
+              <SidebarGroupLabel>Collections</SidebarGroupLabel>
+              <SidebarGroupAction
+                aria-label="New collection"
+                onClick={() => {
+                  closeSidebar()
+                  openCollectionDialog({
+                    open: true,
+                    collection: null,
+                    parentId: null,
+                  })
+                }}
+              >
+                <PlusIcon />
+              </SidebarGroupAction>
+              <SidebarGroupContent>
+                <CollectionTree />
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
+        )}
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <UserMenu user={user} isOwner={isOwner} />
+            <UserMenu user={user} />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

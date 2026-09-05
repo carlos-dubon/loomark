@@ -112,6 +112,16 @@ enum ArchiveStatus {
   FAILED
 }
 
+enum ArchiveStage {
+  LAUNCHING
+  OPENING
+  LOADING
+  SETTLING
+  EXPANDING
+  CAPTURING
+  SAVING
+}
+
 enum CollectionKind {
   USER
   UNSORTED
@@ -170,6 +180,7 @@ model Archive {
   id         String        @id @default(cuid())
   format     ArchiveFormat
   status     ArchiveStatus @default(PENDING)
+  stage      ArchiveStage?
   path       String?
   bytes      Int           @default(0)
   attempts   Int           @default(0)
@@ -183,5 +194,6 @@ model Archive {
 
   @@unique([bookmarkId, format])
   @@index([userId])
+  @@index([userId, status])
   @@index([status, createdAt])
 }
