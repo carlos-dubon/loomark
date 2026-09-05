@@ -6,6 +6,7 @@ import {
   RefreshCwIcon,
   XIcon,
 } from "lucide-react"
+import { toast } from "sonner"
 
 import {
   ARCHIVE_LABELS,
@@ -28,6 +29,7 @@ import {
 } from "@loomark/ui/components/progress"
 
 import { ArchiveFormatIcon } from "@/components/archives/archive-format-icon"
+import { isDemo } from "@/lib/demo/config"
 import { useStageClock } from "@/hooks/use-stage-clock"
 
 const detail = (archive: ArchiveDTO | undefined, queued: boolean) => {
@@ -123,13 +125,25 @@ export const ArchiveJob = ({
             variant="ghost"
             size="icon-sm"
             aria-label={`Open ${ARCHIVE_LABELS[format]}`}
-            render={
-              <a
-                href={routes.bookmarkArchive(bookmarkId, ARCHIVE_SLUGS[format])}
-                target="_blank"
-                rel="noopener noreferrer"
-              />
-            }
+            {...(isDemo
+              ? {
+                  onClick: () =>
+                    toast.info(
+                      "The demo captures nothing for real, so there is no file to open. Self-hosted Loomark saves it to disk."
+                    ),
+                }
+              : {
+                  render: (
+                    <a
+                      href={routes.bookmarkArchive(
+                        bookmarkId,
+                        ARCHIVE_SLUGS[format]
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    />
+                  ),
+                })}
           >
             <ExternalLinkIcon />
           </Button>

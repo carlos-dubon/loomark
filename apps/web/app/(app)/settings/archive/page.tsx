@@ -3,15 +3,21 @@ import { redirect } from "next/navigation"
 
 import { DEFAULT_ARCHIVE_SETTINGS } from "@loomark/core/archive"
 
+import { DemoArchiveSettings } from "@/components/demo/demo-archive-settings"
 import { ArchiveView } from "@/components/settings/archive-view"
 import { archiveQueueFor, getArchiveSettings } from "@/lib/archives/queue"
 import { archiveBytesFor } from "@/lib/archives/storage"
 import { auth } from "@/lib/auth"
+import { isDemo } from "@/lib/demo/config"
 import { prisma } from "@/lib/prisma"
 
 export const metadata: Metadata = { title: "Archive" }
 
 const ArchivePage = async () => {
+  if (isDemo) {
+    return <DemoArchiveSettings />
+  }
+
   const session = await auth()
 
   if (!session?.user?.id) {

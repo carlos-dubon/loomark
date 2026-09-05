@@ -3,9 +3,10 @@ import { redirect } from "next/navigation"
 import { LoomarkMark } from "@/components/loomark-mark"
 import { getUserRole } from "@/lib/admin"
 import { auth } from "@/lib/auth"
+import { isDemo } from "@/lib/demo/config"
 
 const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
-  const session = await auth()
+  const session = isDemo ? null : await auth()
 
   if (session?.user?.id) {
     const role = await getUserRole(session.user.id)
