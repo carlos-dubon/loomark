@@ -98,8 +98,10 @@ const serverApi = {
     }),
   refreshPreview: (id: string) =>
     request<BookmarkDTO>(routes.bookmarkPreview(id), { method: "POST" }),
-  updateStatus: (signal?: AbortSignal) =>
-    request<UpdateStatus>(routes.updates, { signal }),
+  updateStatus: (options: { force?: boolean; signal?: AbortSignal } = {}) =>
+    request<UpdateStatus>(routes.updates(options.force), {
+      signal: options.signal,
+    }),
   updateJob: (signal?: AbortSignal) =>
     request<UpdateJob>(routes.updateInstall, { signal }),
   installUpdate: () =>

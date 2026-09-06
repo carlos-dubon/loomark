@@ -23,7 +23,8 @@ export const routes = {
   userAvatar: (id: string) => `/api/users/${id}/avatar`,
   health: "/api/health",
   sync: "/api/sync",
-  updates: "/api/updates",
+  updates: (force?: boolean) =>
+    force ? "/api/updates?force=1" : "/api/updates",
   updateInstall: "/api/updates/install",
   register: "/api/register",
   extensionToken: "/api/extension/token",
