@@ -128,7 +128,8 @@ export const setState = (next: (current: DemoState) => DemoState) => {
   }
 }
 
-export const signIn = () => setState((current) => ({ ...current, signedIn: true }))
+export const signIn = () =>
+  setState((current) => ({ ...current, signedIn: true }))
 
 export const signOut = () => {
   state = seedState()
@@ -150,7 +151,10 @@ export const collectionList = (current: DemoState) => {
   const tally = new Map<string, number>()
 
   for (const bookmark of current.bookmarks) {
-    tally.set(bookmark.collectionId, (tally.get(bookmark.collectionId) ?? 0) + 1)
+    tally.set(
+      bookmark.collectionId,
+      (tally.get(bookmark.collectionId) ?? 0) + 1
+    )
   }
 
   const list = current.collections.map((collection) => ({
@@ -188,8 +192,7 @@ export const pinnedBookmarks = (current: DemoState) => {
 const collectionCache = new WeakMap<DemoState, Map<string, BookmarkDTO[]>>()
 
 export const bookmarksIn = (current: DemoState, collectionId: string) => {
-  const cache =
-    collectionCache.get(current) ?? new Map<string, BookmarkDTO[]>()
+  const cache = collectionCache.get(current) ?? new Map<string, BookmarkDTO[]>()
 
   if (!collectionCache.has(current)) {
     collectionCache.set(current, cache)
@@ -229,8 +232,8 @@ export const descendantIds = (current: DemoState, id: string) => {
 }
 
 export const unsortedId = (current: DemoState) =>
-  current.collections.find((collection) => collection.kind === "UNSORTED")?.id ??
-  DEMO_UNSORTED_ID
+  current.collections.find((collection) => collection.kind === "UNSORTED")
+    ?.id ?? DEMO_UNSORTED_ID
 
 export const nextPosition = (current: DemoState, collectionId: string) =>
   bookmarksIn(current, collectionId).reduce(
@@ -241,7 +244,9 @@ export const nextPosition = (current: DemoState, collectionId: string) =>
 export const nextPinnedPosition = (current: DemoState) =>
   current.bookmarks.reduce(
     (highest, bookmark) =>
-      bookmark.pinned ? Math.max(highest, bookmark.pinnedPosition + 1) : highest,
+      bookmark.pinned
+        ? Math.max(highest, bookmark.pinnedPosition + 1)
+        : highest,
     0
   )
 

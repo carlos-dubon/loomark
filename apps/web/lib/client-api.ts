@@ -5,6 +5,7 @@ import type {
   ArchiveUsage,
 } from "@loomark/core/archive"
 import { routes } from "@loomark/core/routes"
+import type { UpdateJob, UpdateStatus } from "@loomark/core/updates"
 import type {
   ArchiveDTO,
   ArchiveQueue,
@@ -136,6 +137,16 @@ const serverApi = {
   archiveUsage: () => request<ArchiveUsage>(routes.archiveStorage),
   clearArchives: () =>
     request<ArchiveClearResult>(routes.archiveStorage, { method: "DELETE" }),
+  updateStatus: (signal?: AbortSignal) =>
+    request<UpdateStatus>(routes.updates, { signal }),
+  updateJob: (signal?: AbortSignal) =>
+    request<UpdateJob>(routes.updateInstall, { signal }),
+  installUpdate: () =>
+    request<UpdateJob>(routes.updateInstall, { method: "POST" }),
+  discardParkedUpdates: () =>
+    request<{ discarded: number }>(routes.updateInstall, { method: "DELETE" }),
+  health: (signal?: AbortSignal) =>
+    request<{ status: string; version: string }>(routes.health, { signal }),
   listCollections: () => request<CollectionDTO[]>(routes.collections),
   createCollection: (input: CollectionCreateInput) =>
     request<CollectionDTO>(routes.collections, {

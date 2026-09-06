@@ -46,6 +46,8 @@ No store listing yet, so you sideload it from the [latest release](https://githu
 
 ## Updating
 
+Loomark checks GitHub releases and tells owners when a new version is out.
+
 ```bash
 docker compose pull && docker compose up -d
 ```
@@ -57,6 +59,8 @@ docker compose pull && docker compose up -d
 | `AUTH_SECRET`                                     | **required** | Session encryption key                 |
 | `AUTH_URL`                                        | **required** | Public origin of your instance         |
 | `LOOMARK_VERSION`                                 | optional     | Image tag to run, defaults to `latest` |
+| `LOOMARK_SELF_UPDATE`                             | optional     | `false` turns off one click updates    |
+| `DOCKER_SOCKET`                                   | optional     | Host path to the Docker socket         |
 | `ALLOW_REGISTRATION`                              | optional     | `false` closes signups                 |
 | `APP_PORT`                                        | optional     | Host port, defaults to `3000`          |
 | `DB_WAIT_TIMEOUT`                                 | optional     | Seconds to wait for Postgres at boot   |

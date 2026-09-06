@@ -26,9 +26,7 @@ const initials = (host: string) => {
   const parts = label.split(/[-_]/).filter(Boolean)
 
   return (
-    parts.length > 1
-      ? `${parts[0][0]}${parts[1][0]}`
-      : label.slice(0, 2)
+    parts.length > 1 ? `${parts[0][0]}${parts[1][0]}` : label.slice(0, 2)
   ).toUpperCase()
 }
 

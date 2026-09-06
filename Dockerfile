@@ -34,6 +34,7 @@ ENV HOME=/home/loomark
 
 RUN apk add --no-cache \
       chromium \
+      su-exec \
       nss \
       freetype \
       harfbuzz \
@@ -55,10 +56,10 @@ COPY --from=builder --chown=loomark:nodejs /app/apps/web/next.config.ts ./apps/w
 COPY --from=builder --chown=loomark:nodejs /app/apps/web/prisma.config.ts ./apps/web/prisma.config.ts
 COPY --from=builder --chown=loomark:nodejs /app/apps/web/prisma ./apps/web/prisma
 COPY --chmod=755 docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY --chmod=755 docker/self-update.mjs ./docker/self-update.mjs
 
 VOLUME ["/data/archives"]
 
-USER loomark
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD wget --spider -q http://127.0.0.1:3000/api/health || exit 1
