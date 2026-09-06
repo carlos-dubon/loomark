@@ -137,7 +137,10 @@ export const demoApi = {
       updatedAt: now,
     })
 
-    setState((state) => ({ ...state, bookmarks: [bookmark, ...state.bookmarks] }))
+    setState((state) => ({
+      ...state,
+      bookmarks: [bookmark, ...state.bookmarks],
+    }))
 
     return settle(bookmark)
   },
@@ -292,7 +295,10 @@ export const demoApi = {
       fail("Unsorted cannot be moved")
     }
 
-    if (input.parentId && descendantIds(current, input.id).includes(input.parentId)) {
+    if (
+      input.parentId &&
+      descendantIds(current, input.id).includes(input.parentId)
+    ) {
       fail("A collection cannot be moved into itself")
     }
 

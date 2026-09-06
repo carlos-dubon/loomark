@@ -144,7 +144,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-frontend",
     url: "https://react.dev",
     title: "React",
-    description: "React is the library for web and native user interfaces. Build user interfaces out of individual pieces called components written in JavaScript. React is designed to l…",
+    description:
+      "React is the library for web and native user interfaces. Build user interfaces out of individual pieces called components written in JavaScript. React is designed to l…",
     faviconUrl: "https://react.dev/favicon-32x32.png",
     previewUrl: "https://react.dev/images/og-home.png",
     pinned: true,
@@ -157,9 +158,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-frontend",
     url: "https://tailwindcss.com",
     title: "Tailwind CSS",
-    description: "Tailwind CSS is a utility-first CSS framework for rapidly building modern websites without ever leaving your HTML.",
+    description:
+      "Tailwind CSS is a utility-first CSS framework for rapidly building modern websites without ever leaving your HTML.",
     faviconUrl: "https://tailwindcss.com/favicon.ico?favicon.0cgjfh1m3jfig.ico",
-    previewUrl: "https://tailwindcss.com/opengraph-image.jpg?opengraph-image.0jwfhnd690..4.jpg",
+    previewUrl:
+      "https://tailwindcss.com/opengraph-image.jpg?opengraph-image.0jwfhnd690..4.jpg",
     pinned: true,
     position: 1,
     pinnedPosition: 3,
@@ -170,9 +173,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-frontend",
     url: "https://nextjs.org",
     title: "Next.js by Vercel - The React Framework",
-    description: "Next.js by Vercel is the full-stack React framework for the web.",
+    description:
+      "Next.js by Vercel is the full-stack React framework for the web.",
     faviconUrl: "https://nextjs.org/favicon.ico?favicon.38folom4sz_yx.ico",
-    previewUrl: "https://h8dxkfmaphn8o0p3.public.blob.vercel-storage.com/nextjs/twitter-card.png",
+    previewUrl:
+      "https://h8dxkfmaphn8o0p3.public.blob.vercel-storage.com/nextjs/twitter-card.png",
     pinned: true,
     position: 2,
     pinnedPosition: 2,
@@ -183,7 +188,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-frontend",
     url: "https://developer.mozilla.org/en-US/docs/Web/CSS",
     title: "CSS: Cascading Style Sheets",
-    description: "Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML (including XML dialects such as SVG, MathM…",
+    description:
+      "Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML (including XML dialects such as SVG, MathM…",
     faviconUrl: "https://developer.mozilla.org/favicon.ico",
     previewUrl: "https://developer.mozilla.org/mdn-social-image.46ac2375.png",
     pinned: false,
@@ -196,9 +202,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-frontend",
     url: "https://ui.shadcn.com",
     title: "shadcn/ui - The Foundation for your Design System",
-    description: "Composable, accessible components with thoughtful defaults. Build your own component library with code you can customize, extend, and make your own.",
+    description:
+      "Composable, accessible components with thoughtful defaults. Build your own component library with code you can customize, extend, and make your own.",
     faviconUrl: "https://ui.shadcn.com/favicon-16x16.png",
-    previewUrl: "https://ui.shadcn.com/og?title=The%20Foundation%20for%20your%20Design%20System&description=Composable%2C%20accessible%20components%20with%20thoughtful%20defaults.%20Build%20your%20own%20component%20library%20with%20code%20you%20can%20customize%2C%20extend%2C%20and%20make%20your%20own.",
+    previewUrl:
+      "https://ui.shadcn.com/og?title=The%20Foundation%20for%20your%20Design%20System&description=Composable%2C%20accessible%20components%20with%20thoughtful%20defaults.%20Build%20your%20own%20component%20library%20with%20code%20you%20can%20customize%2C%20extend%2C%20and%20make%20your%20own.",
     pinned: false,
     position: 4,
     pinnedPosition: 0,
@@ -222,8 +230,10 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-frontend",
     url: "https://web.dev",
     title: "web.dev",
-    description: "Panduan untuk membangun pengalaman web modern yang berfungsi di browser apa pun.",
-    faviconUrl: "https://www.gstatic.com/devrel-devsite/prod/v5e941f15ff6710591bee254538202655020220785b40a3f4d932e94adb9f6037/web/images/favicon.png",
+    description:
+      "Panduan untuk membangun pengalaman web modern yang berfungsi di browser apa pun.",
+    faviconUrl:
+      "https://www.gstatic.com/devrel-devsite/prod/v5e941f15ff6710591bee254538202655020220785b40a3f4d932e94adb9f6037/web/images/favicon.png",
     previewUrl: "https://web.dev/images/social-wide.jpg?hl=id",
     pinned: false,
     position: 6,
@@ -235,7 +245,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-frontend",
     url: "https://tanstack.com/query/latest",
     title: "TanStack Query",
-    description: "Powerful asynchronous state management, server-state utilities and data fetching. Fetch, cache, update, and wrangle all forms of async data in your TS/JS, React, Vue,…",
+    description:
+      "Powerful asynchronous state management, server-state utilities and data fetching. Fetch, cache, update, and wrangle all forms of async data in your TS/JS, React, Vue,…",
     faviconUrl: "https://tanstack.com/favicon-light.svg",
     previewUrl: "https://tanstack.com/api/og/query.png?v=2",
     pinned: false,
@@ -248,7 +259,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-backend",
     url: "https://docs.docker.com",
     title: "Docker Docs",
-    description: "Docker Documentation is the official Docker library of resources, manuals, and guides to help you containerize applications.",
+    description:
+      "Docker Documentation is the official Docker library of resources, manuals, and guides to help you containerize applications.",
     faviconUrl: "https://docs.docker.com/favicon.ico",
     previewUrl: "https://docs.docker.com/images/thumbnail.webp",
     pinned: false,
@@ -261,9 +273,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-backend",
     url: "https://redis.io",
     title: "Redis",
-    description: "Developers love Redis. Unlock the full potential of the Redis database with Redis Enterprise and start building blazing fast apps.",
+    description:
+      "Developers love Redis. Unlock the full potential of the Redis database with Redis Enterprise and start building blazing fast apps.",
     faviconUrl: "https://redis.io/apple-icon.png?apple-icon.0oi7qb05iiq_i.png",
-    previewUrl: "https://redis.io/_next/static/immutable/media/open-graph.2wot1rsqh2ybe.png",
+    previewUrl:
+      "https://redis.io/_next/static/immutable/media/open-graph.2wot1rsqh2ybe.png",
     pinned: false,
     position: 1,
     pinnedPosition: 0,
@@ -274,7 +288,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-backend",
     url: "https://www.prisma.io",
     title: "Prisma",
-    description: "Prisma gives TypeScript and Node.js teams Prisma ORM, Prisma Postgres, and Prisma Compute: a type-safe ORM, managed Postgres, and Compute for deploying TypeScript apps…",
+    description:
+      "Prisma gives TypeScript and Node.js teams Prisma ORM, Prisma Postgres, and Prisma Compute: a type-safe ORM, managed Postgres, and Compute for deploying TypeScript apps…",
     faviconUrl: "https://www.prisma.io/favicon.ico?favicon.dac5693e.ico",
     previewUrl: "https://www.prisma.io/og.png",
     pinned: false,
@@ -287,7 +302,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-backend",
     url: "https://kubernetes.io",
     title: "Kubernetes",
-    description: "Kubernetes, also known as K8s, is an open source system for automating deployment, scaling, and management of containerized applications. It groups containers that mak…",
+    description:
+      "Kubernetes, also known as K8s, is an open source system for automating deployment, scaling, and management of containerized applications. It groups containers that mak…",
     faviconUrl: null,
     previewUrl: "https://kubernetes.io/images/kubernetes-open-graph.png",
     pinned: false,
@@ -300,9 +316,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-backend",
     url: "https://fly.io",
     title: "Computers for agents",
-    description: "Sandboxes aren't enough. Give your agent a real computer and get back to building.",
-    faviconUrl: "https://fly.io/phx/ui/images/favicon/favicon-595d1312b35dfe32838befdf8505515e.ico?vsn=d",
-    previewUrl: "https://fly.io/phx/images/preview/og-2f7e07d1485310e79e58ef0690c9eacc.jpg?vsn=d",
+    description:
+      "Sandboxes aren't enough. Give your agent a real computer and get back to building.",
+    faviconUrl:
+      "https://fly.io/phx/ui/images/favicon/favicon-595d1312b35dfe32838befdf8505515e.ico?vsn=d",
+    previewUrl:
+      "https://fly.io/phx/images/preview/og-2f7e07d1485310e79e58ef0690c9eacc.jpg?vsn=d",
     pinned: false,
     position: 4,
     pinnedPosition: 0,
@@ -313,9 +332,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-backend",
     url: "https://caddyserver.com",
     title: "Caddy",
-    description: "Caddy is a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go",
-    faviconUrl: "https://caddyserver.com/resources/images/favicon.png?v=1a6bbd7",
-    previewUrl: "https://caddyserver.com/resources/images/open-graph-square.png?v=1a6bbd7",
+    description:
+      "Caddy is a powerful, enterprise-ready, open source web server with automatic HTTPS written in Go",
+    faviconUrl:
+      "https://caddyserver.com/resources/images/favicon.png?v=1a6bbd7",
+    previewUrl:
+      "https://caddyserver.com/resources/images/open-graph-square.png?v=1a6bbd7",
     pinned: false,
     position: 5,
     pinnedPosition: 0,
@@ -326,7 +348,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-backend",
     url: "https://litestream.io",
     title: "Litestream",
-    description: "Litestream is an open-source, real-time streaming replication tool that lets you safely run SQLite applications on a single node.",
+    description:
+      "Litestream is an open-source, real-time streaming replication tool that lets you safely run SQLite applications on a single node.",
     faviconUrl: "https://litestream.io/favicon-32x32.png",
     previewUrl: "https://litestream.io/images/twitter-image.png",
     pinned: false,
@@ -352,9 +375,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-ai",
     url: "https://www.anthropic.com",
     title: "Anthropic",
-    description: "Anthropic is an AI safety and research company that's working to build reliable, interpretable, and steerable AI systems.",
-    faviconUrl: "https://cdn.prod.website-files.com/67ce28cfec624e2b733f8a52/681d52619fec35886a7f1a70_favicon.png",
-    previewUrl: "https://cdn.prod.website-files.com/67ce28cfec624e2b733f8a52/68309ab48369f7ad9b4a40e1_open-graph.jpg",
+    description:
+      "Anthropic is an AI safety and research company that's working to build reliable, interpretable, and steerable AI systems.",
+    faviconUrl:
+      "https://cdn.prod.website-files.com/67ce28cfec624e2b733f8a52/681d52619fec35886a7f1a70_favicon.png",
+    previewUrl:
+      "https://cdn.prod.website-files.com/67ce28cfec624e2b733f8a52/68309ab48369f7ad9b4a40e1_open-graph.jpg",
     pinned: false,
     position: 0,
     pinnedPosition: 0,
@@ -365,7 +391,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-ai",
     url: "https://huggingface.co",
     title: "Hugging Face",
-    description: "We’re on a journey to advance and democratize artificial intelligence through open source and open science.",
+    description:
+      "We’re on a journey to advance and democratize artificial intelligence through open source and open science.",
     faviconUrl: "https://huggingface.co/favicon.ico",
     previewUrl: "https://huggingface.co/front/thumbnails/v2-2.png",
     pinned: false,
@@ -378,7 +405,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-ai",
     url: "https://ollama.com",
     title: "Ollama",
-    description: "Ollama is the easiest way to automate your work using open models, while keeping your data safe.",
+    description:
+      "Ollama is the easiest way to automate your work using open models, while keeping your data safe.",
     faviconUrl: "https://ollama.com/public/icon-64x64.png",
     previewUrl: "https://ollama.com/public/og.png",
     pinned: false,
@@ -391,9 +419,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-ai",
     url: "https://arxiv.org/abs/1706.03762",
     title: "Attention Is All You Need",
-    description: "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing mode…",
-    faviconUrl: "https://arxiv.org/static/browse/0.3.4/images/icons/favicon-32x32.png",
-    previewUrl: "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+    description:
+      "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration. The best performing mode…",
+    faviconUrl:
+      "https://arxiv.org/static/browse/0.3.4/images/icons/favicon-32x32.png",
+    previewUrl:
+      "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
     pinned: false,
     position: 3,
     pinnedPosition: 0,
@@ -417,9 +448,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-ai",
     url: "https://www.deeplearning.ai",
     title: "DeepLearning.AI",
-    description: "DeepLearning.AI | Andrew Ng | Join over 7 million people learning how to use and build AI through our online courses. Earn certifications, level up your skills, and st…",
+    description:
+      "DeepLearning.AI | Andrew Ng | Join over 7 million people learning how to use and build AI through our online courses. Earn certifications, level up your skills, and st…",
     faviconUrl: "https://www.deeplearning.ai/favicon.ico",
-    previewUrl: "https://home-wordpress.deeplearning.ai/wp-content/uploads/2024/06/homepage-preview.png",
+    previewUrl:
+      "https://home-wordpress.deeplearning.ai/wp-content/uploads/2024/06/homepage-preview.png",
     pinned: false,
     position: 5,
     pinnedPosition: 0,
@@ -443,9 +476,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-design",
     url: "https://www.figma.com",
     title: "Figma",
-    description: "Figma is the canvas where design, code, and AI come together. From first idea to shipped product — go from concept to production with your whole team, in one place.",
+    description:
+      "Figma is the canvas where design, code, and AI come together. From first idea to shipped product — go from concept to production with your whole team, in one place.",
     faviconUrl: "https://static.figma.com/app/icon/2/touch-76.png",
-    previewUrl: "https://cdn.sanity.io/images/599r6htc/regionalized/b08d37520f7d5ad8d6562975b5932dd2d9a862bb-1200x630.gif?w=1200&q=70&fit=max&auto=format",
+    previewUrl:
+      "https://cdn.sanity.io/images/599r6htc/regionalized/b08d37520f7d5ad8d6562975b5932dd2d9a862bb-1200x630.gif?w=1200&q=70&fit=max&auto=format",
     pinned: true,
     position: 0,
     pinnedPosition: 5,
@@ -456,7 +491,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-design",
     url: "https://refactoringui.com",
     title: "Refactoring UI",
-    description: "Learn how to design awesome UIs by yourself using specific tactics explained from a developer’s point-of-view.",
+    description:
+      "Learn how to design awesome UIs by yourself using specific tactics explained from a developer’s point-of-view.",
     faviconUrl: "https://refactoringui.com/favicon-32x32.png",
     previewUrl: "https://refactoringui.com/img/homepage/og-image.png",
     pinned: false,
@@ -469,7 +505,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-design",
     url: "https://lawsofux.com",
     title: "Laws of UX",
-    description: "Laws of UX is a collection of best practices that designers can consider when building user interfaces.",
+    description:
+      "Laws of UX is a collection of best practices that designers can consider when building user interfaces.",
     faviconUrl: null,
     previewUrl: "https://lawsofux.com/home/social.en.png",
     pinned: false,
@@ -495,9 +532,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-type",
     url: "https://fontsinuse.com",
     title: "Fonts In Use",
-    description: "A searchable archive of typographic design, indexed by typeface, format, and topic.",
-    faviconUrl: "https://assets.fontsinuse.com/images/icons/apple-touch-icon-76x76.png",
-    previewUrl: "https://cards.fontsinuse.com/cardshot?s=twitter&t=gallery&url=https://fontsinuse.com/&k=fea3b3b2f54abc640c7705b62dd465bd&v=23db1800",
+    description:
+      "A searchable archive of typographic design, indexed by typeface, format, and topic.",
+    faviconUrl:
+      "https://assets.fontsinuse.com/images/icons/apple-touch-icon-76x76.png",
+    previewUrl:
+      "https://cards.fontsinuse.com/cardshot?s=twitter&t=gallery&url=https://fontsinuse.com/&k=fea3b3b2f54abc640c7705b62dd465bd&v=23db1800",
     pinned: false,
     position: 1,
     pinnedPosition: 0,
@@ -508,9 +548,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-type",
     url: "https://fonts.google.com",
     title: "Google Fonts",
-    description: "Making the web more beautiful, fast, and open through great typography",
-    faviconUrl: "https://www.gstatic.com/images/icons/material/apps/fonts/1x/catalog/v5/favicon.svg",
-    previewUrl: "https://www.gstatic.com/images/icons/material/apps/fonts/1x/catalog/v5/opengraph_color.png",
+    description:
+      "Making the web more beautiful, fast, and open through great typography",
+    faviconUrl:
+      "https://www.gstatic.com/images/icons/material/apps/fonts/1x/catalog/v5/favicon.svg",
+    previewUrl:
+      "https://www.gstatic.com/images/icons/material/apps/fonts/1x/catalog/v5/opengraph_color.png",
     pinned: false,
     position: 2,
     pinnedPosition: 0,
@@ -521,9 +564,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-type",
     url: "https://www.happyhues.co",
     title: "Happy Hues",
-    description: "See color palette inspiration on a real example website. As you click on different palettes every color on this site updates to give you context of how that color coul…",
-    faviconUrl: "https://cdn.prod.website-files.com/5dd40aa8049df8748c72d0ee/5dd9b94105da589ba59c4907_happy-hues-fav.png",
-    previewUrl: "https://cdn.prod.website-files.com/5dd40aa8049df8748c72d0ee/5ddd471cbe5e6601554a2a4d_happy-hues.jpeg",
+    description:
+      "See color palette inspiration on a real example website. As you click on different palettes every color on this site updates to give you context of how that color coul…",
+    faviconUrl:
+      "https://cdn.prod.website-files.com/5dd40aa8049df8748c72d0ee/5dd9b94105da589ba59c4907_happy-hues-fav.png",
+    previewUrl:
+      "https://cdn.prod.website-files.com/5dd40aa8049df8748c72d0ee/5ddd471cbe5e6601554a2a4d_happy-hues.jpeg",
     pinned: false,
     position: 3,
     pinnedPosition: 0,
@@ -534,7 +580,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-type",
     url: "https://coolors.co",
     title: "Coolors",
-    description: "Generate or browse beautiful color combinations for your designs.",
+    description:
+      "Generate or browse beautiful color combinations for your designs.",
     faviconUrl: "https://coolors.co/assets/img/favicon.png",
     previewUrl: "https://coolors.co/assets/img/og_image.png",
     pinned: false,
@@ -548,7 +595,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     url: "https://type-scale.com",
     title: "Typescale",
     description: null,
-    faviconUrl: "https://typescale.com/wp-content/themes/typescale/favicon/favicon-32x32.png?ver=1.2.49",
+    faviconUrl:
+      "https://typescale.com/wp-content/themes/typescale/favicon/favicon-32x32.png?ver=1.2.49",
     previewUrl: "https://typescale.com/wp-content/uploads/2023/11/og-image.png",
     pinned: false,
     position: 5,
@@ -560,7 +608,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-inspiration",
     url: "https://dribbble.com",
     title: "Dribbble",
-    description: "Where designers get inspired — shots, portfolios and the people behind them.",
+    description:
+      "Where designers get inspired — shots, portfolios and the people behind them.",
     faviconUrl: null,
     previewUrl: null,
     pinned: false,
@@ -573,9 +622,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-inspiration",
     url: "https://mobbin.com",
     title: "Mobbin",
-    description: "Save hours of UI & UX research with our library of 400,000+ fully searchable mobile & web app screenshots.",
-    faviconUrl: "https://framerusercontent.com/images/oPS7zaP2iinQmw4du221pyfo.svg",
-    previewUrl: "https://framerusercontent.com/assets/FE3uqmxi41SxsiiVq9JNJC1Pwc.png",
+    description:
+      "Save hours of UI & UX research with our library of 400,000+ fully searchable mobile & web app screenshots.",
+    faviconUrl:
+      "https://framerusercontent.com/images/oPS7zaP2iinQmw4du221pyfo.svg",
+    previewUrl:
+      "https://framerusercontent.com/assets/FE3uqmxi41SxsiiVq9JNJC1Pwc.png",
     pinned: false,
     position: 1,
     pinnedPosition: 0,
@@ -625,7 +677,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-inspiration",
     url: "https://www.awwwards.com",
     title: "Awwwards",
-    description: "Awards for design, creativity and innovation on the internet.",
+    description:
+      "Awards for design, creativity and innovation on the internet.",
     faviconUrl: null,
     previewUrl: null,
     pinned: false,
@@ -638,9 +691,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-reading",
     url: "https://longreads.com",
     title: "Longreads",
-    description: "Sharing the best nonfiction storytelling on the web since 2011.",
-    faviconUrl: "https://longreads.com/wp-content/uploads/2017/01/longreads-logo-sm-rgb-150x150.png",
-    previewUrl: "https://longreads.com/wp-content/uploads/2026/08/Questionnaire-Template-JonRonson-1-1024x597.png",
+    description:
+      "Sharing the best nonfiction storytelling on the web since 2011.",
+    faviconUrl:
+      "https://longreads.com/wp-content/uploads/2017/01/longreads-logo-sm-rgb-150x150.png",
+    previewUrl:
+      "https://longreads.com/wp-content/uploads/2026/08/Questionnaire-Template-JonRonson-1-1024x597.png",
     pinned: false,
     position: 0,
     pinnedPosition: 0,
@@ -690,9 +746,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-essays",
     url: "https://www.joelonsoftware.com",
     title: "Joel on Software",
-    description: "A weblog by Joel Spolsky, a programmer working in New York City, about software and software companies.",
-    faviconUrl: "https://i0.wp.com/www.joelonsoftware.com/wp-content/uploads/2016/12/11969842.jpg?fit=32%2C32&#038;ssl=1",
-    previewUrl: "https://i0.wp.com/www.joelonsoftware.com/wp-content/uploads/2016/12/11969842.jpg?fit=400%2C400&#038;ssl=1",
+    description:
+      "A weblog by Joel Spolsky, a programmer working in New York City, about software and software companies.",
+    faviconUrl:
+      "https://i0.wp.com/www.joelonsoftware.com/wp-content/uploads/2016/12/11969842.jpg?fit=32%2C32&#038;ssl=1",
+    previewUrl:
+      "https://i0.wp.com/www.joelonsoftware.com/wp-content/uploads/2016/12/11969842.jpg?fit=400%2C400&#038;ssl=1",
     pinned: false,
     position: 2,
     pinnedPosition: 0,
@@ -717,7 +776,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     url: "https://blog.codinghorror.com",
     title: "Coding Horror",
     description: "programming and human factors",
-    faviconUrl: "https://storage.ghost.io/c/eb/aa/ebaa2665-01a8-4415-8825-69d1f0e8fd19/content/images/size/w256h256/2020/06/3cffc4b347c3587f19fe222caaac69f63b9a5e73.png",
+    faviconUrl:
+      "https://storage.ghost.io/c/eb/aa/ebaa2665-01a8-4415-8825-69d1f0e8fd19/content/images/size/w256h256/2020/06/3cffc4b347c3587f19fe222caaac69f63b9a5e73.png",
     previewUrl: null,
     pinned: false,
     position: 4,
@@ -742,7 +802,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-newsletters",
     url: "https://bytes.dev",
     title: "Bytes",
-    description: "The most entertaining (and informative) JavaScript newsletter. Delivered twice a week, for free.",
+    description:
+      "The most entertaining (and informative) JavaScript newsletter. Delivered twice a week, for free.",
     faviconUrl: "https://bytes.dev/favicon/favicon-32x32.png",
     previewUrl: "https://bytes.dev/images/bytes-best-javascript-newsletter.png",
     pinned: false,
@@ -768,9 +829,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-newsletters",
     url: "https://newsletter.pragmaticengineer.com",
     title: "The Pragmatic Engineer",
-    description: "Big Tech and startups, from the inside. Highly relevant for software engineers, AI engineers and engineering leaders, useful for those working in tech. Click to read T…",
-    faviconUrl: "https://substackcdn.com/image/fetch/$s_!ktEI!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F47d77fcc-2914-46a1-8d39-3a6e8758e0ad%2Fapple-touch-icon-60x60.png",
-    previewUrl: "https://substackcdn.com/image/fetch/$s_!8_8l!,f_auto,q_auto:best,fl_progressive:steep/https%3A%2F%2Fpragmaticengineer.substack.com%2Ftwitter%2Fsubscribe-card.jpg%3Fv%3D1600631602%26version%3D9",
+    description:
+      "Big Tech and startups, from the inside. Highly relevant for software engineers, AI engineers and engineering leaders, useful for those working in tech. Click to read T…",
+    faviconUrl:
+      "https://substackcdn.com/image/fetch/$s_!ktEI!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F47d77fcc-2914-46a1-8d39-3a6e8758e0ad%2Fapple-touch-icon-60x60.png",
+    previewUrl:
+      "https://substackcdn.com/image/fetch/$s_!8_8l!,f_auto,q_auto:best,fl_progressive:steep/https%3A%2F%2Fpragmaticengineer.substack.com%2Ftwitter%2Fsubscribe-card.jpg%3Fv%3D1600631602%26version%3D9",
     pinned: false,
     position: 2,
     pinnedPosition: 0,
@@ -781,7 +845,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-newsletters",
     url: "https://tldr.tech",
     title: "TLDR",
-    description: "TLDR is the free daily newsletter with the most interesting stories in startups, tech and programming!",
+    description:
+      "TLDR is the free daily newsletter with the most interesting stories in startups, tech and programming!",
     faviconUrl: "https://tldr.tech/favicon.ico",
     previewUrl: "https://tldr.tech/logo-jpg.jpg",
     pinned: false,
@@ -807,7 +872,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-tools",
     url: "https://excalidraw.com",
     title: "Excalidraw",
-    description: "Excalidraw is a virtual collaborative whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.",
+    description:
+      "Excalidraw is a virtual collaborative whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.",
     faviconUrl: "https://excalidraw.com/favicon-32x32.png",
     previewUrl: "https://excalidraw.com/og-image-3.png",
     pinned: true,
@@ -820,9 +886,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-tools",
     url: "https://github.com",
     title: "GitHub",
-    description: "Join the world's most widely adopted, AI-powered developer platform where millions of developers, businesses, and the largest open source community build software that…",
+    description:
+      "Join the world's most widely adopted, AI-powered developer platform where millions of developers, businesses, and the largest open source community build software that…",
     faviconUrl: "https://github.com/fluidicon.png",
-    previewUrl: "https://images.ctfassets.net/8aevphvgewt8/4pe4eOtUJ0ARpZRE4fNekf/f52b1f9c52f059a33170229883731ed0/GH-Homepage-Universe-img.png",
+    previewUrl:
+      "https://images.ctfassets.net/8aevphvgewt8/4pe4eOtUJ0ARpZRE4fNekf/f52b1f9c52f059a33170229883731ed0/GH-Homepage-Universe-img.png",
     pinned: true,
     position: 2,
     pinnedPosition: 1,
@@ -833,9 +901,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-tools",
     url: "https://www.raycast.com",
     title: "Raycast",
-    description: "A collection of powerful productivity tools all within an extendable launcher.",
+    description:
+      "A collection of powerful productivity tools all within an extendable launcher.",
     faviconUrl: "https://www.raycast.com/favicon-production.png",
-    previewUrl: "https://www.raycast.com/opengraph-image-pwu6ef.png?opengraph-image.1f-98etzkaz5s.png",
+    previewUrl:
+      "https://www.raycast.com/opengraph-image-pwu6ef.png?opengraph-image.1f-98etzkaz5s.png",
     pinned: false,
     position: 3,
     pinnedPosition: 0,
@@ -846,7 +916,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-tools",
     url: "https://www.warp.dev",
     title: "Warp",
-    description: "Infrastructure to build, measure, and interact with agents across your SDLC — so you ship more and spend less.",
+    description:
+      "Infrastructure to build, measure, and interact with agents across your SDLC — so you ship more and spend less.",
     faviconUrl: "https://www.warp.dev/apple-touch-icon-60x60.png",
     previewUrl: "https://www.warp.dev/og/default.png",
     pinned: false,
@@ -859,7 +930,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-tools",
     url: "https://linear.app",
     title: "Linear",
-    description: "Purpose-built for planning and building products with AI agents.",
+    description:
+      "Purpose-built for planning and building products with AI agents.",
     faviconUrl: "https://linear.app/favicon.ico?v=2",
     previewUrl: "https://linear.app/static/og/homepage.jpg",
     pinned: true,
@@ -872,7 +944,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-tools",
     url: "https://httpie.io",
     title: "HTTPie",
-    description: "Making APIs simple and intuitive for those building the tools of our time.",
+    description:
+      "Making APIs simple and intuitive for those building the tools of our time.",
     faviconUrl: "https://httpie.io/Brand/Favicons/Black/apple-icon-60x60.png",
     previewUrl: "https://httpie.io/Images/Share/default.png",
     pinned: false,
@@ -885,7 +958,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-tools",
     url: "https://regex101.com",
     title: "regex101: build, test, and debug regex",
-    description: "Online regex tester and debugger with real-time match highlighting, detailed explanations, substitutions, unit tests, benchmarking, and code generation. Supports PCRE2…",
+    description:
+      "Online regex tester and debugger with real-time match highlighting, detailed explanations, substitutions, unit tests, benchmarking, and code generation. Supports PCRE2…",
     faviconUrl: "https://regex101.com/static/assets/icons/apple-icon-180.png",
     previewUrl: "https://regex101.com/preview/",
     pinned: false,
@@ -898,7 +972,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-learning",
     url: "https://roadmap.sh",
     title: "Developer Roadmaps",
-    description: "Community driven roadmaps, articles and guides for developers to grow in their career.",
+    description:
+      "Community driven roadmaps, articles and guides for developers to grow in their career.",
     faviconUrl: "https://roadmap.sh/manifest/icon32.png",
     previewUrl: "https://roadmap.sh/img/og-img.png",
     pinned: false,
@@ -911,7 +986,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-learning",
     url: "https://exercism.org",
     title: "Exercism",
-    description: "Practice programming exercises in 70+ languages, with free mentoring.",
+    description:
+      "Practice programming exercises in 70+ languages, with free mentoring.",
     faviconUrl: null,
     previewUrl: null,
     pinned: false,
@@ -924,9 +1000,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-learning",
     url: "https://css-tricks.com",
     title: "CSS-Tricks",
-    description: "CSS-Tricks is where folks around the world come to learn about front-end code and everything related to it, including HTML, CSS, and yes, CSS.",
+    description:
+      "CSS-Tricks is where folks around the world come to learn about front-end code and everything related to it, including HTML, CSS, and yes, CSS.",
     faviconUrl: "https://css-tricks.com/favicon.ico",
-    previewUrl: "https://i0.wp.com/css-tricks.com/wp-content/uploads/2019/12/css-tricks-logo-gradient-outline.png",
+    previewUrl:
+      "https://i0.wp.com/css-tricks.com/wp-content/uploads/2019/12/css-tricks-logo-gradient-outline.png",
     pinned: false,
     position: 2,
     pinnedPosition: 0,
@@ -939,7 +1017,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     title: "freeCodeCamp.org",
     description: "Learn to Code — For Free",
     faviconUrl: "https://www.freecodecamp.org/icons/icon-72x72.png",
-    previewUrl: "https://cdn.freecodecamp.org/platform/universal/fcc_meta_1920X1080-indigo.png",
+    previewUrl:
+      "https://cdn.freecodecamp.org/platform/universal/fcc_meta_1920X1080-indigo.png",
     pinned: false,
     position: 3,
     pinnedPosition: 0,
@@ -950,7 +1029,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-learning",
     url: "https://javascript.info",
     title: "The Modern JavaScript Tutorial",
-    description: "Modern JavaScript Tutorial: simple, but detailed explanations with examples and tasks, including: closures, document and events, object oriented programming and more.",
+    description:
+      "Modern JavaScript Tutorial: simple, but detailed explanations with examples and tasks, including: closures, document and events, object oriented programming and more.",
     faviconUrl: "https://javascript.info/img/favicon/favicon.png",
     previewUrl: "https://javascript.info/img/site_preview_en_1200x630.png",
     pinned: false,
@@ -963,9 +1043,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-learning",
     url: "https://frontendmasters.com",
     title: "Frontend Masters",
-    description: "Advance your web development and software engineering skills from front-end to full-stack!",
+    description:
+      "Advance your web development and software engineering skills from front-end to full-stack!",
     faviconUrl: "https://master.dev/favicon.ico",
-    previewUrl: "https://cdn.master.dev/assets/fm-md/med/home/md-opengraph-v1.jpg",
+    previewUrl:
+      "https://cdn.master.dev/assets/fm-md/med/home/md-opengraph-v1.jpg",
     pinned: false,
     position: 5,
     pinnedPosition: 0,
@@ -976,9 +1058,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-selfhost",
     url: "https://github.com/linkwarden/linkwarden",
     title: "linkwarden/linkwarden",
-    description: "⚡️⚡️⚡️ Self-hosted collaborative bookmark manager to collect, read, annotate, and fully preserve what matters, all in one place. - linkwarden/linkwarden",
+    description:
+      "⚡️⚡️⚡️ Self-hosted collaborative bookmark manager to collect, read, annotate, and fully preserve what matters, all in one place. - linkwarden/linkwarden",
     faviconUrl: "https://github.com/fluidicon.png",
-    previewUrl: "https://repository-images.githubusercontent.com/479657569/2d809ad0-9ad6-4d55-ae35-003189b1b242",
+    previewUrl:
+      "https://repository-images.githubusercontent.com/479657569/2d809ad0-9ad6-4d55-ae35-003189b1b242",
     pinned: false,
     position: 0,
     pinnedPosition: 0,
@@ -989,7 +1073,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-selfhost",
     url: "https://www.home-assistant.io",
     title: "Home Assistant",
-    description: "Open source home automation that puts local control and privacy first. Powered by a worldwide community of tinkerers and DIY enthusiasts. Perfect to run on a Raspberry…",
+    description:
+      "Open source home automation that puts local control and privacy first. Powered by a worldwide community of tinkerers and DIY enthusiasts. Perfect to run on a Raspberry…",
     faviconUrl: "https://www.home-assistant.io/images/favicon.ico",
     previewUrl: "https://www.home-assistant.io/images/default-social.png",
     pinned: false,
@@ -1002,9 +1087,11 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-selfhost",
     url: "https://umami.is",
     title: "Umami – Privacy-First Analytics Platform",
-    description: "Umami is the open-source, privacy-first analytics platform. Understand traffic, campaigns, behavior, conversions, and revenue — all in one place, no cookies required.",
+    description:
+      "Umami is the open-source, privacy-first analytics platform. Understand traffic, campaigns, behavior, conversions, and revenue — all in one place, no cookies required.",
     faviconUrl: "https://umami.is/favicon.ico",
-    previewUrl: "https://umami.is/opengraph-image-j8qpfc.png?opengraph-image.061x5-78_1ett.png",
+    previewUrl:
+      "https://umami.is/opengraph-image-j8qpfc.png?opengraph-image.061x5-78_1ett.png",
     pinned: false,
     position: 2,
     pinnedPosition: 0,
@@ -1015,7 +1102,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-selfhost",
     url: "https://immich.app",
     title: "Immich",
-    description: "Self-hosted photo and video management solution. Easily back up, organize, and manage your photos on your own server. Immich helps you browse, search and organize your…",
+    description:
+      "Self-hosted photo and video management solution. Easily back up, organize, and manage your photos on your own server. Immich helps you browse, search and organize your…",
     faviconUrl: "https://immich.app/favicon.ico",
     previewUrl: "https://immich.app/img/social-preview.png",
     pinned: false,
@@ -1028,7 +1116,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-selfhost",
     url: "https://jellyfin.org",
     title: "Jellyfin",
-    description: "The volunteer-built media solution that puts you in control of your media. Stream to any device from your own server, with no strings attached.",
+    description:
+      "The volunteer-built media solution that puts you in control of your media. Stream to any device from your own server, with no strings attached.",
     faviconUrl: "https://jellyfin.org/images/favicon.ico",
     previewUrl: "https://jellyfin.org/images/social.png?v2",
     pinned: false,
@@ -1041,7 +1130,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-selfhost",
     url: "https://coolify.io",
     title: "Coolify",
-    description: "Self-hosting platform with superpowers. Deploy apps, databases &#38; 280+ services to your server. Open-source alternative to Heroku.",
+    description:
+      "Self-hosting platform with superpowers. Deploy apps, databases &#38; 280+ services to your server. Open-source alternative to Heroku.",
     faviconUrl: "https://coolify.io/android-launchericon-72-72.png",
     previewUrl: "https://cdn.coollabs.io/og-images/coolify.png",
     pinned: false,
@@ -1054,9 +1144,12 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-selfhost",
     url: "https://selfh.st",
     title: "selfh.st - Self-hosted content and software",
-    description: "Self-hosted news, content, updates, launches, events, and more",
-    faviconUrl: "https://selfh.st/content/images/size/w256h256/2023/09/favicon-1.png",
-    previewUrl: "https://selfh.st/content/images/size/w1200/2024/07/selfh-st-logo-banner-3.png",
+    description:
+      "Self-hosted news, content, updates, launches, events, and more",
+    faviconUrl:
+      "https://selfh.st/content/images/size/w256h256/2023/09/favicon-1.png",
+    previewUrl:
+      "https://selfh.st/content/images/size/w1200/2024/07/selfh-st-logo-banner-3.png",
     pinned: false,
     position: 6,
     pinnedPosition: 0,
@@ -1067,7 +1160,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-unsorted",
     url: "https://www.raspberrypi.com",
     title: "Raspberry Pi",
-    description: "Small, affordable computers for makers, learners and tinkerers.",
+    description:
+      "Small, affordable computers for makers, learners and tinkerers.",
     faviconUrl: "https://www.raspberrypi.com/favicon.ico",
     previewUrl: null,
     pinned: false,
@@ -1093,7 +1187,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-unsorted",
     url: "https://bun.sh",
     title: "Bun — A fast all-in-one JavaScript runtime",
-    description: "Bundle, install, and run JavaScript & TypeScript — all in Bun. Bun is a fast JavaScript runtime & toolkit with a bundler, test runner, and npm-compatible package manag…",
+    description:
+      "Bundle, install, and run JavaScript & TypeScript — all in Bun. Bun is a fast JavaScript runtime & toolkit with a bundler, test runner, and npm-compatible package manag…",
     faviconUrl: "https://bun.sh/favicon.ico",
     previewUrl: "https://bun.com/share_v4.png",
     pinned: false,
@@ -1106,7 +1201,8 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     collectionId: "c-unsorted",
     url: "https://caniuse.com",
     title: "Can I use",
-    description: "\"Can I use\" provides up-to-date browser support tables for support of front-end web technologies on desktop and mobile web browsers.",
+    description:
+      '"Can I use" provides up-to-date browser support tables for support of front-end web technologies on desktop and mobile web browsers.',
     faviconUrl: "https://caniuse.com/img/favicon-128.png",
     previewUrl: null,
     pinned: false,

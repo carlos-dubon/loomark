@@ -100,7 +100,6 @@ export const retargetLink = (id: string, url: string) =>
 export const moveNode = (id: string, parentId: string) =>
   browser.bookmarks.move(id, { parentId })
 
-
 export const removeLink = (id: string) => browser.bookmarks.remove(id)
 
 export const removeFolder = (id: string) => browser.bookmarks.removeTree(id)

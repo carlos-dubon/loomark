@@ -32,6 +32,9 @@ services:
       AUTH_TRUST_HOST: "true"
       ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-true}
       DB_WAIT_TIMEOUT: ${DB_WAIT_TIMEOUT:-180}
+      LOOMARK_SELF_UPDATE: ${LOOMARK_SELF_UPDATE:-true}
+    volumes:
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     ports:
       - "${APP_PORT:-3000}:3000"
 
