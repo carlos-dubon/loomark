@@ -1,7 +1,6 @@
 import type { InstanceUserDTO } from "@loomark/core/types"
 
 import { requireUserId } from "@/lib/api"
-import { removeUserArchives } from "@/lib/archives/storage"
 import { prisma } from "@/lib/prisma"
 
 type Numeric = bigint | number | string | null
@@ -9,8 +8,6 @@ type Numeric = bigint | number | string | null
 type StorageRow = {
   id: string
   rowBytes: Numeric
-  archiveBytes: Numeric
-  archiveCount: Numeric
 }
 
 const toNumber = (value: Numeric) => Number(value ?? 0)
@@ -53,10 +50,7 @@ export const getInstanceUsers = async (): Promise<InstanceUserDTO[]> => {
         u."id" AS "id",
         COALESCE(b."bytes", 0)
           + COALESCE(c."bytes", 0)
-          + COALESCE(a."rowBytes", 0)
-          + COALESCE(v."bytes", 0) AS "rowBytes",
-        COALESCE(a."fileBytes", 0) AS "archiveBytes",
-        COALESCE(a."count", 0) AS "archiveCount"
+          + COALESCE(v."bytes", 0) AS "rowBytes"
       FROM "User" u
       LEFT JOIN (
         SELECT "userId", SUM(pg_column_size(bookmark.*)) AS "bytes"
@@ -68,15 +62,6 @@ export const getInstanceUsers = async (): Promise<InstanceUserDTO[]> => {
         FROM "Collection" collection
         GROUP BY "userId"
       ) c ON c."userId" = u."id"
-      LEFT JOIN (
-        SELECT
-          "userId",
-          SUM(pg_column_size(archive.*)) AS "rowBytes",
-          SUM(archive."bytes") AS "fileBytes",
-          COUNT(*) AS "count"
-        FROM "Archive" archive
-        GROUP BY "userId"
-      ) a ON a."userId" = u."id"
       LEFT JOIN (
         SELECT "userId", SUM(pg_column_size(avatar.*)) AS "bytes"
         FROM "Avatar" avatar
@@ -96,21 +81,14 @@ export const getInstanceUsers = async (): Promise<InstanceUserDTO[]> => {
     createdAt: user.createdAt.toISOString(),
     bookmarkCount: user._count.bookmarks,
     collectionCount: user._count.collections,
-    archiveCount: toNumber(storageByUser.get(user.id)?.archiveCount ?? 0),
-    archiveBytes: toNumber(storageByUser.get(user.id)?.archiveBytes ?? 0),
-    bytes:
-      toNumber(storageByUser.get(user.id)?.rowBytes ?? 0) +
-      toNumber(storageByUser.get(user.id)?.archiveBytes ?? 0),
+    bytes: toNumber(storageByUser.get(user.id)?.rowBytes ?? 0),
   }))
 }
 
 export const deleteInstanceUser = async (userId: string) => {
   await prisma.$transaction([
-    prisma.archive.deleteMany({ where: { userId } }),
     prisma.bookmark.deleteMany({ where: { userId } }),
     prisma.collection.deleteMany({ where: { userId } }),
     prisma.user.delete({ where: { id: userId } }),
   ])
-
-  await removeUserArchives(userId)
 }

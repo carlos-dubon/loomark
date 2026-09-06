@@ -1,9 +1,6 @@
-import { after } from "next/server"
-
 import { normalizeUrl } from "@loomark/core/url"
 
 import { jsonError, parseBody, parseQuery, requireUserId } from "@/lib/api"
-import { enqueueForUser } from "@/lib/archives/queue"
 import { resolveCollectionId } from "@/lib/collections"
 import { fetchUrlMetadata } from "@/lib/metadata"
 import { nextBookmarkPosition, nextPinnedPosition } from "@/lib/positions"
@@ -87,8 +84,6 @@ export const POST = async (request: Request) => {
       collectionId,
     },
   })
-
-  after(() => enqueueForUser(userId, [bookmark.id]))
 
   return Response.json(serializeBookmark(bookmark), { status: 201 })
 }

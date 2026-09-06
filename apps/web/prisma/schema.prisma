@@ -30,13 +30,7 @@ model User {
   themeId       String       @default("default") @map("themePreset")
   viewMode      String       @default("grid")
   sortOrder     String       @default("newest")
-  archives      Archive[]
   avatar        Avatar?
-
-  archiveScreenshot Boolean @default(false)
-  archiveWebpage    Boolean @default(false)
-  archivePdf        Boolean @default(false)
-  archiveMarkdown   Boolean @default(false)
 }
 
 model Avatar {
@@ -98,30 +92,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-enum ArchiveFormat {
-  SCREENSHOT
-  WEBPAGE
-  PDF
-  MARKDOWN
-}
-
-enum ArchiveStatus {
-  PENDING
-  RUNNING
-  READY
-  FAILED
-}
-
-enum ArchiveStage {
-  LAUNCHING
-  OPENING
-  LOADING
-  SETTLING
-  EXPANDING
-  CAPTURING
-  SAVING
-}
-
 enum CollectionKind {
   USER
   UNSORTED
@@ -166,7 +136,6 @@ model Bookmark {
   updatedAt    DateTime   @updatedAt
   collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Restrict)
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  archives     Archive[]
 
   @@index([userId])
   @@index([collectionId])
@@ -174,26 +143,4 @@ model Bookmark {
   @@index([userId, createdAt])
   @@index([collectionId, createdAt])
   @@index([collectionId, position])
-}
-
-model Archive {
-  id         String        @id @default(cuid())
-  format     ArchiveFormat
-  status     ArchiveStatus @default(PENDING)
-  stage      ArchiveStage?
-  path       String?
-  bytes      Int           @default(0)
-  attempts   Int           @default(0)
-  error      String?
-  bookmarkId String
-  userId     String
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
-  bookmark   Bookmark      @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
-  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([bookmarkId, format])
-  @@index([userId])
-  @@index([userId, status])
-  @@index([status, createdAt])
 }

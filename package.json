@@ -1,14 +1,12 @@
 {
   "name": "loomark-monorepo",
   "version": "0.2.0",
-  "description": "Self-hosted bookmark manager that archives the pages you save, and ships a Chrome and Firefox extension.",
+  "description": "Self-hosted bookmark manager that ships a Chrome and Firefox extension.",
   "keywords": [
     "bookmarks",
     "bookmark-manager",
     "self-hosted",
     "selfhosted",
-    "archiving",
-    "web-archive",
     "linkwarden",
     "browser-extension",
     "nextjs",

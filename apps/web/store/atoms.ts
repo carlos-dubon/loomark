@@ -1,19 +1,8 @@
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
-import {
-  DEFAULT_ARCHIVE_SETTINGS,
-  EMPTY_ARCHIVE_USAGE,
-  type ArchiveSettings,
-  type ArchiveUsage,
-} from "@loomark/core/archive"
 import type { SortOrder } from "@loomark/core/sort"
-import {
-  EMPTY_ARCHIVE_QUEUE,
-  type ArchiveQueue,
-  type BookmarkDTO,
-  type CollectionDTO,
-} from "@loomark/core/types"
+import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import {
   IDLE_UPDATE_JOB,
   type UpdateJob,
@@ -84,18 +73,6 @@ export const deleteDialogAtom = atom<BookmarkDTO[]>([])
 export const collectionDeleteDialogAtom = atom<CollectionDTO | null>(null)
 
 export const collectionShareDialogAtom = atom<CollectionDTO | null>(null)
-
-export const archiveDialogAtom = atom<BookmarkDTO | null>(null)
-
-export const archiveSettingsAtom = atom<ArchiveSettings>(
-  DEFAULT_ARCHIVE_SETTINGS
-)
-
-export const archiveUsageAtom = atom<ArchiveUsage>(EMPTY_ARCHIVE_USAGE)
-
-export const archiveClearDialogAtom = atom(false)
-
-export const archiveQueueAtom = atom<ArchiveQueue>(EMPTY_ARCHIVE_QUEUE)
 
 export const bookmarkListAtom = atom<BookmarkListState>({
   source: [],

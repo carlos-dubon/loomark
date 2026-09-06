@@ -2,12 +2,7 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@loomark/core", "@loomark/ui"],
-  serverExternalPackages: [
-    "@prisma/adapter-pg",
-    "bcryptjs",
-    "playwright-core",
-    "turndown",
-  ],
+  serverExternalPackages: ["@prisma/adapter-pg", "bcryptjs"],
   headers: async () => [
     {
       source: "/sw.js",

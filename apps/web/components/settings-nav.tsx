@@ -1,7 +1,6 @@
 "use client"
 
 import {
-  ArchiveIcon,
   ArrowLeftIcon,
   ArrowLeftRightIcon,
   ServerIcon,
@@ -35,12 +34,6 @@ const ITEMS = [
     href: "/settings/profile",
     label: "Your profile",
     icon: UserRoundIcon,
-    owner: false,
-  },
-  {
-    href: "/settings/archive",
-    label: "Archive",
-    icon: ArchiveIcon,
     owner: false,
   },
   {

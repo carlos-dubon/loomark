@@ -1,14 +1,6 @@
-import type {
-  ArchiveClearResult,
-  ArchiveFormat,
-  ArchiveSettings,
-  ArchiveUsage,
-} from "@loomark/core/archive"
 import { routes } from "@loomark/core/routes"
 import type { UpdateJob, UpdateStatus } from "@loomark/core/updates"
 import type {
-  ArchiveDTO,
-  ArchiveQueue,
   BookmarkDTO,
   CollectionDeletion,
   CollectionDTO,
@@ -19,7 +11,6 @@ import type {
 
 import type {
   AppearanceUpdateInput,
-  ArchiveRunInput,
   BookmarkCreateInput,
   BookmarkReorderInput,
   BookmarkUpdateInput,
@@ -107,36 +98,6 @@ const serverApi = {
     }),
   refreshPreview: (id: string) =>
     request<BookmarkDTO>(routes.bookmarkPreview(id), { method: "POST" }),
-  listArchives: (id: string, signal?: AbortSignal) =>
-    request<ArchiveDTO[]>(routes.bookmarkArchives(id), { signal }),
-  runArchives: (id: string, input: ArchiveRunInput = {}) =>
-    request<ArchiveDTO[]>(routes.bookmarkArchives(id), {
-      method: "POST",
-      body: JSON.stringify(input),
-    }),
-  cancelArchives: (id: string, formats?: ArchiveFormat[]) =>
-    request<ArchiveDTO[]>(
-      formats
-        ? `${routes.bookmarkArchives(id)}?formats=${formats.join(",")}`
-        : routes.bookmarkArchives(id),
-      { method: "DELETE" }
-    ),
-  archiveQueue: (signal?: AbortSignal) =>
-    request<ArchiveQueue>(routes.archiveQueue, { signal }),
-  clearArchiveQueue: () =>
-    request<ArchiveQueue & { canceled: number }>(routes.archiveQueue, {
-      method: "DELETE",
-    }),
-  updateArchiveSettings: (input: Partial<ArchiveSettings>) =>
-    request<ArchiveSettings>(routes.archiveSettings, {
-      method: "PATCH",
-      body: JSON.stringify(input),
-    }),
-  backfillArchives: () =>
-    request<{ queued: number }>(routes.archiveBackfill, { method: "POST" }),
-  archiveUsage: () => request<ArchiveUsage>(routes.archiveStorage),
-  clearArchives: () =>
-    request<ArchiveClearResult>(routes.archiveStorage, { method: "DELETE" }),
   updateStatus: (signal?: AbortSignal) =>
     request<UpdateStatus>(routes.updates, { signal }),
   updateJob: (signal?: AbortSignal) =>
