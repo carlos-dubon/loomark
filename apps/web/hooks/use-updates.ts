@@ -28,7 +28,7 @@ export const useUpdateWatcher = (enabled: boolean) => {
 
     const check = async () => {
       try {
-        setStatus(await api.updateStatus(controller.signal))
+        setStatus(await api.updateStatus({ signal: controller.signal }))
       } catch {
         return
       }
@@ -160,13 +160,16 @@ export const useUpdates = () => {
     await waitForRestart(status.current, parked)
   }, [running, status, setJob, waitForRestart])
 
-  const refresh = useCallback(async () => {
-    try {
-      setStatus(await api.updateStatus())
-    } catch {
-      return
-    }
-  }, [setStatus])
+  const refresh = useCallback(
+    async ({ force = false }: { force?: boolean } = {}) => {
+      try {
+        setStatus(await api.updateStatus({ force }))
+      } catch {
+        return
+      }
+    },
+    [setStatus]
+  )
 
   const discardParked = useCallback(async () => {
     try {

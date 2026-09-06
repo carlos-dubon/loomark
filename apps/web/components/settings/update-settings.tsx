@@ -150,7 +150,7 @@ export const UpdateSettings = () => {
 
   const check = async () => {
     setChecking(true)
-    await refresh()
+    await refresh({ force: true })
     setChecking(false)
   }
 
