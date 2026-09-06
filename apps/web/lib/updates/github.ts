@@ -2,7 +2,7 @@ import type { Release } from "@loomark/core/updates"
 
 const REPO = "carlos-dubon/loomark"
 const ENDPOINT = `https://api.github.com/repos/${REPO}/releases/latest`
-const TTL_MS = 3_600_000
+const TTL_MS = 600_000
 const RETRY_MS = 300_000
 const NOTES_LIMIT = 4000
 
@@ -15,7 +15,11 @@ type GithubRelease = {
   prerelease?: boolean
 }
 
-let cached: { release: Release | null; at: number } | null = null
+let cached: {
+  release: Release | null
+  at: number
+  failed: boolean
+} | null = null
 let inflight: Promise<Release | null> | null = null
 
 const load = async (): Promise<Release | null> => {
@@ -48,18 +52,24 @@ const load = async (): Promise<Release | null> => {
   }
 }
 
-export const fetchLatestRelease = async (): Promise<Release | null> => {
-  const ttl = cached?.release ? TTL_MS : RETRY_MS
+export const fetchLatestRelease = async ({
+  force = false,
+}: { force?: boolean } = {}): Promise<Release | null> => {
+  const ttl = cached && !cached.failed ? TTL_MS : RETRY_MS
 
-  if (cached && Date.now() - cached.at < ttl) {
+  if (!force && cached && Date.now() - cached.at < ttl) {
     return cached.release
   }
 
   inflight ??= load()
     .then((release) => {
-      cached = { release, at: Date.now() }
+      cached = {
+        release: release ?? cached?.release ?? null,
+        at: Date.now(),
+        failed: release === null,
+      }
 
-      return release
+      return cached.release
     })
     .finally(() => {
       inflight = null

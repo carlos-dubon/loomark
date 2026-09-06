@@ -9,13 +9,15 @@ import {
   selfUpdateSupport,
 } from "@/lib/updates/self-update"
 
-export const GET = async () => {
+export const GET = async (request: Request) => {
   if (!(await requireOwnerId())) {
     return jsonError("Unauthorized", 401)
   }
 
+  const force = new URL(request.url).searchParams.get("force") === "1"
+
   const [latest, selfUpdate, parked] = await Promise.all([
-    fetchLatestRelease(),
+    fetchLatestRelease({ force }),
     selfUpdateSupport(),
     parkedUpdates(),
   ])
