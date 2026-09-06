@@ -15,6 +15,7 @@ import { CollectionDialog } from "@/components/collection-dialog"
 import { CollectionShareDialog } from "@/components/collection-share-dialog"
 import { DemoShell } from "@/components/demo/demo-shell"
 import { DndProvider } from "@/components/dnd-provider"
+import { UpdateToast } from "@/components/update-toast"
 import { getAppearance } from "@/lib/appearance"
 import { isDemo } from "@/lib/demo/config"
 import { auth } from "@/lib/auth"
@@ -79,6 +80,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
         <CollectionDeleteDialog />
         <CollectionShareDialog />
         <ArchiveDialog />
+        <UpdateToast isOwner={profile.role === "OWNER"} />
       </SidebarProvider>
     </AppearanceProvider>
   )

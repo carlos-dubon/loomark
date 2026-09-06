@@ -14,6 +14,11 @@ import {
   type BookmarkDTO,
   type CollectionDTO,
 } from "@loomark/core/types"
+import {
+  IDLE_UPDATE_JOB,
+  type UpdateJob,
+  type UpdateStatus,
+} from "@loomark/core/updates"
 import type { ViewMode } from "@loomark/core/view-mode"
 
 import type { AppearanceDTO } from "@/lib/themes/appearance"
@@ -37,6 +42,10 @@ type BookmarkListState = {
 }
 
 export const collectionsAtom = atom<CollectionDTO[]>([])
+
+export const updateStatusAtom = atom<UpdateStatus | null>(null)
+
+export const updateJobAtom = atom<UpdateJob>(IDLE_UPDATE_JOB)
 
 export const appearanceAtom = atom<AppearanceDTO>(DEFAULT_APPEARANCE)
 

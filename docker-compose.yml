@@ -33,8 +33,10 @@ services:
       ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-true}
       ARCHIVE_DIR: /data/archives
       DB_WAIT_TIMEOUT: ${DB_WAIT_TIMEOUT:-180}
+      LOOMARK_SELF_UPDATE: ${LOOMARK_SELF_UPDATE:-true}
     volumes:
       - loomark-archives:/data/archives
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     ports:
       - "${APP_PORT:-3000}:3000"
 
