@@ -1,14 +1,5 @@
-import {
-  ARCHIVE_FORMATS,
-  ARCHIVE_STAGES,
-  isArchiveActive,
-  type ArchiveFormat,
-  type ArchiveSettings,
-} from "@loomark/core/archive"
 import { hostFromUrl, normalizeUrl } from "@loomark/core/url"
 import type {
-  ArchiveDTO,
-  ArchiveQueue,
   BookmarkDTO,
   CollectionDeletion,
   UrlMetadata,
@@ -17,7 +8,6 @@ import type {
 import { demoBanner, demoFavicon } from "@/lib/demo/banner"
 import { DemoUnavailableError } from "@/lib/demo/config"
 import {
-  archiveUsage,
   collectionList,
   descendantIds,
   getState,
@@ -27,12 +17,10 @@ import {
   setState,
   unsortedId,
   withArtwork,
-  type DemoArchiveRecord,
   type DemoState,
 } from "@/lib/demo/store"
 import type {
   AppearanceUpdateInput,
-  ArchiveRunInput,
   BookmarkCreateInput,
   BookmarkReorderInput,
   BookmarkUpdateInput,
@@ -49,95 +37,6 @@ const settle = <T>(value: T): Promise<T> =>
 const fail = (message: string): never => {
   throw new Error(message)
 }
-
-const BYTES_BY_FORMAT: Record<ArchiveFormat, [number, number]> = {
-  SCREENSHOT: [420_000, 1_900_000],
-  WEBPAGE: [180_000, 2_400_000],
-  PDF: [240_000, 1_100_000],
-  MARKDOWN: [4_000, 38_000],
-}
-
-const plausibleBytes = (format: ArchiveFormat) => {
-  const [min, max] = BYTES_BY_FORMAT[format]
-
-  return min + Math.floor(Math.random() * (max - min))
-}
-
-const toArchiveDTO = (archive: DemoArchiveRecord): ArchiveDTO => ({
-  format: archive.format,
-  status: archive.status,
-  stage: archive.stage,
-  bytes: archive.bytes,
-  error: archive.error,
-  updatedAt: archive.updatedAt,
-})
-
-const timers = new Map<string, ReturnType<typeof setTimeout>>()
-
-const keyOf = (bookmarkId: string, format: ArchiveFormat) =>
-  `${bookmarkId}:${format}`
-
-const stopTimer = (bookmarkId: string, format: ArchiveFormat) => {
-  const key = keyOf(bookmarkId, format)
-  const timer = timers.get(key)
-
-  if (timer) {
-    clearTimeout(timer)
-    timers.delete(key)
-  }
-}
-
-const patchArchive = (
-  bookmarkId: string,
-  format: ArchiveFormat,
-  patch: Partial<DemoArchiveRecord>
-) => {
-  setState((current) => ({
-    ...current,
-    archives: current.archives.map((archive) =>
-      archive.bookmarkId === bookmarkId && archive.format === format
-        ? { ...archive, ...patch, updatedAt: new Date().toISOString() }
-        : archive
-    ),
-  }))
-}
-
-const advance = (bookmarkId: string, format: ArchiveFormat, step: number) => {
-  const key = keyOf(bookmarkId, format)
-
-  if (step >= ARCHIVE_STAGES.length) {
-    timers.delete(key)
-    patchArchive(bookmarkId, format, {
-      status: "READY",
-      stage: null,
-      bytes: plausibleBytes(format),
-      error: null,
-    })
-
-    return
-  }
-
-  patchArchive(bookmarkId, format, {
-    status: "RUNNING",
-    stage: ARCHIVE_STAGES[step],
-  })
-
-  timers.set(
-    key,
-    setTimeout(() => advance(bookmarkId, format, step + 1), 700 + step * 120)
-  )
-}
-
-const startCapture = (bookmarkId: string, format: ArchiveFormat) => {
-  stopTimer(bookmarkId, format)
-  timers.set(
-    keyOf(bookmarkId, format),
-    setTimeout(() => advance(bookmarkId, format, 0), 900)
-  )
-}
-
-const enabledFormats = (settings: ArchiveSettings) =>
-  ARCHIVE_FORMATS.filter((format) => settings[format])
 
 const requireBookmark = (current: DemoState, id: string) =>
   current.bookmarks.find((bookmark) => bookmark.id === id) ??
@@ -280,9 +179,6 @@ export const demoApi = {
     setState((state) => ({
       ...state,
       bookmarks: state.bookmarks.filter((bookmark) => !doomed.has(bookmark.id)),
-      archives: state.archives.filter(
-        (archive) => !doomed.has(archive.bookmarkId)
-      ),
     }))
 
     return settle({ count: ids.length })
@@ -327,182 +223,6 @@ export const demoApi = {
 
   refreshPreview: (id: string) =>
     settle(withArtwork(requireBookmark(getState(), id))),
-
-  listArchives: (id: string) =>
-    settle(
-      getState()
-        .archives.filter((archive) => archive.bookmarkId === id)
-        .map(toArchiveDTO)
-    ),
-
-  runArchives: (id: string, input: ArchiveRunInput = {}) => {
-    const current = getState()
-    requireBookmark(current, id)
-
-    const formats = input.formats?.length
-      ? input.formats
-      : enabledFormats(current.archiveSettings)
-
-    if (formats.length === 0) {
-      fail("Turn on at least one archive format first")
-    }
-
-    const now = new Date().toISOString()
-
-    setState((state) => {
-      const untouched = state.archives.filter(
-        (archive) =>
-          archive.bookmarkId !== id || !formats.includes(archive.format)
-      )
-
-      return {
-        ...state,
-        archives: [
-          ...untouched,
-          ...formats.map((format) => ({
-            bookmarkId: id,
-            format,
-            status: "PENDING" as const,
-            stage: null,
-            bytes: 0,
-            error: null,
-            updatedAt: now,
-            queuedAt: now,
-          })),
-        ],
-      }
-    })
-
-    for (const format of formats) {
-      startCapture(id, format)
-    }
-
-    return settle(
-      getState()
-        .archives.filter((archive) => archive.bookmarkId === id)
-        .map(toArchiveDTO)
-    )
-  },
-
-  cancelArchives: (id: string, formats?: ArchiveFormat[]) => {
-    const targets = formats ?? [...ARCHIVE_FORMATS]
-
-    for (const format of targets) {
-      stopTimer(id, format)
-    }
-
-    setState((state) => ({
-      ...state,
-      archives: state.archives.filter(
-        (archive) =>
-          !(
-            archive.bookmarkId === id &&
-            targets.includes(archive.format) &&
-            isArchiveActive(archive.status)
-          )
-      ),
-    }))
-
-    return settle(
-      getState()
-        .archives.filter((archive) => archive.bookmarkId === id)
-        .map(toArchiveDTO)
-    )
-  },
-
-  archiveQueue: () => settle(queueSnapshot(getState())),
-
-  clearArchiveQueue: () => {
-    const current = getState()
-    const canceled = current.archives.filter((archive) =>
-      isArchiveActive(archive.status)
-    )
-
-    for (const archive of canceled) {
-      stopTimer(archive.bookmarkId, archive.format)
-    }
-
-    setState((state) => ({
-      ...state,
-      archives: state.archives.filter(
-        (archive) => !isArchiveActive(archive.status)
-      ),
-    }))
-
-    return settle({ ...queueSnapshot(getState()), canceled: canceled.length })
-  },
-
-  updateArchiveSettings: (input: Partial<ArchiveSettings>) => {
-    setState((state) => ({
-      ...state,
-      archiveSettings: { ...state.archiveSettings, ...input },
-    }))
-
-    return settle(getState().archiveSettings)
-  },
-
-  backfillArchives: () => {
-    const current = getState()
-    const formats = enabledFormats(current.archiveSettings)
-
-    if (formats.length === 0) {
-      fail("Turn on at least one archive format first")
-    }
-
-    const pending = current.bookmarks
-      .filter(
-        (bookmark) =>
-          !current.archives.some(
-            (archive) =>
-              archive.bookmarkId === bookmark.id &&
-              formats.includes(archive.format)
-          )
-      )
-      .slice(0, 6)
-
-    const now = new Date().toISOString()
-
-    setState((state) => ({
-      ...state,
-      archives: [
-        ...state.archives,
-        ...pending.flatMap((bookmark) =>
-          formats.map((format) => ({
-            bookmarkId: bookmark.id,
-            format,
-            status: "PENDING" as const,
-            stage: null,
-            bytes: 0,
-            error: null,
-            updatedAt: now,
-            queuedAt: now,
-          }))
-        ),
-      ],
-    }))
-
-    for (const bookmark of pending) {
-      for (const format of formats) {
-        startCapture(bookmark.id, format)
-      }
-    }
-
-    return settle({ queued: pending.length * formats.length })
-  },
-
-  archiveUsage: () => settle(archiveUsage(getState())),
-
-  clearArchives: () => {
-    const cleared = archiveUsage(getState()).archives
-
-    for (const archive of getState().archives) {
-      stopTimer(archive.bookmarkId, archive.format)
-    }
-
-    setState((state) => ({ ...state, archives: [] }))
-
-    return settle({ bytes: 0, archives: 0, cleared })
-  },
 
   listCollections: () => settle(collectionList(getState())),
 
@@ -650,12 +370,6 @@ export const demoApi = {
       bookmarks: state.bookmarks.filter(
         (bookmark) => !doomed.has(bookmark.collectionId)
       ),
-      archives: state.archives.filter(
-        (archive) =>
-          !deletion.bookmarks.some(
-            (bookmark) => bookmark.id === archive.bookmarkId
-          )
-      ),
     }))
 
     return settle(deletion)
@@ -796,42 +510,4 @@ export const demoApi = {
   register: () => {
     throw new DemoUnavailableError("Creating an account")
   },
-}
-
-const queueSnapshot = (current: DemoState): ArchiveQueue => {
-  const active = current.archives.filter((archive) =>
-    isArchiveActive(archive.status)
-  )
-
-  const groups = new Map<string, DemoArchiveRecord[]>()
-
-  for (const archive of active) {
-    const bucket = groups.get(archive.bookmarkId) ?? []
-    bucket.push(archive)
-    groups.set(archive.bookmarkId, bucket)
-  }
-
-  return {
-    groups: [...groups.entries()].flatMap(([bookmarkId, archives]) => {
-      const bookmark = current.bookmarks.find((item) => item.id === bookmarkId)
-
-      if (!bookmark) {
-        return []
-      }
-
-      return [
-        {
-          bookmarkId,
-          title: bookmark.title,
-          url: bookmark.url,
-          faviconUrl: bookmark.faviconUrl,
-          queuedAt: archives[0]?.queuedAt ?? new Date().toISOString(),
-          archives: archives.map(toArchiveDTO),
-        },
-      ]
-    }),
-    bookmarks: groups.size,
-    pending: active.filter((archive) => archive.status === "PENDING").length,
-    running: active.filter((archive) => archive.status === "RUNNING").length,
-  }
 }

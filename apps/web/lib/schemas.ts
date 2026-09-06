@@ -1,6 +1,5 @@
 import { z } from "zod"
 
-import { ARCHIVE_FORMATS } from "@loomark/core/archive"
 import {
   bookmarkDescription,
   bookmarkTitle,
@@ -106,26 +105,6 @@ export const appearanceUpdateSchema = z
   })
   .partial()
 
-export const archiveSettingsSchema = z
-  .object(
-    Object.fromEntries(
-      ARCHIVE_FORMATS.map((format) => [format, z.boolean()])
-    ) as Record<(typeof ARCHIVE_FORMATS)[number], z.ZodBoolean>
-  )
-  .partial()
-
-export const archiveRunSchema = z.object({
-  formats: z.array(z.enum(ARCHIVE_FORMATS)).min(1).optional(),
-})
-
-export const archiveCancelSchema = z.object({
-  formats: z
-    .string()
-    .transform((value) => value.split(",").filter(Boolean))
-    .pipe(z.array(z.enum(ARCHIVE_FORMATS)).min(1))
-    .optional(),
-})
-
 export const bookmarkBulkDeleteSchema = z.object({
   ids: z.array(idField).min(1).max(500),
 })
@@ -179,9 +158,6 @@ export type CollectionUpdateInput = z.infer<typeof collectionUpdateSchema>
 export type CollectionMoveInput = z.infer<typeof collectionMoveSchema>
 export type SyncReorderInput = z.infer<typeof syncReorderSchema>
 export type AppearanceUpdateInput = z.infer<typeof appearanceUpdateSchema>
-export type ArchiveSettingsInput = z.infer<typeof archiveSettingsSchema>
-export type ArchiveRunInput = z.infer<typeof archiveRunSchema>
-export type ArchiveCancelInput = z.infer<typeof archiveCancelSchema>
 export type BookmarkBulkDeleteInput = z.infer<typeof bookmarkBulkDeleteSchema>
 export type BookmarkReorderInput = z.infer<typeof bookmarkReorderSchema>
 export type BookmarkRestoreInput = z.infer<typeof bookmarkRestoreSchema>

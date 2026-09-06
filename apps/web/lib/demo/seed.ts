@@ -1,4 +1,3 @@
-import type { ArchiveFormat } from "@loomark/core/archive"
 import type { CollectionKind } from "@loomark/core/types"
 
 export type DemoCollectionSeed = {
@@ -10,8 +9,6 @@ export type DemoCollectionSeed = {
   position: number
   shareToken: string | null
 }
-
-export type DemoArchiveSeed = { format: ArchiveFormat; bytes: number }
 
 export type DemoBookmarkSeed = {
   id: string
@@ -25,7 +22,6 @@ export type DemoBookmarkSeed = {
   position: number
   pinnedPosition: number
   daysAgo: number
-  archives: DemoArchiveSeed[]
 }
 
 export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
@@ -171,11 +167,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 3,
-    archives: [
-      { format: "SCREENSHOT", bytes: 1171312 },
-      { format: "WEBPAGE", bytes: 1726119 },
-      { format: "MARKDOWN", bytes: 27747 },
-    ],
   },
   {
     id: "b-tailwindcss-com",
@@ -191,7 +182,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 3,
     daysAgo: 10,
-    archives: [],
   },
   {
     id: "b-nextjs-org",
@@ -207,10 +197,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 2,
     daysAgo: 17,
-    archives: [
-      { format: "SCREENSHOT", bytes: 664516 },
-      { format: "WEBPAGE", bytes: 1819563 },
-    ],
   },
   {
     id: "b-developer-mozilla-org-en-us-docs-web-css",
@@ -225,7 +211,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 26,
-    archives: [],
   },
   {
     id: "b-ui-shadcn-com",
@@ -241,7 +226,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 31,
-    archives: [],
   },
   {
     id: "b-vite-dev",
@@ -255,7 +239,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 5,
     pinnedPosition: 0,
     daysAgo: 39,
-    archives: [],
   },
   {
     id: "b-web-dev",
@@ -271,7 +254,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 6,
     pinnedPosition: 0,
     daysAgo: 46,
-    archives: [],
   },
   {
     id: "b-tanstack-com-query-latest",
@@ -286,7 +268,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 7,
     pinnedPosition: 0,
     daysAgo: 53,
-    archives: [],
   },
   {
     id: "b-docs-docker-com",
@@ -301,7 +282,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 59,
-    archives: [],
   },
   {
     id: "b-redis-io",
@@ -317,7 +297,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 69,
-    archives: [],
   },
   {
     id: "b-prisma-io",
@@ -332,7 +311,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 72,
-    archives: [],
   },
   {
     id: "b-kubernetes-io",
@@ -347,7 +325,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 78,
-    archives: [],
   },
   {
     id: "b-fly-io",
@@ -364,7 +341,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 90,
-    archives: [],
   },
   {
     id: "b-caddyserver-com",
@@ -381,7 +357,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 5,
     pinnedPosition: 0,
     daysAgo: 93,
-    archives: [],
   },
   {
     id: "b-litestream-io",
@@ -396,10 +371,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 6,
     pinnedPosition: 0,
     daysAgo: 101,
-    archives: [
-      { format: "WEBPAGE", bytes: 1267605 },
-      { format: "PDF", bytes: 622406 },
-    ],
   },
   {
     id: "b-postgresql-org",
@@ -413,7 +384,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 7,
     pinnedPosition: 0,
     daysAgo: 109,
-    archives: [{ format: "SCREENSHOT", bytes: 1768137 }],
   },
   {
     id: "b-anthropic-com",
@@ -430,7 +400,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 113,
-    archives: [],
   },
   {
     id: "b-huggingface-co",
@@ -445,7 +414,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 124,
-    archives: [],
   },
   {
     id: "b-ollama-com",
@@ -460,7 +428,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 130,
-    archives: [],
   },
   {
     id: "b-arxiv-org-abs-1706-03762",
@@ -477,10 +444,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 138,
-    archives: [
-      { format: "PDF", bytes: 604568 },
-      { format: "MARKDOWN", bytes: 23937 },
-    ],
   },
   {
     id: "b-karpathy-github-io",
@@ -494,7 +457,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 144,
-    archives: [],
   },
   {
     id: "b-deeplearning-ai",
@@ -510,7 +472,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 5,
     pinnedPosition: 0,
     daysAgo: 151,
-    archives: [],
   },
   {
     id: "b-simonwillison-net",
@@ -524,10 +485,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 6,
     pinnedPosition: 0,
     daysAgo: 157,
-    archives: [
-      { format: "WEBPAGE", bytes: 2108111 },
-      { format: "MARKDOWN", bytes: 15285 },
-    ],
   },
   {
     id: "b-figma-com",
@@ -543,7 +500,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 5,
     daysAgo: 164,
-    archives: [],
   },
   {
     id: "b-refactoringui-com",
@@ -558,7 +514,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 174,
-    archives: [{ format: "SCREENSHOT", bytes: 1196273 }],
   },
   {
     id: "b-lawsofux-com",
@@ -573,10 +528,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 176,
-    archives: [
-      { format: "SCREENSHOT", bytes: 1502340 },
-      { format: "WEBPAGE", bytes: 2203883 },
-    ],
   },
   {
     id: "b-oklch-com",
@@ -590,7 +541,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 183,
-    archives: [],
   },
   {
     id: "b-fontsinuse-com",
@@ -607,7 +557,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 191,
-    archives: [],
   },
   {
     id: "b-fonts-google-com",
@@ -624,7 +573,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 197,
-    archives: [],
   },
   {
     id: "b-happyhues-co",
@@ -641,7 +589,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 206,
-    archives: [],
   },
   {
     id: "b-coolors-co",
@@ -656,7 +603,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 214,
-    archives: [],
   },
   {
     id: "b-type-scale-com",
@@ -671,7 +617,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 5,
     pinnedPosition: 0,
     daysAgo: 220,
-    archives: [],
   },
   {
     id: "b-dribbble-com",
@@ -686,7 +631,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 230,
-    archives: [],
   },
   {
     id: "b-mobbin-com",
@@ -703,7 +647,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 232,
-    archives: [],
   },
   {
     id: "b-land-book-com",
@@ -717,7 +660,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 241,
-    archives: [],
   },
   {
     id: "b-siteinspire-com",
@@ -731,7 +673,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 247,
-    archives: [],
   },
   {
     id: "b-godly-website",
@@ -745,7 +686,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 257,
-    archives: [],
   },
   {
     id: "b-awwwards-com",
@@ -760,7 +700,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 5,
     pinnedPosition: 0,
     daysAgo: 264,
-    archives: [],
   },
   {
     id: "b-longreads-com",
@@ -777,7 +716,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 267,
-    archives: [],
   },
   {
     id: "b-news-ycombinator-com",
@@ -791,7 +729,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 4,
     daysAgo: 7,
-    archives: [],
   },
   {
     id: "b-danluu-com",
@@ -805,7 +742,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 13,
-    archives: [{ format: "MARKDOWN", bytes: 17741 }],
   },
   {
     id: "b-paulgraham-com-greatwork-html",
@@ -819,11 +755,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 21,
-    archives: [
-      { format: "WEBPAGE", bytes: 645766 },
-      { format: "MARKDOWN", bytes: 4080 },
-      { format: "PDF", bytes: 713303 },
-    ],
   },
   {
     id: "b-joelonsoftware-com",
@@ -840,7 +771,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 29,
-    archives: [],
   },
   {
     id: "b-martinfowler-com",
@@ -854,10 +784,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 35,
-    archives: [
-      { format: "SCREENSHOT", bytes: 745537 },
-      { format: "MARKDOWN", bytes: 30772 },
-    ],
   },
   {
     id: "b-blog-codinghorror-com",
@@ -872,7 +798,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 46,
-    archives: [],
   },
   {
     id: "b-jvns-ca",
@@ -886,7 +811,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 5,
     pinnedPosition: 0,
     daysAgo: 51,
-    archives: [{ format: "MARKDOWN", bytes: 27976 }],
   },
   {
     id: "b-bytes-dev",
@@ -901,7 +825,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 57,
-    archives: [],
   },
   {
     id: "b-thisweekinreact-com",
@@ -915,7 +838,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 63,
-    archives: [],
   },
   {
     id: "b-newsletter-pragmaticengineer-com",
@@ -932,7 +854,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 70,
-    archives: [],
   },
   {
     id: "b-tldr-tech",
@@ -947,7 +868,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 76,
-    archives: [],
   },
   {
     id: "b-obsidian-md",
@@ -961,7 +881,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 8,
     daysAgo: 87,
-    archives: [],
   },
   {
     id: "b-excalidraw-com",
@@ -976,7 +895,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 6,
     daysAgo: 95,
-    archives: [],
   },
   {
     id: "b-github-com",
@@ -992,7 +910,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 1,
     daysAgo: 97,
-    archives: [],
   },
   {
     id: "b-raycast-com",
@@ -1008,7 +925,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 105,
-    archives: [],
   },
   {
     id: "b-warp-dev",
@@ -1023,7 +939,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 111,
-    archives: [],
   },
   {
     id: "b-linear-app",
@@ -1038,7 +953,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 5,
     pinnedPosition: 7,
     daysAgo: 122,
-    archives: [],
   },
   {
     id: "b-httpie-io",
@@ -1053,7 +967,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 6,
     pinnedPosition: 0,
     daysAgo: 129,
-    archives: [],
   },
   {
     id: "b-regex101-com",
@@ -1068,7 +981,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 7,
     pinnedPosition: 0,
     daysAgo: 134,
-    archives: [],
   },
   {
     id: "b-roadmap-sh",
@@ -1083,7 +995,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 144,
-    archives: [],
   },
   {
     id: "b-exercism-org",
@@ -1098,7 +1009,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 148,
-    archives: [],
   },
   {
     id: "b-css-tricks-com",
@@ -1114,7 +1024,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 154,
-    archives: [],
   },
   {
     id: "b-freecodecamp-org",
@@ -1129,7 +1038,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 161,
-    archives: [],
   },
   {
     id: "b-javascript-info",
@@ -1144,7 +1052,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 172,
-    archives: [],
   },
   {
     id: "b-frontendmasters-com",
@@ -1160,7 +1067,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 5,
     pinnedPosition: 0,
     daysAgo: 178,
-    archives: [],
   },
   {
     id: "b-github-com-linkwarden-linkwarden",
@@ -1176,10 +1082,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 183,
-    archives: [
-      { format: "SCREENSHOT", bytes: 1836970 },
-      { format: "MARKDOWN", bytes: 10327 },
-    ],
   },
   {
     id: "b-home-assistant-io",
@@ -1194,7 +1096,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 191,
-    archives: [],
   },
   {
     id: "b-umami-is",
@@ -1210,7 +1111,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 198,
-    archives: [],
   },
   {
     id: "b-immich-app",
@@ -1225,7 +1125,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 206,
-    archives: [],
   },
   {
     id: "b-jellyfin-org",
@@ -1240,7 +1139,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 210,
-    archives: [],
   },
   {
     id: "b-coolify-io",
@@ -1255,7 +1153,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 5,
     pinnedPosition: 0,
     daysAgo: 221,
-    archives: [],
   },
   {
     id: "b-selfh-st",
@@ -1272,7 +1169,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 6,
     pinnedPosition: 0,
     daysAgo: 228,
-    archives: [{ format: "WEBPAGE", bytes: 2259350 }],
   },
   {
     id: "b-raspberrypi-com",
@@ -1287,7 +1183,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 0,
     pinnedPosition: 0,
     daysAgo: 235,
-    archives: [],
   },
   {
     id: "b-sqlite-org",
@@ -1301,7 +1196,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 1,
     pinnedPosition: 0,
     daysAgo: 241,
-    archives: [],
   },
   {
     id: "b-bun-sh",
@@ -1316,7 +1210,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 2,
     pinnedPosition: 0,
     daysAgo: 246,
-    archives: [],
   },
   {
     id: "b-caniuse-com",
@@ -1331,7 +1224,6 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 3,
     pinnedPosition: 0,
     daysAgo: 252,
-    archives: [{ format: "SCREENSHOT", bytes: 698791 }],
   },
   {
     id: "b-ffmpeg-org",
@@ -1345,6 +1237,5 @@ export const DEMO_BOOKMARKS: DemoBookmarkSeed[] = [
     position: 4,
     pinnedPosition: 0,
     daysAgo: 263,
-    archives: [],
   },
 ]

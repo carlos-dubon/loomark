@@ -68,8 +68,8 @@ export const DemoLoginForm = () => {
             <AlertTitle>Nothing here is saved</AlertTitle>
             <AlertDescription>
               This demo runs on an in-memory database that lives only in this
-              browser tab. Add, edit, drag and archive anything you want —
-              refreshing the page wipes it clean.
+              browser tab. Add, edit and drag anything you want — refreshing the
+              page wipes it clean.
             </AlertDescription>
           </Alert>
         </CardContent>

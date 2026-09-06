@@ -1,10 +1,3 @@
-import {
-  DEFAULT_ARCHIVE_SETTINGS,
-  type ArchiveFormat,
-  type ArchiveSettings,
-  type ArchiveStage,
-  type ArchiveStatus,
-} from "@loomark/core/archive"
 import type {
   BookmarkDTO,
   CollectionDTO,
@@ -27,25 +20,12 @@ export type DemoCollectionRecord = {
   shareToken: string | null
 }
 
-export type DemoArchiveRecord = {
-  bookmarkId: string
-  format: ArchiveFormat
-  status: ArchiveStatus
-  stage: ArchiveStage | null
-  bytes: number
-  error: string | null
-  updatedAt: string
-  queuedAt: string
-}
-
 export type DemoState = {
   signedIn: boolean
   user: { name: string | null; email: string; image: string | null }
   appearance: AppearanceDTO
   collections: DemoCollectionRecord[]
   bookmarks: BookmarkDTO[]
-  archives: DemoArchiveRecord[]
-  archiveSettings: ArchiveSettings
 }
 
 const DAY_MS = 86_400_000
@@ -77,32 +57,12 @@ const seedState = (): DemoState => {
     })
   )
 
-  const archives = DEMO_BOOKMARKS.flatMap((seed) =>
-    seed.archives.map((archive) => ({
-      bookmarkId: seed.id,
-      format: archive.format,
-      status: "READY" as ArchiveStatus,
-      stage: null,
-      bytes: archive.bytes,
-      error: null,
-      updatedAt: timestamp(seed.daysAgo),
-      queuedAt: timestamp(seed.daysAgo),
-    }))
-  )
-
   return {
     signedIn: false,
     user: { name: DEMO_USER.name, email: DEMO_USER.email, image: null },
     appearance: { ...DEFAULT_APPEARANCE },
     collections: DEMO_COLLECTIONS.map((collection) => ({ ...collection })),
     bookmarks,
-    archives,
-    archiveSettings: {
-      ...DEFAULT_ARCHIVE_SETTINGS,
-      SCREENSHOT: true,
-      WEBPAGE: true,
-      MARKDOWN: true,
-    },
   }
 }
 
@@ -252,13 +212,3 @@ export const nextPinnedPosition = (current: DemoState) =>
 
 export const newId = (prefix: string) =>
   `${prefix}-${Math.random().toString(36).slice(2, 10)}`
-
-export const archiveUsage = (current: DemoState) => ({
-  bytes: current.archives.reduce(
-    (total, archive) =>
-      archive.status === "READY" ? total + archive.bytes : total,
-    0
-  ),
-  archives: current.archives.filter((archive) => archive.status === "READY")
-    .length,
-})

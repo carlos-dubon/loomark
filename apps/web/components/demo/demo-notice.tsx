@@ -11,8 +11,8 @@ export const DemoNotice = () => (
     <DatabaseZapIcon className="size-3.5 shrink-0 text-warning" />
     <p className="min-w-0 flex-1 text-current/80">
       <span className="font-medium text-current">Demo mode.</span> Everything
-      here lives in an in-memory database inside this tab — edit, drag, delete
-      and archive whatever you like. Refreshing the page wipes it all and starts
+      here lives in an in-memory database inside this tab — edit, drag and
+      delete whatever you like. Refreshing the page wipes it all and starts
       over.
     </p>
     <Button
