@@ -9,8 +9,8 @@ import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
 import { BookmarkGrid } from "@/components/bookmark-grid"
 import { CollectionMenu } from "@/components/collection-menu"
+import { CollectionCard } from "@/components/collection-card"
 import { EmptyState } from "@/components/empty-state"
-import { Link } from "@/components/link"
 import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
 import { ViewModeToggle } from "@/components/view-mode-toggle"
@@ -25,26 +25,6 @@ const EMPTY_ICONS = {
   bookmark: BookmarkIcon,
   inbox: InboxIcon,
 }
-
-const CollectionCard = ({ collection }: { collection: CollectionDTO }) => (
-  <Link
-    href={`/collections/${collection.id}`}
-    className="group flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-foreground/20 hover:bg-accent/50"
-  >
-    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground transition-colors group-hover:bg-background">
-      <CollectionIcon name={collection.icon} className="size-5" />
-    </span>
-    <span className="min-w-0 flex-1">
-      <span className="block truncate text-sm font-medium">
-        {collection.name}
-      </span>
-      <span className="block truncate text-xs text-muted-foreground">
-        {collection.bookmarkCount}{" "}
-        {collection.bookmarkCount === 1 ? "bookmark" : "bookmarks"}
-      </span>
-    </span>
-  </Link>
-)
 
 export const BookmarkListView = ({
   title,
@@ -121,7 +101,13 @@ export const BookmarkListView = ({
             <h2 className="text-sm font-semibold">Collections</h2>
             <div className="grid gap-3 @lg:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-4">
               {subcollections.map((child) => (
-                <CollectionCard key={child.id} collection={child} />
+                <CollectionCard
+                  key={child.id}
+                  href={`/collections/${child.id}`}
+                  icon={child.icon}
+                  name={child.name}
+                  count={child.bookmarkCount}
+                />
               ))}
             </div>
           </section>

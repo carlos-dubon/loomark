@@ -4,6 +4,7 @@ import { sharePath } from "@loomark/core/routes"
 import type { SharedCollectionPage } from "@loomark/core/types"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
+import { CollectionCard } from "@/components/collection-card"
 import { EmptyState } from "@/components/empty-state"
 import { Link } from "@/components/link"
 import { LoomarkMark } from "@/components/loomark-mark"
@@ -35,31 +36,6 @@ const Breadcrumb = ({ page }: { page: SharedCollectionPage }) => (
     ))}
     <span className="truncate text-foreground">{page.collection.name}</span>
   </nav>
-)
-
-const SubcollectionCard = ({
-  token,
-  collection,
-}: {
-  token: string
-  collection: SharedCollectionPage["subcollections"][number]
-}) => (
-  <Link
-    href={sharePath(token, collection.id)}
-    className="group flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-foreground/20 hover:bg-accent/50"
-  >
-    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground transition-colors group-hover:bg-background">
-      <CollectionIcon name={collection.icon} className="size-5" />
-    </span>
-    <span className="min-w-0 flex-1">
-      <span className="block truncate text-sm font-medium">
-        {collection.name}
-      </span>
-      <span className="block truncate text-xs text-muted-foreground">
-        {plural(collection.bookmarkCount, "bookmark")}
-      </span>
-    </span>
-  </Link>
 )
 
 export const SharedCollectionView = ({
@@ -104,10 +80,12 @@ export const SharedCollectionView = ({
             <h2 className="text-sm font-semibold">Collections</h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {page.subcollections.map((collection) => (
-                <SubcollectionCard
+                <CollectionCard
                   key={collection.id}
-                  token={page.token}
-                  collection={collection}
+                  href={sharePath(page.token, collection.id)}
+                  icon={collection.icon}
+                  name={collection.name}
+                  count={collection.bookmarkCount}
                 />
               ))}
             </div>
