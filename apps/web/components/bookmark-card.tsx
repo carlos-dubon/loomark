@@ -10,7 +10,7 @@ import { hostFromUrl } from "@loomark/core/url"
 import { cn } from "@loomark/core/utils"
 import type { ViewMode } from "@loomark/core/view-mode"
 import { Button } from "@loomark/ui/components/button"
-import { Card, CardContent, CardFooter } from "@loomark/ui/components/card"
+import { Card, CardContent } from "@loomark/ui/components/card"
 import { Checkbox } from "@loomark/ui/components/checkbox"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
@@ -243,10 +243,8 @@ const GridCard = ({
           {bookmark.description}
         </p>
       ) : null}
+      <BookmarkMeta bookmark={bookmark} wrap className="mt-auto" />
     </CardContent>
-    <CardFooter className="mt-auto">
-      <BookmarkMeta bookmark={bookmark} wrap />
-    </CardFooter>
   </Card>
 )
 
