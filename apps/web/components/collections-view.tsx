@@ -3,42 +3,13 @@
 import { useSetAtom } from "jotai"
 import { FolderTreeIcon, PlusIcon } from "lucide-react"
 
-import type { FlatCollection } from "@loomark/core/tree"
 import { Button } from "@loomark/ui/components/button"
-import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
+import { CollectionCard } from "@/components/collection-card"
 import { EmptyState } from "@/components/empty-state"
-import { Link } from "@/components/link"
 import { PageHeader } from "@/components/page-header"
 import { useCollectionItems } from "@/hooks/use-collection-items"
 import { collectionDialogAtom } from "@/store/atoms"
-
-const CollectionCard = ({
-  collection,
-  parentName,
-}: {
-  collection: FlatCollection
-  parentName?: string
-}) => (
-  <Link
-    href={`/collections/${collection.id}`}
-    className="group flex items-center gap-3 rounded-xl border bg-card p-4 transition-colors hover:border-foreground/20 hover:bg-accent/50"
-  >
-    <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground transition-colors group-hover:bg-background">
-      <CollectionIcon name={collection.icon} className="size-5" />
-    </span>
-    <span className="min-w-0 flex-1">
-      <span className="block truncate text-sm font-medium">
-        {collection.name}
-      </span>
-      <span className="block truncate text-xs text-muted-foreground">
-        {collection.totalCount}{" "}
-        {collection.totalCount === 1 ? "bookmark" : "bookmarks"}
-        {parentName ? ` · in ${parentName}` : ""}
-      </span>
-    </span>
-  </Link>
-)
 
 export const CollectionsView = () => {
   const { items } = useCollectionItems()
@@ -78,7 +49,10 @@ export const CollectionsView = () => {
             {items.map((item) => (
               <CollectionCard
                 key={item.id}
-                collection={item}
+                href={`/collections/${item.id}`}
+                icon={item.icon}
+                name={item.name}
+                count={item.totalCount}
                 parentName={
                   item.parentId ? names.get(item.parentId) : undefined
                 }
