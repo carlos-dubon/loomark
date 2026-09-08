@@ -128,7 +128,7 @@ export const clearRecentSearchesAtom = atom(null, (_get, set) => {
 
 export const viewModeAtom = atom<ViewMode>("grid")
 
-export const sortOrderAtom = atom<SortOrder>("newest")
+export const sortOrderAtom = atom<SortOrder>("custom")
 
 export const openInNewTabAtom = atom(true)
 

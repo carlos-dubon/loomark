@@ -92,6 +92,44 @@ export const flattenCollections = (
   return walk(null, 0)
 }
 
+export const projectDepth = (
+  items: FlatCollection[],
+  targetId: string,
+  projectedDepth: number
+): { depth: number; parentId: string | null } => {
+  const index = items.findIndex((item) => item.id === targetId)
+  const target = items[index]
+
+  if (!target) {
+    return { depth: 0, parentId: null }
+  }
+
+  const previous = items[index - 1]
+  const next = items[index + 1]
+  const maxDepth = previous ? Math.min(target.depth + 1, previous.depth + 1) : 0
+  const minDepth = next ? next.depth : 0
+  const depth = Math.min(Math.max(projectedDepth, minDepth), maxDepth)
+
+  if (depth === 0 || !previous) {
+    return { depth, parentId: null }
+  }
+
+  if (depth === previous.depth) {
+    return { depth, parentId: previous.parentId }
+  }
+
+  if (depth > previous.depth) {
+    return { depth, parentId: previous.id }
+  }
+
+  const parentId = items
+    .slice(0, index)
+    .reverse()
+    .find((item) => item.depth === depth)?.parentId
+
+  return { depth, parentId: parentId ?? null }
+}
+
 export const collectDescendantIds = (
   collections: TreeShape[],
   rootId: string
