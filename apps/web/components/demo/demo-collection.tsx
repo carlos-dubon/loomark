@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useEffect, useMemo } from "react"
+import { useEffect } from "react"
 
 import { BookmarkListView } from "@/components/bookmark-list-view"
 import { useDemoState } from "@/hooks/use-demo-state"
@@ -12,14 +12,6 @@ export const DemoCollection = ({ id }: { id: string }) => {
   const router = useRouter()
   const collections = collectionList(state)
   const collection = collections.find((item) => item.id === id)
-
-  const subcollections = useMemo(
-    () =>
-      collection?.kind === "UNSORTED"
-        ? []
-        : collections.filter((item) => item.parentId === id),
-    [collections, collection?.kind, id]
-  )
 
   useEffect(() => {
     if (!collection) {
@@ -39,7 +31,6 @@ export const DemoCollection = ({ id }: { id: string }) => {
       collectionId={collection.id}
       collection={collection}
       bookmarks={bookmarksIn(state, collection.id)}
-      subcollections={subcollections}
       emptyIcon={unsorted ? "inbox" : "bookmark"}
       emptyTitle={unsorted ? "Nothing unsorted" : "This collection is empty"}
       emptyDescription={

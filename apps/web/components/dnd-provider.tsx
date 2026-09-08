@@ -10,8 +10,7 @@ import {
 import type { BookmarkDTO } from "@loomark/core/types"
 
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
-import { useCollectionActions } from "@/hooks/use-collection-actions"
-import { DRAG_TYPE, dropTargetData } from "@/lib/dnd"
+import { collectionDropData, DRAG_TYPE } from "@/lib/dnd"
 
 const NON_DRAGGABLE = "button, input, textarea, select"
 
@@ -32,58 +31,22 @@ const sensors = [
 
 export const DndProvider = ({ children }: { children: React.ReactNode }) => {
   const { move: moveBookmark } = useBookmarkActions()
-  const { move: moveCollection } = useCollectionActions()
 
   const onDragEnd = ({ canceled, operation }: DragEndEvent) => {
     const { source, target } = operation
 
-    if (canceled || !source || !target) {
+    if (canceled || source?.type !== DRAG_TYPE.bookmark || !target) {
       return
     }
 
-    const drop = dropTargetData(target.data)
+    const bookmark = source.data?.bookmark as BookmarkDTO | undefined
+    const collectionId = collectionDropData(target.data)?.collectionId
 
-    if (!drop) {
+    if (!bookmark || !collectionId || bookmark.collectionId === collectionId) {
       return
     }
 
-    if (source.type === DRAG_TYPE.bookmark) {
-      const bookmark = source.data?.bookmark as BookmarkDTO | undefined
-
-      if (
-        !bookmark ||
-        drop.zone !== "into" ||
-        !drop.collectionId ||
-        bookmark.collectionId === drop.collectionId
-      ) {
-        return
-      }
-
-      moveBookmark(bookmark, drop.collectionId)
-      return
-    }
-
-    if (source.type !== DRAG_TYPE.collection) {
-      return
-    }
-
-    const id = String(source.id)
-
-    if (drop.zone === "root") {
-      moveCollection(id, null, null)
-      return
-    }
-
-    if (drop.zone === "into") {
-      if (drop.collectionId) {
-        moveCollection(id, drop.collectionId, null)
-      }
-      return
-    }
-
-    if (drop.collectionId) {
-      moveCollection(id, drop.parentId ?? null, drop.collectionId)
-    }
+    moveBookmark(bookmark, collectionId)
   }
 
   return (

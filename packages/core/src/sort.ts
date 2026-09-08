@@ -51,4 +51,4 @@ export const applyManualOrder = (
 const KNOWN = new Set<string>(SORT_ORDERS)
 
 export const toSortOrder = (value: string): SortOrder =>
-  KNOWN.has(value) ? (value as SortOrder) : "newest"
+  KNOWN.has(value) ? (value as SortOrder) : "custom"

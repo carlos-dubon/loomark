@@ -15,15 +15,19 @@ import {
 import { Link } from "@/components/link"
 import { useCloseSidebar } from "@/hooks/use-close-sidebar"
 import { useCollectionItems } from "@/hooks/use-collection-items"
-import { DRAG_TYPE, DROP_PRIORITY, type DropTargetData } from "@/lib/dnd"
+import {
+  COLLECTION_DROP_PRIORITY,
+  DRAG_TYPE,
+  type CollectionDropData,
+} from "@/lib/dnd"
 
 export const UnsortedNavItem = () => {
   const pathname = usePathname()
   const { unsorted } = useCollectionItems()
   const closeSidebar = useCloseSidebar()
 
-  const data = useMemo<DropTargetData>(
-    () => ({ zone: "into", collectionId: unsorted?.id }),
+  const data = useMemo<CollectionDropData>(
+    () => ({ collectionId: unsorted?.id ?? "" }),
     [unsorted?.id]
   )
 
@@ -31,7 +35,7 @@ export const UnsortedNavItem = () => {
     id: "into:unsorted",
     accept: DRAG_TYPE.bookmark,
     collisionDetector: pointerIntersection,
-    collisionPriority: DROP_PRIORITY.row,
+    collisionPriority: COLLECTION_DROP_PRIORITY,
     data,
     disabled: !unsorted,
   })

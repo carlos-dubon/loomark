@@ -29,7 +29,7 @@ export const SortOrderSelect = () => {
         <SelectValue>
           {(value) => (
             <span className="max-sm:hidden">
-              {SORT_LABELS[value as SortOrder] ?? SORT_LABELS.newest}
+              {SORT_LABELS[value as SortOrder] ?? SORT_LABELS.custom}
             </span>
           )}
         </SelectValue>

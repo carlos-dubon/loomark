@@ -29,7 +29,7 @@ model User {
   apiTokens     ApiToken[]
   themeId       String       @default("default") @map("themePreset")
   viewMode      String       @default("grid")
-  sortOrder     String       @default("newest")
+  sortOrder     String       @default("custom")
   avatar        Avatar?
 }
 

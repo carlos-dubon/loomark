@@ -39,16 +39,6 @@ export const getCollection = cache(async (userId: string, id: string) => {
   return collection ? serializeCollection(collection) : null
 })
 
-export const getChildCollections = async (userId: string, parentId: string) => {
-  const collections = await prisma.collection.findMany({
-    where: { userId, parentId },
-    orderBy: [{ position: "asc" }, { name: "asc" }],
-    include: { _count: { select: { bookmarks: true } } },
-  })
-
-  return collections.map(serializeCollection)
-}
-
 export const getBookmarks = async (
   userId: string,
   filters: BookmarkFilters = {}

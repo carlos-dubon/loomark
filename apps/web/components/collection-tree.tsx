@@ -1,13 +1,13 @@
 "use client"
 
 import { pointerIntersection } from "@dnd-kit/collision"
-import { useDragOperation, useDraggable, useDroppable } from "@dnd-kit/react"
-import { useAtomValue } from "jotai"
-import { CornerLeftUpIcon, LibraryIcon } from "lucide-react"
+import { useDroppable } from "@dnd-kit/react"
+import { useSortable } from "@dnd-kit/react/sortable"
+import { LibraryIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useCallback, useMemo } from "react"
 
-import { collectDescendantIds, type FlatCollection } from "@loomark/core/tree"
+import type { FlatCollection } from "@loomark/core/tree"
 import { cn } from "@loomark/core/utils"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 import {
@@ -18,151 +18,85 @@ import {
 
 import { Link } from "@/components/link"
 import { useCloseSidebar } from "@/hooks/use-close-sidebar"
-import { useCollectionItems } from "@/hooks/use-collection-items"
-import { DRAG_TYPE, DROP_PRIORITY, type DropTargetData } from "@/lib/dnd"
-import { collectionsAtom } from "@/store/atoms"
-
-const INDENT_WIDTH = 16
-
-const DropEdge = ({
-  id,
-  data,
-  disabled,
-  className,
-}: {
-  id: string
-  data: DropTargetData
-  disabled: boolean
-  className?: string
-}) => {
-  const { ref, isDropTarget } = useDroppable({
-    id,
-    accept: DRAG_TYPE.collection,
-    collisionDetector: pointerIntersection,
-    collisionPriority: DROP_PRIORITY.edge,
-    data,
-    disabled,
-  })
-
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "pointer-events-none absolute right-0 left-0 z-10 h-3",
-        className
-      )}
-    >
-      {isDropTarget ? (
-        <div className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-primary" />
-      ) : null}
-    </div>
-  )
-}
+import { useCollectionTree } from "@/hooks/use-collection-tree"
+import {
+  COLLECTION_DROP_PRIORITY,
+  DRAG_TYPE,
+  TREE_GROUP,
+  TREE_INDENT,
+  type CollectionDropData,
+} from "@/lib/dnd"
 
 const CollectionRow = ({
   item,
-  excluded,
+  index,
 }: {
   item: FlatCollection
-  excluded: boolean
+  index: number
 }) => {
   const pathname = usePathname()
   const closeSidebar = useCloseSidebar()
   const href = `/collections/${item.id}`
 
-  const beforeData = useMemo<DropTargetData>(
-    () => ({ zone: "before", collectionId: item.id, parentId: item.parentId }),
-    [item.id, item.parentId]
-  )
-  const intoData = useMemo<DropTargetData>(
-    () => ({ zone: "into", collectionId: item.id }),
+  const dropData = useMemo<CollectionDropData>(
+    () => ({ collectionId: item.id }),
     [item.id]
   )
 
-  const { ref: dragRef, isDragSource } = useDraggable({
+  const { ref: sortableRef } = useSortable({
     id: item.id,
+    index,
+    group: TREE_GROUP,
     type: DRAG_TYPE.collection,
+    accept: DRAG_TYPE.collection,
+    alignment: { x: "start", y: "center" },
+    transition: { idle: true },
   })
 
   const { ref: dropRef, isDropTarget } = useDroppable({
-    id: `into:${item.id}`,
-    accept: [DRAG_TYPE.collection, DRAG_TYPE.bookmark],
+    id: `row-bookmarks:${item.id}`,
+    accept: DRAG_TYPE.bookmark,
     collisionDetector: pointerIntersection,
-    collisionPriority: DROP_PRIORITY.row,
-    data: intoData,
-    disabled: excluded,
+    collisionPriority: COLLECTION_DROP_PRIORITY,
+    data: dropData,
   })
 
   const setRowRef = useCallback(
     (element: HTMLDivElement | null) => {
-      dragRef(element)
+      sortableRef(element)
       dropRef(element)
     },
-    [dragRef, dropRef]
+    [sortableRef, dropRef]
   )
 
   return (
     <SidebarMenuItem>
       <div
-        className="relative rounded-md"
-        style={{ marginLeft: item.depth * INDENT_WIDTH }}
-      >
-        <DropEdge
-          id={`before:${item.id}`}
-          data={beforeData}
-          disabled={excluded}
-          className="-top-1.5"
-        />
-        <div
-          ref={setRowRef}
-          className={cn(
-            "relative rounded-md transition-opacity",
-            isDragSource && "opacity-40",
-            isDropTarget &&
-              "ring-2 ring-primary/70 ring-offset-1 ring-offset-sidebar"
-          )}
-        >
-          <SidebarMenuButton
-            isActive={pathname === href}
-            tooltip={item.name}
-            className="w-full min-w-0 pr-8"
-            onClick={closeSidebar}
-            render={<Link href={href} />}
-          >
-            <CollectionIcon name={item.icon} />
-            <span className="truncate">{item.name}</span>
-          </SidebarMenuButton>
-          {item.totalCount > 0 ? (
-            <span className="pointer-events-none absolute top-1/2 right-1 flex size-6 -translate-y-1/2 items-center justify-center text-xs text-muted-foreground tabular-nums">
-              {item.totalCount}
-            </span>
-          ) : null}
-        </div>
-      </div>
-    </SidebarMenuItem>
-  )
-}
-
-const RootDropZone = () => {
-  const { ref, isDropTarget } = useDroppable({
-    id: "root",
-    accept: DRAG_TYPE.collection,
-    collisionDetector: pointerIntersection,
-    collisionPriority: DROP_PRIORITY.edge,
-    data: { zone: "root" } satisfies DropTargetData,
-  })
-
-  return (
-    <SidebarMenuItem>
-      <div
-        ref={ref}
+        ref={setRowRef}
         className={cn(
-          "pointer-events-none mt-1 flex h-8 items-center justify-center gap-1.5 rounded-md border border-dashed text-xs transition-colors",
-          isDropTarget ? "border-primary text-primary" : "text-muted-foreground"
+          "relative rounded-md",
+          "[&[data-dnd-dragging]]:bg-sidebar-row-selected [&[data-dnd-dragging]]:shadow-lg [&[data-dnd-dragging]]:ring-sidebar-border",
+          "[&[data-dnd-placeholder]]:visible! [&[data-dnd-placeholder]]:bg-primary/10 [&[data-dnd-placeholder]]:ring-primary/70 [&[data-dnd-placeholder]]:ring-inset [&[data-dnd-placeholder]]:*:opacity-70",
+          isDropTarget &&
+            "ring-2 ring-primary/70 ring-offset-1 ring-offset-sidebar"
         )}
+        style={{ marginLeft: item.depth * TREE_INDENT }}
       >
-        <CornerLeftUpIcon className="size-(--sidebar-icon-size)" />
-        Move to top level
+        <SidebarMenuButton
+          isActive={pathname === href}
+          tooltip={item.name}
+          className="w-full min-w-0 pr-8"
+          onClick={closeSidebar}
+          render={<Link href={href} />}
+        >
+          <CollectionIcon name={item.icon} />
+          <span className="truncate">{item.name}</span>
+        </SidebarMenuButton>
+        {item.totalCount > 0 ? (
+          <span className="pointer-events-none absolute top-1/2 right-1 flex size-6 -translate-y-1/2 items-center justify-center text-xs text-muted-foreground tabular-nums">
+            {item.totalCount}
+          </span>
+        ) : null}
       </div>
     </SidebarMenuItem>
   )
@@ -171,39 +105,19 @@ const RootDropZone = () => {
 export const CollectionTree = () => {
   const pathname = usePathname()
   const closeSidebar = useCloseSidebar()
-  const { items } = useCollectionItems()
-  const collections = useAtomValue(collectionsAtom)
-  const { source } = useDragOperation()
-
-  const draggingCollectionId =
-    source?.type === DRAG_TYPE.collection ? String(source.id) : null
-
-  const excluded = useMemo(
-    () =>
-      new Set(
-        draggingCollectionId
-          ? collectDescendantIds(collections, draggingCollectionId)
-          : []
-      ),
-    [collections, draggingCollectionId]
-  )
+  const { rows } = useCollectionTree()
 
   return (
     <>
       <SidebarMenu className="group-data-[collapsible=icon]:hidden">
-        {items.map((item) => (
-          <CollectionRow
-            key={item.id}
-            item={item}
-            excluded={excluded.has(item.id)}
-          />
+        {rows.map((item, index) => (
+          <CollectionRow key={item.id} item={item} index={index} />
         ))}
-        {items.length === 0 ? (
+        {rows.length === 0 ? (
           <p className="px-2 py-1.5 text-xs text-muted-foreground">
             No collections yet.
           </p>
         ) : null}
-        {draggingCollectionId ? <RootDropZone /> : null}
       </SidebarMenu>
       <SidebarMenu className="hidden group-data-[collapsible=icon]:flex">
         <SidebarMenuItem>
