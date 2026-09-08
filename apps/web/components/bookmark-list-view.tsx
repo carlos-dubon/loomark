@@ -2,14 +2,16 @@
 
 import { useAtomValue, useSetAtom } from "jotai"
 import { BookmarkIcon, InboxIcon, PlusIcon, Share2Icon } from "lucide-react"
+import { useMemo } from "react"
 
+import { siblingsOf } from "@loomark/core/tree"
 import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
 import { BookmarkGrid } from "@/components/bookmark-grid"
 import { CollectionMenu } from "@/components/collection-menu"
-import { CollectionCard } from "@/components/collection-card"
+import { CollectionGrid } from "@/components/collection-grid"
 import { EmptyState } from "@/components/empty-state"
 import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
@@ -18,6 +20,7 @@ import { useBookmarkList } from "@/hooks/use-bookmark-list"
 import {
   bookmarkDialogAtom,
   collectionShareDialogAtom,
+  collectionsAtom,
   viewModeAtom,
 } from "@/store/atoms"
 
@@ -34,7 +37,6 @@ export const BookmarkListView = ({
   collectionId,
   collection,
   bookmarks,
-  subcollections = [],
 }: {
   title: React.ReactNode
   emptyIcon?: keyof typeof EMPTY_ICONS
@@ -43,9 +45,9 @@ export const BookmarkListView = ({
   collectionId: string | null
   collection?: CollectionDTO
   bookmarks: BookmarkDTO[]
-  subcollections?: CollectionDTO[]
 }) => {
   const mode = useAtomValue(viewModeAtom)
+  const collections = useAtomValue(collectionsAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const openShareDialog = useSetAtom(collectionShareDialogAtom)
   const { items, manual } = useBookmarkList(
@@ -57,7 +59,12 @@ export const BookmarkListView = ({
   const addBookmark = () =>
     openBookmarkDialog({ open: true, bookmark: null, collectionId })
 
-  const hasCollections = subcollections.length > 0
+  const children = useMemo(
+    () => (collectionId ? siblingsOf(collections, collectionId) : []),
+    [collections, collectionId]
+  )
+
+  const hasCollections = children.length > 0
   const hasBookmarks = items.length > 0
 
   return (
@@ -99,17 +106,7 @@ export const BookmarkListView = ({
         {hasCollections ? (
           <section className="flex flex-col gap-3">
             <h2 className="text-sm font-semibold">Collections</h2>
-            <div className="grid gap-3 @lg:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-4">
-              {subcollections.map((child) => (
-                <CollectionCard
-                  key={child.id}
-                  href={`/collections/${child.id}`}
-                  icon={child.icon}
-                  name={child.name}
-                  count={child.bookmarkCount}
-                />
-              ))}
-            </div>
+            <CollectionGrid collections={children} parentId={collectionId} />
           </section>
         ) : null}
         {hasBookmarks ? (

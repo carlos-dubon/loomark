@@ -5,7 +5,7 @@ import { BookmarkListView } from "@/components/bookmark-list-view"
 import { DemoCollection } from "@/components/demo/demo-collection"
 import { auth } from "@/lib/auth"
 import { isDemo } from "@/lib/demo/config"
-import { getBookmarks, getChildCollections, getCollection } from "@/lib/queries"
+import { getBookmarks, getCollection } from "@/lib/queries"
 
 export const generateMetadata = async ({
   params,
@@ -52,13 +52,10 @@ const CollectionPage = async ({
 
   const unsorted = collection.kind === "UNSORTED"
 
-  const [bookmarks, subcollections] = await Promise.all([
-    getBookmarks(session.user.id, {
-      collectionId: id,
-      take: 200,
-    }),
-    unsorted ? Promise.resolve([]) : getChildCollections(session.user.id, id),
-  ])
+  const bookmarks = await getBookmarks(session.user.id, {
+    collectionId: id,
+    take: 200,
+  })
 
   return (
     <BookmarkListView
@@ -66,7 +63,6 @@ const CollectionPage = async ({
       collectionId={collection.id}
       collection={collection}
       bookmarks={bookmarks}
-      subcollections={subcollections}
       emptyIcon={unsorted ? "inbox" : "bookmark"}
       emptyTitle={unsorted ? "Nothing unsorted" : "This collection is empty"}
       emptyDescription={
