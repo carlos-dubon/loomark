@@ -91,13 +91,10 @@ export const TransferView = ({
   }
 
   return (
-    <SettingsPage
-      title="Import and export"
-      description="Move your library in and out"
-    >
+    <SettingsPage title="Import and export">
       <SettingsCard
         title="Import bookmarks"
-        description="Upload an HTML bookmarks file exported from Chrome, Edge, Safari, Firefox, or any other browser that speaks the same format, or a JSON backup exported from Linkwarden. Folders and collections come across and links you already saved are left alone."
+        description="Browser HTML export or Linkwarden JSON."
       >
         <div className="flex flex-col gap-4">
           <Dropzone
@@ -114,10 +111,10 @@ export const TransferView = ({
             <DropzoneArea>
               <DropzoneIcon />
               <DropzoneTitle>
-                Drop your bookmarks file or click to browse
+                Drop a bookmarks file or click to browse
               </DropzoneTitle>
               <DropzoneDescription>
-                A single .html or .json export, up to 10 MB
+                .html or .json, up to 10 MB
               </DropzoneDescription>
             </DropzoneArea>
             {file ? (
@@ -161,7 +158,7 @@ export const TransferView = ({
       </SettingsCard>
       <SettingsCard
         title="Export bookmarks"
-        description={`Download ${plural(bookmarkCount, "bookmark")} across ${plural(collectionCount, "collection")} as a Chrome compatible HTML file. Keep it as a backup or import it into any browser.`}
+        description={`${plural(bookmarkCount, "bookmark")} in ${plural(collectionCount, "collection")}, as browser HTML.`}
       >
         <Button
           variant="outline"

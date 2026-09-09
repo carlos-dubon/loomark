@@ -15,32 +15,24 @@ export const GeneralView = ({
   version: string
   isOwner: boolean
 }) => (
-  <SettingsPage title="General" description="Appearance and link behaviour">
-    <SettingsCard
-      title="Theme"
-      description="Six palettes, each tuned for light and dark, so the mode toggle keeps working whichever one you pick. Press D to switch modes."
-    >
+  <SettingsPage title="General">
+    <SettingsCard title="Theme" description="Press D to switch light and dark.">
       <ThemePicker />
     </SettingsCard>
-    <SettingsCard
-      title="Links"
-      description="Bookmarks and other outside links open in a new tab by default. If Loomark is your new tab page, turn this off so they load in the tab you are already in and the back button brings you home. Kept in a cookie on this browser, not on your account."
-    >
+    <SettingsCard title="Links">
       <LinkSettings />
     </SettingsCard>
     <SettingsCard
       title="About"
       description={
         <>
-          Running Loomark{" "}
-          <span className="font-mono text-foreground">{version}</span>. Check{" "}
+          Loomark <span className="font-mono text-foreground">{version}</span> ·{" "}
           <Link
             className="underline underline-offset-4 hover:text-foreground"
             href={RELEASES_URL}
           >
-            the releases page
-          </Link>{" "}
-          for what is new.
+            Release notes
+          </Link>
         </>
       }
     >
