@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "viewMode" TEXT NOT NULL DEFAULT 'grid';
