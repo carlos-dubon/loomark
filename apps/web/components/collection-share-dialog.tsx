@@ -116,9 +116,7 @@ export const CollectionShareDialog = () => {
         <DialogHeader>
           <DialogTitle>Share “{collection?.name}”</DialogTitle>
           <DialogDescription>
-            Anyone with the link can read this collection and everything nested
-            inside it. They cannot change anything, and they never see the rest
-            of your library.
+            Anyone with the link can read this collection.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-3">
