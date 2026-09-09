@@ -4,7 +4,7 @@ const manifest = (): MetadataRoute.Manifest => ({
   id: "/",
   name: "Loomark",
   short_name: "Loomark",
-  description: "A self hosted home for everything you bookmark.",
+  description: "A self-hosted bookmark manager that syncs with your browser.",
   start_url: "/",
   scope: "/",
   display: "standalone",

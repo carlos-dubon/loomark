@@ -1,20 +1,24 @@
 <p align="center">
-  <img src="apps/web/public/brand/loomark-rounded-512.png" alt="Loomark" width="96" height="96">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="apps/web/public/brand/loomark-lockup-dark.png">
+    <img src="apps/web/public/brand/loomark-lockup-light.png" alt="Loomark" width="320" height="104">
+  </picture>
 </p>
-
-<h1 align="center">Loomark</h1>
 
 <p align="center">
-  <b>A modern self-hosted bookmark manager built with shadcn.</b>
+  <b>A self-hosted bookmark manager that syncs with your browser.</b>
 </p>
 
-- Pinned sites in the homepage
-- Search your bookmarks with `⌘K`
-- Themes, each tuned for light and dark. Press `D` to switch modes
-- A browser extension for Chromium based browsers and Firefox
+<p align="center">
+  <a href="https://loomarkdemo.vercel.app/login">Try the live demo</a> &#124; <a href="https://github.com/carlos-dubon/loomark/releases">Releases</a>
+</p>
+
+- Themes
+- Search your bookmarks with `Command+K`
+- Browser extension for Chromium based browsers and Firefox
 - Two-way sync with your browser's bookmarks bar
 - Import from any browser or from [Linkwarden](https://linkwarden.app)
-- Share links for any collection
+- Share collections
 - Installable as a PWA
 
 ## Install
@@ -27,29 +31,19 @@ curl -O https://raw.githubusercontent.com/carlos-dubon/loomark/main/docker-compo
 curl -o .env https://raw.githubusercontent.com/carlos-dubon/loomark/main/.env.example
 ```
 
-Set `AUTH_SECRET` in `.env` to the output of `openssl rand -base64 32`. If you'll reach Loomark at anything other than `http://localhost:3000`, set `AUTH_URL` too.
+Set `AUTH_SECRET` and `AUTH_URL` in `.env`
 
 ```bash
 docker compose up -d
 ```
 
-The first account you create is the owner.
-
 ## Extension
 
-No store listing yet, so you sideload it from the [latest release](https://github.com/carlos-dubon/loomark/releases/latest).
+Sideload it from the [latest release](https://github.com/carlos-dubon/loomark/releases/latest).
 
 **Chromium**: unzip `loomark-extension-<version>-chrome.zip`, then load the folder at `chrome://extensions` with developer mode on.
 
 **Firefox**: load `loomark-extension-<version>-firefox.zip` at `about:debugging#/runtime/this-firefox` as a temporary add-on.
-
-## Updating
-
-Loomark checks GitHub releases and tells owners when a new version is out.
-
-```bash
-docker compose pull && docker compose up -d
-```
 
 ## Config
 
@@ -67,12 +61,12 @@ docker compose pull && docker compose up -d
 
 ## Keyboard shortcuts
 
-| Key             |                  |
-| --------------- | ---------------- |
-| `⌘K` / `Ctrl+K` | Search           |
-| `⌘B` / `Ctrl+B` | Toggle sidebar   |
-| `D`             | Toggle dark mode |
-| `Esc`           | Clear selection  |
+| Key                    |                  |
+| ---------------------- | ---------------- |
+| `Command+K` / `Ctrl+K` | Search           |
+| `Command+B` / `Ctrl+B` | Toggle sidebar   |
+| `D`                    | Toggle dark mode |
+| `Esc`                  | Clear selection  |
 
 ## Development
 
