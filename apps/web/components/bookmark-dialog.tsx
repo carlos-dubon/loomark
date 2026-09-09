@@ -271,9 +271,6 @@ const BookmarkForm = ({
         <div className="flex items-center justify-between rounded-lg border px-3 py-2">
           <div className="flex flex-col">
             <Label htmlFor="bookmark-pinned">Pin to homepage</Label>
-            <span className="text-xs text-muted-foreground">
-              Keep it one click away.
-            </span>
           </div>
           <Controller
             control={control}

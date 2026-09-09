@@ -14,7 +14,7 @@ export const SettingsPage = ({
   children,
 }: {
   title: string
-  description: string
+  description?: string
   children: React.ReactNode
 }) => (
   <>
@@ -31,13 +31,13 @@ export const SettingsCard = ({
   children,
 }: {
   title: string
-  description: React.ReactNode
+  description?: React.ReactNode
   children?: React.ReactNode
 }) => (
   <Card className="w-full max-w-2xl shrink-0">
     <CardHeader>
       <CardTitle>{title}</CardTitle>
-      <CardDescription>{description}</CardDescription>
+      {description ? <CardDescription>{description}</CardDescription> : null}
     </CardHeader>
     {children ? <CardContent>{children}</CardContent> : null}
   </Card>

@@ -104,9 +104,6 @@ const CollectionForm = ({
         <DialogTitle>
           {editing ? "Edit collection" : "New collection"}
         </DialogTitle>
-        <DialogDescription>
-          Collections nest, so build the tree however you think.
-        </DialogDescription>
       </DialogHeader>
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">

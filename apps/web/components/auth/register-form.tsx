@@ -54,9 +54,9 @@ export const RegisterForm = () => {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Create your library</CardTitle>
+        <CardTitle>Create an account</CardTitle>
         <CardDescription>
-          The first account becomes the owner of this instance.
+          Save your bookmarks and access them from anywhere.
         </CardDescription>
       </CardHeader>
       <form onSubmit={onSubmit} noValidate>

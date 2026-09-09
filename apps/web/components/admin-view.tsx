@@ -81,19 +81,13 @@ export const AdminView = ({
             <CardDescription>
               {users.length} {users.length === 1 ? "account" : "accounts"},{" "}
               {totalBookmarks} {totalBookmarks === 1 ? "bookmark" : "bookmarks"}
-              , about {formatBytes(totalBytes)} in total. Storage counts
-              bookmark, collection and profile rows, so indexes and backups sit
-              outside it.
+              , {formatBytes(totalBytes)} in total.
             </CardDescription>
           </CardHeader>
         </Card>
         <Card className="w-full max-w-3xl shrink-0">
           <CardHeader>
             <CardTitle>Accounts</CardTitle>
-            <CardDescription>
-              Reset a password to hand someone a new one, or delete an account
-              with everything in it. The owner account cannot be deleted.
-            </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col divide-y">
             {users.map((user) => {

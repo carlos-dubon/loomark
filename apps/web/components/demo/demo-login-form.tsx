@@ -38,10 +38,8 @@ export const DemoLoginForm = () => {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Welcome to the demo</CardTitle>
-        <CardDescription>
-          The credentials are already filled in — just sign in.
-        </CardDescription>
+        <CardTitle>Welcome back</CardTitle>
+        <CardDescription>Sign in to reach your library.</CardDescription>
       </CardHeader>
       <form onSubmit={onSubmit}>
         <CardContent className="flex flex-col gap-4">
@@ -68,8 +66,7 @@ export const DemoLoginForm = () => {
             <AlertTitle>Nothing here is saved</AlertTitle>
             <AlertDescription>
               This demo runs on an in-memory database that lives only in this
-              browser tab. Add, edit and drag anything you want — refreshing the
-              page wipes it clean.
+              browser tab.
             </AlertDescription>
           </Alert>
         </CardContent>

@@ -43,7 +43,6 @@ export const BookmarkDeleteDialog = () => {
             {only ? (
               <>
                 “{only.title?.trim() || hostFromUrl(only.url)}” will be removed.
-                You can undo this from the toast.
               </>
             ) : (
               <>

@@ -79,7 +79,6 @@ export const CollectionDeleteDialog = () => {
             {doomed && doomed.bookmarks > 0 ? (
               <>{plural(doomed.bookmarks, "bookmark")} will be deleted too. </>
             ) : null}
-            You can undo this from the toast.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
