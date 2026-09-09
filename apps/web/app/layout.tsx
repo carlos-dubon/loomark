@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     default: "Loomark",
     template: "%s - Loomark",
   },
-  description: "A self hosted home for everything you bookmark.",
+  description: "A self-hosted bookmark manager that syncs with your browser.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
