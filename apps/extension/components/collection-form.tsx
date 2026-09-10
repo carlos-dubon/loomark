@@ -2,10 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { ArrowLeftIcon } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 
+import { errorMessage } from "@loomark/core/format"
 import { flattenCollections } from "@loomark/core/tree"
 import type { CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
-import { Field, FieldInput, FieldSelect } from "@loomark/ui/components/field"
+import { Field, NativeSelect } from "@loomark/ui/components/field"
+import { Input } from "@loomark/ui/components/input"
 
 import { IconPicker } from "@/components/icon-picker"
 import { createCollection, type Auth } from "@/lib/api"
@@ -46,7 +48,7 @@ export const CollectionForm = ({
       onCreated(await createCollection(auth, values))
     } catch (cause) {
       setError("root", {
-        message: cause instanceof Error ? cause.message : "Could not create it",
+        message: errorMessage(cause, "Could not create it"),
       })
     }
   })
@@ -66,11 +68,13 @@ export const CollectionForm = ({
         <h2 className="text-sm font-medium">New collection</h2>
       </div>
       <Field
+        size="sm"
         label="Name"
         htmlFor="collection-name"
         error={errors.name?.message}
       >
-        <FieldInput
+        <Input
+          size="sm"
           id="collection-name"
           placeholder="Reading list"
           autoFocus
@@ -85,12 +89,13 @@ export const CollectionForm = ({
           <IconPicker value={field.value} onChange={field.onChange} />
         )}
       />
-      <Field label="Parent" htmlFor="collection-parent">
+      <Field size="sm" label="Parent" htmlFor="collection-parent">
         <Controller
           control={control}
           name="parentId"
           render={({ field }) => (
-            <FieldSelect
+            <NativeSelect
+              size="sm"
               id="collection-parent"
               value={field.value ?? ROOT}
               onChange={(event) =>
@@ -105,7 +110,7 @@ export const CollectionForm = ({
                   {`${"  ".repeat(node.depth)}${node.name}`}
                 </option>
               ))}
-            </FieldSelect>
+            </NativeSelect>
           )}
         />
       </Field>

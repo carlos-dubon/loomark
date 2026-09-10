@@ -1,0 +1,2 @@
+export const controlSurface =
+  "w-full rounded-lg border border-input bg-background text-foreground shadow-xs/5 ring-ring/24 transition-[color,box-shadow] outline-none not-dark:bg-clip-padding placeholder:text-placeholder focus-visible:border-ring focus-visible:ring-3 disabled:opacity-64 aria-invalid:border-destructive/36 focus-visible:aria-invalid:border-destructive/64 focus-visible:aria-invalid:ring-destructive/16 dark:bg-input/32"

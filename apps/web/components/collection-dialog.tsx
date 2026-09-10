@@ -7,6 +7,7 @@ import { useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import {
   buildCollectionTree,
   collectDescendantIds,
@@ -16,13 +17,12 @@ import { Button } from "@loomark/ui/components/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@loomark/ui/components/dialog"
+import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
-import { Label } from "@loomark/ui/components/label"
 import {
   Select,
   SelectContent,
@@ -92,8 +92,7 @@ const CollectionForm = ({
       router.refresh()
     } catch (cause) {
       setError("root", {
-        message:
-          cause instanceof Error ? cause.message : "Something went wrong",
+        message: errorMessage(cause, "Something went wrong"),
       })
     }
   })
@@ -106,8 +105,11 @@ const CollectionForm = ({
         </DialogTitle>
       </DialogHeader>
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="collection-name">Name</Label>
+        <Field
+          label="Name"
+          htmlFor="collection-name"
+          error={errors.name ? "Give the collection a name" : undefined}
+        >
           <Input
             id="collection-name"
             placeholder="Reading list"
@@ -115,12 +117,7 @@ const CollectionForm = ({
             aria-invalid={Boolean(errors.name)}
             {...register("name")}
           />
-          {errors.name ? (
-            <p className="text-sm text-destructive" role="alert">
-              Give the collection a name
-            </p>
-          ) : null}
-        </div>
+        </Field>
         <Controller
           control={control}
           name="icon"
@@ -128,8 +125,7 @@ const CollectionForm = ({
             <IconPicker value={field.value ?? null} onChange={field.onChange} />
           )}
         />
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="collection-parent">Parent</Label>
+        <Field label="Parent" htmlFor="collection-parent">
           <Controller
             control={control}
             name="parentId"
@@ -163,7 +159,7 @@ const CollectionForm = ({
               </Select>
             )}
           />
-        </div>
+        </Field>
         {errors.root ? (
           <p className="text-sm text-destructive" role="alert">
             {errors.root.message}
