@@ -1,5 +1,6 @@
 import { BookmarkIcon, ChevronRightIcon } from "lucide-react"
 
+import { plural } from "@loomark/core/format"
 import { sharePath } from "@loomark/core/routes"
 import type { SharedCollectionPage } from "@loomark/core/types"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
@@ -11,9 +12,6 @@ import { LoomarkMark } from "@/components/loomark-mark"
 import { SharedBookmarkCard } from "@/components/shared-bookmark-card"
 import { THEMES } from "@/lib/themes/palettes"
 import { findTheme, themeToCss } from "@/lib/themes/theme"
-
-const plural = (count: number, noun: string) =>
-  `${count} ${noun}${count === 1 ? "" : "s"}`
 
 const Breadcrumb = ({ page }: { page: SharedCollectionPage }) => (
   <nav

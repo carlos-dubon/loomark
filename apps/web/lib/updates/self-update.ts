@@ -1,3 +1,4 @@
+import { errorMessage } from "@loomark/core/format"
 import {
   IDLE_UPDATE_JOB,
   isUpdateRunning,
@@ -18,7 +19,11 @@ import {
   SOCKET_PATH,
   type Container,
 } from "@/lib/updates/docker"
-import { endpoint, helperBody, successorBody } from "@/lib/updates/successor"
+import {
+  endpoint,
+  helperBody,
+  successorBody,
+} from "@/lib/updates/successor"
 
 export const appVersion = process.env.APP_VERSION ?? "dev"
 
@@ -293,7 +298,7 @@ export const startSelfUpdate = async () => {
   void run(self, target).catch((cause: unknown) => {
     setJob({
       phase: "FAILED",
-      error: cause instanceof Error ? cause.message : "The update failed",
+      error: errorMessage(cause, "The update failed"),
     })
   })
 

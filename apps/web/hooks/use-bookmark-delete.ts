@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
+import { errorMessage, plural } from "@loomark/core/format"
 import type { BookmarkDTO } from "@loomark/core/types"
 
 import { api } from "@/lib/client-api"
@@ -13,9 +14,6 @@ import {
   removeBookmarksAtom,
   restoreBookmarksAtom,
 } from "@/store/atoms"
-
-const plural = (count: number) =>
-  `${count} ${count === 1 ? "bookmark" : "bookmarks"}`
 
 export const useBookmarkDelete = () => {
   const router = useRouter()
@@ -28,10 +26,10 @@ export const useBookmarkDelete = () => {
   const undo = async (bookmarks: BookmarkDTO[]) => {
     try {
       restoreBookmarks(await api.restoreBookmarks(bookmarks))
-      toast.success(`${plural(bookmarks.length)} restored`)
+      toast.success(`${plural(bookmarks.length, "bookmark")} restored`)
       router.refresh()
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Restore failed")
+      toast.error(errorMessage(cause, "Restore failed"))
     }
   }
 
@@ -49,11 +47,11 @@ export const useBookmarkDelete = () => {
       clearSelection()
       router.refresh()
 
-      toast.success(`${plural(bookmarks.length)} deleted`, {
+      toast.success(`${plural(bookmarks.length, "bookmark")} deleted`, {
         action: { label: "Undo", onClick: () => void undo(bookmarks) },
       })
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Delete failed")
+      toast.error(errorMessage(cause, "Delete failed"))
     } finally {
       setPending(false)
     }

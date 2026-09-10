@@ -11,6 +11,7 @@ import {
 import { useState } from "react"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import { sharePath } from "@loomark/core/routes"
 import { Button } from "@loomark/ui/components/button"
 import {
@@ -97,7 +98,7 @@ export const CollectionShareDialog = () => {
       setShare(id, shareToken)
       toast.success(message)
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Sharing failed")
+      toast.error(errorMessage(cause, "Sharing failed"))
     } finally {
       setPending(false)
     }

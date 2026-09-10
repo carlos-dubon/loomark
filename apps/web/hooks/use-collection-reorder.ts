@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useRef } from "react"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import { applyCollectionMove, siblingsOf } from "@loomark/core/tree"
 import type { CollectionDTO } from "@loomark/core/types"
 
@@ -31,9 +32,7 @@ export const useCollectionReorder = (parentId: string | null) => {
       router.refresh()
     } catch (cause) {
       setCollections(previous)
-      toast.error(
-        cause instanceof Error ? cause.message : "Could not save the order"
-      )
+      toast.error(errorMessage(cause, "Could not save the order"))
     }
   }
 

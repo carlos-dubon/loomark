@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useRef } from "react"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import {
   applyManualOrder,
   sortBookmarks,
@@ -42,9 +43,7 @@ export const useBookmarkReorder = ({
       router.refresh()
     } catch (cause) {
       setItems(() => previous)
-      toast.error(
-        cause instanceof Error ? cause.message : "Could not save the order"
-      )
+      toast.error(errorMessage(cause, "Could not save the order"))
     }
   }
 
