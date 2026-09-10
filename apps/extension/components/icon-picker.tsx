@@ -1,15 +1,11 @@
 import { RotateCcwIcon } from "lucide-react"
-import { type IconName } from "lucide-react/dynamic"
-import { useMemo, useRef, useState } from "react"
 
 import { Button } from "@loomark/ui/components/button"
-import {
-  CollectionIcon,
-  isIconName,
-} from "@loomark/ui/components/collection-icon"
-import { FieldInput, FieldLabel } from "@loomark/ui/components/field"
-import { IconGrid, type IconGridHandle } from "@loomark/ui/components/icon-grid"
-import { iconNames, searchIcons, SUGGESTED_ICONS } from "@loomark/ui/lib/icons"
+import { CollectionIcon } from "@loomark/ui/components/collection-icon"
+import { Field } from "@loomark/ui/components/field"
+import { IconGrid } from "@loomark/ui/components/icon-grid"
+import { Input } from "@loomark/ui/components/input"
+import { useIconSearch } from "@loomark/ui/hooks/use-icon-search"
 
 export const IconPicker = ({
   value,
@@ -18,50 +14,29 @@ export const IconPicker = ({
   value: string | null
   onChange: (value: string | null) => void
 }) => {
-  const [query, setQuery] = useState("")
-  const [initialValue] = useState(() => (isIconName(value) ? value : null))
-  const gridRef = useRef<IconGridHandle | null>(null)
-
-  const results = useMemo<IconName[]>(() => {
-    const trimmed = query.trim()
-
-    if (trimmed) {
-      return searchIcons(trimmed)
-    }
-
-    const pinned = initialValue
-      ? [
-          initialValue,
-          ...SUGGESTED_ICONS.filter((name) => name !== initialValue),
-        ]
-      : SUGGESTED_ICONS
-    const seen = new Set(pinned)
-
-    return [...pinned, ...iconNames.filter((name) => !seen.has(name))]
-  }, [query, initialValue])
-
-  const handleQueryChange = (next: string) => {
-    setQuery(next)
-    gridRef.current?.scrollToTop()
-  }
+  const { query, onQueryChange, results, gridRef } = useIconSearch(value)
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-center justify-between gap-2">
-        <FieldLabel htmlFor="collection-icon">Icon</FieldLabel>
+    <Field
+      size="sm"
+      label="Icon"
+      htmlFor="collection-icon"
+      hint={
         <span className="text-xs text-muted-foreground tabular-nums">
           {results.length} icons
         </span>
-      </div>
+      }
+    >
       <div className="flex items-center gap-1.5">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-md border bg-muted/40">
           <CollectionIcon name={value} className="size-4" />
         </span>
-        <FieldInput
+        <Input
           id="collection-icon"
+          size="sm"
           placeholder="Search all Lucide icons"
           value={query}
-          onChange={(event) => handleQueryChange(event.target.value)}
+          onChange={(event) => onQueryChange(event.target.value)}
         />
         <Button
           type="button"
@@ -76,7 +51,7 @@ export const IconPicker = ({
       </div>
       {results.length === 0 ? (
         <p className="rounded-md border px-3 py-6 text-center text-xs text-muted-foreground">
-          No icons match “{query.trim()}”
+          No icon matches “{query.trim()}”
         </p>
       ) : (
         <IconGrid
@@ -91,6 +66,6 @@ export const IconPicker = ({
           selectedClassName="bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
         />
       )}
-    </div>
+    </Field>
   )
 }

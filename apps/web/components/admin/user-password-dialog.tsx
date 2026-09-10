@@ -5,6 +5,7 @@ import * as React from "react"
 import { useState } from "react"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import type { InstanceUserDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import {
@@ -16,8 +17,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@loomark/ui/components/dialog"
+import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
-import { Label } from "@loomark/ui/components/label"
 
 import { api } from "@/lib/client-api"
 
@@ -54,7 +55,7 @@ export const UserPasswordDialog = ({
       setPassword("")
       onOpenChange(false)
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Reset failed")
+      toast.error(errorMessage(cause, "Reset failed"))
     } finally {
       setPending(false)
     }
@@ -84,41 +85,41 @@ export const UserPasswordDialog = ({
           </DialogDescription>
         </DialogHeader>
         <form
-          className="flex flex-col gap-2"
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault()
             void onSubmit()
           }}
         >
-          <Label htmlFor="new-password">New password</Label>
-          <div className="flex gap-2">
-            <Input
-              id="new-password"
-              type="text"
-              autoComplete="off"
-              spellCheck={false}
-              value={password}
-              disabled={pending}
-              aria-invalid={password.length > 0 && tooShort}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setPassword(event.target.value)
-              }
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              aria-label="Generate a password"
-              disabled={pending}
-              onClick={() => setPassword(generatePassword())}
-            >
-              <ShuffleIcon />
-            </Button>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            At least 8 characters. Their signed in sessions keep working until
-            they expire.
-          </p>
+          <Field label="New password" htmlFor="new-password">
+            <div className="flex gap-2">
+              <Input
+                id="new-password"
+                type="text"
+                autoComplete="off"
+                spellCheck={false}
+                value={password}
+                disabled={pending}
+                aria-invalid={password.length > 0 && tooShort}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setPassword(event.target.value)
+                }
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                aria-label="Generate a password"
+                disabled={pending}
+                onClick={() => setPassword(generatePassword())}
+              >
+                <ShuffleIcon />
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              At least 8 characters. Their signed in sessions keep working until
+              they expire.
+            </p>
+          </Field>
         </form>
         <DialogFooter>
           <DialogClose render={<Button variant="outline" disabled={pending} />}>

@@ -10,8 +10,9 @@ import { Controller, useForm, useWatch } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { errorMessage } from "@loomark/core/format"
 import { buildCollectionTree, flattenTree } from "@loomark/core/tree"
-import { normalizeUrl } from "@loomark/core/url"
+import { normalizeUrl, safeNormalizeUrl } from "@loomark/core/url"
 import { Button } from "@loomark/ui/components/button"
 import {
   Dialog,
@@ -21,6 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@loomark/ui/components/dialog"
+import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
 import { Label } from "@loomark/ui/components/label"
 import {
@@ -42,16 +44,6 @@ import {
 } from "@/store/atoms"
 
 const NONE = "__unsorted__"
-
-const safeNormalizeUrl = (value: string) => {
-  try {
-    const normalized = normalizeUrl(value)
-
-    return /[%\s]/.test(new URL(normalized).hostname) ? null : normalized
-  } catch {
-    return null
-  }
-}
 
 const bookmarkFormSchema = z.object({
   url: z
@@ -156,8 +148,7 @@ const BookmarkForm = ({
       router.refresh()
     } catch (cause) {
       setError("root", {
-        message:
-          cause instanceof Error ? cause.message : "Something went wrong",
+        message: errorMessage(cause, "Something went wrong"),
       })
     }
   })
@@ -171,8 +162,7 @@ const BookmarkForm = ({
         </DialogDescription>
       </DialogHeader>
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="bookmark-url">URL</Label>
+        <Field label="URL" htmlFor="bookmark-url" error={errors.url?.message}>
           <div className="flex gap-2">
             <Input
               id="bookmark-url"
@@ -203,37 +193,32 @@ const BookmarkForm = ({
               )}
             </Button>
           </div>
-          {errors.url ? (
-            <p className="text-sm text-destructive" role="alert">
-              {errors.url.message}
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="bookmark-title">Title</Label>
+        </Field>
+        <Field
+          label="Title"
+          htmlFor="bookmark-title"
+          error={errors.title?.message}
+        >
           <Input
             id="bookmark-title"
             placeholder="Read from the page when left empty"
             aria-invalid={Boolean(errors.title)}
             {...register("title")}
           />
-          {errors.title ? (
-            <p className="text-sm text-destructive" role="alert">
-              {errors.title.message}
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="bookmark-description">Description</Label>
+        </Field>
+        <Field
+          label="Description"
+          htmlFor="bookmark-description"
+          error={errors.description?.message}
+        >
           <Textarea
             id="bookmark-description"
             rows={2}
             aria-invalid={Boolean(errors.description)}
             {...register("description")}
           />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="bookmark-collection">Collection</Label>
+        </Field>
+        <Field label="Collection" htmlFor="bookmark-collection">
           <Controller
             control={control}
             name="collectionId"
@@ -267,7 +252,7 @@ const BookmarkForm = ({
               </Select>
             )}
           />
-        </div>
+        </Field>
         <div className="flex items-center justify-between rounded-lg border px-3 py-2">
           <div className="flex flex-col">
             <Label htmlFor="bookmark-pinned">Pin to homepage</Label>

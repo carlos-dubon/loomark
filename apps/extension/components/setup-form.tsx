@@ -3,10 +3,12 @@ import { ArrowLeftIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
+import { errorMessage } from "@loomark/core/format"
 import type { Connection } from "@loomark/core/types"
 import { safeNormalizeUrl } from "@loomark/core/url"
 import { Button } from "@loomark/ui/components/button"
-import { Field, FieldInput } from "@loomark/ui/components/field"
+import { Field } from "@loomark/ui/components/field"
+import { Input } from "@loomark/ui/components/input"
 
 import { connect } from "@/lib/api"
 import { hasHostPermission, requestHostPermission } from "@/lib/permissions"
@@ -88,11 +90,13 @@ const ServerStep = ({
         </p>
       </div>
       <Field
+        size="sm"
         label="Server URL"
         htmlFor="server-url"
         error={errors.serverUrl?.message}
       >
-        <FieldInput
+        <Input
+          size="sm"
           id="server-url"
           placeholder="https://loomark.example.com"
           autoFocus
@@ -141,7 +145,7 @@ const CredentialsStep = ({
       onConnected({ serverUrl, token, user })
     } catch (cause) {
       setError("root", {
-        message: cause instanceof Error ? cause.message : "Could not sign in",
+        message: errorMessage(cause, "Could not sign in"),
       })
     }
   })
@@ -163,8 +167,14 @@ const CredentialsStep = ({
           <p className="truncate text-xs text-muted-foreground">{serverUrl}</p>
         </div>
       </div>
-      <Field label="Email" htmlFor="email" error={errors.email?.message}>
-        <FieldInput
+      <Field
+        size="sm"
+        label="Email"
+        htmlFor="email"
+        error={errors.email?.message}
+      >
+        <Input
+          size="sm"
           id="email"
           type="email"
           autoComplete="username"
@@ -174,11 +184,13 @@ const CredentialsStep = ({
         />
       </Field>
       <Field
+        size="sm"
         label="Password"
         htmlFor="password"
         error={errors.password?.message}
       >
-        <FieldInput
+        <Input
+          size="sm"
           id="password"
           type="password"
           autoComplete="current-password"

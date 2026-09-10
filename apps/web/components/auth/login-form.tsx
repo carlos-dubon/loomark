@@ -14,8 +14,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@loomark/ui/components/card"
+import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
-import { Label } from "@loomark/ui/components/label"
 
 import { Link } from "@/components/link"
 import { loginSchema } from "@/lib/schemas"
@@ -62,8 +62,11 @@ export const LoginForm = ({ callbackUrl }: Props) => {
       </CardHeader>
       <form onSubmit={onSubmit} noValidate>
         <CardContent className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="email">Email</Label>
+          <Field
+            label="Email"
+            htmlFor="email"
+            error={errors.email ? "Enter a valid email" : undefined}
+          >
             <Input
               id="email"
               type="email"
@@ -71,14 +74,12 @@ export const LoginForm = ({ callbackUrl }: Props) => {
               aria-invalid={Boolean(errors.email)}
               {...register("email")}
             />
-            {errors.email ? (
-              <p className="text-sm text-destructive" role="alert">
-                Enter a valid email
-              </p>
-            ) : null}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="password">Password</Label>
+          </Field>
+          <Field
+            label="Password"
+            htmlFor="password"
+            error={errors.password ? "Enter your password" : undefined}
+          >
             <Input
               id="password"
               type="password"
@@ -86,12 +87,7 @@ export const LoginForm = ({ callbackUrl }: Props) => {
               aria-invalid={Boolean(errors.password)}
               {...register("password")}
             />
-            {errors.password ? (
-              <p className="text-sm text-destructive" role="alert">
-                Enter your password
-              </p>
-            ) : null}
-          </div>
+          </Field>
           {errors.root ? (
             <p className="text-sm text-destructive" role="alert">
               {errors.root.message}

@@ -3,16 +3,14 @@ import { Loader2Icon, PlusIcon, WandSparklesIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 
+import { errorMessage } from "@loomark/core/format"
 import { flattenCollections } from "@loomark/core/tree"
 import type { ActiveTab, BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
-import {
-  Field,
-  FieldInput,
-  FieldLabel,
-  FieldSelect,
-  FieldTextarea,
-} from "@loomark/ui/components/field"
+import { Field, NativeSelect } from "@loomark/ui/components/field"
+import { Input } from "@loomark/ui/components/input"
+import { Label } from "@loomark/ui/components/label"
+import { Textarea } from "@loomark/ui/components/textarea"
 import { Switch } from "@loomark/ui/components/switch"
 
 import {
@@ -113,7 +111,7 @@ export const BookmarkForm = ({
       onRemoved()
     } catch (cause) {
       setError("root", {
-        message: cause instanceof Error ? cause.message : "Could not remove it",
+        message: errorMessage(cause, "Could not remove it"),
       })
     } finally {
       setRemoving(false)
@@ -139,7 +137,7 @@ export const BookmarkForm = ({
       onSaved(saved)
     } catch (cause) {
       setError("root", {
-        message: cause instanceof Error ? cause.message : "Could not save it",
+        message: errorMessage(cause, "Could not save it"),
       })
     }
   })
@@ -147,12 +145,14 @@ export const BookmarkForm = ({
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-3 p-3">
       <Field
+        size="sm"
         label="Title"
         htmlFor="bookmark-title"
         error={errors.title?.message}
       >
         <div className="flex gap-2">
-          <FieldInput
+          <Input
+            size="sm"
             id="bookmark-title"
             placeholder="Read from the page when left empty"
             aria-invalid={Boolean(errors.title)}
@@ -175,24 +175,27 @@ export const BookmarkForm = ({
         </div>
       </Field>
       <Field
+        size="sm"
         label="Notes"
         htmlFor="bookmark-description"
         error={errors.description?.message}
       >
-        <FieldTextarea
+        <Textarea
+          size="sm"
           id="bookmark-description"
           rows={2}
           aria-invalid={Boolean(errors.description)}
           {...register("description")}
         />
       </Field>
-      <Field label="Collection" htmlFor="bookmark-collection">
+      <Field size="sm" label="Collection" htmlFor="bookmark-collection">
         <div className="flex gap-2">
           <Controller
             control={control}
             name="collectionId"
             render={({ field }) => (
-              <FieldSelect
+              <NativeSelect
+                size="sm"
                 id="bookmark-collection"
                 value={field.value ?? ""}
                 onChange={(event) => field.onChange(event.target.value)}
@@ -202,7 +205,7 @@ export const BookmarkForm = ({
                     {`${"  ".repeat(node.depth)}${node.name}`}
                   </option>
                 ))}
-              </FieldSelect>
+              </NativeSelect>
             )}
           />
           <Button
@@ -217,9 +220,9 @@ export const BookmarkForm = ({
         </div>
       </Field>
       <div className="flex items-center justify-between rounded-md border px-3 py-2">
-        <FieldLabel htmlFor="bookmark-pinned" className="text-foreground">
+        <Label size="sm" htmlFor="bookmark-pinned">
           Pin to homepage
-        </FieldLabel>
+        </Label>
         <Controller
           control={control}
           name="pinned"
