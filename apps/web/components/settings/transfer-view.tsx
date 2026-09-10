@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
+import { errorMessage, plural } from "@loomark/core/format"
 import type { ImportSummary } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import {
@@ -29,9 +30,6 @@ import { api } from "@/lib/client-api"
 import { collectionsAtom } from "@/store/atoms"
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
-
-const plural = (count: number, word: string) =>
-  `${count} ${count === 1 ? word : `${word}s`}`
 
 const summaryLines = (summary: ImportSummary) =>
   [
@@ -84,7 +82,7 @@ export const TransferView = ({
       setCollections(await api.listCollections())
       router.refresh()
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Import failed")
+      toast.error(errorMessage(cause, "Import failed"))
     } finally {
       setImporting(false)
     }

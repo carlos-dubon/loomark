@@ -4,6 +4,7 @@ import { useAtom, useSetAtom } from "jotai"
 import { useCallback, useEffect } from "react"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import { isUpdateRunning, type UpdateJob } from "@loomark/core/updates"
 
 import { api } from "@/lib/client-api"
@@ -112,9 +113,7 @@ export const useUpdates = () => {
     try {
       setJob(await api.installUpdate())
     } catch (cause) {
-      toast.error(
-        cause instanceof Error ? cause.message : "Could not start the update"
-      )
+      toast.error(errorMessage(cause, "Could not start the update"))
 
       return
     }
@@ -182,9 +181,7 @@ export const useUpdates = () => {
           : `${discarded} parked containers removed`
       )
     } catch (cause) {
-      toast.error(
-        cause instanceof Error ? cause.message : "Could not remove it"
-      )
+      toast.error(errorMessage(cause, "Could not remove it"))
     }
   }, [refresh])
 

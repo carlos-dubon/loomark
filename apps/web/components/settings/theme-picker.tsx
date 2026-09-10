@@ -5,6 +5,7 @@ import { CheckIcon } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import { cn } from "@loomark/core/utils"
 
 import { useIsDark } from "@/hooks/use-is-dark"
@@ -63,9 +64,7 @@ export const ThemePicker = () => {
     } catch (cause) {
       setThemeCss(themeToCss(findTheme(THEMES, previous.themeId)))
       setAppearance(previous)
-      toast.error(
-        cause instanceof Error ? cause.message : "Could not save theme"
-      )
+      toast.error(errorMessage(cause, "Could not save theme"))
     } finally {
       setSaving(false)
     }
