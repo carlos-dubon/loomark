@@ -1,25 +1,13 @@
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { parseBody, withUser } from "@/lib/api"
 import { getAppearance } from "@/lib/appearance"
 import { prisma } from "@/lib/prisma"
 import { appearanceUpdateSchema } from "@/lib/schemas"
 
-export const GET = async () => {
-  const userId = await requireUserId()
+export const GET = withUser(async (_request, userId) =>
+  Response.json(await getAppearance(userId))
+)
 
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
-  return Response.json(await getAppearance(userId))
-}
-
-export const PATCH = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const PATCH = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, appearanceUpdateSchema)
 
   if (!data) {
@@ -36,4 +24,4 @@ export const PATCH = async (request: Request) => {
   })
 
   return Response.json(await getAppearance(userId))
-}
+})

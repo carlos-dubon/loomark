@@ -1,15 +1,9 @@
-import { jsonError, requireUserId } from "@/lib/api"
+import { withUser } from "@/lib/api"
 import { buildBookmarksFile } from "@/lib/netscape"
 import { prisma } from "@/lib/prisma"
 import { buildExportTree } from "@/lib/transfer"
 
-export const GET = async () => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withUser(async (_request, userId) => {
   const [collections, bookmarks] = await Promise.all([
     prisma.collection.findMany({
       where: { userId, kind: "USER" },
@@ -31,4 +25,4 @@ export const GET = async () => {
       "cache-control": "no-store",
     },
   })
-}
+})

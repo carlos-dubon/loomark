@@ -1,17 +1,11 @@
-import { jsonError, requireUserId } from "@/lib/api"
+import { jsonError, withUser } from "@/lib/api"
 import { fetchUrlMetadata } from "@/lib/metadata"
 import { prisma } from "@/lib/prisma"
 import { serializeBookmark } from "@/lib/serialize"
 
 type Context = { params: Promise<{ id: string }> }
 
-export const POST = async (_request: Request, { params }: Context) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (_request, userId, { params }: Context) => {
   const { id } = await params
   const bookmark = await prisma.bookmark.findFirst({
     where: { id, userId },
@@ -46,4 +40,4 @@ export const POST = async (_request: Request, { params }: Context) => {
   })
 
   return Response.json(serializeBookmark(updated))
-}
+})

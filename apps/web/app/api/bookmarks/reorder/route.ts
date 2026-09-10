@@ -1,5 +1,5 @@
 import { reorderWithin } from "@loomark/core/order"
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { jsonError, parseBody, withUser } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 import { bookmarkReorderSchema } from "@/lib/schemas"
 import {
@@ -34,13 +34,7 @@ const reorderPinned = async (userId: string, ids: string[]) => {
   return new Response(null, { status: 204 })
 }
 
-export const POST = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, bookmarkReorderSchema)
 
   if (!data) {
@@ -72,4 +66,4 @@ export const POST = async (request: Request) => {
   }
 
   return new Response(null, { status: 204 })
-}
+})

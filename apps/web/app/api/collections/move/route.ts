@@ -1,19 +1,17 @@
 import { slotForTypeIndex } from "@loomark/core/order"
 import { collectDescendantIds } from "@loomark/core/tree"
 
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { jsonError, parseBody, withUser } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 import { getCollections } from "@/lib/queries"
 import { collectionMoveSchema } from "@/lib/schemas"
-import { loadSiblings, renumber, unsortedCollectionId } from "@/lib/siblings"
+import {
+  loadSiblings,
+  renumber,
+  unsortedCollectionId,
+} from "@/lib/siblings"
 
-export const POST = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, collectionMoveSchema)
 
   if (!data) {
@@ -115,4 +113,4 @@ export const POST = async (request: Request) => {
       }
     })
   )
-}
+})

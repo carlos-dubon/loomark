@@ -1,21 +1,18 @@
 import { normalizeUrl } from "@loomark/core/url"
 
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { jsonError, parseBody, withUser } from "@/lib/api"
 import { resolveCollectionId } from "@/lib/collections"
-import { nextBookmarkPosition, nextPinnedPosition } from "@/lib/positions"
+import {
+  nextBookmarkPosition,
+  nextPinnedPosition,
+} from "@/lib/positions"
 import { prisma } from "@/lib/prisma"
 import { bookmarkUpdateSchema } from "@/lib/schemas"
 import { serializeBookmark } from "@/lib/serialize"
 
 type Context = { params: Promise<{ id: string }> }
 
-export const GET = async (_request: Request, { params }: Context) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withUser(async (_request, userId, { params }: Context) => {
   const { id } = await params
   const bookmark = await prisma.bookmark.findFirst({
     where: { id, userId },
@@ -26,15 +23,9 @@ export const GET = async (_request: Request, { params }: Context) => {
   }
 
   return Response.json(serializeBookmark(bookmark))
-}
+})
 
-export const PATCH = async (request: Request, { params }: Context) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const PATCH = withUser(async (request, userId, { params }: Context) => {
   const { id } = await params
   const { data, response } = await parseBody(request, bookmarkUpdateSchema)
 
@@ -93,21 +84,17 @@ export const PATCH = async (request: Request, { params }: Context) => {
   })
 
   return Response.json(serializeBookmark(bookmark))
-}
+})
 
-export const DELETE = async (_request: Request, { params }: Context) => {
-  const userId = await requireUserId()
+export const DELETE = withUser(
+  async (_request, userId, { params }: Context) => {
+    const { id } = await params
+    const deleted = await prisma.bookmark.deleteMany({ where: { id, userId } })
 
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
+    if (deleted.count === 0) {
+      return jsonError("Bookmark not found", 404)
+    }
+
+    return new Response(null, { status: 204 })
   }
-
-  const { id } = await params
-  const deleted = await prisma.bookmark.deleteMany({ where: { id, userId } })
-
-  if (deleted.count === 0) {
-    return jsonError("Bookmark not found", 404)
-  }
-
-  return new Response(null, { status: 204 })
-}
+)

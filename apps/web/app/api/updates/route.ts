@@ -1,7 +1,6 @@
 import { isNewer, type UpdateStatus } from "@loomark/core/updates"
 
-import { requireOwnerId } from "@/lib/admin"
-import { jsonError } from "@/lib/api"
+import { withOwner } from "@/lib/admin"
 import { fetchLatestRelease } from "@/lib/updates/github"
 import {
   appVersion,
@@ -9,11 +8,7 @@ import {
   selfUpdateSupport,
 } from "@/lib/updates/self-update"
 
-export const GET = async (request: Request) => {
-  if (!(await requireOwnerId())) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withOwner(async (request) => {
   const force = new URL(request.url).searchParams.get("force") === "1"
 
   const [latest, selfUpdate, parked] = await Promise.all([
@@ -31,4 +26,4 @@ export const GET = async (request: Request) => {
   }
 
   return Response.json(status)
-}
+})

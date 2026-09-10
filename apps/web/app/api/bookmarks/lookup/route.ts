@@ -1,17 +1,11 @@
 import { normalizeUrl } from "@loomark/core/url"
 
-import { jsonError, parseQuery, requireUserId } from "@/lib/api"
+import { jsonError, parseQuery, withUser } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 import { bookmarkLookupSchema } from "@/lib/schemas"
 import { serializeBookmark } from "@/lib/serialize"
 
-export const GET = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withUser(async (request, userId) => {
   const { data, response } = parseQuery(request, bookmarkLookupSchema)
 
   if (!data) {
@@ -32,4 +26,4 @@ export const GET = async (request: Request) => {
   })
 
   return Response.json(bookmark ? serializeBookmark(bookmark) : null)
-}
+})
