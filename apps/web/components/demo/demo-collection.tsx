@@ -5,6 +5,7 @@ import { useEffect } from "react"
 
 import { BookmarkListView } from "@/components/bookmark-list-view"
 import { useDemoState } from "@/hooks/use-demo-state"
+import { collectionEmptyState } from "@/lib/collection-view"
 import { bookmarksIn, collectionList } from "@/lib/demo/store"
 
 export const DemoCollection = ({ id }: { id: string }) => {
@@ -23,21 +24,13 @@ export const DemoCollection = ({ id }: { id: string }) => {
     return null
   }
 
-  const unsorted = collection.kind === "UNSORTED"
-
   return (
     <BookmarkListView
       title={collection.name}
       collectionId={collection.id}
       collection={collection}
       bookmarks={bookmarksIn(state, collection.id)}
-      emptyIcon={unsorted ? "inbox" : "bookmark"}
-      emptyTitle={unsorted ? "Nothing unsorted" : "This collection is empty"}
-      emptyDescription={
-        unsorted
-          ? "Every bookmark you saved already lives in a collection."
-          : "Add a bookmark here or drop one in from another collection."
-      }
+      {...collectionEmptyState(collection)}
     />
   )
 }

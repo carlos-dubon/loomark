@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation"
 import { BookmarkListView } from "@/components/bookmark-list-view"
 import { DemoCollection } from "@/components/demo/demo-collection"
 import { auth } from "@/lib/auth"
+import { collectionEmptyState } from "@/lib/collection-view"
 import { isDemo } from "@/lib/demo/config"
 import { getBookmarks, getCollection } from "@/lib/queries"
 
@@ -50,8 +51,6 @@ const CollectionPage = async ({
     notFound()
   }
 
-  const unsorted = collection.kind === "UNSORTED"
-
   const bookmarks = await getBookmarks(session.user.id, {
     collectionId: id,
     take: 200,
@@ -63,13 +62,7 @@ const CollectionPage = async ({
       collectionId={collection.id}
       collection={collection}
       bookmarks={bookmarks}
-      emptyIcon={unsorted ? "inbox" : "bookmark"}
-      emptyTitle={unsorted ? "Nothing unsorted" : "This collection is empty"}
-      emptyDescription={
-        unsorted
-          ? "Every bookmark you saved already lives in a collection."
-          : "Add a bookmark here or drop one in from another collection."
-      }
+      {...collectionEmptyState(collection)}
     />
   )
 }
