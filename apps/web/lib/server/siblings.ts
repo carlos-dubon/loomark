@@ -1,6 +1,6 @@
 import { compareSiblings } from "@loomark/core/order"
 
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/server/prisma"
 
 import type { Sibling } from "@loomark/core/order"
 

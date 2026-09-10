@@ -1,15 +1,15 @@
 import { slotForTypeIndex } from "@loomark/core/order"
 import { collectDescendantIds } from "@loomark/core/tree"
 
-import { jsonError, parseBody, withUser } from "@/lib/api"
-import { prisma } from "@/lib/prisma"
-import { getCollections } from "@/lib/queries"
+import { jsonError, parseBody, withUser } from "@/lib/server/api"
+import { prisma } from "@/lib/server/prisma"
+import { getCollections } from "@/lib/server/queries"
 import { collectionMoveSchema } from "@/lib/schemas"
 import {
   loadSiblings,
   renumber,
   unsortedCollectionId,
-} from "@/lib/siblings"
+} from "@/lib/server/siblings"
 
 export const POST = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, collectionMoveSchema)

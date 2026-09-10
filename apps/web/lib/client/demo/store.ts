@@ -1,12 +1,14 @@
+import "client-only"
+
 import type {
   BookmarkDTO,
   CollectionDTO,
   CollectionKind,
 } from "@loomark/core/types"
 
-import { demoBanner, demoFavicon } from "@/lib/demo/banner"
+import { demoBanner, demoFavicon } from "@/lib/client/demo/banner"
 import { DEMO_UNSORTED_ID, DEMO_USER } from "@/lib/demo/config"
-import { DEMO_BOOKMARKS, DEMO_COLLECTIONS } from "@/lib/demo/seed"
+import { DEMO_BOOKMARKS, DEMO_COLLECTIONS } from "@/lib/client/demo/seed"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
 import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
 

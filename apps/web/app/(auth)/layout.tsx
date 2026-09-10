@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation"
 
 import { LoomarkMark } from "@/components/loomark-mark"
-import { getUserRole } from "@/lib/admin"
-import { auth } from "@/lib/auth"
+import { getUserRole } from "@/lib/server/admin"
+import { auth } from "@/lib/server/auth"
 import { isDemo } from "@/lib/demo/config"
 
 const AuthLayout = async ({ children }: { children: React.ReactNode }) => {

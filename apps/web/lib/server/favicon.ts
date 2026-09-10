@@ -1,4 +1,4 @@
-import { jsonError } from "@/lib/api"
+import { jsonError } from "@/lib/server/api"
 
 const USER_AGENT =
   "Mozilla/5.0 (compatible; Loomark/1.0; +https://github.com/carlos-dubon/loomark)"

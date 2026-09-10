@@ -1,3 +1,5 @@
+import "server-only"
+
 import { decodeEntities } from "@loomark/core/format"
 import type { UrlMetadata } from "@loomark/core/types"
 import { normalizeUrl } from "@loomark/core/url"

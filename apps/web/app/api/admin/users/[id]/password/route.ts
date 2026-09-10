@@ -1,8 +1,8 @@
 import { hash } from "bcryptjs"
 
-import { getUserRole, withOwner } from "@/lib/admin"
-import { jsonError, parseBody } from "@/lib/api"
-import { prisma } from "@/lib/prisma"
+import { getUserRole, withOwner } from "@/lib/server/admin"
+import { jsonError, parseBody } from "@/lib/server/api"
+import { prisma } from "@/lib/server/prisma"
 import { passwordResetSchema } from "@/lib/schemas"
 
 type Context = { params: Promise<{ id: string }> }

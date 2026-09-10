@@ -1,6 +1,6 @@
-import { parseBody, withUser } from "@/lib/api"
-import { getAppearance } from "@/lib/appearance"
-import { prisma } from "@/lib/prisma"
+import { parseBody, withUser } from "@/lib/server/api"
+import { getAppearance } from "@/lib/server/appearance"
+import { prisma } from "@/lib/server/prisma"
 import { appearanceUpdateSchema } from "@/lib/schemas"
 
 export const GET = withUser(async (_request, userId) =>

@@ -1,14 +1,14 @@
 import { normalizeUrl } from "@loomark/core/url"
 
-import { jsonError, parseBody, withUser } from "@/lib/api"
-import { resolveCollectionId } from "@/lib/collections"
+import { jsonError, parseBody, withUser } from "@/lib/server/api"
+import { resolveCollectionId } from "@/lib/server/collections"
 import {
   nextBookmarkPosition,
   nextPinnedPosition,
-} from "@/lib/positions"
-import { prisma } from "@/lib/prisma"
+} from "@/lib/server/positions"
+import { prisma } from "@/lib/server/prisma"
 import { bookmarkUpdateSchema } from "@/lib/schemas"
-import { serializeBookmark } from "@/lib/serialize"
+import { serializeBookmark } from "@/lib/server/serialize"
 
 type Context = { params: Promise<{ id: string }> }
 

@@ -1,10 +1,10 @@
-import { jsonError, withUser } from "@/lib/api"
+import { jsonError, withUser } from "@/lib/server/api"
 import {
   AVATAR_MAX_BYTES,
   clearAvatar,
   isAvatarContentType,
   saveAvatar,
-} from "@/lib/avatars"
+} from "@/lib/server/avatars"
 
 export const POST = withUser(async (request, userId) => {
   const form = await request.formData().catch(() => null)

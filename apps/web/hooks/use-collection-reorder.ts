@@ -12,7 +12,7 @@ import { errorMessage } from "@loomark/core/format"
 import { applyCollectionMove, siblingsOf } from "@loomark/core/tree"
 import type { CollectionDTO } from "@loomark/core/types"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import {
   collectionCardId,
   collectionSourceId,

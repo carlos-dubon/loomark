@@ -35,7 +35,7 @@ import {
 import { Switch } from "@loomark/ui/components/switch"
 import { Textarea } from "@loomark/ui/components/textarea"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import {
   bookmarkDialogAtom,
   collectionsAtom,

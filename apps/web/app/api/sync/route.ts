@@ -1,16 +1,16 @@
 import { reorderWithin } from "@loomark/core/order"
 import type { SyncSnapshot } from "@loomark/core/types"
 
-import { parseBody, withUser } from "@/lib/api"
-import { ensureUnsortedCollection } from "@/lib/collections"
-import { prisma } from "@/lib/prisma"
+import { parseBody, withUser } from "@/lib/server/api"
+import { ensureUnsortedCollection } from "@/lib/server/collections"
+import { prisma } from "@/lib/server/prisma"
 import { syncReorderSchema } from "@/lib/schemas"
 import {
   containerOf,
   loadSiblings,
   renumber,
   unsortedCollectionId,
-} from "@/lib/siblings"
+} from "@/lib/server/siblings"
 
 const ROOT = "__root__"
 

@@ -32,7 +32,7 @@ import {
 } from "@loomark/ui/components/select"
 
 import { IconPicker } from "@/components/icon-picker"
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import { collectionCreateSchema } from "@/lib/schemas"
 import {
   collectionDialogAtom,

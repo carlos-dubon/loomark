@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
 import { useDemoState } from "@/hooks/use-demo-state"
-import { unsortedId } from "@/lib/demo/store"
+import { unsortedId } from "@/lib/client/demo/store"
 
 export const DemoUnsorted = () => {
   const state = useDemoState()

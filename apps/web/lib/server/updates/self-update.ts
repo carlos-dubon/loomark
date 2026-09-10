@@ -18,12 +18,12 @@ import {
   streamPull,
   SOCKET_PATH,
   type Container,
-} from "@/lib/updates/docker"
+} from "@/lib/server/updates/docker"
 import {
   endpoint,
   helperBody,
   successorBody,
-} from "@/lib/updates/successor"
+} from "@/lib/server/updates/successor"
 
 export const appVersion = process.env.APP_VERSION ?? "dev"
 

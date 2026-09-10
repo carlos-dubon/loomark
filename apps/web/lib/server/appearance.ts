@@ -1,7 +1,7 @@
 import { toSortOrder } from "@loomark/core/sort"
 import { toViewMode } from "@loomark/core/view-mode"
 
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/server/prisma"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
 import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
 

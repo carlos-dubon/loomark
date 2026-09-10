@@ -1,5 +1,5 @@
-import { parseQuery, withUser } from "@/lib/api"
-import { fetchUrlMetadata } from "@/lib/metadata"
+import { parseQuery, withUser } from "@/lib/server/api"
+import { fetchUrlMetadata } from "@/lib/server/metadata"
 import { metadataQuerySchema } from "@/lib/schemas"
 
 export const GET = withUser(async (request) => {

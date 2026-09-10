@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes"
 import { useCallback } from "react"
 
-import { playSound } from "@/lib/sound"
+import { playSound } from "@/lib/client/sound"
 
 const THEME_SOUND_SRC = "/sounds/theme-toggle.mp3"
 const THEME_SOUND_VOLUME = 0.3

@@ -17,7 +17,7 @@ import {
 
 import { FaviconImage } from "@/components/favicon-image"
 import { useOpenInNewTab } from "@/hooks/use-open-in-new-tab"
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import {
   clearRecentSearchesAtom,
   pushRecentSearchAtom,

@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 import { GeneralView } from "@/components/settings/general-view"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/server/auth"
 import { isDemo } from "@/lib/demo/config"
-import { getProfile } from "@/lib/queries"
+import { getProfile } from "@/lib/server/queries"
 
 export const metadata: Metadata = { title: "General" }
 

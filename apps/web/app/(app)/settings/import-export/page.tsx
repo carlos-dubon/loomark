@@ -3,9 +3,9 @@ import { redirect } from "next/navigation"
 
 import { DemoTransfer } from "@/components/demo/demo-transfer"
 import { TransferView } from "@/components/settings/transfer-view"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/server/auth"
 import { isDemo } from "@/lib/demo/config"
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/server/prisma"
 
 export const metadata: Metadata = { title: "Import and export" }
 

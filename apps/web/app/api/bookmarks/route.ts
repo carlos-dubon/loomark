@@ -1,20 +1,20 @@
 import { normalizeUrl } from "@loomark/core/url"
 
-import { jsonError, parseBody, parseQuery, withUser } from "@/lib/api"
-import { resolveCollectionId } from "@/lib/collections"
-import { fetchUrlMetadata } from "@/lib/metadata"
+import { jsonError, parseBody, parseQuery, withUser } from "@/lib/server/api"
+import { resolveCollectionId } from "@/lib/server/collections"
+import { fetchUrlMetadata } from "@/lib/server/metadata"
 import {
   nextBookmarkPosition,
   nextPinnedPosition,
-} from "@/lib/positions"
-import { prisma } from "@/lib/prisma"
-import { getBookmarks } from "@/lib/queries"
+} from "@/lib/server/positions"
+import { prisma } from "@/lib/server/prisma"
+import { getBookmarks } from "@/lib/server/queries"
 import {
   bookmarkBulkDeleteSchema,
   bookmarkCreateSchema,
   bookmarkQuerySchema,
 } from "@/lib/schemas"
-import { serializeBookmark } from "@/lib/serialize"
+import { serializeBookmark } from "@/lib/server/serialize"
 
 export const GET = withUser(async (request, userId) => {
   const { data, response } = parseQuery(request, bookmarkQuerySchema)

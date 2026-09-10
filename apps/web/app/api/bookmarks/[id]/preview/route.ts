@@ -1,7 +1,7 @@
-import { jsonError, withUser } from "@/lib/api"
-import { fetchUrlMetadata } from "@/lib/metadata"
-import { prisma } from "@/lib/prisma"
-import { serializeBookmark } from "@/lib/serialize"
+import { jsonError, withUser } from "@/lib/server/api"
+import { fetchUrlMetadata } from "@/lib/server/metadata"
+import { prisma } from "@/lib/server/prisma"
+import { serializeBookmark } from "@/lib/server/serialize"
 
 type Context = { params: Promise<{ id: string }> }
 

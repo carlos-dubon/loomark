@@ -1,7 +1,7 @@
 import type { InstanceUserDTO } from "@loomark/core/types"
 
-import { jsonError, requireUserId } from "@/lib/api"
-import { prisma } from "@/lib/prisma"
+import { jsonError, requireUserId } from "@/lib/server/api"
+import { prisma } from "@/lib/server/prisma"
 
 type Numeric = bigint | number | string | null
 

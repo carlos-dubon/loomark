@@ -3,7 +3,7 @@ import {
   type Container,
   type EndpointSettings,
   type Image,
-} from "@/lib/updates/docker"
+} from "@/lib/server/updates/docker"
 
 const withoutImageDefaults = (values: string[], defaults: string[]) => {
   const known = new Set(defaults)

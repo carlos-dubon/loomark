@@ -1,13 +1,13 @@
 import { reorderWithin } from "@loomark/core/order"
-import { jsonError, parseBody, withUser } from "@/lib/api"
-import { prisma } from "@/lib/prisma"
+import { jsonError, parseBody, withUser } from "@/lib/server/api"
+import { prisma } from "@/lib/server/prisma"
 import { bookmarkReorderSchema } from "@/lib/schemas"
 import {
   containerOf,
   loadSiblings,
   renumber,
   unsortedCollectionId,
-} from "@/lib/siblings"
+} from "@/lib/server/siblings"
 
 const reorderPinned = async (userId: string, ids: string[]) => {
   const bookmarks = await prisma.bookmark.findMany({

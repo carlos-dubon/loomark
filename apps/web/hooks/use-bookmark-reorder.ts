@@ -16,7 +16,7 @@ import {
 } from "@loomark/core/sort"
 import type { BookmarkDTO } from "@loomark/core/types"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import { DRAG_TYPE } from "@/lib/dnd"
 import { setBookmarkItemsAtom } from "@/store/atoms"
 

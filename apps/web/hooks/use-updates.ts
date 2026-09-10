@@ -7,7 +7,7 @@ import { toast } from "sonner"
 import { errorMessage } from "@loomark/core/format"
 import { isUpdateRunning, type UpdateJob } from "@loomark/core/updates"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import { isDemo } from "@/lib/demo/config"
 import { updateJobAtom, updateStatusAtom } from "@/store/atoms"
 

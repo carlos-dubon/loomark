@@ -1,7 +1,7 @@
-import { withUser } from "@/lib/api"
+import { withUser } from "@/lib/server/api"
 import { buildBookmarksFile } from "@/lib/netscape"
-import { prisma } from "@/lib/prisma"
-import { buildExportTree } from "@/lib/transfer"
+import { prisma } from "@/lib/server/prisma"
+import { buildExportTree } from "@/lib/server/transfer"
 
 export const GET = withUser(async (_request, userId) => {
   const [collections, bookmarks] = await Promise.all([
