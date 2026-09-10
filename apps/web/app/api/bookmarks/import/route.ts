@@ -1,7 +1,7 @@
-import { jsonError, withUser } from "@/lib/api"
+import { jsonError, withUser } from "@/lib/server/api"
 import { isLinkwardenBackup, parseLinkwardenBackup } from "@/lib/linkwarden"
 import { parseBookmarksFile } from "@/lib/netscape"
-import { importBookmarksTree } from "@/lib/transfer"
+import { importBookmarksTree } from "@/lib/server/transfer"
 
 const MAX_BYTES = 10 * 1024 * 1024
 

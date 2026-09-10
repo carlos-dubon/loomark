@@ -12,7 +12,7 @@ import {
   insertionIndex,
 } from "@loomark/core/tree"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import { collectionsAtom } from "@/store/atoms"
 
 export const useCollectionActions = () => {

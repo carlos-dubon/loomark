@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from "node:crypto"
 
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/server/prisma"
 
 export const API_TOKEN_PREFIX = "lmk_"
 const STALE_MS = 60 * 60 * 1000

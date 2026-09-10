@@ -1,14 +1,14 @@
 import type { ImportSummary } from "@loomark/core/types"
 
-import { ensureUnsortedCollection } from "@/lib/collections"
+import { ensureUnsortedCollection } from "@/lib/server/collections"
 import type {
   Bookmark,
   Collection,
   Prisma,
 } from "@/lib/generated/prisma/client"
 import type { NetscapeBookmark, NetscapeFolder } from "@/lib/netscape"
-import { prisma } from "@/lib/prisma"
-import { normalizeUserPositions } from "@/lib/siblings"
+import { prisma } from "@/lib/server/prisma"
+import { normalizeUserPositions } from "@/lib/server/siblings"
 
 const MAX_BOOKMARKS = 10000
 

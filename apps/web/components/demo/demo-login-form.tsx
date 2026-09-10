@@ -22,7 +22,7 @@ import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
 
 import { DEMO_CREDENTIALS } from "@/lib/demo/config"
-import { signIn } from "@/lib/demo/store"
+import { signIn } from "@/lib/client/demo/store"
 
 export const DemoLoginForm = () => {
   const router = useRouter()

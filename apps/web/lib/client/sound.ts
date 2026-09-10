@@ -1,3 +1,5 @@
+import "client-only"
+
 type AudioContextConstructor = typeof AudioContext
 
 const buffers = new Map<string, Promise<AudioBuffer>>()

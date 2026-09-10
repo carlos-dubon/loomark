@@ -1,10 +1,12 @@
+import "server-only"
+
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { compare } from "bcryptjs"
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 
-import { ensureUnsortedCollection } from "@/lib/collections"
-import { prisma } from "@/lib/prisma"
+import { ensureUnsortedCollection } from "@/lib/server/collections"
+import { prisma } from "@/lib/server/prisma"
 import { loginSchema } from "@/lib/schemas"
 
 export const { handlers, auth, signOut } = NextAuth({

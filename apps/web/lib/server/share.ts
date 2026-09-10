@@ -8,13 +8,13 @@ import type {
   SharedCollectionPage,
 } from "@loomark/core/types"
 
-import { getAppearance } from "@/lib/appearance"
-import { prisma } from "@/lib/prisma"
+import { getAppearance } from "@/lib/server/appearance"
+import { prisma } from "@/lib/server/prisma"
 import {
   serializeBookmark,
   serializeSharedBookmark,
   serializeSharedCollection,
-} from "@/lib/serialize"
+} from "@/lib/server/serialize"
 
 export const createShareToken = () => randomBytes(16).toString("base64url")
 

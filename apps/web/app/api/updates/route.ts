@@ -1,12 +1,12 @@
 import { isNewer, type UpdateStatus } from "@loomark/core/updates"
 
-import { withOwner } from "@/lib/admin"
-import { fetchLatestRelease } from "@/lib/updates/github"
+import { withOwner } from "@/lib/server/admin"
+import { fetchLatestRelease } from "@/lib/server/updates/github"
 import {
   appVersion,
   parkedUpdates,
   selfUpdateSupport,
-} from "@/lib/updates/self-update"
+} from "@/lib/server/updates/self-update"
 
 export const GET = withOwner(async (request) => {
   const force = new URL(request.url).searchParams.get("force") === "1"

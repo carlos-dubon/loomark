@@ -5,7 +5,7 @@ import { toast } from "sonner"
 
 import { errorMessage } from "@loomark/core/format"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import type { AppearanceUpdateInput } from "@/lib/schemas"
 
 type Key = keyof AppearanceUpdateInput

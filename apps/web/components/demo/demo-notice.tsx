@@ -4,7 +4,7 @@ import { DatabaseZapIcon, RotateCcwIcon } from "lucide-react"
 
 import { Button } from "@loomark/ui/components/button"
 
-import { signOut } from "@/lib/demo/store"
+import { signOut } from "@/lib/client/demo/store"
 
 export const DemoNotice = () => (
   <div className="flex shrink-0 items-center gap-2.5 border-b border-warning/32 bg-warning-surface px-4 py-2 text-xs text-warning-foreground md:px-6">

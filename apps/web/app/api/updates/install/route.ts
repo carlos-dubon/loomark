@@ -4,13 +4,13 @@ import {
   type SelfUpdateBlocker,
 } from "@loomark/core/updates"
 
-import { withOwner } from "@/lib/admin"
-import { jsonError } from "@/lib/api"
+import { withOwner } from "@/lib/server/admin"
+import { jsonError } from "@/lib/server/api"
 import {
   discardParkedUpdates,
   startSelfUpdate,
   updateJob,
-} from "@/lib/updates/self-update"
+} from "@/lib/server/updates/self-update"
 
 export const dynamic = "force-dynamic"
 

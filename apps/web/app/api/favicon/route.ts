@@ -1,5 +1,5 @@
-import { withUser } from "@/lib/api"
-import { faviconTarget, proxyFavicon } from "@/lib/favicon"
+import { withUser } from "@/lib/server/api"
+import { faviconTarget, proxyFavicon } from "@/lib/server/favicon"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"

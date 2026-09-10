@@ -20,7 +20,7 @@ import {
 import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 
 const ALPHABET = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 

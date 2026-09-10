@@ -19,7 +19,7 @@ import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
 
 import { Link } from "@/components/link"
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import { registerSchema } from "@/lib/schemas"
 
 export const RegisterForm = () => {

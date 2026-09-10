@@ -1,14 +1,14 @@
 import { compare } from "bcryptjs"
 import { headers } from "next/headers"
 
-import { jsonError, parseBody, withUser } from "@/lib/api"
+import { jsonError, parseBody, withUser } from "@/lib/server/api"
 import {
   bearerToken,
   createApiToken,
   revokeApiToken,
-} from "@/lib/api-tokens"
-import { ensureUnsortedCollection } from "@/lib/collections"
-import { prisma } from "@/lib/prisma"
+} from "@/lib/server/api-tokens"
+import { ensureUnsortedCollection } from "@/lib/server/collections"
+import { prisma } from "@/lib/server/prisma"
 import { apiTokenCreateSchema } from "@/lib/schemas"
 
 const DEFAULT_NAME = "Browser extension"

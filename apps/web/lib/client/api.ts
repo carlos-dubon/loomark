@@ -1,3 +1,5 @@
+import "client-only"
+
 import { routes } from "@loomark/core/routes"
 import type { UpdateJob, UpdateStatus } from "@loomark/core/updates"
 import type {
@@ -18,7 +20,7 @@ import type {
   CollectionMoveInput,
   CollectionUpdateInput,
 } from "@/lib/schemas"
-import { demoApi } from "@/lib/demo/api"
+import { demoApi } from "@/lib/client/demo/api"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
 
 const request = async <T>(url: string, init?: RequestInit): Promise<T> => {

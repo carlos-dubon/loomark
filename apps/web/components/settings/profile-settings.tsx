@@ -13,8 +13,8 @@ import {
 } from "@loomark/ui/components/avatar"
 import { Button } from "@loomark/ui/components/button"
 
-import { api } from "@/lib/client-api"
-import { toSquareImage } from "@/lib/image"
+import { api } from "@/lib/client/api"
+import { toSquareImage } from "@/lib/client/image"
 
 const AVATAR_EDGE = 512
 

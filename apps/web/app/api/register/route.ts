@@ -1,8 +1,8 @@
 import { hash } from "bcryptjs"
 
-import { jsonError, parseBody } from "@/lib/api"
-import { ensureUnsortedCollection } from "@/lib/collections"
-import { prisma } from "@/lib/prisma"
+import { jsonError, parseBody } from "@/lib/server/api"
+import { ensureUnsortedCollection } from "@/lib/server/collections"
+import { prisma } from "@/lib/server/prisma"
 import { registerSchema } from "@/lib/schemas"
 
 export const POST = async (request: Request) => {

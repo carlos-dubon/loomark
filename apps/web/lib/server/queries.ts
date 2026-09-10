@@ -1,8 +1,8 @@
 import { cache } from "react"
 
 import type { Prisma } from "@/lib/generated/prisma/client"
-import { prisma } from "@/lib/prisma"
-import { serializeBookmark, serializeCollection } from "@/lib/serialize"
+import { prisma } from "@/lib/server/prisma"
+import { serializeBookmark, serializeCollection } from "@/lib/server/serialize"
 
 type BookmarkFilters = {
   q?: string

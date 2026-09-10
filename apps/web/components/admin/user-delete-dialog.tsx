@@ -8,7 +8,7 @@ import { errorMessage, plural } from "@loomark/core/format"
 import type { InstanceUserDTO } from "@loomark/core/types"
 import { ConfirmDialog } from "@loomark/ui/components/confirm-dialog"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 
 export const UserDeleteDialog = ({
   user,

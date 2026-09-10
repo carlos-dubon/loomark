@@ -1,3 +1,5 @@
+import "client-only"
+
 const loadImage = (file: File) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
     const url = URL.createObjectURL(file)

@@ -1,8 +1,8 @@
-import { parseBody, withUser } from "@/lib/api"
-import { ensureUnsortedCollection } from "@/lib/collections"
-import { prisma } from "@/lib/prisma"
+import { parseBody, withUser } from "@/lib/server/api"
+import { ensureUnsortedCollection } from "@/lib/server/collections"
+import { prisma } from "@/lib/server/prisma"
 import { bookmarkRestoreSchema } from "@/lib/schemas"
-import { serializeBookmark } from "@/lib/serialize"
+import { serializeBookmark } from "@/lib/server/serialize"
 
 export const POST = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, bookmarkRestoreSchema)

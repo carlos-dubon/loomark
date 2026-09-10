@@ -17,7 +17,7 @@ import { CollectionShareDialog } from "@/components/collection-share-dialog"
 import { DemoNotice } from "@/components/demo/demo-notice"
 import { DndProvider } from "@/components/dnd-provider"
 import { useDemoState, useMounted } from "@/hooks/use-demo-state"
-import { collectionList } from "@/lib/demo/store"
+import { collectionList } from "@/lib/client/demo/store"
 import { THEMES } from "@/lib/themes/palettes"
 import { findTheme, themeToCss } from "@/lib/themes/theme"
 

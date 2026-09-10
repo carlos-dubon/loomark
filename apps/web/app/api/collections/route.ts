@@ -1,12 +1,12 @@
-import { jsonError, parseBody, withUser } from "@/lib/api"
-import { prisma } from "@/lib/prisma"
-import { getCollections } from "@/lib/queries"
+import { jsonError, parseBody, withUser } from "@/lib/server/api"
+import { prisma } from "@/lib/server/prisma"
+import { getCollections } from "@/lib/server/queries"
 import { collectionCreateSchema } from "@/lib/schemas"
-import { serializeCollection } from "@/lib/serialize"
+import { serializeCollection } from "@/lib/server/serialize"
 import {
   nextSiblingPosition,
   unsortedCollectionId,
-} from "@/lib/siblings"
+} from "@/lib/server/siblings"
 
 export const GET = withUser(async (_request, userId) =>
   Response.json(await getCollections(userId))

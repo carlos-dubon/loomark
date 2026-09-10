@@ -1,6 +1,6 @@
 import { routes } from "@loomark/core/routes"
 
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/server/prisma"
 
 export const AVATAR_MAX_BYTES = 2 * 1024 * 1024
 

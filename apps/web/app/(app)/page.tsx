@@ -3,10 +3,10 @@ import { redirect } from "next/navigation"
 
 import { DemoHome } from "@/components/demo/demo-home"
 import { HomeView } from "@/components/home-view"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/server/auth"
 import { isDemo } from "@/lib/demo/config"
-import { prisma } from "@/lib/prisma"
-import { getBookmarks } from "@/lib/queries"
+import { prisma } from "@/lib/server/prisma"
+import { getBookmarks } from "@/lib/server/queries"
 
 export const metadata: Metadata = { title: "Homepage" }
 

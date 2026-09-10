@@ -31,7 +31,7 @@ import { Link } from "@/components/link"
 import { useCloseSidebar } from "@/hooks/use-close-sidebar"
 import { useThemeToggle } from "@/hooks/use-theme-toggle"
 import { isDemo } from "@/lib/demo/config"
-import { signOut as demoSignOut } from "@/lib/demo/store"
+import { signOut as demoSignOut } from "@/lib/client/demo/store"
 
 export type SessionUser = {
   name: string | null
