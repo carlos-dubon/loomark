@@ -1,21 +1,12 @@
 "use client"
 
 import { useAtom, useAtomValue } from "jotai"
-import { Loader2Icon, Trash2Icon } from "lucide-react"
 import { useState } from "react"
 
+import { plural } from "@loomark/core/format"
 import { collectDescendantIds } from "@loomark/core/tree"
 import type { CollectionDTO } from "@loomark/core/types"
-import { Button } from "@loomark/ui/components/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@loomark/ui/components/dialog"
+import { ConfirmDialog } from "@loomark/ui/components/confirm-dialog"
 
 import { useCollectionDelete } from "@/hooks/use-collection-delete"
 import { collectionDeleteDialogAtom, collectionsAtom } from "@/store/atoms"
@@ -26,9 +17,6 @@ type Doomed = {
   nested: number
   bookmarks: number
 }
-
-const plural = (count: number, noun: string) =>
-  `${count} ${noun}${count === 1 ? "" : "s"}`
 
 const summarize = (
   collection: CollectionDTO,
@@ -58,54 +46,37 @@ export const CollectionDeleteDialog = () => {
   }
 
   return (
-    <Dialog
+    <ConfirmDialog
       open={collection !== null}
       onOpenChange={(open) => {
-        if (!open && !pending) {
+        if (!open) {
           setCollection(null)
         }
       }}
-    >
-      <DialogContent className="sm:max-w-sm">
-        <DialogHeader>
-          <DialogTitle>Delete “{doomed?.name}”?</DialogTitle>
-          <DialogDescription>
-            {doomed && doomed.nested > 0 ? (
-              <>
-                This also deletes {plural(doomed.nested, "nested collection")}
-                .{" "}
-              </>
-            ) : null}
-            {doomed && doomed.bookmarks > 0 ? (
-              <>{plural(doomed.bookmarks, "bookmark")} will be deleted too. </>
-            ) : null}
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" disabled={pending} />}>
-            Cancel
-          </DialogClose>
-          <Button
-            variant="destructive"
-            disabled={pending}
-            onClick={async () => {
-              if (!collection) {
-                return
-              }
+      pending={pending}
+      title={`Delete “${doomed?.name}”?`}
+      description={
+        <>
+          {doomed && doomed.nested > 0 ? (
+            <>
+              This also deletes {plural(doomed.nested, "nested collection")}
+              .{" "}
+            </>
+          ) : null}
+          {doomed && doomed.bookmarks > 0 ? (
+            <>{plural(doomed.bookmarks, "bookmark")} will be deleted too. </>
+          ) : null}
+        </>
+      }
+      confirmLabel="Delete collection"
+      onConfirm={async () => {
+        if (!collection) {
+          return
+        }
 
-              await destroy(collection)
-              setCollection(null)
-            }}
-          >
-            {pending ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <Trash2Icon />
-            )}
-            Delete collection
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        await destroy(collection)
+        setCollection(null)
+      }}
+    />
   )
 }
