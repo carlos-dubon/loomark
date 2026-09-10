@@ -1,19 +1,10 @@
 "use client"
 
 import { useAtom } from "jotai"
-import { Loader2Icon, Trash2Icon } from "lucide-react"
 
+import { plural } from "@loomark/core/format"
 import { hostFromUrl } from "@loomark/core/url"
-import { Button } from "@loomark/ui/components/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@loomark/ui/components/dialog"
+import { ConfirmDialog } from "@loomark/ui/components/confirm-dialog"
 
 import { useBookmarkDelete } from "@/hooks/use-bookmark-delete"
 import { deleteDialogAtom } from "@/store/atoms"
@@ -26,53 +17,29 @@ export const BookmarkDeleteDialog = () => {
   const only = count === 1 ? bookmarks[0] : null
 
   return (
-    <Dialog
+    <ConfirmDialog
       open={count > 0}
       onOpenChange={(open) => {
-        if (!open && !pending) {
+        if (!open) {
           setBookmarks([])
         }
       }}
-    >
-      <DialogContent className="sm:max-w-sm">
-        <DialogHeader>
-          <DialogTitle>
-            {only ? "Delete this bookmark?" : `Delete ${count} bookmarks?`}
-          </DialogTitle>
-          <DialogDescription>
-            {only ? (
-              <>
-                “{only.title?.trim() || hostFromUrl(only.url)}” will be removed.
-              </>
-            ) : (
-              <>
-                They will be removed from every collection they live in. You can
-                undo this from the toast.
-              </>
-            )}
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" disabled={pending} />}>
-            Cancel
-          </DialogClose>
-          <Button
-            variant="destructive"
-            disabled={pending}
-            onClick={async () => {
-              await destroy(bookmarks)
-              setBookmarks([])
-            }}
-          >
-            {pending ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <Trash2Icon />
-            )}
-            {only ? "Delete bookmark" : `Delete ${count} bookmarks`}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      pending={pending}
+      title={
+        only ? "Delete this bookmark?" : `Delete ${plural(count, "bookmark")}?`
+      }
+      description={
+        only
+          ? `“${only.title?.trim() || hostFromUrl(only.url)}” will be removed.`
+          : "They will be removed from every collection they live in. You can undo this from the toast."
+      }
+      confirmLabel={
+        only ? "Delete bookmark" : `Delete ${plural(count, "bookmark")}`
+      }
+      onConfirm={async () => {
+        await destroy(bookmarks)
+        setBookmarks([])
+      }}
+    />
   )
 }
