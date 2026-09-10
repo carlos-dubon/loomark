@@ -1,32 +1,14 @@
 "use client"
 
-import { useAtom } from "jotai"
-import { toast } from "sonner"
-
-import type { ViewMode } from "@loomark/core/view-mode"
-
-import { api } from "@/lib/client-api"
+import { useAppearanceSetting } from "@/hooks/use-appearance-setting"
 import { viewModeAtom } from "@/store/atoms"
 
 export const useViewMode = () => {
-  const [mode, setMode] = useAtom(viewModeAtom)
-
-  const select = async (next: ViewMode) => {
-    if (next === mode) {
-      return
-    }
-
-    setMode(next)
-
-    try {
-      await api.updateAppearance({ viewMode: next })
-    } catch (cause) {
-      setMode(mode)
-      toast.error(
-        cause instanceof Error ? cause.message : "Could not save view"
-      )
-    }
-  }
+  const [mode, select] = useAppearanceSetting(
+    viewModeAtom,
+    "viewMode",
+    "Could not save view"
+  )
 
   return { mode, select }
 }
