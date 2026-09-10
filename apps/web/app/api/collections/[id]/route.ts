@@ -1,7 +1,7 @@
 import { collectDescendantIds } from "@loomark/core/tree"
 import type { CollectionDeletion } from "@loomark/core/types"
 
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { jsonError, parseBody, withUser } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 import { getCollections } from "@/lib/queries"
 import { collectionUpdateSchema } from "@/lib/schemas"
@@ -9,13 +9,7 @@ import { serializeBookmark, serializeCollection } from "@/lib/serialize"
 
 type Context = { params: Promise<{ id: string }> }
 
-export const PATCH = async (request: Request, { params }: Context) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const PATCH = withUser(async (request, userId, { params }: Context) => {
   const { id } = await params
   const { data, response } = await parseBody(request, collectionUpdateSchema)
 
@@ -63,50 +57,46 @@ export const PATCH = async (request: Request, { params }: Context) => {
   })
 
   return Response.json(serializeCollection(collection))
-}
+})
 
-export const DELETE = async (_request: Request, { params }: Context) => {
-  const userId = await requireUserId()
+export const DELETE = withUser(
+  async (_request, userId, { params }: Context) => {
+    const { id } = await params
+    const collections = await prisma.collection.findMany({
+      where: { userId },
+      include: { _count: { select: { bookmarks: true } } },
+    })
 
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
+    const existing = collections.find((collection) => collection.id === id)
 
-  const { id } = await params
-  const collections = await prisma.collection.findMany({
-    where: { userId },
-    include: { _count: { select: { bookmarks: true } } },
-  })
+    if (!existing) {
+      return jsonError("Collection not found", 404)
+    }
 
-  const existing = collections.find((collection) => collection.id === id)
+    if (existing.kind === "UNSORTED") {
+      return jsonError("Unsorted cannot be deleted", 400)
+    }
 
-  if (!existing) {
-    return jsonError("Collection not found", 404)
-  }
+    const doomed = collectDescendantIds(collections, id)
 
-  if (existing.kind === "UNSORTED") {
-    return jsonError("Unsorted cannot be deleted", 400)
-  }
-
-  const doomed = collectDescendantIds(collections, id)
-
-  const bookmarks = await prisma.bookmark.findMany({
-    where: { userId, collectionId: { in: doomed } },
-  })
-
-  await prisma.$transaction([
-    prisma.bookmark.deleteMany({
+    const bookmarks = await prisma.bookmark.findMany({
       where: { userId, collectionId: { in: doomed } },
-    }),
-    prisma.collection.delete({ where: { id } }),
-  ])
+    })
 
-  const removed = new Set(doomed)
+    await prisma.$transaction([
+      prisma.bookmark.deleteMany({
+        where: { userId, collectionId: { in: doomed } },
+      }),
+      prisma.collection.delete({ where: { id } }),
+    ])
 
-  return Response.json({
-    collections: collections
-      .filter((collection) => removed.has(collection.id))
-      .map(serializeCollection),
-    bookmarks: bookmarks.map(serializeBookmark),
-  } satisfies CollectionDeletion)
-}
+    const removed = new Set(doomed)
+
+    return Response.json({
+      collections: collections
+        .filter((collection) => removed.has(collection.id))
+        .map(serializeCollection),
+      bookmarks: bookmarks.map(serializeBookmark),
+    } satisfies CollectionDeletion)
+  }
+)

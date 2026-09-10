@@ -1,16 +1,9 @@
-import { jsonError, requireUserId } from "@/lib/api"
+import { jsonError, withUser } from "@/lib/api"
 import { readAvatar } from "@/lib/avatars"
 
-export const GET = async (
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) => {
-  const userId = await requireUserId()
+type Context = { params: Promise<{ id: string }> }
 
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withUser(async (_request, _userId, { params }: Context) => {
   const { id } = await params
   const avatar = await readAvatar(id)
 
@@ -26,4 +19,4 @@ export const GET = async (
       etag: `"${avatar.updatedAt.getTime()}"`,
     },
   })
-}
+})

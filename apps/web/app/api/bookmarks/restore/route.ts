@@ -1,16 +1,10 @@
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { parseBody, withUser } from "@/lib/api"
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { prisma } from "@/lib/prisma"
 import { bookmarkRestoreSchema } from "@/lib/schemas"
 import { serializeBookmark } from "@/lib/serialize"
 
-export const POST = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, bookmarkRestoreSchema)
 
   if (!data) {
@@ -58,4 +52,4 @@ export const POST = async (request: Request) => {
   )
 
   return Response.json(restored.map(serializeBookmark), { status: 201 })
-}
+})

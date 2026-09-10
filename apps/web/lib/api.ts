@@ -52,3 +52,19 @@ export const parseQuery = <T>(request: Request, schema: ZodType<T>) => {
 
   return { data: result.data, response: null }
 }
+
+export const withUser =
+  <C>(
+    handler: (
+      request: Request,
+      userId: string,
+      context: C
+    ) => Promise<Response> | Response
+  ) =>
+  async (request: Request, context: C) => {
+    const userId = await requireUserId()
+
+    return userId
+      ? await handler(request, userId, context)
+      : jsonError("Unauthorized", 401)
+  }

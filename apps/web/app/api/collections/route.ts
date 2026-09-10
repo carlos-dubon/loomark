@@ -1,27 +1,18 @@
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { jsonError, parseBody, withUser } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 import { getCollections } from "@/lib/queries"
 import { collectionCreateSchema } from "@/lib/schemas"
 import { serializeCollection } from "@/lib/serialize"
-import { nextSiblingPosition, unsortedCollectionId } from "@/lib/siblings"
+import {
+  nextSiblingPosition,
+  unsortedCollectionId,
+} from "@/lib/siblings"
 
-export const GET = async () => {
-  const userId = await requireUserId()
+export const GET = withUser(async (_request, userId) =>
+  Response.json(await getCollections(userId))
+)
 
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
-  return Response.json(await getCollections(userId))
-}
-
-export const POST = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, collectionCreateSchema)
 
   if (!data) {
@@ -54,4 +45,4 @@ export const POST = async (request: Request) => {
   })
 
   return Response.json(serializeCollection(collection), { status: 201 })
-}
+})

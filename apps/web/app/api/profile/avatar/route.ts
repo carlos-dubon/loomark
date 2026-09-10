@@ -1,4 +1,4 @@
-import { jsonError, requireUserId } from "@/lib/api"
+import { jsonError, withUser } from "@/lib/api"
 import {
   AVATAR_MAX_BYTES,
   clearAvatar,
@@ -6,13 +6,7 @@ import {
   saveAvatar,
 } from "@/lib/avatars"
 
-export const POST = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (request, userId) => {
   const form = await request.formData().catch(() => null)
   const file = form?.get("file")
 
@@ -32,16 +26,10 @@ export const POST = async (request: Request) => {
   const image = await saveAvatar(userId, data, file.type)
 
   return Response.json({ image })
-}
+})
 
-export const DELETE = async () => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const DELETE = withUser(async (_request, userId) => {
   await clearAvatar(userId)
 
   return Response.json({ image: null })
-}
+})

@@ -1,17 +1,11 @@
-import { jsonError, requireUserId } from "@/lib/api"
+import { jsonError, withUser } from "@/lib/api"
 import { isLinkwardenBackup, parseLinkwardenBackup } from "@/lib/linkwarden"
 import { parseBookmarksFile } from "@/lib/netscape"
 import { importBookmarksTree } from "@/lib/transfer"
 
 const MAX_BYTES = 10 * 1024 * 1024
 
-export const POST = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (request, userId) => {
   const form = await request.formData().catch(() => null)
   const file = form?.get("file")
 
@@ -59,4 +53,4 @@ export const POST = async (request: Request) => {
   )
 
   return Response.json(summary)
-}
+})

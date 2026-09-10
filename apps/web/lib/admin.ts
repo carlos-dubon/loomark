@@ -1,6 +1,6 @@
 import type { InstanceUserDTO } from "@loomark/core/types"
 
-import { requireUserId } from "@/lib/api"
+import { jsonError, requireUserId } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 
 type Numeric = bigint | number | string | null
@@ -92,3 +92,19 @@ export const deleteInstanceUser = async (userId: string) => {
     prisma.user.delete({ where: { id: userId } }),
   ])
 }
+
+export const withOwner =
+  <C>(
+    handler: (
+      request: Request,
+      ownerId: string,
+      context: C
+    ) => Promise<Response> | Response
+  ) =>
+  async (request: Request, context: C) => {
+    const ownerId = await requireOwnerId()
+
+    return ownerId
+      ? await handler(request, ownerId, context)
+      : jsonError("Unauthorized", 401)
+  }

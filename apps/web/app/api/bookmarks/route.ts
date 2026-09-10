@@ -1,9 +1,12 @@
 import { normalizeUrl } from "@loomark/core/url"
 
-import { jsonError, parseBody, parseQuery, requireUserId } from "@/lib/api"
+import { jsonError, parseBody, parseQuery, withUser } from "@/lib/api"
 import { resolveCollectionId } from "@/lib/collections"
 import { fetchUrlMetadata } from "@/lib/metadata"
-import { nextBookmarkPosition, nextPinnedPosition } from "@/lib/positions"
+import {
+  nextBookmarkPosition,
+  nextPinnedPosition,
+} from "@/lib/positions"
 import { prisma } from "@/lib/prisma"
 import { getBookmarks } from "@/lib/queries"
 import {
@@ -13,13 +16,7 @@ import {
 } from "@/lib/schemas"
 import { serializeBookmark } from "@/lib/serialize"
 
-export const GET = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withUser(async (request, userId) => {
   const { data, response } = parseQuery(request, bookmarkQuerySchema)
 
   if (!data) {
@@ -36,15 +33,9 @@ export const GET = async (request: Request) => {
   })
 
   return Response.json(bookmarks)
-}
+})
 
-export const POST = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, bookmarkCreateSchema)
 
   if (!data) {
@@ -86,15 +77,9 @@ export const POST = async (request: Request) => {
   })
 
   return Response.json(serializeBookmark(bookmark), { status: 201 })
-}
+})
 
-export const DELETE = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const DELETE = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, bookmarkBulkDeleteSchema)
 
   if (!data) {
@@ -106,4 +91,4 @@ export const DELETE = async (request: Request) => {
   })
 
   return Response.json({ count })
-}
+})

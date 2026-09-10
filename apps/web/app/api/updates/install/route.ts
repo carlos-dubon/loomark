@@ -1,9 +1,10 @@
+import { errorMessage } from "@loomark/core/format"
 import {
   SELF_UPDATE_MESSAGES,
   type SelfUpdateBlocker,
 } from "@loomark/core/updates"
 
-import { requireOwnerId } from "@/lib/admin"
+import { withOwner } from "@/lib/admin"
 import { jsonError } from "@/lib/api"
 import {
   discardParkedUpdates,
@@ -13,23 +14,13 @@ import {
 
 export const dynamic = "force-dynamic"
 
-export const GET = async () => {
-  if (!(await requireOwnerId())) {
-    return jsonError("Unauthorized", 401)
-  }
+export const GET = withOwner(async () => Response.json(updateJob()))
 
-  return Response.json(updateJob())
-}
-
-export const POST = async () => {
-  if (!(await requireOwnerId())) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withOwner(async () => {
   try {
     return Response.json(await startSelfUpdate())
   } catch (cause) {
-    const reason = cause instanceof Error ? cause.message : ""
+    const reason = errorMessage(cause, "")
     const blocked = SELF_UPDATE_MESSAGES[reason as SelfUpdateBlocker]
 
     return jsonError(
@@ -37,12 +28,8 @@ export const POST = async () => {
       blocked ? 409 : 500
     )
   }
-}
+})
 
-export const DELETE = async () => {
-  if (!(await requireOwnerId())) {
-    return jsonError("Unauthorized", 401)
-  }
-
-  return Response.json({ discarded: await discardParkedUpdates() })
-}
+export const DELETE = withOwner(async () =>
+  Response.json({ discarded: await discardParkedUpdates() })
+)

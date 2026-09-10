@@ -1,7 +1,7 @@
 import { reorderWithin } from "@loomark/core/order"
 import type { SyncSnapshot } from "@loomark/core/types"
 
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
+import { parseBody, withUser } from "@/lib/api"
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { prisma } from "@/lib/prisma"
 import { syncReorderSchema } from "@/lib/schemas"
@@ -14,13 +14,7 @@ import {
 
 const ROOT = "__root__"
 
-export const GET = async () => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withUser(async (_request, userId) => {
   await ensureUnsortedCollection(userId)
 
   const [collections, bookmarks] = await Promise.all([
@@ -51,15 +45,9 @@ export const GET = async () => {
   return Response.json({ collections, bookmarks } satisfies SyncSnapshot, {
     headers: { "cache-control": "no-store" },
   })
-}
+})
 
-export const POST = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (request, userId) => {
   const { data, response } = await parseBody(request, syncReorderSchema)
 
   if (!data) {
@@ -121,4 +109,4 @@ export const POST = async (request: Request) => {
   }
 
   return new Response(null, { status: 204 })
-}
+})
