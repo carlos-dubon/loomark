@@ -1,8 +1,12 @@
 import { compare } from "bcryptjs"
 import { headers } from "next/headers"
 
-import { jsonError, parseBody, requireUserId } from "@/lib/api"
-import { bearerToken, createApiToken, revokeApiToken } from "@/lib/api-tokens"
+import { jsonError, parseBody, withUser } from "@/lib/api"
+import {
+  bearerToken,
+  createApiToken,
+  revokeApiToken,
+} from "@/lib/api-tokens"
 import { ensureUnsortedCollection } from "@/lib/collections"
 import { prisma } from "@/lib/prisma"
 import { apiTokenCreateSchema } from "@/lib/schemas"
@@ -38,13 +42,7 @@ export const POST = async (request: Request) => {
   )
 }
 
-export const GET = async () => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withUser(async (_request, userId) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { id: true, name: true, email: true },
@@ -55,17 +53,16 @@ export const GET = async () => {
   }
 
   return Response.json({ user })
-}
+})
 
-export const DELETE = async () => {
-  const userId = await requireUserId()
+export const DELETE = withUser(async (_request, userId) => {
   const token = bearerToken((await headers()).get("authorization"))
 
-  if (!userId || !token) {
+  if (!token) {
     return jsonError("Unauthorized", 401)
   }
 
   await revokeApiToken(userId, token)
 
   return new Response(null, { status: 204 })
-}
+})

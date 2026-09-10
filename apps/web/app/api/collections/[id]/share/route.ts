@@ -1,6 +1,6 @@
 import type { CollectionShareDTO } from "@loomark/core/types"
 
-import { jsonError, requireUserId } from "@/lib/api"
+import { jsonError, withUser } from "@/lib/api"
 import { prisma } from "@/lib/prisma"
 import { createShareToken } from "@/lib/share"
 
@@ -33,13 +33,7 @@ const shareable = async (userId: string, id: string) => {
   return { error: null }
 }
 
-export const POST = async (_request: Request, { params }: Context) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const POST = withUser(async (_request, userId, { params }: Context) => {
   const { id } = await params
   const { error } = await shareable(userId, id)
 
@@ -54,27 +48,23 @@ export const POST = async (_request: Request, { params }: Context) => {
   })
 
   return Response.json(serializeShare(collection))
-}
+})
 
-export const DELETE = async (_request: Request, { params }: Context) => {
-  const userId = await requireUserId()
+export const DELETE = withUser(
+  async (_request, userId, { params }: Context) => {
+    const { id } = await params
+    const { error } = await shareable(userId, id)
 
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
+    if (error) {
+      return error
+    }
+
+    const collection = await prisma.collection.update({
+      where: { id },
+      data: { shareToken: null, sharedAt: null },
+      select: { id: true, shareToken: true, sharedAt: true },
+    })
+
+    return Response.json(serializeShare(collection))
   }
-
-  const { id } = await params
-  const { error } = await shareable(userId, id)
-
-  if (error) {
-    return error
-  }
-
-  const collection = await prisma.collection.update({
-    where: { id },
-    data: { shareToken: null, sharedAt: null },
-    select: { id: true, shareToken: true, sharedAt: true },
-  })
-
-  return Response.json(serializeShare(collection))
-}
+)

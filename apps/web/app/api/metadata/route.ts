@@ -1,14 +1,8 @@
-import { jsonError, parseQuery, requireUserId } from "@/lib/api"
+import { parseQuery, withUser } from "@/lib/api"
 import { fetchUrlMetadata } from "@/lib/metadata"
 import { metadataQuerySchema } from "@/lib/schemas"
 
-export const GET = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withUser(async (request) => {
   const { data, response } = parseQuery(request, metadataQuerySchema)
 
   if (!data) {
@@ -16,4 +10,4 @@ export const GET = async (request: Request) => {
   }
 
   return Response.json(await fetchUrlMetadata(data.url))
-}
+})

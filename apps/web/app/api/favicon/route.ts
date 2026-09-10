@@ -1,16 +1,10 @@
-import { jsonError, requireUserId } from "@/lib/api"
+import { withUser } from "@/lib/api"
 import { faviconTarget, proxyFavicon } from "@/lib/favicon"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
 
-export const GET = async (request: Request) => {
-  const userId = await requireUserId()
-
-  if (!userId) {
-    return jsonError("Unauthorized", 401)
-  }
-
+export const GET = withUser(async (request) => {
   const { target, error } = faviconTarget(
     new URL(request.url).searchParams.get("url")
   )
@@ -20,4 +14,4 @@ export const GET = async (request: Request) => {
   }
 
   return proxyFavicon(target)
-}
+})
