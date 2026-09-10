@@ -1,9 +1,9 @@
 import { normalizeUrl } from "@loomark/core/url"
 
-import { jsonError, parseQuery, withUser } from "@/lib/api"
-import { prisma } from "@/lib/prisma"
+import { jsonError, parseQuery, withUser } from "@/lib/server/api"
+import { prisma } from "@/lib/server/prisma"
 import { bookmarkLookupSchema } from "@/lib/schemas"
-import { serializeBookmark } from "@/lib/serialize"
+import { serializeBookmark } from "@/lib/server/serialize"
 
 export const GET = withUser(async (request, userId) => {
   const { data, response } = parseQuery(request, bookmarkLookupSchema)

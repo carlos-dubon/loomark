@@ -6,7 +6,7 @@ import { useEffect } from "react"
 import { BookmarkListView } from "@/components/bookmark-list-view"
 import { useDemoState } from "@/hooks/use-demo-state"
 import { collectionEmptyState } from "@/lib/collection-view"
-import { bookmarksIn, collectionList } from "@/lib/demo/store"
+import { bookmarksIn, collectionList } from "@/lib/client/demo/store"
 
 export const DemoCollection = ({ id }: { id: string }) => {
   const state = useDemoState()

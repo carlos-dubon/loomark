@@ -1,9 +1,9 @@
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/server/prisma"
 import {
   containerOf,
   nextSiblingPosition,
   unsortedCollectionId,
-} from "@/lib/siblings"
+} from "@/lib/server/siblings"
 
 export const nextBookmarkPosition = async (
   userId: string,

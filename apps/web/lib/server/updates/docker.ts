@@ -1,3 +1,5 @@
+import "server-only"
+
 import { readFile, stat } from "node:fs/promises"
 import { request } from "node:http"
 import { connect } from "node:net"

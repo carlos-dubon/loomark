@@ -2,7 +2,7 @@
 
 import { HomeView } from "@/components/home-view"
 import { useDemoState } from "@/hooks/use-demo-state"
-import { pinnedBookmarks } from "@/lib/demo/store"
+import { pinnedBookmarks } from "@/lib/client/demo/store"
 
 export const DemoHome = () => {
   const state = useDemoState()

@@ -1,5 +1,5 @@
-import { jsonError, withUser } from "@/lib/api"
-import { readAvatar } from "@/lib/avatars"
+import { jsonError, withUser } from "@/lib/server/api"
+import { readAvatar } from "@/lib/server/avatars"
 
 type Context = { params: Promise<{ id: string }> }
 

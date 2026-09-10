@@ -3,9 +3,9 @@ import { redirect } from "next/navigation"
 
 import { DemoProfile } from "@/components/demo/demo-profile"
 import { ProfileView } from "@/components/settings/profile-view"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/server/auth"
 import { isDemo } from "@/lib/demo/config"
-import { getProfile } from "@/lib/queries"
+import { getProfile } from "@/lib/server/queries"
 
 export const metadata: Metadata = { title: "Your profile" }
 

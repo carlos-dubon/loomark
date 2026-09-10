@@ -1,8 +1,8 @@
 import type { CollectionShareDTO } from "@loomark/core/types"
 
-import { jsonError, withUser } from "@/lib/api"
-import { prisma } from "@/lib/prisma"
-import { createShareToken } from "@/lib/share"
+import { jsonError, withUser } from "@/lib/server/api"
+import { prisma } from "@/lib/server/prisma"
+import { createShareToken } from "@/lib/server/share"
 
 type Context = { params: Promise<{ id: string }> }
 

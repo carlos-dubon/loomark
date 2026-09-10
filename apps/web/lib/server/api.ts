@@ -1,8 +1,10 @@
+import "server-only"
+
 import { headers } from "next/headers"
 import type { ZodType } from "zod"
 
-import { bearerToken, userIdFromApiToken } from "@/lib/api-tokens"
-import { auth } from "@/lib/auth"
+import { bearerToken, userIdFromApiToken } from "@/lib/server/api-tokens"
+import { auth } from "@/lib/server/auth"
 
 export const jsonError = (message: string, status: number) =>
   Response.json({ error: message }, { status })

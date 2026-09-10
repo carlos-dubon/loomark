@@ -8,7 +8,7 @@ import { toast } from "sonner"
 import { errorMessage, plural } from "@loomark/core/format"
 import type { BookmarkDTO } from "@loomark/core/types"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import {
   clearBookmarkSelectionAtom,
   removeBookmarksAtom,

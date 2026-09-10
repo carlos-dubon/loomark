@@ -5,7 +5,7 @@ import type {
   UrlMetadata,
 } from "@loomark/core/types"
 
-import { demoBanner, demoFavicon } from "@/lib/demo/banner"
+import { demoBanner, demoFavicon } from "@/lib/client/demo/banner"
 import { DemoUnavailableError } from "@/lib/demo/config"
 import {
   collectionList,
@@ -18,7 +18,7 @@ import {
   unsortedId,
   withArtwork,
   type DemoState,
-} from "@/lib/demo/store"
+} from "@/lib/client/demo/store"
 import type {
   AppearanceUpdateInput,
   BookmarkCreateInput,

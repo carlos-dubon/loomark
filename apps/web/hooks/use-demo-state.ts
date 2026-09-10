@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react"
 
-import { getState, subscribe } from "@/lib/demo/store"
+import { getState, subscribe } from "@/lib/client/demo/store"
 
 const noop = () => () => {}
 

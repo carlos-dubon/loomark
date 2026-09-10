@@ -26,7 +26,7 @@ import {
 } from "@loomark/ui/components/dropzone"
 
 import { SettingsCard, SettingsPage } from "@/components/settings/settings-page"
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import { collectionsAtom } from "@/store/atoms"
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024

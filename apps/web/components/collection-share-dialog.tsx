@@ -25,7 +25,7 @@ import { Input } from "@loomark/ui/components/input"
 import { Label } from "@loomark/ui/components/label"
 import { Switch } from "@loomark/ui/components/switch"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import {
   collectionShareDialogAtom,
   collectionsAtom,

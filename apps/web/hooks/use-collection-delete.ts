@@ -8,7 +8,7 @@ import { toast } from "sonner"
 import { errorMessage } from "@loomark/core/format"
 import type { CollectionDeletion, CollectionDTO } from "@loomark/core/types"
 
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import {
   collectionsAtom,
   removeBookmarksAtom,

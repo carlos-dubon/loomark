@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { SharedCollectionView } from "@/components/shared-collection-view"
-import { getSharedCollection } from "@/lib/share"
+import { getSharedCollection } from "@/lib/server/share"
 
 type Props = { params: Promise<{ token: string }> }
 

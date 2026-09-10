@@ -9,7 +9,7 @@ import { errorMessage } from "@loomark/core/format"
 import { cn } from "@loomark/core/utils"
 
 import { useIsDark } from "@/hooks/use-is-dark"
-import { api } from "@/lib/client-api"
+import { api } from "@/lib/client/api"
 import { THEMES, THEME_OPTIONS } from "@/lib/themes/palettes"
 import {
   findTheme,

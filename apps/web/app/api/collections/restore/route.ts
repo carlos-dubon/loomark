@@ -1,9 +1,9 @@
 import { parentsFirst } from "@loomark/core/tree"
 
-import { parseBody, withUser } from "@/lib/api"
-import { ensureUnsortedCollection } from "@/lib/collections"
-import { prisma } from "@/lib/prisma"
-import { getCollections } from "@/lib/queries"
+import { parseBody, withUser } from "@/lib/server/api"
+import { ensureUnsortedCollection } from "@/lib/server/collections"
+import { prisma } from "@/lib/server/prisma"
+import { getCollections } from "@/lib/server/queries"
 import { collectionRestoreSchema } from "@/lib/schemas"
 
 export const POST = withUser(async (request, userId) => {

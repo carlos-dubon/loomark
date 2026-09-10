@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 import { AdminView } from "@/components/admin-view"
-import { getInstanceUsers, requireOwnerId } from "@/lib/admin"
+import { getInstanceUsers, requireOwnerId } from "@/lib/server/admin"
 import { isDemo } from "@/lib/demo/config"
 
 export const metadata: Metadata = { title: "Server administration" }

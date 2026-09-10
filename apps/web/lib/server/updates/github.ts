@@ -1,3 +1,5 @@
+import "server-only"
+
 import type { Release } from "@loomark/core/updates"
 
 const REPO = "carlos-dubon/loomark"

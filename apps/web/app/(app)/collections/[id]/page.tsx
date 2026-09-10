@@ -3,10 +3,10 @@ import { notFound, redirect } from "next/navigation"
 
 import { BookmarkListView } from "@/components/bookmark-list-view"
 import { DemoCollection } from "@/components/demo/demo-collection"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/server/auth"
 import { collectionEmptyState } from "@/lib/collection-view"
 import { isDemo } from "@/lib/demo/config"
-import { getBookmarks, getCollection } from "@/lib/queries"
+import { getBookmarks, getCollection } from "@/lib/server/queries"
 
 export const generateMetadata = async ({
   params,

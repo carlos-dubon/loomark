@@ -1,6 +1,6 @@
-import { jsonError } from "@/lib/api"
-import { faviconTarget, proxyFavicon } from "@/lib/favicon"
-import { isSharedFaviconUrl } from "@/lib/share"
+import { jsonError } from "@/lib/server/api"
+import { faviconTarget, proxyFavicon } from "@/lib/server/favicon"
+import { isSharedFaviconUrl } from "@/lib/server/share"
 
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"

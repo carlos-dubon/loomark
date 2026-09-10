@@ -1,5 +1,5 @@
-import { deleteInstanceUser, getUserRole, withOwner } from "@/lib/admin"
-import { jsonError } from "@/lib/api"
+import { deleteInstanceUser, getUserRole, withOwner } from "@/lib/server/admin"
+import { jsonError } from "@/lib/server/api"
 
 type Context = { params: Promise<{ id: string }> }
 
