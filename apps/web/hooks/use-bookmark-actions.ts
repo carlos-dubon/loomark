@@ -4,6 +4,7 @@ import { useSetAtom } from "jotai"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import type { BookmarkDTO } from "@loomark/core/types"
 
 import { api } from "@/lib/client-api"
@@ -22,7 +23,7 @@ export const useBookmarkActions = () => {
       toast.success(updated.pinned ? "Pinned to homepage" : "Unpinned")
       router.refresh()
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Update failed")
+      toast.error(errorMessage(cause, "Update failed"))
     }
   }
 
@@ -33,7 +34,7 @@ export const useBookmarkActions = () => {
       toast.success("Bookmark moved")
       router.refresh()
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Move failed")
+      toast.error(errorMessage(cause, "Move failed"))
     }
   }
 

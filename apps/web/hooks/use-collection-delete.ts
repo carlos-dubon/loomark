@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import type { CollectionDeletion, CollectionDTO } from "@loomark/core/types"
 
 import { api } from "@/lib/client-api"
@@ -32,7 +33,7 @@ export const useCollectionDelete = () => {
       toast.success(`“${name}” restored`)
       router.refresh()
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Restore failed")
+      toast.error(errorMessage(cause, "Restore failed"))
     }
   }
 
@@ -62,7 +63,7 @@ export const useCollectionDelete = () => {
         },
       })
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Delete failed")
+      toast.error(errorMessage(cause, "Delete failed"))
     } finally {
       setPending(false)
     }

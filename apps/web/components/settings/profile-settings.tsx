@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import {
   Avatar,
   AvatarFallback,
@@ -44,7 +45,7 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
       toast.success("Profile picture updated")
       router.refresh()
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Upload failed")
+      toast.error(errorMessage(cause, "Upload failed"))
     } finally {
       setBusy(false)
     }
@@ -60,7 +61,7 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
       toast.success("Profile picture removed")
       router.refresh()
     } catch (cause) {
-      toast.error(cause instanceof Error ? cause.message : "Removal failed")
+      toast.error(errorMessage(cause, "Removal failed"))
     } finally {
       setBusy(false)
     }

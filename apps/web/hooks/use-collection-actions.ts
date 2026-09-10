@@ -4,6 +4,7 @@ import { useAtom } from "jotai"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
+import { errorMessage } from "@loomark/core/format"
 import {
   applyCollectionMove,
   changedCollections,
@@ -60,7 +61,7 @@ export const useCollectionActions = () => {
       return true
     } catch (cause) {
       setCollections(previous)
-      toast.error(cause instanceof Error ? cause.message : "Move failed")
+      toast.error(errorMessage(cause, "Move failed"))
 
       return false
     }

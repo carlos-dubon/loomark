@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 
+import { errorMessage } from "@loomark/core/format"
 import { unsortedCollection } from "@loomark/core/tree"
 import type {
   ActiveTab,
@@ -193,9 +194,7 @@ const Workspace = ({
       }
 
       setOffline(isOffline(cause))
-      setError(
-        cause instanceof Error ? cause.message : "Could not reach Loomark"
-      )
+      setError(errorMessage(cause, "Could not reach Loomark"))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connection.serverUrl, connection.token, tab.url])

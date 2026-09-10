@@ -1,3 +1,4 @@
+import { errorMessage } from "@loomark/core/format"
 import type {
   SyncBookmark,
   SyncCollection,
@@ -1067,6 +1068,6 @@ export const runSync = async (): Promise<SyncStatus> => {
       return await finish("Your Loomark session expired. Reconnect to sync.")
     }
 
-    return await finish(cause instanceof Error ? cause.message : "Sync failed")
+    return await finish(errorMessage(cause, "Sync failed"))
   }
 }

@@ -52,3 +52,9 @@ export const formatBytes = (bytes: number) => {
 
   return `${value.toFixed(exponent === 0 || value >= 100 ? 0 : 1)} ${BYTE_UNITS[exponent]}`
 }
+
+export const plural = (count: number, noun: string) =>
+  `${count} ${noun}${count === 1 ? "" : "s"}`
+
+export const errorMessage = (cause: unknown, fallback: string) =>
+  cause instanceof Error ? cause.message : fallback
