@@ -1,19 +1,14 @@
 "use client"
 
 import { RotateCcwIcon } from "lucide-react"
-import { type IconName } from "lucide-react/dynamic"
 import * as React from "react"
-import { useMemo, useRef, useState } from "react"
 
 import { Button } from "@loomark/ui/components/button"
-import {
-  CollectionIcon,
-  isIconName,
-} from "@loomark/ui/components/collection-icon"
-import { IconGrid, type IconGridHandle } from "@loomark/ui/components/icon-grid"
+import { CollectionIcon } from "@loomark/ui/components/collection-icon"
+import { Field } from "@loomark/ui/components/field"
+import { IconGrid } from "@loomark/ui/components/icon-grid"
 import { Input } from "@loomark/ui/components/input"
-import { Label } from "@loomark/ui/components/label"
-import { iconNames, searchIcons, SUGGESTED_ICONS } from "@loomark/ui/lib/icons"
+import { useIconSearch } from "@loomark/ui/hooks/use-icon-search"
 
 export const IconPicker = ({
   value,
@@ -22,39 +17,18 @@ export const IconPicker = ({
   value: string | null
   onChange: (value: string | null) => void
 }) => {
-  const [query, setQuery] = useState("")
-  const [initialValue] = useState(() => (isIconName(value) ? value : null))
-  const gridRef = useRef<IconGridHandle | null>(null)
-
-  const results = useMemo<IconName[]>(() => {
-    if (!query.trim()) {
-      const pinned = initialValue
-        ? [
-            initialValue,
-            ...SUGGESTED_ICONS.filter((name) => name !== initialValue),
-          ]
-        : SUGGESTED_ICONS
-      const seen = new Set(pinned)
-
-      return [...pinned, ...iconNames.filter((name) => !seen.has(name))]
-    }
-
-    return searchIcons(query)
-  }, [query, initialValue])
-
-  const handleQueryChange = (next: string) => {
-    setQuery(next)
-    gridRef.current?.scrollToTop()
-  }
+  const { query, onQueryChange, results, gridRef } = useIconSearch(value)
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-baseline justify-between gap-2">
-        <Label htmlFor="collection-icon">Icon</Label>
+    <Field
+      label="Icon"
+      htmlFor="collection-icon"
+      hint={
         <span className="text-xs text-muted-foreground tabular-nums">
           {results.length} icons
         </span>
-      </div>
+      }
+    >
       <div className="flex items-center gap-2">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-md border bg-muted/40">
           <CollectionIcon name={value} className="size-4" />
@@ -64,7 +38,7 @@ export const IconPicker = ({
           placeholder="Search all Lucide icons"
           value={query}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleQueryChange(event.target.value)
+            onQueryChange(event.target.value)
           }
           onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
             if (event.key === "Enter") {
@@ -97,6 +71,6 @@ export const IconPicker = ({
           viewportClassName="p-2"
         />
       )}
-    </div>
+    </Field>
   )
 }

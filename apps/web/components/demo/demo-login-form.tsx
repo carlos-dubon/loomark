@@ -18,8 +18,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@loomark/ui/components/card"
+import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
-import { Label } from "@loomark/ui/components/label"
 
 import { DEMO_CREDENTIALS } from "@/lib/demo/config"
 import { signIn } from "@/lib/demo/store"
@@ -43,24 +43,22 @@ export const DemoLoginForm = () => {
       </CardHeader>
       <form onSubmit={onSubmit}>
         <CardContent className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="email">Email</Label>
+          <Field label="Email" htmlFor="email">
             <Input
               id="email"
               type="email"
               readOnly
               defaultValue={DEMO_CREDENTIALS.email}
             />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="password">Password</Label>
+          </Field>
+          <Field label="Password" htmlFor="password">
             <Input
               id="password"
               type="password"
               readOnly
               defaultValue={DEMO_CREDENTIALS.password}
             />
-          </div>
+          </Field>
           <Alert variant="warning">
             <DatabaseZapIcon />
             <AlertTitle>Nothing here is saved</AlertTitle>

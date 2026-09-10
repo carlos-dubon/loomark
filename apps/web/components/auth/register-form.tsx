@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
+import { errorMessage } from "@loomark/core/format"
 import { Button } from "@loomark/ui/components/button"
 import {
   Card,
@@ -14,8 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@loomark/ui/components/card"
+import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
-import { Label } from "@loomark/ui/components/label"
 
 import { Link } from "@/components/link"
 import { api } from "@/lib/client-api"
@@ -46,7 +47,7 @@ export const RegisterForm = () => {
       router.refresh()
     } catch (cause) {
       setError("root", {
-        message: cause instanceof Error ? cause.message : "Registration failed",
+        message: errorMessage(cause, "Registration failed"),
       })
     }
   })
@@ -61,22 +62,23 @@ export const RegisterForm = () => {
       </CardHeader>
       <form onSubmit={onSubmit} noValidate>
         <CardContent className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="name">Name</Label>
+          <Field
+            label="Name"
+            htmlFor="name"
+            error={errors.name ? "Tell us what to call you" : undefined}
+          >
             <Input
               id="name"
               autoComplete="name"
               aria-invalid={Boolean(errors.name)}
               {...register("name")}
             />
-            {errors.name ? (
-              <p className="text-sm text-destructive" role="alert">
-                Tell us what to call you
-              </p>
-            ) : null}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="email">Email</Label>
+          </Field>
+          <Field
+            label="Email"
+            htmlFor="email"
+            error={errors.email ? "Enter a valid email" : undefined}
+          >
             <Input
               id="email"
               type="email"
@@ -84,14 +86,12 @@ export const RegisterForm = () => {
               aria-invalid={Boolean(errors.email)}
               {...register("email")}
             />
-            {errors.email ? (
-              <p className="text-sm text-destructive" role="alert">
-                Enter a valid email
-              </p>
-            ) : null}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="password">Password</Label>
+          </Field>
+          <Field
+            label="Password"
+            htmlFor="password"
+            error={errors.password ? "Use at least 8 characters" : undefined}
+          >
             <Input
               id="password"
               type="password"
@@ -99,12 +99,7 @@ export const RegisterForm = () => {
               aria-invalid={Boolean(errors.password)}
               {...register("password")}
             />
-            {errors.password ? (
-              <p className="text-sm text-destructive" role="alert">
-                Use at least 8 characters
-              </p>
-            ) : null}
-          </div>
+          </Field>
           {errors.root ? (
             <p className="text-sm text-destructive" role="alert">
               {errors.root.message}
