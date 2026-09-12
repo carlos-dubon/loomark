@@ -5,7 +5,6 @@ import type {
   UrlMetadata,
 } from "@loomark/core/types"
 
-import { demoBanner, demoFavicon } from "@/lib/client/demo/banner"
 import { DemoUnavailableError } from "@/lib/demo/config"
 import {
   collectionList,
@@ -13,10 +12,9 @@ import {
   getState,
   newId,
   nextPinnedPosition,
-  nextPosition,
   setState,
+  shiftPositions,
   unsortedId,
-  withArtwork,
   type DemoState,
 } from "@/lib/client/demo/store"
 import type {
@@ -37,6 +35,8 @@ const settle = <T>(value: T): Promise<T> =>
 const fail = (message: string): never => {
   throw new Error(message)
 }
+
+const faviconFallback = (url: string) => `${new URL(url).origin}/favicon.ico`
 
 const requireBookmark = (current: DemoState, id: string) =>
   current.bookmarks.find((bookmark) => bookmark.id === id) ??
@@ -122,7 +122,7 @@ export const demoApi = {
     const collectionId = input.collectionId ?? unsortedId(current)
     const now = new Date().toISOString()
 
-    const bookmark = withArtwork({
+    const bookmark: BookmarkDTO = {
       id: newId("b"),
       url,
       title: input.title?.trim() || hostFromUrl(url),
@@ -130,16 +130,16 @@ export const demoApi = {
       faviconUrl: input.faviconUrl ?? null,
       previewUrl: input.previewUrl ?? null,
       pinned: input.pinned ?? false,
-      position: nextPosition(current, collectionId),
+      position: 0,
       pinnedPosition: input.pinned ? nextPinnedPosition(current) : 0,
       collectionId,
       createdAt: now,
       updatedAt: now,
-    })
+    }
 
     setState((state) => ({
       ...state,
-      bookmarks: [bookmark, ...state.bookmarks],
+      bookmarks: [bookmark, ...shiftPositions(state.bookmarks, collectionId)],
     }))
 
     return settle(bookmark)
@@ -149,25 +149,30 @@ export const demoApi = {
     const current = getState()
     const existing = requireBookmark(current, id)
     const pinning = input.pinned === true && !existing.pinned
+    const moved =
+      input.collectionId && input.collectionId !== existing.collectionId
+        ? input.collectionId
+        : null
 
-    const updated = withArtwork({
+    const updated: BookmarkDTO = {
       ...existing,
       ...(input.url ? { url: normalizeUrl(input.url) } : {}),
       ...(input.title === undefined ? {} : { title: input.title }),
       ...(input.description === undefined
         ? {}
         : { description: input.description ?? null }),
-      ...(input.collectionId ? { collectionId: input.collectionId } : {}),
+      ...(moved ? { collectionId: moved, position: 0 } : {}),
       ...(input.pinned === undefined ? {} : { pinned: input.pinned }),
       ...(pinning ? { pinnedPosition: nextPinnedPosition(current) } : {}),
       updatedAt: new Date().toISOString(),
-    })
+    }
 
     setState((state) => ({
       ...state,
-      bookmarks: state.bookmarks.map((bookmark) =>
-        bookmark.id === id ? updated : bookmark
-      ),
+      bookmarks: (moved
+        ? shiftPositions(state.bookmarks, moved)
+        : state.bookmarks
+      ).map((bookmark) => (bookmark.id === id ? updated : bookmark)),
     }))
 
     return settle(updated)
@@ -221,8 +226,27 @@ export const demoApi = {
     return settle<void>(undefined)
   },
 
-  refreshPreview: (id: string) =>
-    settle(withArtwork(requireBookmark(getState(), id))),
+  refreshPreview: (id: string) => {
+    const existing = requireBookmark(getState(), id)
+
+    if (existing.previewUrl && existing.faviconUrl) {
+      return settle(existing)
+    }
+
+    const updated: BookmarkDTO = {
+      ...existing,
+      faviconUrl: existing.faviconUrl ?? faviconFallback(existing.url),
+    }
+
+    setState((state) => ({
+      ...state,
+      bookmarks: state.bookmarks.map((bookmark) =>
+        bookmark.id === id ? updated : bookmark
+      ),
+    }))
+
+    return settle(updated)
+  },
 
   listCollections: () => settle(collectionList(getState())),
 
@@ -454,8 +478,8 @@ export const demoApi = {
         ? `${segments.slice(0, 1).toUpperCase()}${segments.slice(1)}`
         : host,
       description: null,
-      faviconUrl: demoFavicon(normalized),
-      previewUrl: demoBanner(normalized),
+      faviconUrl: faviconFallback(normalized),
+      previewUrl: null,
     }
 
     return settle(metadata)

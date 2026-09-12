@@ -3,7 +3,7 @@ import { normalizeUrl } from "@loomark/core/url"
 import { jsonError, parseBody, withUser } from "@/lib/server/api"
 import { resolveCollectionId } from "@/lib/server/collections"
 import {
-  nextBookmarkPosition,
+  firstBookmarkPlacement,
   nextPinnedPosition,
 } from "@/lib/server/positions"
 import { prisma } from "@/lib/server/prisma"
@@ -65,23 +65,27 @@ export const PATCH = withUser(async (request, userId, { params }: Context) => {
   }
 
   const pinning = data.pinned === true && !existing.pinned
+  const placement = collectionId
+    ? await firstBookmarkPlacement(userId, collectionId)
+    : null
 
-  const bookmark = await prisma.bookmark.update({
-    where: { id },
-    data: {
-      url,
-      title: data.title,
-      description: data.description,
-      faviconUrl: data.faviconUrl,
-      previewUrl: data.previewUrl,
-      pinned: data.pinned,
-      position: collectionId
-        ? await nextBookmarkPosition(userId, collectionId)
-        : undefined,
-      pinnedPosition: pinning ? await nextPinnedPosition(userId) : undefined,
-      collectionId,
-    },
-  })
+  const [bookmark] = await prisma.$transaction([
+    prisma.bookmark.update({
+      where: { id },
+      data: {
+        url,
+        title: data.title,
+        description: data.description,
+        faviconUrl: data.faviconUrl,
+        previewUrl: data.previewUrl,
+        pinned: data.pinned,
+        position: placement?.position,
+        pinnedPosition: pinning ? await nextPinnedPosition(userId) : undefined,
+        collectionId,
+      },
+    }),
+    ...(placement?.shift ?? []),
+  ])
 
   return Response.json(serializeBookmark(bookmark))
 })

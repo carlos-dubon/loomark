@@ -4,7 +4,7 @@ import { jsonError, parseBody, parseQuery, withUser } from "@/lib/server/api"
 import { resolveCollectionId } from "@/lib/server/collections"
 import { fetchUrlMetadata } from "@/lib/server/metadata"
 import {
-  nextBookmarkPosition,
+  firstBookmarkPlacement,
   nextPinnedPosition,
 } from "@/lib/server/positions"
 import { prisma } from "@/lib/server/prisma"
@@ -52,7 +52,6 @@ export const POST = withUser(async (request, userId) => {
 
   const needsMetadata = !data.title || !data.faviconUrl
   const metadata = needsMetadata ? await fetchUrlMetadata(url) : null
-
   const collectionId = await resolveCollectionId(userId, data.collectionId)
 
   if (!collectionId) {
@@ -60,21 +59,25 @@ export const POST = withUser(async (request, userId) => {
   }
 
   const pinned = data.pinned ?? false
+  const { position, shift } = await firstBookmarkPlacement(userId, collectionId)
 
-  const bookmark = await prisma.bookmark.create({
-    data: {
-      userId,
-      url,
-      title: data.title ?? metadata?.title ?? url,
-      description: data.description ?? metadata?.description ?? null,
-      faviconUrl: data.faviconUrl ?? metadata?.faviconUrl ?? null,
-      previewUrl: data.previewUrl ?? metadata?.previewUrl ?? null,
-      pinned,
-      position: await nextBookmarkPosition(userId, collectionId),
-      pinnedPosition: pinned ? await nextPinnedPosition(userId) : 0,
-      collectionId,
-    },
-  })
+  const [bookmark] = await prisma.$transaction([
+    prisma.bookmark.create({
+      data: {
+        userId,
+        url,
+        title: data.title ?? metadata?.title ?? url,
+        description: data.description ?? metadata?.description ?? null,
+        faviconUrl: data.faviconUrl ?? metadata?.faviconUrl ?? null,
+        previewUrl: data.previewUrl ?? metadata?.previewUrl ?? null,
+        pinned,
+        position,
+        pinnedPosition: pinned ? await nextPinnedPosition(userId) : 0,
+        collectionId,
+      },
+    }),
+    ...shift,
+  ])
 
   return Response.json(serializeBookmark(bookmark), { status: 201 })
 })

@@ -59,15 +59,6 @@ Sideload it from the [latest release](https://github.com/carlos-dubon/loomark/re
 | `DB_WAIT_TIMEOUT`                                 | optional     | Seconds to wait for Postgres at boot   |
 | `POSTGRES_USER` `POSTGRES_PASSWORD` `POSTGRES_DB` | optional     | Database credentials                   |
 
-## Keyboard shortcuts
-
-| Key                    |                  |
-| ---------------------- | ---------------- |
-| `Command+K` / `Ctrl+K` | Search           |
-| `Command+B` / `Ctrl+B` | Toggle sidebar   |
-| `D`                    | Toggle dark mode |
-| `Esc`                  | Clear selection  |
-
 ## Development
 
 Node 24, pnpm, Docker.

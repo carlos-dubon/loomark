@@ -6,7 +6,6 @@ import type {
   CollectionKind,
 } from "@loomark/core/types"
 
-import { demoBanner, demoFavicon } from "@/lib/client/demo/banner"
 import { DEMO_UNSORTED_ID, DEMO_USER } from "@/lib/demo/config"
 import { DEMO_BOOKMARKS, DEMO_COLLECTIONS } from "@/lib/client/demo/seed"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
@@ -35,33 +34,29 @@ const DAY_MS = 86_400_000
 const timestamp = (daysAgo: number) =>
   new Date(Date.now() - daysAgo * DAY_MS).toISOString()
 
-export const withArtwork = (bookmark: BookmarkDTO): BookmarkDTO => ({
-  ...bookmark,
-  previewUrl: bookmark.previewUrl ?? demoBanner(bookmark.url),
-  faviconUrl: bookmark.faviconUrl ?? demoFavicon(bookmark.url),
-})
-
 const seedState = (): DemoState => {
-  const bookmarks = DEMO_BOOKMARKS.map((seed) =>
-    withArtwork({
-      id: seed.id,
-      url: seed.url,
-      title: seed.title,
-      description: seed.description,
-      faviconUrl: seed.faviconUrl,
-      previewUrl: seed.previewUrl,
-      pinned: seed.pinned,
-      position: seed.position,
-      pinnedPosition: seed.pinnedPosition,
-      collectionId: seed.collectionId,
-      createdAt: timestamp(seed.daysAgo),
-      updatedAt: timestamp(seed.daysAgo),
-    })
-  )
+  const bookmarks = DEMO_BOOKMARKS.map((seed) => ({
+    id: seed.id,
+    url: seed.url,
+    title: seed.title,
+    description: seed.description,
+    faviconUrl: seed.faviconUrl,
+    previewUrl: seed.previewUrl,
+    pinned: seed.pinned,
+    position: seed.position,
+    pinnedPosition: seed.pinnedPosition,
+    collectionId: seed.collectionId,
+    createdAt: timestamp(seed.daysAgo),
+    updatedAt: timestamp(seed.daysAgo),
+  }))
 
   return {
     signedIn: false,
-    user: { name: DEMO_USER.name, email: DEMO_USER.email, image: null },
+    user: {
+      name: DEMO_USER.name,
+      email: DEMO_USER.email,
+      image: DEMO_USER.image,
+    },
     appearance: { ...DEFAULT_APPEARANCE },
     collections: DEMO_COLLECTIONS.map((collection) => ({ ...collection })),
     bookmarks,
@@ -197,10 +192,14 @@ export const unsortedId = (current: DemoState) =>
   current.collections.find((collection) => collection.kind === "UNSORTED")
     ?.id ?? DEMO_UNSORTED_ID
 
-export const nextPosition = (current: DemoState, collectionId: string) =>
-  bookmarksIn(current, collectionId).reduce(
-    (highest, bookmark) => Math.max(highest, bookmark.position + 1),
-    0
+export const shiftPositions = (
+  bookmarks: BookmarkDTO[],
+  collectionId: string
+) =>
+  bookmarks.map((bookmark) =>
+    bookmark.collectionId === collectionId
+      ? { ...bookmark, position: bookmark.position + 1 }
+      : bookmark
   )
 
 export const nextPinnedPosition = (current: DemoState) =>

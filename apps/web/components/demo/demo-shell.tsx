@@ -14,7 +14,6 @@ import { BookmarkSelectionBar } from "@/components/bookmark-selection-bar"
 import { CollectionDeleteDialog } from "@/components/collection-delete-dialog"
 import { CollectionDialog } from "@/components/collection-dialog"
 import { CollectionShareDialog } from "@/components/collection-share-dialog"
-import { DemoNotice } from "@/components/demo/demo-notice"
 import { DndProvider } from "@/components/dnd-provider"
 import { useDemoState, useMounted } from "@/hooks/use-demo-state"
 import { collectionList } from "@/lib/client/demo/store"
@@ -49,10 +48,7 @@ export const DemoShell = ({ children }: { children: React.ReactNode }) => {
             isOwner={false}
             user={state.user}
           />
-          <SidebarInset>
-            <DemoNotice />
-            {children}
-          </SidebarInset>
+          <SidebarInset>{children}</SidebarInset>
         </DndProvider>
         <BookmarkDialog />
         <BookmarkSearchDialog />
