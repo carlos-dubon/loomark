@@ -9,7 +9,7 @@ export const DEMO_USER = {
   id: "demo-user",
   name: "Demo User",
   email: DEMO_CREDENTIALS.email,
-  image: null,
+  image: "https://randomuser.me/api/portraits/men/32.jpg",
   role: "OWNER" as const,
 }
 

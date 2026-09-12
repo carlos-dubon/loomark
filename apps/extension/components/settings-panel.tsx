@@ -137,13 +137,8 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
 
       <Section title="Bookmark sync">
         <label className="flex items-start justify-between gap-3">
-          <span className="flex flex-col gap-0.5">
-            <span className="text-sm font-medium">
-              Mirror the bookmarks bar
-            </span>
-            <span className="text-xs text-muted-foreground">
-              Loomark and your bookmarks bar stay in step every 3 minutes.
-            </span>
+          <span className="flex flex-col gap-0.5 text-sm font-medium">
+            Mirror the bookmarks bar
           </span>
           <Switch
             checked={Boolean(settings?.enabled)}
@@ -153,13 +148,6 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
             }}
           />
         </label>
-
-        {settings?.enabled ? (
-          <p className="text-xs text-muted-foreground">
-            Everything on your bookmarks bar mirrors your Loomark collections,
-            both ways. Deleting on either side deletes on the other.
-          </p>
-        ) : null}
 
         {error ? (
           <p className="text-xs text-destructive" role="alert">
