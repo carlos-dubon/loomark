@@ -142,4 +142,3 @@ model Bookmark {
   @@index([collectionId, createdAt])
   @@index([collectionId, position])
 }
-
