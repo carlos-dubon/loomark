@@ -13,7 +13,6 @@ import { BookmarkSearchDialog } from "@/components/bookmark-search-dialog"
 import { BookmarkSelectionBar } from "@/components/bookmark-selection-bar"
 import { CollectionDeleteDialog } from "@/components/collection-delete-dialog"
 import { CollectionDialog } from "@/components/collection-dialog"
-import { CollectionShareDialog } from "@/components/collection-share-dialog"
 import { DndProvider } from "@/components/dnd-provider"
 import { useDemoState, useMounted } from "@/hooks/use-demo-state"
 import { collectionList } from "@/lib/client/demo/store"
@@ -56,7 +55,6 @@ export const DemoShell = ({ children }: { children: React.ReactNode }) => {
         <BookmarkSelectionBar />
         <BookmarkDeleteDialog />
         <CollectionDeleteDialog />
-        <CollectionShareDialog />
       </SidebarProvider>
     </AppearanceProvider>
   )

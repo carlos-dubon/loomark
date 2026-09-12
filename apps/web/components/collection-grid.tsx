@@ -80,7 +80,6 @@ const CollectionGridItem = ({
         icon={collection.icon}
         name={collection.name}
         count={collection.bookmarkCount}
-        shared={Boolean(collection.shareToken)}
       />
     </div>
   )

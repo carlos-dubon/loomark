@@ -19,7 +19,7 @@ export const SettingsPage = ({
 }) => (
   <>
     <PageHeader title={title} description={description} />
-    <div className="flex min-h-0 flex-1 scroll-fade-y flex-col gap-4 overflow-y-auto p-4 md:p-6">
+    <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 md:p-6">
       {children}
     </div>
   </>

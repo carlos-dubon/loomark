@@ -7,7 +7,6 @@ import {
   MoreHorizontalIcon,
   PencilIcon,
   PlusIcon,
-  Share2Icon,
   Trash2Icon,
 } from "lucide-react"
 import { useMemo } from "react"
@@ -37,7 +36,6 @@ import {
   bookmarkDialogAtom,
   collectionDeleteDialogAtom,
   collectionDialogAtom,
-  collectionShareDialogAtom,
   collectionsAtom,
 } from "@/store/atoms"
 
@@ -53,7 +51,6 @@ export const CollectionMenu = ({
   const openCollectionDialog = useSetAtom(collectionDialogAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const confirmDelete = useSetAtom(collectionDeleteDialogAtom)
-  const openShareDialog = useSetAtom(collectionShareDialogAtom)
   const collections = useAtomValue(collectionsAtom)
   const { move } = useCollectionActions()
 
@@ -166,11 +163,6 @@ export const CollectionMenu = ({
             </div>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => openShareDialog(collection)}>
-          <Share2Icon />
-          Share…
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"

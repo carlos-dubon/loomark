@@ -11,7 +11,6 @@ import { BookmarkSearchDialog } from "@/components/bookmark-search-dialog"
 import { BookmarkSelectionBar } from "@/components/bookmark-selection-bar"
 import { CollectionDeleteDialog } from "@/components/collection-delete-dialog"
 import { CollectionDialog } from "@/components/collection-dialog"
-import { CollectionShareDialog } from "@/components/collection-share-dialog"
 import { DemoShell } from "@/components/demo/demo-shell"
 import { DndProvider } from "@/components/dnd-provider"
 import { UpdateToast } from "@/components/update-toast"
@@ -77,7 +76,6 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
         <BookmarkSelectionBar />
         <BookmarkDeleteDialog />
         <CollectionDeleteDialog />
-        <CollectionShareDialog />
         <UpdateToast isOwner={profile.role === "OWNER"} />
       </SidebarProvider>
     </AppearanceProvider>

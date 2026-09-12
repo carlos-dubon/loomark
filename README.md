@@ -18,7 +18,6 @@
 - Browser extension for Chromium based browsers and Firefox
 - Two-way sync with your browser's bookmarks bar
 - Import from any browser or from [Linkwarden](https://linkwarden.app)
-- Share collections
 - Installable as a PWA
 
 ## Install

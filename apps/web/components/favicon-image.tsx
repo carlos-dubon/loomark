@@ -11,11 +11,9 @@ import { isDemo } from "@/lib/demo/config"
 export const FaviconImage = ({
   src,
   className,
-  proxy = routes.favicon,
 }: {
   src: string | null
   className?: string
-  proxy?: (url: string) => string
 }) => {
   const [failed, setFailed] = useState(false)
   const [lastSrc, setLastSrc] = useState(src)
@@ -30,7 +28,7 @@ export const FaviconImage = ({
     if (src.startsWith("data:")) return src
     if (src.startsWith("/api/")) return src
     if (isDemo) return src
-    return proxy(src)
+    return routes.favicon(src)
   })()
 
   if (!proxiedSrc || failed) {

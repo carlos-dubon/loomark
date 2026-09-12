@@ -1,7 +1,7 @@
 "use client"
 
 import { useAtomValue, useSetAtom } from "jotai"
-import { BookmarkIcon, InboxIcon, PlusIcon, Share2Icon } from "lucide-react"
+import { BookmarkIcon, InboxIcon, PlusIcon } from "lucide-react"
 import { useMemo } from "react"
 
 import { siblingsOf } from "@loomark/core/tree"
@@ -19,7 +19,6 @@ import { ViewModeToggle } from "@/components/view-mode-toggle"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
 import {
   bookmarkDialogAtom,
-  collectionShareDialogAtom,
   collectionsAtom,
   viewModeAtom,
 } from "@/store/atoms"
@@ -49,7 +48,6 @@ export const BookmarkListView = ({
   const mode = useAtomValue(viewModeAtom)
   const collections = useAtomValue(collectionsAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
-  const openShareDialog = useSetAtom(collectionShareDialogAtom)
   const { items, manual } = useBookmarkList(
     bookmarks,
     "collection",
@@ -87,22 +85,11 @@ export const BookmarkListView = ({
       >
         <ViewModeToggle />
         <SortOrderSelect />
-        {collection?.shareToken ? (
-          <Button
-            variant="outline"
-            size="icon"
-            aria-label="Manage the share link"
-            title="Shared with a link"
-            onClick={() => openShareDialog(collection)}
-          >
-            <Share2Icon />
-          </Button>
-        ) : null}
         {collection && collection.kind === "USER" ? (
           <CollectionMenu collection={collection} />
         ) : null}
       </PageHeader>
-      <div className="@container flex min-h-0 flex-1 scroll-fade-y flex-col gap-6 overflow-y-auto p-4 md:p-6">
+      <div className="@container flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto p-4 md:p-6">
         {hasCollections ? (
           <section className="flex flex-col gap-3">
             <h2 className="text-sm font-semibold">Collections</h2>

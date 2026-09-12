@@ -7,7 +7,6 @@ export type DemoCollectionSeed = {
   kind: CollectionKind
   parentId: string | null
   position: number
-  shareToken: string | null
 }
 
 export type DemoBookmarkSeed = {
@@ -32,7 +31,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: null,
     position: 0,
-    shareToken: null,
   },
   {
     id: "c-frontend",
@@ -41,7 +39,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: "c-engineering",
     position: 0,
-    shareToken: null,
   },
   {
     id: "c-backend",
@@ -50,7 +47,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: "c-engineering",
     position: 1,
-    shareToken: null,
   },
   {
     id: "c-ai",
@@ -59,7 +55,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: "c-engineering",
     position: 2,
-    shareToken: null,
   },
   {
     id: "c-design",
@@ -68,7 +63,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: null,
     position: 1,
-    shareToken: "demo1c020h",
   },
   {
     id: "c-type",
@@ -77,7 +71,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: "c-design",
     position: 0,
-    shareToken: null,
   },
   {
     id: "c-inspiration",
@@ -86,7 +79,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: "c-design",
     position: 1,
-    shareToken: null,
   },
   {
     id: "c-reading",
@@ -95,7 +87,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: null,
     position: 2,
-    shareToken: null,
   },
   {
     id: "c-essays",
@@ -104,7 +95,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: "c-reading",
     position: 0,
-    shareToken: null,
   },
   {
     id: "c-newsletters",
@@ -113,7 +103,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: "c-reading",
     position: 1,
-    shareToken: null,
   },
   {
     id: "c-tools",
@@ -122,7 +111,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: null,
     position: 3,
-    shareToken: null,
   },
   {
     id: "c-learning",
@@ -131,7 +119,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: null,
     position: 4,
-    shareToken: null,
   },
   {
     id: "c-selfhost",
@@ -140,7 +127,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "USER",
     parentId: null,
     position: 5,
-    shareToken: "demoad84vz",
   },
   {
     id: "c-unsorted",
@@ -149,7 +135,6 @@ export const DEMO_COLLECTIONS: DemoCollectionSeed[] = [
     kind: "UNSORTED",
     parentId: null,
     position: 0,
-    shareToken: null,
   },
 ]
 

@@ -264,7 +264,6 @@ export const demoApi = {
       kind: "USER" as const,
       parentId,
       position: siblings.length,
-      shareToken: null,
     }
 
     setState((state) => ({
@@ -399,31 +398,6 @@ export const demoApi = {
     return settle(deletion)
   },
 
-  shareCollection: (id: string) => {
-    const token = newId("s").replace("s-", "")
-    const sharedAt = new Date().toISOString()
-
-    setState((state) => ({
-      ...state,
-      collections: state.collections.map((collection) =>
-        collection.id === id ? { ...collection, shareToken: token } : collection
-      ),
-    }))
-
-    return settle({ id, shareToken: token, sharedAt })
-  },
-
-  unshareCollection: (id: string) => {
-    setState((state) => ({
-      ...state,
-      collections: state.collections.map((collection) =>
-        collection.id === id ? { ...collection, shareToken: null } : collection
-      ),
-    }))
-
-    return settle({ id, shareToken: null, sharedAt: null })
-  },
-
   restoreCollection: (deletion: CollectionDeletion) => {
     setState((state) => {
       const knownCollections = new Set(
@@ -446,7 +420,6 @@ export const demoApi = {
               kind: collection.kind,
               parentId: collection.parentId,
               position: collection.position,
-              shareToken: collection.shareToken,
             })),
         ],
         bookmarks: [

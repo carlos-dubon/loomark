@@ -18,7 +18,6 @@ export type DemoCollectionRecord = {
   kind: CollectionKind
   parentId: string | null
   position: number
-  shareToken: string | null
 }
 
 export type DemoState = {
@@ -122,7 +121,6 @@ export const collectionList = (current: DemoState) => {
     position: collection.position,
     parentId: collection.parentId,
     bookmarkCount: tally.get(collection.id) ?? 0,
-    shareToken: collection.shareToken,
   }))
 
   counts.set(current, list)

@@ -1,7 +1,5 @@
 "use client"
 
-import { Share2Icon } from "lucide-react"
-
 import { Card } from "@loomark/ui/components/card"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
@@ -13,14 +11,12 @@ export const CollectionCard = ({
   name,
   count,
   parentName,
-  shared = false,
 }: {
   href: string
   icon: string | null | undefined
   name: string
   count: number
   parentName?: string
-  shared?: boolean
 }) => (
   <Card
     size="sm"
@@ -40,9 +36,6 @@ export const CollectionCard = ({
       ) : null}
     </span>
     <span className="flex shrink-0 items-center gap-1.5 text-[11px] text-muted-foreground/70 tabular-nums">
-      {shared ? (
-        <Share2Icon className="size-3" aria-label="Shared with a link" />
-      ) : null}
       {count}
       <span className="sr-only">{count === 1 ? "bookmark" : "bookmarks"}</span>
     </span>
