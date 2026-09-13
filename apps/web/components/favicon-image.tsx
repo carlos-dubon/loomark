@@ -41,7 +41,6 @@ export const FaviconImage = ({
     <img
       src={proxiedSrc}
       alt=""
-      loading="lazy"
       onError={() => setFailed(true)}
       className={cn("size-4 rounded-[4px] object-contain", className)}
     />

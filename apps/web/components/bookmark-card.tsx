@@ -178,7 +178,6 @@ const BookmarkPreview = ({
         <img
           src={src}
           alt=""
-          loading="lazy"
           onError={() => setFailed(true)}
           className="size-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
         />
