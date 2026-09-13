@@ -85,6 +85,7 @@ const SelectToggle = ({
       checked={selected}
       onCheckedChange={onSelect}
       aria-label={`Select ${bookmarkLabel(bookmark)}`}
+      className="after:-inset-3"
     />
   </span>
 )
@@ -162,7 +163,12 @@ const BookmarkActions = ({
   const { togglePin } = useBookmarkActions()
 
   return (
-    <div className={cn("relative z-10 flex shrink-0 items-center", className)}>
+    <div
+      className={cn(
+        "relative z-10 flex shrink-0 items-center before:absolute before:-inset-2",
+        className
+      )}
+    >
       <Button
         variant="ghost"
         size="icon-sm"
