@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
-import { BookmarkListView } from "@/components/bookmark-list-view"
+import { BookmarkListView } from "@/components/views/bookmark-list-view"
 import { useDemoState } from "@/hooks/use-demo-state"
 import { collectionEmptyState } from "@/lib/collection-view"
 import { bookmarksIn, collectionList } from "@/lib/client/demo/store"

@@ -1,6 +1,6 @@
 "use client"
 
-import { HomeView } from "@/components/home-view"
+import { HomeView } from "@/components/views/home-view"
 import { useDemoState } from "@/hooks/use-demo-state"
 import { pinnedBookmarks } from "@/lib/client/demo/store"
 
