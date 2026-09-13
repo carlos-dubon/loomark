@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 import { DemoHome } from "@/components/demo/demo-home"
-import { HomeView } from "@/components/home-view"
+import { HomeView } from "@/components/views/home-view"
 import { auth } from "@/lib/server/auth"
 import { isDemo } from "@/lib/demo/config"
 import { prisma } from "@/lib/server/prisma"

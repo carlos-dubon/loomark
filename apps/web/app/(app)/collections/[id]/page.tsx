@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 
-import { BookmarkListView } from "@/components/bookmark-list-view"
+import { BookmarkListView } from "@/components/views/bookmark-list-view"
 import { DemoCollection } from "@/components/demo/demo-collection"
 import { auth } from "@/lib/server/auth"
 import { collectionEmptyState } from "@/lib/collection-view"
