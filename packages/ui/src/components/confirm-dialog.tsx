@@ -1,6 +1,6 @@
 "use client"
 
-import { Loader2Icon, Trash2Icon } from "lucide-react"
+import { Trash2Icon } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { cn } from "@loomark/core/utils"
@@ -62,10 +62,10 @@ export const ConfirmDialog = ({
         </DialogClose>
         <Button
           variant={variant}
-          disabled={pending}
+          loading={pending}
           onClick={() => void onConfirm()}
         >
-          {pending ? <Loader2Icon className="animate-spin" /> : icon}
+          {icon}
           {confirmLabel}
         </Button>
       </DialogFooter>

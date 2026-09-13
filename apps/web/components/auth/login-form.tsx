@@ -95,7 +95,7 @@ export const LoginForm = ({ callbackUrl }: Props) => {
           ) : null}
         </CardContent>
         <CardFooter className="mt-4 flex-col items-stretch gap-3">
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" loading={isSubmitting}>
             {isSubmitting ? "Signing in…" : "Sign in"}
           </Button>
           <p className="text-center text-sm text-muted-foreground">

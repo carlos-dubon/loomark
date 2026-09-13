@@ -2,7 +2,6 @@ import {
   CheckIcon,
   ExternalLinkIcon,
   GlobeIcon,
-  Loader2Icon,
   LogOutIcon,
   SettingsIcon,
 } from "lucide-react"
@@ -19,6 +18,7 @@ import type {
 import { hostFromUrl } from "@loomark/core/url"
 import { Button } from "@loomark/ui/components/button"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
+import { Spinner } from "@loomark/ui/components/spinner"
 
 import { BookmarkForm } from "@/components/bookmark-form"
 import { CollectionForm } from "@/components/collection-form"
@@ -132,7 +132,7 @@ const StatusBar = ({
         onClick={onOpenSettings}
       >
         {syncing ? (
-          <Loader2Icon className="animate-spin text-muted-foreground" />
+          <Spinner aria-hidden="true" className="text-muted-foreground" />
         ) : (
           <SettingsIcon className="text-muted-foreground" />
         )}
@@ -243,7 +243,7 @@ const Workspace = ({
     if (!collections) {
       return (
         <Centered>
-          <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
+          <Spinner className="size-5 text-muted-foreground" />
         </Centered>
       )
     }
@@ -331,7 +331,7 @@ export const App = () => {
     return (
       <Shell>
         <Centered>
-          <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
+          <Spinner className="size-5 text-muted-foreground" />
         </Centered>
       </Shell>
     )

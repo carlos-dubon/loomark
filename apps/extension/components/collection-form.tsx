@@ -123,7 +123,7 @@ export const CollectionForm = ({
         <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit" size="sm" disabled={isSubmitting}>
+        <Button type="submit" size="sm" loading={isSubmitting}>
           {isSubmitting ? "Creating…" : "Create"}
         </Button>
       </div>

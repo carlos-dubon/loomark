@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { Loader2Icon, WandSparklesIcon } from "lucide-react"
+import { WandSparklesIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import * as React from "react"
 import { useMemo, useState } from "react"
@@ -183,14 +183,11 @@ const BookmarkForm = ({
               variant="outline"
               size="icon"
               aria-label="Fetch page details"
-              disabled={fetching || !url.trim()}
+              disabled={!url.trim()}
+              loading={fetching}
               onClick={loadMetadata}
             >
-              {fetching ? (
-                <Loader2Icon className="animate-spin" />
-              ) : (
-                <WandSparklesIcon />
-              )}
+              <WandSparklesIcon />
             </Button>
           </div>
         </Field>
@@ -276,7 +273,7 @@ const BookmarkForm = ({
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button type="submit" loading={isSubmitting}>
             {isSubmitting
               ? "Saving…"
               : editing
