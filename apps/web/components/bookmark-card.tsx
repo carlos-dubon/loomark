@@ -24,10 +24,37 @@ import { useCoarsePointer } from "@/hooks/use-coarse-pointer"
 import { useCollection } from "@/hooks/use-collection"
 import { DRAG_TYPE } from "@/lib/dnd"
 
+type DragState = "idle" | "source" | "group"
+
 type DragProps = {
   ref: (element: Element | null) => void
-  isDragSource: boolean
+  dragState: DragState
+  groupSize: number
 }
+
+const DRAG_CLASS: Record<DragState, string | undefined> = {
+  idle: undefined,
+  source: "opacity-40",
+  group: "shadow-xl",
+}
+
+const GroupCount = ({
+  count,
+  className,
+}: {
+  count: number
+  className?: string
+}) => (
+  <span
+    aria-hidden
+    className={cn(
+      "pointer-events-none absolute z-30 flex h-7 min-w-7 items-center justify-center rounded-full bg-primary px-2 text-sm font-semibold text-primary-foreground tabular-nums shadow-md ring-2 ring-background",
+      className
+    )}
+  >
+    {count}
+  </span>
+)
 
 const bookmarkLabel = (bookmark: BookmarkDTO) =>
   bookmark.title?.trim() || hostFromUrl(bookmark.url)
@@ -201,7 +228,8 @@ const BookmarkPreview = ({
 const GridCard = ({
   bookmark,
   ref,
-  isDragSource,
+  dragState,
+  groupSize,
   pendingPreview,
   ...select
 }: { bookmark: BookmarkDTO; pendingPreview: boolean } & DragProps &
@@ -213,10 +241,16 @@ const GridCard = ({
     data-selected={select.selected || undefined}
     className={cn(
       "group pt-0 transition-colors hover:border-input hover:bg-accent/40 pointer-fine:touch-none",
-      isDragSource && "opacity-40",
-      select.selected && "border-ring ring-2 ring-ring/24"
+      select.selected && "border-ring ring-2 ring-ring/24",
+      DRAG_CLASS[dragState]
     )}
   >
+    {groupSize > 0 ? (
+      <GroupCount
+        count={groupSize}
+        className="top-(--card-spacing) right-(--card-spacing)"
+      />
+    ) : null}
     <SelectToggle
       bookmark={bookmark}
       {...select}
@@ -250,7 +284,8 @@ const GridCard = ({
 const ListRow = ({
   bookmark,
   ref,
-  isDragSource,
+  dragState,
+  groupSize,
   ...select
 }: { bookmark: BookmarkDTO } & DragProps & SelectProps) => (
   <Card
@@ -260,10 +295,16 @@ const ListRow = ({
     data-selected={select.selected || undefined}
     className={cn(
       "group flex-row items-center gap-2.5 rounded-lg px-(--card-spacing) transition-colors hover:border-input hover:bg-accent/40 sm:gap-3 pointer-fine:touch-none",
-      isDragSource && "opacity-40",
-      select.selected && "border-ring ring-2 ring-ring/24"
+      select.selected && "border-ring ring-2 ring-ring/24",
+      DRAG_CLASS[dragState]
     )}
   >
+    {groupSize > 0 ? (
+      <GroupCount
+        count={groupSize}
+        className="top-1/2 left-[calc(var(--card-spacing)+8px)] h-6 min-w-6 -translate-x-1/2 -translate-y-1/2 px-1.5 text-xs"
+      />
+    ) : null}
     <SelectToggle bookmark={bookmark} {...select} />
     <FaviconImage src={bookmark.faviconUrl} className="size-5 shrink-0" />
     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -303,7 +344,9 @@ export const BookmarkCard = ({
 
   const pendingPreview = useBookmarkPreview(bookmark, mode === "grid")
 
-  const { selected, selecting, toggle } = useBookmarkSelected(bookmark.id)
+  const { selected, selecting, dragGroup, toggle } = useBookmarkSelected(
+    bookmark.id
+  )
 
   const select = {
     selected,
@@ -311,20 +354,26 @@ export const BookmarkCard = ({
     onSelect: () => toggle(bookmark.id),
   }
 
+  const dragState: DragState = isDragSource
+    ? dragGroup
+      ? "group"
+      : "source"
+    : "idle"
+
+  const drag = {
+    ref,
+    dragState,
+    groupSize: dragState === "group" && dragGroup ? dragGroup.size : 0,
+  }
+
   return mode === "grid" ? (
     <GridCard
       bookmark={bookmark}
-      ref={ref}
-      isDragSource={isDragSource}
       pendingPreview={pendingPreview}
+      {...drag}
       {...select}
     />
   ) : (
-    <ListRow
-      bookmark={bookmark}
-      ref={ref}
-      isDragSource={isDragSource}
-      {...select}
-    />
+    <ListRow bookmark={bookmark} {...drag} {...select} />
   )
 }

@@ -64,6 +64,11 @@ export const bookmarkReorderSchema = z.object({
   ids: z.array(idField).min(1).max(500),
 })
 
+export const bookmarkMoveSchema = z.object({
+  ids: z.array(idField).min(1).max(500),
+  collectionId: z.string().min(1).nullish(),
+})
+
 export const collectionCreateSchema = z.object({
   name: collectionName,
   icon: iconSlug.nullish(),
@@ -160,5 +165,6 @@ export type SyncReorderInput = z.infer<typeof syncReorderSchema>
 export type AppearanceUpdateInput = z.infer<typeof appearanceUpdateSchema>
 export type BookmarkBulkDeleteInput = z.infer<typeof bookmarkBulkDeleteSchema>
 export type BookmarkReorderInput = z.infer<typeof bookmarkReorderSchema>
+export type BookmarkMoveInput = z.infer<typeof bookmarkMoveSchema>
 export type BookmarkRestoreInput = z.infer<typeof bookmarkRestoreSchema>
 export type CollectionRestoreInput = z.infer<typeof collectionRestoreSchema>

@@ -5,12 +5,19 @@ import {
   KeyboardSensor,
   PointerSensor,
   type DragEndEvent,
+  type DragStartEvent,
 } from "@dnd-kit/react"
+import { useQueryClient } from "@tanstack/react-query"
+import { useStore } from "jotai"
+import { useRef } from "react"
 
+import { sortBookmarks } from "@loomark/core/sort"
 import type { BookmarkDTO } from "@loomark/core/types"
 
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
-import { collectionDropData, DRAG_TYPE } from "@/lib/dnd"
+import { bookmarkListQuery } from "@/lib/client/queries"
+import { bookmarkDragGroup, collectionDropData, DRAG_TYPE } from "@/lib/dnd"
+import { activeBookmarkQueryAtom, selectedBookmarkIdsAtom } from "@/store/atoms"
 
 const NON_DRAGGABLE = "button, input, textarea, select"
 
@@ -30,27 +37,62 @@ const sensors = [
 ]
 
 export const DndProvider = ({ children }: { children: React.ReactNode }) => {
-  const { move: moveBookmark } = useBookmarkActions()
+  const { moveMany } = useBookmarkActions()
+  const store = useStore()
+  const queryClient = useQueryClient()
+  const dragged = useRef<BookmarkDTO[]>([])
+
+  const draggedBookmarks = (bookmark: BookmarkDTO) => {
+    const group = bookmarkDragGroup(
+      bookmark.id,
+      store.get(selectedBookmarkIdsAtom)
+    )
+    const query = store.get(activeBookmarkQueryAtom)
+
+    if (!group || !query) {
+      return [bookmark]
+    }
+
+    const items = queryClient.getQueryData(bookmarkListQuery(query).queryKey)
+
+    return sortBookmarks(items ?? [bookmark], "custom").filter((item) =>
+      group.has(item.id)
+    )
+  }
+
+  const onDragStart = ({ operation: { source } }: DragStartEvent) => {
+    const bookmark =
+      source?.type === DRAG_TYPE.bookmark
+        ? (source.data?.bookmark as BookmarkDTO | undefined)
+        : undefined
+
+    dragged.current = bookmark ? draggedBookmarks(bookmark) : []
+  }
 
   const onDragEnd = ({ canceled, operation }: DragEndEvent) => {
-    const { source, target } = operation
+    const bookmarks = dragged.current
+    dragged.current = []
 
-    if (canceled || source?.type !== DRAG_TYPE.bookmark || !target) {
+    const collectionId = collectionDropData(
+      operation.target?.data
+    )?.collectionId
+
+    if (canceled || !collectionId) {
       return
     }
 
-    const bookmark = source.data?.bookmark as BookmarkDTO | undefined
-    const collectionId = collectionDropData(target.data)?.collectionId
-
-    if (!bookmark || !collectionId || bookmark.collectionId === collectionId) {
-      return
-    }
-
-    moveBookmark(bookmark, collectionId)
+    moveMany(
+      bookmarks.filter((item) => item.collectionId !== collectionId),
+      collectionId
+    )
   }
 
   return (
-    <DragDropProvider sensors={sensors} onDragEnd={onDragEnd}>
+    <DragDropProvider
+      sensors={sensors}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    >
       {children}
     </DragDropProvider>
   )

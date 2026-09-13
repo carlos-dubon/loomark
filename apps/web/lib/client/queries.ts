@@ -45,14 +45,22 @@ export const invalidateLibrary = (queryClient: QueryClient) =>
     queryClient.invalidateQueries({ queryKey: queryKeys.collections }),
   ])
 
+export const upsertBookmarksInCache = (
+  queryClient: QueryClient,
+  bookmarks: BookmarkDTO[]
+) => {
+  const updated = new Map(bookmarks.map((bookmark) => [bookmark.id, bookmark]))
+
+  queryClient.setQueriesData<BookmarkDTO[]>(
+    { queryKey: queryKeys.bookmarks },
+    (items) => items?.map((item) => updated.get(item.id) ?? item)
+  )
+}
+
 export const upsertBookmarkInCache = (
   queryClient: QueryClient,
   bookmark: BookmarkDTO
-) =>
-  queryClient.setQueriesData<BookmarkDTO[]>(
-    { queryKey: queryKeys.bookmarks },
-    (items) => items?.map((item) => (item.id === bookmark.id ? bookmark : item))
-  )
+) => upsertBookmarksInCache(queryClient, [bookmark])
 
 export const removeBookmarksFromCache = (
   queryClient: QueryClient,

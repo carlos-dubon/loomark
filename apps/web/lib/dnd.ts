@@ -29,6 +29,23 @@ export const collectionCardId = (collectionId: string) =>
 export const isCollectionCardId = (id: string | number) =>
   String(id).startsWith(CARD_PREFIX)
 
+export const bookmarkDragGroup = (
+  sourceId: string | number,
+  selected: ReadonlySet<string>
+) => (selected.size > 1 && selected.has(String(sourceId)) ? selected : null)
+
+export const gatherGroup = <T extends { id: string }>(
+  items: T[],
+  anchorId: string,
+  members: T[]
+) => {
+  const memberIds = new Set(members.map((member) => member.id))
+
+  return items.flatMap((item) =>
+    item.id === anchorId ? members : memberIds.has(item.id) ? [] : [item]
+  )
+}
+
 export const collectionSourceId = (
   source: { id: string | number; data?: unknown } | null | undefined
 ) => {

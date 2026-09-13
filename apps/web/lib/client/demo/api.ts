@@ -21,6 +21,7 @@ import {
 import type {
   AppearanceUpdateInput,
   BookmarkCreateInput,
+  BookmarkMoveInput,
   BookmarkReorderInput,
   BookmarkUpdateInput,
   CollectionCreateInput,
@@ -163,6 +164,41 @@ export const demoApi = {
     })
 
     return settle(bookmarks)
+  },
+
+  moveBookmarks: (input: BookmarkMoveInput) => {
+    const current = getState()
+    const collectionId = input.collectionId ?? unsortedId(current)
+    const bookmarks = [...new Set(input.ids)].map((id) =>
+      requireBookmark(current, id)
+    )
+    const moving = new Map(
+      bookmarks
+        .filter((bookmark) => bookmark.collectionId !== collectionId)
+        .map((bookmark, index) => [bookmark.id, index])
+    )
+    const now = new Date().toISOString()
+
+    setState((state) => ({
+      ...state,
+      bookmarks: state.bookmarks.map((bookmark) => {
+        const index = moving.get(bookmark.id)
+
+        if (index !== undefined) {
+          return { ...bookmark, collectionId, position: index, updatedAt: now }
+        }
+
+        return bookmark.collectionId === collectionId
+          ? { ...bookmark, position: bookmark.position + moving.size }
+          : bookmark
+      }),
+    }))
+
+    const updated = new Set(bookmarks.map((bookmark) => bookmark.id))
+
+    return settle(
+      getState().bookmarks.filter((bookmark) => updated.has(bookmark.id))
+    )
   },
 
   reorderBookmarks: (input: BookmarkReorderInput) => {

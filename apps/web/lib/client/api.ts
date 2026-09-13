@@ -13,6 +13,7 @@ import type {
 import type {
   AppearanceUpdateInput,
   BookmarkCreateInput,
+  BookmarkMoveInput,
   BookmarkReorderInput,
   BookmarkUpdateInput,
   CollectionCreateInput,
@@ -87,6 +88,11 @@ const serverApi = {
     }),
   reorderBookmarks: (input: BookmarkReorderInput) =>
     request<void>(routes.bookmarksReorder, {
+      method: "POST",
+      body: JSON.stringify(input),
+    }),
+  moveBookmarks: (input: BookmarkMoveInput) =>
+    request<BookmarkDTO[]>(routes.bookmarksMove, {
       method: "POST",
       body: JSON.stringify(input),
     }),

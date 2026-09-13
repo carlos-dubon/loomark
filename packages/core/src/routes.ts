@@ -9,6 +9,7 @@ export const routes = {
   bookmarksImport: "/api/bookmarks/import",
   bookmarksRestore: "/api/bookmarks/restore",
   bookmarksReorder: "/api/bookmarks/reorder",
+  bookmarksMove: "/api/bookmarks/move",
   collections: "/api/collections",
   collection: (id: string) => `/api/collections/${id}`,
   collectionsMove: "/api/collections/move",

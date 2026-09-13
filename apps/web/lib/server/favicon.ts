@@ -5,6 +5,13 @@ const USER_AGENT =
 
 const MAX_FAVICON_BYTES = 1 * 1024 * 1024
 const FETCH_TIMEOUT_MS = 8000
+const CACHE_CONTROL = "public, max-age=86400, stale-while-revalidate=604800"
+
+const failure = (message: string, status: number) => {
+  const response = jsonError(message, status)
+  response.headers.set("cache-control", CACHE_CONTROL)
+  return response
+}
 
 const isBlockedHostname = (hostname: string) => {
   const h = hostname.toLowerCase()
@@ -77,7 +84,7 @@ export const proxyFavicon = async (target: URL) => {
     })
 
     if (!response.ok || !response.body) {
-      return jsonError("Failed to fetch favicon", 502)
+      return failure("Failed to fetch favicon", 502)
     }
 
     const contentType =
@@ -88,7 +95,7 @@ export const proxyFavicon = async (target: URL) => {
         .toLowerCase() ?? ""
 
     if (contentType.includes("text/html")) {
-      return jsonError("Not an image", 502)
+      return failure("Not an image", 502)
     }
 
     const isImage =
@@ -98,7 +105,7 @@ export const proxyFavicon = async (target: URL) => {
       contentType.includes("icon")
 
     if (!isImage) {
-      return jsonError("Not an image", 502)
+      return failure("Not an image", 502)
     }
 
     const reader = response.body.getReader()
@@ -112,7 +119,7 @@ export const proxyFavicon = async (target: URL) => {
       received += value.byteLength
       if (received > MAX_FAVICON_BYTES) {
         await reader.cancel().catch(() => undefined)
-        return jsonError("Favicon too large", 413)
+        return failure("Favicon too large", 413)
       }
       chunks.push(value)
     }
@@ -130,10 +137,7 @@ export const proxyFavicon = async (target: URL) => {
     const headers = new Headers()
     headers.set("content-type", contentType || "image/x-icon")
     headers.set("content-length", String(totalLength))
-    headers.set(
-      "cache-control",
-      "public, max-age=86400, stale-while-revalidate=604800"
-    )
+    headers.set("cache-control", CACHE_CONTROL)
     headers.set("cross-origin-resource-policy", "cross-origin")
     headers.set("access-control-allow-origin", "*")
     headers.set("x-content-type-options", "nosniff")
@@ -144,8 +148,8 @@ export const proxyFavicon = async (target: URL) => {
     })
   } catch (error) {
     if (error instanceof DOMException && error.name === "TimeoutError") {
-      return jsonError("Favicon fetch timed out", 504)
+      return failure("Favicon fetch timed out", 504)
     }
-    return jsonError("Failed to fetch favicon", 502)
+    return failure("Failed to fetch favicon", 502)
   }
 }

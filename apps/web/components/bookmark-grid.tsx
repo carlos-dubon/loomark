@@ -4,6 +4,7 @@ import type { BookmarkDTO } from "@loomark/core/types"
 import type { ViewMode } from "@loomark/core/view-mode"
 
 import { BookmarkCard } from "@/components/bookmark-card"
+import { useBookmarkDragStack } from "@/hooks/use-bookmark-drag-stack"
 
 export const BookmarkGrid = ({
   bookmarks,
@@ -13,8 +14,10 @@ export const BookmarkGrid = ({
   bookmarks: BookmarkDTO[]
   mode: ViewMode
   manual: boolean
-}) =>
-  mode === "grid" ? (
+}) => {
+  useBookmarkDragStack()
+
+  return mode === "grid" ? (
     <div className="grid gap-3 @lg:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-4">
       {bookmarks.map((bookmark, index) => (
         <BookmarkCard
@@ -39,3 +42,4 @@ export const BookmarkGrid = ({
       ))}
     </div>
   )
+}

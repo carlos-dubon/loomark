@@ -4,6 +4,7 @@ import { move } from "@dnd-kit/helpers"
 import { useDragDropMonitor } from "@dnd-kit/react"
 import { isSortable } from "@dnd-kit/react/sortable"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useStore } from "jotai"
 import { useRef } from "react"
 import { toast } from "sonner"
 
@@ -17,8 +18,9 @@ import type { BookmarkDTO } from "@loomark/core/types"
 
 import { api } from "@/lib/client/api"
 import { bookmarkListQuery } from "@/lib/client/queries"
-import { DRAG_TYPE } from "@/lib/dnd"
+import { bookmarkDragGroup, DRAG_TYPE, gatherGroup } from "@/lib/dnd"
 import type { BookmarkQuery } from "@/lib/query-keys"
+import { selectedBookmarkIdsAtom } from "@/store/atoms"
 
 type ReorderVariables = {
   ids: string[]
@@ -37,6 +39,7 @@ export const useBookmarkReorder = ({
   enabled: boolean
 }) => {
   const queryClient = useQueryClient()
+  const store = useStore()
   const { queryKey } = bookmarkListQuery(query)
   const before = useRef<BookmarkDTO[] | null>(null)
 
@@ -93,12 +96,33 @@ export const useBookmarkReorder = ({
         return
       }
 
-      const items = queryClient.getQueryData(queryKey) ?? previous
+      const { source } = event.operation
+      const items = sortBookmarks(
+        queryClient.getQueryData(queryKey) ?? previous,
+        "custom",
+        scope
+      )
+      const group = source
+        ? bookmarkDragGroup(source.id, store.get(selectedBookmarkIdsAtom))
+        : null
+
+      const ordered =
+        source && group
+          ? gatherGroup(
+              items,
+              String(source.id),
+              sortBookmarks(previous, "custom", scope).filter((bookmark) =>
+                group.has(bookmark.id)
+              )
+            )
+          : items
+
+      if (group) {
+        queryClient.setQueryData(queryKey, applyManualOrder(ordered, scope))
+      }
 
       save({
-        ids: sortBookmarks(items, "custom", scope).map(
-          (bookmark) => bookmark.id
-        ),
+        ids: ordered.map((bookmark) => bookmark.id),
         previous,
       })
     },

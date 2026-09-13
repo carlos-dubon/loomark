@@ -1,16 +1,23 @@
 "use client"
 
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useSetAtom } from "jotai"
 import { toast } from "sonner"
 
-import { errorMessage } from "@loomark/core/format"
+import { errorMessage, plural } from "@loomark/core/format"
 import type { BookmarkDTO } from "@loomark/core/types"
 
 import { api } from "@/lib/client/api"
-import { invalidateLibrary, upsertBookmarkInCache } from "@/lib/client/queries"
+import {
+  invalidateLibrary,
+  upsertBookmarkInCache,
+  upsertBookmarksInCache,
+} from "@/lib/client/queries"
+import { deselectBookmarksAtom } from "@/store/atoms"
 
 export const useBookmarkActions = () => {
   const queryClient = useQueryClient()
+  const deselectBookmarks = useSetAtom(deselectBookmarksAtom)
 
   const applyUpdate = (updated: BookmarkDTO) => {
     upsertBookmarkInCache(queryClient, updated)
@@ -29,25 +36,41 @@ export const useBookmarkActions = () => {
     },
   })
 
-  const { mutate: moveBookmark } = useMutation({
+  const { mutate: moveBookmarks } = useMutation({
     mutationFn: ({
-      bookmark,
+      bookmarks,
       collectionId,
     }: {
-      bookmark: BookmarkDTO
+      bookmarks: BookmarkDTO[]
       collectionId: string | null
-    }) => api.updateBookmark(bookmark.id, { collectionId }),
+    }) =>
+      api.moveBookmarks({
+        ids: bookmarks.map((bookmark) => bookmark.id),
+        collectionId,
+      }),
     onSuccess: (updated) => {
-      applyUpdate(updated)
-      toast.success("Bookmark moved")
+      upsertBookmarksInCache(queryClient, updated)
+      deselectBookmarks(updated.map((bookmark) => bookmark.id))
+      void invalidateLibrary(queryClient)
+      toast.success(
+        updated.length === 1
+          ? "Bookmark moved"
+          : `${plural(updated.length, "bookmark")} moved`
+      )
     },
     onError: (cause) => {
       toast.error(errorMessage(cause, "Move failed"))
     },
   })
 
+  const moveMany = (bookmarks: BookmarkDTO[], collectionId: string | null) => {
+    if (bookmarks.length > 0) {
+      moveBookmarks({ bookmarks, collectionId })
+    }
+  }
+
   const move = (bookmark: BookmarkDTO, collectionId: string | null) =>
-    moveBookmark({ bookmark, collectionId })
+    moveMany([bookmark], collectionId)
 
   const copyLink = async (bookmark: BookmarkDTO) => {
     try {
@@ -58,5 +81,5 @@ export const useBookmarkActions = () => {
     }
   }
 
-  return { togglePin, move, copyLink }
+  return { togglePin, move, moveMany, copyLink }
 }

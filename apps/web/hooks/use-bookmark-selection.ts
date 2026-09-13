@@ -1,9 +1,11 @@
 "use client"
 
+import { useDragOperation } from "@dnd-kit/react"
 import { useAtomValue, useSetAtom } from "jotai"
 
 import type { BookmarkDTO } from "@loomark/core/types"
 
+import { bookmarkDragGroup, DRAG_TYPE } from "@/lib/dnd"
 import {
   clearBookmarkSelectionAtom,
   selectedBookmarkIdsAtom,
@@ -25,10 +27,17 @@ export const useBookmarkSelection = () => {
 export const useBookmarkSelected = (id: string) => {
   const selected = useAtomValue(selectedBookmarkIdsAtom)
   const toggle = useSetAtom(toggleBookmarkSelectionAtom)
+  const { source } = useDragOperation()
+
+  const dragGroup =
+    source?.type === DRAG_TYPE.bookmark
+      ? bookmarkDragGroup(source.id, selected)
+      : null
 
   return {
     selected: selected.has(id),
     selecting: selected.size > 0,
+    dragGroup,
     toggle,
   }
 }
