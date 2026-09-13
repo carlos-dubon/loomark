@@ -1,6 +1,6 @@
 "use client"
 
-import { useAtomValue, useSetAtom } from "jotai"
+import { useSetAtom } from "jotai"
 import {
   ExternalLinkIcon,
   FolderInputIcon,
@@ -29,12 +29,9 @@ import {
 } from "@loomark/ui/components/dropdown-menu"
 
 import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
+import { useCollections } from "@/hooks/use-collections"
 import { useOpenInNewTab } from "@/hooks/use-open-in-new-tab"
-import {
-  bookmarkDialogAtom,
-  collectionsAtom,
-  deleteDialogAtom,
-} from "@/store/atoms"
+import { bookmarkDialogAtom, deleteDialogAtom } from "@/store/atoms"
 
 export const BookmarkMenu = ({
   bookmark,
@@ -43,7 +40,7 @@ export const BookmarkMenu = ({
   bookmark: BookmarkDTO
   className?: string
 }) => {
-  const collections = useAtomValue(collectionsAtom)
+  const collections = useCollections()
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const confirmDelete = useSetAtom(deleteDialogAtom)
   const { togglePin, move, copyLink } = useBookmarkActions()

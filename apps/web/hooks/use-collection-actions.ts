@@ -1,7 +1,6 @@
 "use client"
 
-import { useAtom } from "jotai"
-import { useRouter } from "next/navigation"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 import { errorMessage } from "@loomark/core/format"
@@ -11,19 +10,44 @@ import {
   collectDescendantIds,
   insertionIndex,
 } from "@loomark/core/tree"
+import type { CollectionDTO } from "@loomark/core/types"
 
 import { api } from "@/lib/client/api"
-import { collectionsAtom } from "@/store/atoms"
+import { collectionsQuery } from "@/lib/client/queries"
+import type { CollectionMoveInput } from "@/lib/schemas"
+
+type MoveVariables = {
+  input: CollectionMoveInput
+  previous: CollectionDTO[]
+}
+
+export const useMoveCollection = (fallback: string) => {
+  const queryClient = useQueryClient()
+  const { queryKey } = collectionsQuery
+
+  return useMutation({
+    mutationFn: ({ input }: MoveVariables) => api.moveCollection(input),
+    onSuccess: (collections) => {
+      queryClient.setQueryData(queryKey, collections)
+    },
+    onError: (cause, { previous }) => {
+      queryClient.setQueryData(queryKey, previous)
+      toast.error(errorMessage(cause, fallback))
+    },
+  })
+}
 
 export const useCollectionActions = () => {
-  const router = useRouter()
-  const [collections, setCollections] = useAtom(collectionsAtom)
+  const queryClient = useQueryClient()
+  const { mutateAsync } = useMoveCollection("Move failed")
+  const { queryKey } = collectionsQuery
 
   const move = async (
     id: string,
     parentId: string | null,
     beforeId: string | null = null
   ) => {
+    const collections = queryClient.getQueryData(queryKey) ?? []
     const moving = collections.find((collection) => collection.id === id)
 
     if (!moving) {
@@ -51,18 +75,17 @@ export const useCollectionActions = () => {
       return false
     }
 
-    const previous = collections
-    setCollections(next)
+    await queryClient.cancelQueries({ queryKey })
+    queryClient.setQueryData(queryKey, next)
 
     try {
-      setCollections(await api.moveCollection({ id, parentId, index }))
-      router.refresh()
+      await mutateAsync({
+        input: { id, parentId, index },
+        previous: collections,
+      })
 
       return true
-    } catch (cause) {
-      setCollections(previous)
-      toast.error(errorMessage(cause, "Move failed"))
-
+    } catch {
       return false
     }
   }

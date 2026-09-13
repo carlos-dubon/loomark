@@ -1,9 +1,9 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useAtom, useAtomValue, useSetAtom } from "jotai"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAtom } from "jotai"
 import { WandSparklesIcon } from "lucide-react"
-import { useRouter } from "next/navigation"
 import * as React from "react"
 import { useMemo, useState } from "react"
 import { Controller, useForm, useWatch } from "react-hook-form"
@@ -35,13 +35,15 @@ import {
 import { Switch } from "@loomark/ui/components/switch"
 import { Textarea } from "@loomark/ui/components/textarea"
 
+import { useCollections } from "@/hooks/use-collections"
 import { api } from "@/lib/client/api"
 import {
-  bookmarkDialogAtom,
-  collectionsAtom,
-  upsertBookmarkAtom,
-  type BookmarkDialogState,
-} from "@/store/atoms"
+  invalidateLibrary,
+  metadataQuery,
+  upsertBookmarkInCache,
+} from "@/lib/client/queries"
+import type { BookmarkCreateInput } from "@/lib/schemas"
+import { bookmarkDialogAtom, type BookmarkDialogState } from "@/store/atoms"
 
 const NONE = "__unsorted__"
 
@@ -67,12 +69,9 @@ const BookmarkForm = ({
   state: BookmarkDialogState
   onClose: () => void
 }) => {
-  const router = useRouter()
-  const collections = useAtomValue(collectionsAtom)
-  const upsertBookmark = useSetAtom(upsertBookmarkAtom)
+  const queryClient = useQueryClient()
+  const collections = useCollections()
   const editing = state.bookmark
-
-  const [fetching, setFetching] = useState(false)
 
   const {
     register,
@@ -97,30 +96,41 @@ const BookmarkForm = ({
 
   const url = useWatch({ control, name: "url" })
 
+  const { mutate: loadUrlMetadata, isPending: fetching } = useMutation({
+    mutationFn: (target: string) =>
+      queryClient.fetchQuery(metadataQuery(target)),
+    onSuccess: (metadata) => {
+      setValue("title", metadata.title, { shouldValidate: true })
+      setValue("description", metadata.description ?? "")
+      setValue("faviconUrl", metadata.faviconUrl)
+      setValue("previewUrl", metadata.previewUrl)
+    },
+    onError: () => {
+      toast.error("Could not read that page")
+    },
+  })
+
+  const { mutateAsync: save } = useMutation({
+    mutationFn: (payload: BookmarkCreateInput) =>
+      editing
+        ? api.updateBookmark(editing.id, payload)
+        : api.createBookmark(payload),
+    onSuccess: (bookmark) => {
+      upsertBookmarkInCache(queryClient, bookmark)
+      void invalidateLibrary(queryClient)
+    },
+  })
+
   const flat = useMemo(
     () => flattenTree(buildCollectionTree(collections)),
     [collections]
   )
 
-  const loadMetadata = async () => {
+  const loadMetadata = () => {
     const normalized = safeNormalizeUrl(getValues("url"))
 
-    if (!normalized) {
-      return
-    }
-
-    setFetching(true)
-
-    try {
-      const metadata = await api.fetchMetadata(normalized)
-      setValue("title", metadata.title, { shouldValidate: true })
-      setValue("description", metadata.description ?? "")
-      setValue("faviconUrl", metadata.faviconUrl)
-      setValue("previewUrl", metadata.previewUrl)
-    } catch {
-      toast.error("Could not read that page")
-    } finally {
-      setFetching(false)
+    if (normalized) {
+      loadUrlMetadata(normalized)
     }
   }
 
@@ -138,14 +148,9 @@ const BookmarkForm = ({
         pinned: values.pinned,
       }
 
-      const bookmark = editing
-        ? await api.updateBookmark(editing.id, payload)
-        : await api.createBookmark(payload)
-
-      upsertBookmark(bookmark)
+      await save(payload)
       toast.success(editing ? "Bookmark updated" : "Bookmark saved")
       onClose()
-      router.refresh()
     } catch (cause) {
       setError("root", {
         message: errorMessage(cause, "Something went wrong"),
@@ -174,7 +179,7 @@ const BookmarkForm = ({
                 void urlField.onBlur(event)
 
                 if (!getValues("title").trim()) {
-                  void loadMetadata()
+                  loadMetadata()
                 }
               }}
             />

@@ -1,5 +1,6 @@
 "use client"
 
+import { useMutation } from "@tanstack/react-query"
 import { ImageUpIcon, Trash2Icon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
@@ -29,44 +30,34 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [image, setImage] = useState(profile.image)
-  const [uploading, setUploading] = useState(false)
-  const [removing, setRemoving] = useState(false)
 
   const label = profile.name ?? profile.email
   const initials = label.slice(0, 2).toUpperCase()
 
-  const onPick = async (file: File) => {
-    setUploading(true)
-
-    try {
-      const square = await toSquareImage(file, AVATAR_EDGE)
-      const { image: next } = await api.uploadAvatar(square)
-
+  const { mutate: upload, isPending: uploading } = useMutation({
+    mutationFn: async (file: File) =>
+      api.uploadAvatar(await toSquareImage(file, AVATAR_EDGE)),
+    onSuccess: ({ image: next }) => {
       setImage(next)
       toast.success("Profile picture updated")
       router.refresh()
-    } catch (cause) {
+    },
+    onError: (cause) => {
       toast.error(errorMessage(cause, "Upload failed"))
-    } finally {
-      setUploading(false)
-    }
-  }
+    },
+  })
 
-  const onRemove = async () => {
-    setRemoving(true)
-
-    try {
-      await api.removeAvatar()
-
+  const { mutate: remove, isPending: removing } = useMutation({
+    mutationFn: () => api.removeAvatar(),
+    onSuccess: () => {
       setImage(null)
       toast.success("Profile picture removed")
       router.refresh()
-    } catch (cause) {
+    },
+    onError: (cause) => {
       toast.error(errorMessage(cause, "Removal failed"))
-    } finally {
-      setRemoving(false)
-    }
-  }
+    },
+  })
 
   return (
     <div className="flex items-center gap-4">
@@ -86,7 +77,7 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
             event.target.value = ""
 
             if (file) {
-              void onPick(file)
+              upload(file)
             }
           }}
         />
@@ -108,7 +99,7 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
             variant="destructive-outline"
             disabled={uploading}
             loading={removing}
-            onClick={() => void onRemove()}
+            onClick={() => remove()}
           >
             <Trash2Icon aria-hidden="true" />
             {removing ? "Removing…" : "Remove"}

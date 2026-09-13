@@ -1,6 +1,7 @@
 "use client"
 
 import { useSortable } from "@dnd-kit/react/sortable"
+import { useQuery } from "@tanstack/react-query"
 import { useSetAtom } from "jotai"
 import { PinIcon, PlusIcon, UploadIcon } from "lucide-react"
 import { useMemo } from "react"
@@ -20,7 +21,9 @@ import { SortOrderSelect } from "@/components/sort-order-select"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
 import { useBookmarkPreview } from "@/hooks/use-bookmark-preview"
 import { useCoarsePointer } from "@/hooks/use-coarse-pointer"
+import { bookmarkListQuery } from "@/lib/client/queries"
 import { DRAG_TYPE } from "@/lib/dnd"
+import { LIBRARY_PROBE, PINNED_BOOKMARKS } from "@/lib/query-keys"
 import { bookmarkDialogAtom } from "@/store/atoms"
 
 const PinnedItem = ({
@@ -79,21 +82,16 @@ const PinnedItem = ({
   )
 }
 
-export const HomeView = ({
-  pinned,
-  bookmarkCount,
-}: {
-  pinned: BookmarkDTO[]
-  bookmarkCount?: number
-}) => {
+export const HomeView = () => {
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
+  const { data: probe } = useQuery(bookmarkListQuery(LIBRARY_PROBE))
 
   const addBookmark = () =>
     openBookmarkDialog({ open: true, bookmark: null, collectionId: null })
 
-  const { items, manual } = useBookmarkList(pinned, "pinned")
+  const { items, manual } = useBookmarkList(PINNED_BOOKMARKS, "pinned")
 
-  const isEmptyLibrary = bookmarkCount === 0 && pinned.length === 0
+  const isEmptyLibrary = probe?.length === 0
 
   return (
     <>

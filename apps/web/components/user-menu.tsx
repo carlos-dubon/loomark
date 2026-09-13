@@ -1,5 +1,6 @@
 "use client"
 
+import { useQueryClient } from "@tanstack/react-query"
 import {
   ChevronsUpDownIcon,
   LogOutIcon,
@@ -41,6 +42,7 @@ export type SessionUser = {
 
 export const UserMenu = ({ user }: { user: SessionUser }) => {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const { resolvedTheme } = useTheme()
   const toggleTheme = useThemeToggle()
   const closeSidebar = useCloseSidebar()
@@ -85,6 +87,7 @@ export const UserMenu = ({ user }: { user: SessionUser }) => {
           onClick={() => {
             if (isDemo) {
               demoSignOut()
+              queryClient.clear()
               router.push("/login")
 
               return

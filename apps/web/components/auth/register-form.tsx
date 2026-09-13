@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
@@ -24,6 +25,9 @@ import { registerSchema } from "@/lib/schemas"
 
 export const RegisterForm = () => {
   const router = useRouter()
+  const { mutateAsync: createAccount } = useMutation({
+    mutationFn: api.register,
+  })
 
   const {
     register,
@@ -37,7 +41,7 @@ export const RegisterForm = () => {
 
   const onSubmit = handleSubmit(async (values) => {
     try {
-      await api.register(values)
+      await createAccount(values)
       await signIn("credentials", {
         email: values.email,
         password: values.password,

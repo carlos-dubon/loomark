@@ -1,8 +1,7 @@
 "use client"
 
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useSetAtom } from "jotai"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { toast } from "sonner"
 
 import { errorMessage, plural } from "@loomark/core/format"
@@ -10,52 +9,53 @@ import type { BookmarkDTO } from "@loomark/core/types"
 
 import { api } from "@/lib/client/api"
 import {
-  clearBookmarkSelectionAtom,
-  removeBookmarksAtom,
-  restoreBookmarksAtom,
-} from "@/store/atoms"
+  invalidateLibrary,
+  removeBookmarksFromCache,
+} from "@/lib/client/queries"
+import { clearBookmarkSelectionAtom } from "@/store/atoms"
 
 export const useBookmarkDelete = () => {
-  const router = useRouter()
-  const removeBookmarks = useSetAtom(removeBookmarksAtom)
-  const restoreBookmarks = useSetAtom(restoreBookmarksAtom)
+  const queryClient = useQueryClient()
   const clearSelection = useSetAtom(clearBookmarkSelectionAtom)
 
-  const [pending, setPending] = useState(false)
-
-  const undo = async (bookmarks: BookmarkDTO[]) => {
-    try {
-      restoreBookmarks(await api.restoreBookmarks(bookmarks))
+  const { mutate: restore } = useMutation({
+    mutationFn: (bookmarks: BookmarkDTO[]) => api.restoreBookmarks(bookmarks),
+    onSuccess: (bookmarks) => {
+      void invalidateLibrary(queryClient)
       toast.success(`${plural(bookmarks.length, "bookmark")} restored`)
-      router.refresh()
-    } catch (cause) {
+    },
+    onError: (cause) => {
       toast.error(errorMessage(cause, "Restore failed"))
-    }
-  }
+    },
+  })
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (bookmarks: BookmarkDTO[]) =>
+      api.deleteBookmarks(bookmarks.map((bookmark) => bookmark.id)),
+    onSuccess: (_result, bookmarks) => {
+      removeBookmarksFromCache(
+        queryClient,
+        bookmarks.map((bookmark) => bookmark.id)
+      )
+      clearSelection()
+      void invalidateLibrary(queryClient)
+
+      toast.success(`${plural(bookmarks.length, "bookmark")} deleted`, {
+        action: { label: "Undo", onClick: () => restore(bookmarks) },
+      })
+    },
+    onError: (cause) => {
+      toast.error(errorMessage(cause, "Delete failed"))
+    },
+  })
 
   const destroy = async (bookmarks: BookmarkDTO[]) => {
     if (bookmarks.length === 0) {
       return
     }
 
-    setPending(true)
-
-    try {
-      await api.deleteBookmarks(bookmarks.map((bookmark) => bookmark.id))
-
-      removeBookmarks(bookmarks.map((bookmark) => bookmark.id))
-      clearSelection()
-      router.refresh()
-
-      toast.success(`${plural(bookmarks.length, "bookmark")} deleted`, {
-        action: { label: "Undo", onClick: () => void undo(bookmarks) },
-      })
-    } catch (cause) {
-      toast.error(errorMessage(cause, "Delete failed"))
-    } finally {
-      setPending(false)
-    }
+    await mutateAsync(bookmarks).catch(() => null)
   }
 
-  return { destroy, pending }
+  return { destroy, pending: isPending }
 }

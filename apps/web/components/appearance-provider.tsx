@@ -1,35 +1,21 @@
 "use client"
 
-import { useAtomValue } from "jotai"
 import { useHydrateAtoms } from "jotai/utils"
+import { useMemo } from "react"
 
-import type { AppearanceDTO } from "@/lib/themes/appearance"
-import {
-  appearanceAtom,
-  openInNewTabAtom,
-  sortOrderAtom,
-  themeCssAtom,
-  viewModeAtom,
-} from "@/store/atoms"
+import { useAppearance } from "@/hooks/use-appearance"
+import { THEMES } from "@/lib/themes/palettes"
+import { findTheme, themeToCss } from "@/lib/themes/theme"
+import { openInNewTabAtom } from "@/store/atoms"
 
 export const AppearanceProvider = ({
-  appearance,
-  themeCss,
   openInNewTab,
   children,
 }: {
-  appearance: AppearanceDTO
-  themeCss: string
   openInNewTab: boolean
   children: React.ReactNode
 }) => {
-  useHydrateAtoms([
-    [appearanceAtom, appearance],
-    [viewModeAtom, appearance.viewMode],
-    [sortOrderAtom, appearance.sortOrder],
-    [themeCssAtom, themeCss],
-    [openInNewTabAtom, openInNewTab],
-  ])
+  useHydrateAtoms([[openInNewTabAtom, openInNewTab]])
 
   return (
     <>
@@ -40,7 +26,8 @@ export const AppearanceProvider = ({
 }
 
 const ThemeStyle = () => {
-  const css = useAtomValue(themeCssAtom)
+  const { themeId } = useAppearance()
+  const css = useMemo(() => themeToCss(findTheme(THEMES, themeId)), [themeId])
 
   return css ? <style dangerouslySetInnerHTML={{ __html: css }} /> : null
 }

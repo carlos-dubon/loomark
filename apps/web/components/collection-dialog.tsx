@@ -1,8 +1,8 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { useRouter } from "next/navigation"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useAtom } from "jotai"
 import { useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -32,14 +32,14 @@ import {
 } from "@loomark/ui/components/select"
 
 import { IconPicker } from "@/components/icon-picker"
+import { useCollections } from "@/hooks/use-collections"
 import { api } from "@/lib/client/api"
-import { collectionCreateSchema } from "@/lib/schemas"
+import { collectionsQuery, upsertCollectionInCache } from "@/lib/client/queries"
 import {
-  collectionDialogAtom,
-  collectionsAtom,
-  upsertCollectionAtom,
-  type CollectionDialogState,
-} from "@/store/atoms"
+  collectionCreateSchema,
+  type CollectionCreateInput,
+} from "@/lib/schemas"
+import { collectionDialogAtom, type CollectionDialogState } from "@/store/atoms"
 
 const NONE = "__root__"
 
@@ -50,9 +50,8 @@ const CollectionForm = ({
   state: CollectionDialogState
   onClose: () => void
 }) => {
-  const router = useRouter()
-  const collections = useAtomValue(collectionsAtom)
-  const upsertCollection = useSetAtom(upsertCollectionAtom)
+  const queryClient = useQueryClient()
+  const collections = useCollections()
   const editing = state.collection
 
   const {
@@ -70,6 +69,19 @@ const CollectionForm = ({
     },
   })
 
+  const { mutateAsync: save } = useMutation({
+    mutationFn: (values: CollectionCreateInput) =>
+      editing
+        ? api.updateCollection(editing.id, values)
+        : api.createCollection(values),
+    onSuccess: (collection) => {
+      upsertCollectionInCache(queryClient, collection)
+      void queryClient.invalidateQueries({
+        queryKey: collectionsQuery.queryKey,
+      })
+    },
+  })
+
   const options = useMemo(() => {
     const excluded = editing
       ? new Set(collectDescendantIds(collections, editing.id))
@@ -82,14 +94,9 @@ const CollectionForm = ({
 
   const onSubmit = handleSubmit(async (values) => {
     try {
-      const collection = editing
-        ? await api.updateCollection(editing.id, values)
-        : await api.createCollection(values)
-
-      upsertCollection(collection)
+      await save(values)
       toast.success(editing ? "Collection updated" : "Collection created")
       onClose()
-      router.refresh()
     } catch (cause) {
       setError("root", {
         message: errorMessage(cause, "Something went wrong"),

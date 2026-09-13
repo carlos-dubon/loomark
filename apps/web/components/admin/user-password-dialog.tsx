@@ -1,5 +1,6 @@
 "use client"
 
+import { useMutation } from "@tanstack/react-query"
 import { KeyRoundIcon, ShuffleIcon } from "lucide-react"
 import * as React from "react"
 import { useState } from "react"
@@ -38,26 +39,25 @@ export const UserPasswordDialog = ({
   onOpenChange: (open: boolean) => void
 }) => {
   const [password, setPassword] = useState("")
-  const [pending, setPending] = useState(false)
 
   const tooShort = password.length < 8
 
-  const onSubmit = async () => {
-    if (!user || tooShort) {
-      return
-    }
-
-    setPending(true)
-
-    try {
-      await api.resetUserPassword(user.id, password)
-      toast.success(`Password updated for ${user.email}`)
+  const { mutate: reset, isPending: pending } = useMutation({
+    mutationFn: ({ target, next }: { target: InstanceUserDTO; next: string }) =>
+      api.resetUserPassword(target.id, next),
+    onSuccess: (_result, { target }) => {
+      toast.success(`Password updated for ${target.email}`)
       setPassword("")
       onOpenChange(false)
-    } catch (cause) {
+    },
+    onError: (cause) => {
       toast.error(errorMessage(cause, "Reset failed"))
-    } finally {
-      setPending(false)
+    },
+  })
+
+  const onSubmit = () => {
+    if (user && !tooShort) {
+      reset({ target: user, next: password })
     }
   }
 
@@ -87,7 +87,7 @@ export const UserPasswordDialog = ({
         <form
           onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault()
-            void onSubmit()
+            onSubmit()
           }}
         >
           <Field label="New password" htmlFor="new-password">
@@ -125,11 +125,7 @@ export const UserPasswordDialog = ({
           <DialogClose render={<Button variant="outline" disabled={pending} />}>
             Cancel
           </DialogClose>
-          <Button
-            disabled={tooShort}
-            loading={pending}
-            onClick={() => void onSubmit()}
-          >
+          <Button disabled={tooShort} loading={pending} onClick={onSubmit}>
             <KeyRoundIcon aria-hidden="true" />
             {pending ? "Setting…" : "Set password"}
           </Button>

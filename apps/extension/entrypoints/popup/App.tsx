@@ -1,3 +1,4 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   CheckIcon,
   ExternalLinkIcon,
@@ -11,7 +12,6 @@ import { errorMessage } from "@loomark/core/format"
 import { unsortedCollection } from "@loomark/core/tree"
 import type {
   ActiveTab,
-  BookmarkDTO,
   CollectionDTO,
   Connection,
 } from "@loomark/core/types"
@@ -25,21 +25,14 @@ import { CollectionForm } from "@/components/collection-form"
 import { useSyncStatus } from "@/hooks/use-sync-status"
 import { SettingsPanel } from "@/components/settings-panel"
 import { SetupForm } from "@/components/setup-form"
-import {
-  disconnect,
-  isOffline,
-  isUnauthorized,
-  listCollections,
-  lookupBookmark,
-  type Auth,
-} from "@/lib/api"
+import { disconnect, isOffline, isUnauthorized, type Auth } from "@/lib/api"
 import { requestHostPermission } from "@/lib/permissions"
 import {
-  clearConnection,
-  readConnection,
-  readLastCollectionId,
-  writeConnection,
-} from "@/lib/storage"
+  bookmarkLookupQuery,
+  collectionsQuery,
+  lastCollectionIdQuery,
+} from "@/lib/queries"
+import { clearConnection, readConnection, writeConnection } from "@/lib/storage"
 import { readActiveTab } from "@/lib/tabs"
 
 const Shell = ({ children }: { children: React.ReactNode }) => (
@@ -157,14 +150,24 @@ const Workspace = ({
     token: connection.token,
   }
 
-  const [collections, setCollections] = useState<CollectionDTO[] | null>(null)
-  const [bookmark, setBookmark] = useState<BookmarkDTO | null>(null)
-  const [defaultCollectionId, setDefaultCollectionId] = useState("")
+  const queryClient = useQueryClient()
+  const collectionsOptions = collectionsQuery(auth)
+  const lookupOptions = bookmarkLookupQuery(auth, tab.url)
+
+  const collectionsResult = useQuery(collectionsOptions)
+  const lookupResult = useQuery(lookupOptions)
+  const lastIdResult = useQuery(lastCollectionIdQuery)
+
+  const { mutate: revoke } = useMutation({
+    mutationFn: () => disconnect(auth),
+  })
+
+  const [preferredCollectionId, setPreferredCollectionId] = useState<
+    string | null
+  >(null)
   const [pendingCollectionId, setPendingCollectionId] = useState<string | null>(
     null
   )
-  const [error, setError] = useState<string | null>(null)
-  const [offline, setOffline] = useState(false)
   const [creating, setCreating] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
 
@@ -172,56 +175,46 @@ const Workspace = ({
     setPendingCollectionId(null)
   }, [])
 
-  const load = useCallback(async () => {
-    try {
-      const [list, existing, lastId] = await Promise.all([
-        listCollections(auth),
-        lookupBookmark(auth, tab.url),
-        readLastCollectionId(),
-      ])
-
-      const fallback = unsortedCollection(list)?.id ?? list[0]?.id ?? ""
-      const remembered =
-        lastId && list.some((item) => item.id === lastId) ? lastId : null
-
-      setCollections(list)
-      setBookmark(existing)
-      setDefaultCollectionId(existing?.collectionId ?? remembered ?? fallback)
-    } catch (cause) {
-      if (isUnauthorized(cause)) {
-        onExpired()
-        return
-      }
-
-      setOffline(isOffline(cause))
-      setError(errorMessage(cause, "Could not reach Loomark"))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connection.serverUrl, connection.token, tab.url])
+  const cause = collectionsResult.error ?? lookupResult.error
+  const expired = isUnauthorized(cause)
+  const fetching = collectionsResult.isFetching || lookupResult.isFetching
 
   useEffect(() => {
-    // load() only touches state after awaiting network I/O, so this never
-    // cascades renders synchronously.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    void load()
-  }, [load])
+    if (expired) {
+      onExpired()
+    }
+  }, [expired, onExpired])
 
-  const retry = useCallback(() => {
-    setError(null)
-    setOffline(false)
-    void load()
-  }, [load])
+  const retry = () => {
+    void collectionsResult.refetch()
+    void lookupResult.refetch()
+  }
+
+  const collections = collectionsResult.data ?? null
+  const bookmark = lookupResult.data ?? null
+  const loaded = collections && lookupResult.isSuccess && lastIdResult.isSuccess
+
+  const lastId = lastIdResult.data
+  const remembered =
+    lastId && collections?.some((item) => item.id === lastId) ? lastId : null
+  const fallback = collections
+    ? (unsortedCollection(collections)?.id ?? collections[0]?.id ?? "")
+    : ""
+  const defaultCollectionId =
+    preferredCollectionId ?? bookmark?.collectionId ?? remembered ?? fallback
 
   const savedIn =
     collections?.find((item) => item.id === bookmark?.collectionId) ?? null
 
   const body = () => {
-    if (error) {
+    if (cause && !expired && !fetching) {
       return (
         <Centered>
-          <p className="text-sm text-muted-foreground">{error}</p>
+          <p className="text-sm text-muted-foreground">
+            {errorMessage(cause, "Could not reach Loomark")}
+          </p>
           <div className="flex gap-2">
-            {offline ? (
+            {isOffline(cause) ? (
               <Button
                 variant="outline"
                 size="sm"
@@ -240,7 +233,7 @@ const Workspace = ({
       )
     }
 
-    if (!collections) {
+    if (!loaded) {
       return (
         <Centered>
           <Spinner className="size-5 text-muted-foreground" />
@@ -261,10 +254,15 @@ const Workspace = ({
             pendingCollectionId={pendingCollectionId}
             onCollectionApplied={clearPendingCollection}
             onSaved={(saved) => {
-              setBookmark(saved)
-              setDefaultCollectionId(saved.collectionId)
+              queryClient.setQueryData(lookupOptions.queryKey, saved)
+              setPreferredCollectionId(saved.collectionId)
             }}
-            onRemoved={() => setBookmark(null)}
+            onRemoved={() => {
+              setPreferredCollectionId(
+                (current) => current ?? bookmark?.collectionId ?? null
+              )
+              queryClient.setQueryData(lookupOptions.queryKey, null)
+            }}
             onNewCollection={() => setCreating(true)}
           />
         </div>
@@ -275,8 +273,11 @@ const Workspace = ({
             defaultParentId={null}
             onCancel={() => setCreating(false)}
             onCreated={(collection) => {
-              setCollections([...collections, collection])
-              setDefaultCollectionId(collection.id)
+              queryClient.setQueryData(collectionsOptions.queryKey, [
+                ...collections,
+                collection,
+              ])
+              setPreferredCollectionId(collection.id)
               setPendingCollectionId(collection.id)
               setCreating(false)
             }}
@@ -304,7 +305,7 @@ const Workspace = ({
         saved={Boolean(bookmark)}
         onOpenSettings={() => setShowSettings(true)}
         onDisconnect={() => {
-          void disconnect(auth).catch(() => null)
+          revoke()
           onDisconnect()
         }}
       />
@@ -313,6 +314,7 @@ const Workspace = ({
 }
 
 export const App = () => {
+  const queryClient = useQueryClient()
   const [connection, setConnection] = useState<Connection | null>(null)
   const [tab, setTab] = useState<ActiveTab | null>(null)
   const [booted, setBooted] = useState(false)
@@ -374,6 +376,7 @@ export const App = () => {
 
   const reset = () => {
     void clearConnection()
+    queryClient.clear()
     setConnection(null)
   }
 

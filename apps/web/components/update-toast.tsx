@@ -1,12 +1,10 @@
 "use client"
 
-import { useAtomValue } from "jotai"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { toast } from "sonner"
 
-import { useUpdateWatcher } from "@/hooks/use-updates"
-import { updateStatusAtom } from "@/store/atoms"
+import { useUpdateStatus } from "@/hooks/use-updates"
 
 const SEEN_KEY = "loomark:update-seen"
 
@@ -27,9 +25,7 @@ const remember = (version: string) => {
 }
 
 export const UpdateToast = ({ isOwner }: { isOwner: boolean }) => {
-  useUpdateWatcher(isOwner)
-
-  const status = useAtomValue(updateStatusAtom)
+  const status = useUpdateStatus(isOwner)
   const router = useRouter()
   const shown = useRef(false)
 

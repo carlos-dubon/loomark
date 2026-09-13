@@ -1,8 +1,9 @@
 "use client"
 
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { ClockIcon, XIcon } from "lucide-react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 import { hostFromUrl } from "@loomark/core/url"
 import { Button } from "@loomark/ui/components/button"
@@ -18,16 +19,14 @@ import {
 
 import { FaviconImage } from "@/components/favicon-image"
 import { useOpenInNewTab } from "@/hooks/use-open-in-new-tab"
-import { api } from "@/lib/client/api"
+import { bookmarkListQuery } from "@/lib/client/queries"
 import {
   clearRecentSearchesAtom,
   pushRecentSearchAtom,
   recentSearchesAtom,
   removeRecentSearchAtom,
   searchDialogAtom,
-  searchPendingAtom,
   searchQueryAtom,
-  searchResultsAtom,
 } from "@/store/atoms"
 
 const SEARCH_DEBOUNCE_MS = 200
@@ -36,8 +35,7 @@ const SEARCH_LIMIT = 20
 export const BookmarkSearchDialog = () => {
   const [open, setOpen] = useAtom(searchDialogAtom)
   const [query, setQuery] = useAtom(searchQueryAtom)
-  const [results, setResults] = useAtom(searchResultsAtom)
-  const [pending, setPending] = useAtom(searchPendingAtom)
+  const [debounced, setDebounced] = useState("")
   const recents = useAtomValue(recentSearchesAtom)
   const pushRecent = useSetAtom(pushRecentSearchAtom)
   const removeRecent = useSetAtom(removeRecentSearchAtom)
@@ -65,46 +63,30 @@ export const BookmarkSearchDialog = () => {
   }, [open, setQuery])
 
   useEffect(() => {
-    const term = query.trim()
+    const timeout = setTimeout(
+      () => setDebounced(query.trim()),
+      SEARCH_DEBOUNCE_MS
+    )
 
-    if (!term) {
-      setResults(null)
-      setPending(false)
+    return () => clearTimeout(timeout)
+  }, [query])
 
-      return
-    }
+  const term = query.trim()
 
-    setPending(true)
+  const search = useQuery({
+    ...bookmarkListQuery({ q: debounced, take: SEARCH_LIMIT }),
+    enabled: debounced.length > 0,
+    placeholderData: keepPreviousData,
+  })
 
-    const controller = new AbortController()
-    const timeout = setTimeout(() => {
-      api
-        .listBookmarks({ q: term, take: SEARCH_LIMIT }, controller.signal)
-        .then((bookmarks) => {
-          setResults(bookmarks)
-          setPending(false)
-        })
-        .catch(() => {
-          if (controller.signal.aborted) return
-
-          setResults([])
-          setPending(false)
-        })
-    }, SEARCH_DEBOUNCE_MS)
-
-    return () => {
-      clearTimeout(timeout)
-      controller.abort()
-    }
-  }, [query, setResults, setPending])
+  const pending = term.length > 0 && (term !== debounced || search.isFetching)
+  const results = search.isError ? [] : (search.data ?? null)
 
   const openBookmark = (url: string) => {
     pushRecent(query)
     setOpen(false)
     openUrl(url)
   }
-
-  const term = query.trim()
 
   return (
     <CommandDialog

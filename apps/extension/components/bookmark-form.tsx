@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { PlusIcon, WandSparklesIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
@@ -16,11 +17,11 @@ import { Switch } from "@loomark/ui/components/switch"
 import {
   createBookmark,
   deleteBookmark,
-  fetchMetadata,
   updateBookmark,
   type Auth,
 } from "@/lib/api"
 import { notifyBookmarksChanged } from "@/lib/messages"
+import { lastCollectionIdQuery, metadataQuery } from "@/lib/queries"
 import { bookmarkFormSchema, type BookmarkFormValues } from "@/lib/schemas"
 import { writeLastCollectionId } from "@/lib/storage"
 
@@ -47,9 +48,8 @@ export const BookmarkForm = ({
   onRemoved: () => void
   onNewCollection: () => void
 }) => {
-  const [fetching, setFetching] = useState(false)
+  const queryClient = useQueryClient()
   const [confirmingRemove, setConfirmingRemove] = useState(false)
-  const [removing, setRemoving] = useState(false)
 
   const {
     register,
@@ -79,21 +79,61 @@ export const BookmarkForm = ({
 
   const options = flattenCollections(collections)
 
-  const loadMetadata = async () => {
-    setFetching(true)
-
-    try {
-      const metadata = await fetchMetadata(auth, tab.url)
+  const { mutate: loadMetadata, isPending: fetching } = useMutation({
+    mutationFn: () => queryClient.fetchQuery(metadataQuery(auth, tab.url)),
+    onSuccess: (metadata) => {
       setValue("title", metadata.title, { shouldValidate: true })
       setValue("description", metadata.description ?? "")
-    } catch {
+    },
+    onError: () => {
       setError("root", { message: "Could not read that page" })
-    } finally {
-      setFetching(false)
-    }
-  }
+    },
+  })
 
-  const remove = async () => {
+  const { mutate: removeBookmark, isPending: removing } = useMutation({
+    mutationFn: async (id: string) => {
+      await deleteBookmark(auth, id)
+      await notifyBookmarksChanged()
+    },
+    onSuccess: () => {
+      onRemoved()
+    },
+    onError: (cause) => {
+      setError("root", {
+        message: errorMessage(cause, "Could not remove it"),
+      })
+    },
+    onSettled: () => {
+      setConfirmingRemove(false)
+    },
+  })
+
+  const { mutateAsync: save } = useMutation({
+    mutationFn: async (payload: {
+      title?: string
+      description: string | null
+      collectionId: string | null
+      pinned: boolean
+    }) => {
+      const saved = bookmark
+        ? await updateBookmark(auth, bookmark.id, payload)
+        : await createBookmark(auth, { url: tab.url, ...payload })
+
+      await writeLastCollectionId(saved.collectionId)
+      await notifyBookmarksChanged()
+
+      return saved
+    },
+    onSuccess: (saved) => {
+      queryClient.setQueryData(
+        lastCollectionIdQuery.queryKey,
+        saved.collectionId
+      )
+      onSaved(saved)
+    },
+  })
+
+  const remove = () => {
     if (!bookmark) {
       return
     }
@@ -103,20 +143,7 @@ export const BookmarkForm = ({
       return
     }
 
-    setRemoving(true)
-
-    try {
-      await deleteBookmark(auth, bookmark.id)
-      await notifyBookmarksChanged()
-      onRemoved()
-    } catch (cause) {
-      setError("root", {
-        message: errorMessage(cause, "Could not remove it"),
-      })
-    } finally {
-      setRemoving(false)
-      setConfirmingRemove(false)
-    }
+    removeBookmark(bookmark.id)
   }
 
   const onSubmit = handleSubmit(async (values) => {
@@ -128,13 +155,7 @@ export const BookmarkForm = ({
     }
 
     try {
-      const saved = bookmark
-        ? await updateBookmark(auth, bookmark.id, payload)
-        : await createBookmark(auth, { url: tab.url, ...payload })
-
-      await writeLastCollectionId(saved.collectionId)
-      await notifyBookmarksChanged()
-      onSaved(saved)
+      await save(payload)
     } catch (cause) {
       setError("root", {
         message: errorMessage(cause, "Could not save it"),
@@ -164,7 +185,7 @@ export const BookmarkForm = ({
             size="icon"
             aria-label="Read details from the page"
             loading={fetching}
-            onClick={loadMetadata}
+            onClick={() => loadMetadata()}
           >
             <WandSparklesIcon />
           </Button>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useSetAtom } from "jotai"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { DownloadIcon, FileCodeIcon, UploadIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -22,7 +22,7 @@ import {
 
 import { SettingsCard, SettingsPage } from "@/components/settings/settings-page"
 import { api } from "@/lib/client/api"
-import { collectionsAtom } from "@/store/atoms"
+import { invalidateLibrary } from "@/lib/client/queries"
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 
@@ -48,23 +48,17 @@ export const TransferView = ({
   collectionCount: number
 }) => {
   const router = useRouter()
-  const setCollections = useSetAtom(collectionsAtom)
+  const queryClient = useQueryClient()
 
   const [file, setFile] = useState<File | null>(null)
   const [summary, setSummary] = useState<ImportSummary | null>(null)
-  const [importing, setImporting] = useState(false)
 
-  const onImport = async () => {
-    if (!file) {
-      return
-    }
-
-    setSummary(null)
-    setImporting(true)
-
-    try {
-      const result = await api.importBookmarks(file)
-
+  const { mutate: importFile, isPending: importing } = useMutation({
+    mutationFn: (selected: File) => api.importBookmarks(selected),
+    onMutate: () => {
+      setSummary(null)
+    },
+    onSuccess: async (result) => {
       setSummary(result)
       setFile(null)
 
@@ -74,12 +68,17 @@ export const TransferView = ({
         toast.success(`${plural(result.bookmarks, "bookmark")} imported`)
       }
 
-      setCollections(await api.listCollections())
+      await invalidateLibrary(queryClient)
       router.refresh()
-    } catch (cause) {
+    },
+    onError: (cause) => {
       toast.error(errorMessage(cause, "Import failed"))
-    } finally {
-      setImporting(false)
+    },
+  })
+
+  const onImport = () => {
+    if (file) {
+      importFile(file)
     }
   }
 
@@ -135,11 +134,7 @@ export const TransferView = ({
             </div>
           ) : null}
           <div>
-            <Button
-              disabled={!file}
-              loading={importing}
-              onClick={() => void onImport()}
-            >
+            <Button disabled={!file} loading={importing} onClick={onImport}>
               <UploadIcon aria-hidden="true" />
               {importing ? "Importing…" : "Import"}
             </Button>

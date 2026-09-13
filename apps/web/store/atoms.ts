@@ -1,17 +1,10 @@
 import { atom } from "jotai"
 import { atomWithStorage } from "jotai/utils"
 
-import type { SortOrder } from "@loomark/core/sort"
 import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
-import {
-  IDLE_UPDATE_JOB,
-  type UpdateJob,
-  type UpdateStatus,
-} from "@loomark/core/updates"
-import type { ViewMode } from "@loomark/core/view-mode"
+import { IDLE_UPDATE_JOB, type UpdateJob } from "@loomark/core/updates"
 
-import type { AppearanceDTO } from "@/lib/themes/appearance"
-import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
+import type { BookmarkQuery } from "@/lib/query-keys"
 
 export type BookmarkDialogState = {
   open: boolean
@@ -25,20 +18,9 @@ export type CollectionDialogState = {
   parentId: string | null
 }
 
-type BookmarkListState = {
-  source: BookmarkDTO[]
-  items: BookmarkDTO[]
-}
-
-export const collectionsAtom = atom<CollectionDTO[]>([])
-
-export const updateStatusAtom = atom<UpdateStatus | null>(null)
-
 export const updateJobAtom = atom<UpdateJob>(IDLE_UPDATE_JOB)
 
-export const appearanceAtom = atom<AppearanceDTO>(DEFAULT_APPEARANCE)
-
-export const themeCssAtom = atom("")
+export const activeBookmarkQueryAtom = atom<BookmarkQuery | null>(null)
 
 export const selectedBookmarkIdsAtom = atom<ReadonlySet<string>>(
   new Set<string>()
@@ -68,31 +50,31 @@ export const clearBookmarkSelectionAtom = atom(null, (_get, set) => {
   set(selectedBookmarkIdsAtom, new Set<string>())
 })
 
+export const deselectBookmarksAtom = atom(
+  null,
+  (get, set, ids: Iterable<string>) => {
+    const selected = get(selectedBookmarkIdsAtom)
+
+    if (selected.size === 0) {
+      return
+    }
+
+    const removed = new Set(ids)
+
+    set(
+      selectedBookmarkIdsAtom,
+      new Set([...selected].filter((id) => !removed.has(id)))
+    )
+  }
+)
+
 export const deleteDialogAtom = atom<BookmarkDTO[]>([])
 
 export const collectionDeleteDialogAtom = atom<CollectionDTO | null>(null)
 
-export const bookmarkListAtom = atom<BookmarkListState>({
-  source: [],
-  items: [],
-})
-
-export const setBookmarkItemsAtom = atom(
-  null,
-  (get, set, update: (items: BookmarkDTO[]) => BookmarkDTO[]) => {
-    const list = get(bookmarkListAtom)
-
-    set(bookmarkListAtom, { ...list, items: update(list.items) })
-  }
-)
-
 export const searchDialogAtom = atom(false)
 
 export const searchQueryAtom = atom("")
-
-export const searchResultsAtom = atom<BookmarkDTO[] | null>(null)
-
-export const searchPendingAtom = atom(false)
 
 const RECENT_SEARCH_LIMIT = 8
 
@@ -124,10 +106,6 @@ export const clearRecentSearchesAtom = atom(null, (_get, set) => {
   set(recentSearchesAtom, [])
 })
 
-export const viewModeAtom = atom<ViewMode>("grid")
-
-export const sortOrderAtom = atom<SortOrder>("custom")
-
 export const openInNewTabAtom = atom(true)
 
 export const bookmarkDialogAtom = atom<BookmarkDialogState>({
@@ -140,131 +118,4 @@ export const collectionDialogAtom = atom<CollectionDialogState>({
   open: false,
   collection: null,
   parentId: null,
-})
-
-export const upsertBookmarkAtom = atom(
-  null,
-  (get, set, bookmark: BookmarkDTO) => {
-    const results = get(searchResultsAtom)
-
-    if (results) {
-      set(
-        searchResultsAtom,
-        results.some((item) => item.id === bookmark.id)
-          ? results.map((item) => (item.id === bookmark.id ? bookmark : item))
-          : [bookmark, ...results]
-      )
-    }
-
-    const list = get(bookmarkListAtom)
-
-    if (list.items.some((item) => item.id === bookmark.id)) {
-      set(bookmarkListAtom, {
-        ...list,
-        items: list.items.map((item) =>
-          item.id === bookmark.id ? bookmark : item
-        ),
-      })
-    }
-  }
-)
-
-export const removeBookmarksAtom = atom(
-  null,
-  (get, set, ids: Iterable<string>) => {
-    const removed = new Set(ids)
-    const results = get(searchResultsAtom)
-
-    if (results) {
-      set(
-        searchResultsAtom,
-        results.filter((item) => !removed.has(item.id))
-      )
-    }
-
-    const list = get(bookmarkListAtom)
-
-    set(bookmarkListAtom, {
-      ...list,
-      items: list.items.filter((item) => !removed.has(item.id)),
-    })
-
-    const selected = get(selectedBookmarkIdsAtom)
-
-    if (selected.size > 0) {
-      set(
-        selectedBookmarkIdsAtom,
-        new Set([...selected].filter((id) => !removed.has(id)))
-      )
-    }
-  }
-)
-
-export const restoreBookmarksAtom = atom(
-  null,
-  (get, set, bookmarks: BookmarkDTO[]) => {
-    const results = get(searchResultsAtom)
-
-    if (results) {
-      const known = new Set(results.map((item) => item.id))
-
-      set(searchResultsAtom, [
-        ...bookmarks.filter((item) => !known.has(item.id)),
-        ...results,
-      ])
-    }
-
-    const list = get(bookmarkListAtom)
-    const known = new Set(list.items.map((item) => item.id))
-
-    set(bookmarkListAtom, {
-      ...list,
-      items: [
-        ...bookmarks.filter((item) => !known.has(item.id)),
-        ...list.items,
-      ],
-    })
-  }
-)
-
-export const upsertCollectionAtom = atom(
-  null,
-  (get, set, collection: CollectionDTO) => {
-    const collections = get(collectionsAtom)
-
-    set(
-      collectionsAtom,
-      collections.some((item) => item.id === collection.id)
-        ? collections.map((item) =>
-            item.id === collection.id ? collection : item
-          )
-        : [...collections, collection]
-    )
-  }
-)
-
-export const removeCollectionAtom = atom(null, (get, set, id: string) => {
-  const remaining = get(collectionsAtom).filter((item) => item.id !== id)
-  const removed = new Set([id])
-  let changed = true
-
-  while (changed) {
-    changed = false
-
-    for (const collection of remaining) {
-      if (
-        collection.parentId &&
-        removed.has(collection.parentId) &&
-        !removed.has(collection.id)
-      ) {
-        removed.add(collection.id)
-        changed = true
-      }
-    }
-  }
-
-  set(
-    collectionsAtom,
-    remaining.filter((collection) => !removed.has(collection.id))
-  )
 })

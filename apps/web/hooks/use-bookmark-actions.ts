@@ -1,42 +1,53 @@
 "use client"
 
-import { useSetAtom } from "jotai"
-import { useRouter } from "next/navigation"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 import { errorMessage } from "@loomark/core/format"
 import type { BookmarkDTO } from "@loomark/core/types"
 
 import { api } from "@/lib/client/api"
-import { upsertBookmarkAtom } from "@/store/atoms"
+import { invalidateLibrary, upsertBookmarkInCache } from "@/lib/client/queries"
 
 export const useBookmarkActions = () => {
-  const router = useRouter()
-  const upsertBookmark = useSetAtom(upsertBookmarkAtom)
+  const queryClient = useQueryClient()
 
-  const togglePin = async (bookmark: BookmarkDTO) => {
-    try {
-      const updated = await api.updateBookmark(bookmark.id, {
-        pinned: !bookmark.pinned,
-      })
-      upsertBookmark(updated)
+  const applyUpdate = (updated: BookmarkDTO) => {
+    upsertBookmarkInCache(queryClient, updated)
+    void invalidateLibrary(queryClient)
+  }
+
+  const { mutate: togglePin } = useMutation({
+    mutationFn: (bookmark: BookmarkDTO) =>
+      api.updateBookmark(bookmark.id, { pinned: !bookmark.pinned }),
+    onSuccess: (updated) => {
+      applyUpdate(updated)
       toast.success(updated.pinned ? "Pinned to homepage" : "Unpinned")
-      router.refresh()
-    } catch (cause) {
+    },
+    onError: (cause) => {
       toast.error(errorMessage(cause, "Update failed"))
-    }
-  }
+    },
+  })
 
-  const move = async (bookmark: BookmarkDTO, collectionId: string | null) => {
-    try {
-      const updated = await api.updateBookmark(bookmark.id, { collectionId })
-      upsertBookmark(updated)
+  const { mutate: moveBookmark } = useMutation({
+    mutationFn: ({
+      bookmark,
+      collectionId,
+    }: {
+      bookmark: BookmarkDTO
+      collectionId: string | null
+    }) => api.updateBookmark(bookmark.id, { collectionId }),
+    onSuccess: (updated) => {
+      applyUpdate(updated)
       toast.success("Bookmark moved")
-      router.refresh()
-    } catch (cause) {
+    },
+    onError: (cause) => {
       toast.error(errorMessage(cause, "Move failed"))
-    }
-  }
+    },
+  })
+
+  const move = (bookmark: BookmarkDTO, collectionId: string | null) =>
+    moveBookmark({ bookmark, collectionId })
 
   const copyLink = async (bookmark: BookmarkDTO) => {
     try {

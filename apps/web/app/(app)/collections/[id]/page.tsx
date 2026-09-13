@@ -1,11 +1,13 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 
 import { BookmarkListView } from "@/components/views/bookmark-list-view"
 import { DemoCollection } from "@/components/demo/demo-collection"
 import { auth } from "@/lib/server/auth"
-import { collectionEmptyState } from "@/lib/collection-view"
 import { isDemo } from "@/lib/demo/config"
+import { makeQueryClient } from "@/lib/query-client"
+import { collectionBookmarks, queryKeys } from "@/lib/query-keys"
 import { getBookmarks, getCollection } from "@/lib/server/queries"
 
 export const generateMetadata = async ({
@@ -51,19 +53,19 @@ const CollectionPage = async ({
     notFound()
   }
 
-  const bookmarks = await getBookmarks(session.user.id, {
-    collectionId: id,
-    take: 200,
+  const userId = session.user.id
+  const query = collectionBookmarks(collection.id)
+  const queryClient = makeQueryClient()
+
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.bookmarkList(query),
+    queryFn: () => getBookmarks(userId, query),
   })
 
   return (
-    <BookmarkListView
-      title={collection.name}
-      collectionId={collection.id}
-      collection={collection}
-      bookmarks={bookmarks}
-      {...collectionEmptyState(collection)}
-    />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <BookmarkListView collectionId={collection.id} />
+    </HydrationBoundary>
   )
 }
 

@@ -1,36 +1,43 @@
 "use client"
 
-import { useAtom, useAtomValue } from "jotai"
+import { useQuery } from "@tanstack/react-query"
+import { useSetAtom } from "jotai"
 import { useEffect, useMemo } from "react"
 
 import { sortBookmarks, type OrderScope } from "@loomark/core/sort"
 import type { BookmarkDTO } from "@loomark/core/types"
 
 import { useBookmarkReorder } from "@/hooks/use-bookmark-reorder"
-import { bookmarkListAtom, sortOrderAtom } from "@/store/atoms"
+import { useSortOrder } from "@/hooks/use-sort-order"
+import { bookmarkListQuery } from "@/lib/client/queries"
+import type { BookmarkQuery } from "@/lib/query-keys"
+import { activeBookmarkQueryAtom } from "@/store/atoms"
+
+const NO_BOOKMARKS: BookmarkDTO[] = []
 
 export const useBookmarkList = (
-  source: BookmarkDTO[],
+  query: BookmarkQuery,
   scope: OrderScope,
   collectionId: string | null = null
 ) => {
-  const [list, setList] = useAtom(bookmarkListAtom)
-  const order = useAtomValue(sortOrderAtom)
+  const { data = NO_BOOKMARKS } = useQuery(bookmarkListQuery(query))
+  const { order } = useSortOrder()
+  const setActiveQuery = useSetAtom(activeBookmarkQueryAtom)
   const manual = order === "custom"
 
   useEffect(() => {
-    setList({ source, items: source })
-  }, [source, setList])
+    setActiveQuery(query)
 
-  const items = list.source === source ? list.items : source
+    return () => setActiveQuery(null)
+  }, [query, setActiveQuery])
 
-  useBookmarkReorder({ scope, collectionId, enabled: manual })
+  useBookmarkReorder({ query, scope, collectionId, enabled: manual })
 
   return {
     manual,
     items: useMemo(
-      () => sortBookmarks(items, order, scope),
-      [items, order, scope]
+      () => sortBookmarks(data, order, scope),
+      [data, order, scope]
     ),
   }
 }

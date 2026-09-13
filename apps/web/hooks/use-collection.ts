@@ -1,8 +1,6 @@
 "use client"
 
-import { useAtomValue } from "jotai"
-
-import { collectionsAtom } from "@/store/atoms"
+import { useCollections } from "@/hooks/use-collections"
 
 export const useCollection = (collectionId: string) =>
-  useAtomValue(collectionsAtom).find((item) => item.id === collectionId) ?? null
+  useCollections().find((item) => item.id === collectionId) ?? null

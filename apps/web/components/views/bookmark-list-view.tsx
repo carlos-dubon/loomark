@@ -1,11 +1,10 @@
 "use client"
 
-import { useAtomValue, useSetAtom } from "jotai"
+import { useSetAtom } from "jotai"
 import { BookmarkIcon, InboxIcon, PlusIcon } from "lucide-react"
 import { useMemo } from "react"
 
 import { siblingsOf } from "@loomark/core/tree"
-import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 
@@ -17,11 +16,12 @@ import { PageHeader } from "@/components/page-header"
 import { SortOrderSelect } from "@/components/sort-order-select"
 import { ViewModeToggle } from "@/components/view-mode-toggle"
 import { useBookmarkList } from "@/hooks/use-bookmark-list"
-import {
-  bookmarkDialogAtom,
-  collectionsAtom,
-  viewModeAtom,
-} from "@/store/atoms"
+import { useCollection } from "@/hooks/use-collection"
+import { useCollections } from "@/hooks/use-collections"
+import { useViewMode } from "@/hooks/use-view-mode"
+import { collectionEmptyState } from "@/lib/collection-view"
+import { collectionBookmarks } from "@/lib/query-keys"
+import { bookmarkDialogAtom } from "@/store/atoms"
 
 const EMPTY_ICONS = {
   bookmark: BookmarkIcon,
@@ -29,38 +29,31 @@ const EMPTY_ICONS = {
 }
 
 export const BookmarkListView = ({
-  title,
-  emptyIcon = "bookmark",
-  emptyTitle,
-  emptyDescription,
   collectionId,
-  collection,
-  bookmarks,
 }: {
-  title: React.ReactNode
-  emptyIcon?: keyof typeof EMPTY_ICONS
-  emptyTitle: string
-  emptyDescription: string
-  collectionId: string | null
-  collection?: CollectionDTO
-  bookmarks: BookmarkDTO[]
+  collectionId: string
 }) => {
-  const mode = useAtomValue(viewModeAtom)
-  const collections = useAtomValue(collectionsAtom)
+  const { mode } = useViewMode()
+  const collections = useCollections()
+  const collection = useCollection(collectionId)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
-  const { items, manual } = useBookmarkList(
-    bookmarks,
-    "collection",
-    collectionId
-  )
+  const query = useMemo(() => collectionBookmarks(collectionId), [collectionId])
+  const { items, manual } = useBookmarkList(query, "collection", collectionId)
 
   const addBookmark = () =>
     openBookmarkDialog({ open: true, bookmark: null, collectionId })
 
   const children = useMemo(
-    () => (collectionId ? siblingsOf(collections, collectionId) : []),
+    () => siblingsOf(collections, collectionId),
     [collections, collectionId]
   )
+
+  if (!collection) {
+    return null
+  }
+
+  const { emptyIcon, emptyTitle, emptyDescription } =
+    collectionEmptyState(collection)
 
   const hasCollections = children.length > 0
   const hasBookmarks = items.length > 0
@@ -69,23 +62,23 @@ export const BookmarkListView = ({
     <>
       <PageHeader
         title={
-          collection && collection.kind === "USER" ? (
+          collection.kind === "USER" ? (
             <span className="flex min-w-0 items-center gap-1.5">
               <CollectionIcon
                 name={collection.icon}
                 className="size-3.5 shrink-0"
               />
-              <span className="truncate">{title}</span>
+              <span className="truncate">{collection.name}</span>
             </span>
           ) : (
-            title
+            collection.name
           )
         }
         description={`${items.length} ${items.length === 1 ? "bookmark" : "bookmarks"}`}
       >
         <ViewModeToggle />
         <SortOrderSelect />
-        {collection && collection.kind === "USER" ? (
+        {collection.kind === "USER" ? (
           <CollectionMenu collection={collection} />
         ) : null}
       </PageHeader>

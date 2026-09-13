@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
 import { ArrowLeftIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -137,12 +138,20 @@ const CredentialsStep = ({
     defaultValues: { email: "", password: "" },
   })
 
-  const onSubmit = handleSubmit(async (values) => {
-    try {
+  const { mutateAsync: signIn } = useMutation({
+    mutationFn: async (values: CredentialsValues) => {
       const { token, user } = await connect(serverUrl, values)
 
       await clearDraftServerUrl()
-      onConnected({ serverUrl, token, user })
+
+      return { serverUrl, token, user }
+    },
+    onSuccess: onConnected,
+  })
+
+  const onSubmit = handleSubmit(async (values) => {
+    try {
+      await signIn(values)
     } catch (cause) {
       setError("root", {
         message: errorMessage(cause, "Could not sign in"),

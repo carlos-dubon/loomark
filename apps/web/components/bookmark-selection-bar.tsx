@@ -1,5 +1,6 @@
 "use client"
 
+import { useQuery } from "@tanstack/react-query"
 import { useAtomValue, useSetAtom } from "jotai"
 import { Trash2Icon, XIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
@@ -8,11 +9,16 @@ import { useEffect } from "react"
 import { Button } from "@loomark/ui/components/button"
 
 import { useBookmarkSelection } from "@/hooks/use-bookmark-selection"
-import { bookmarkListAtom, deleteDialogAtom } from "@/store/atoms"
+import { bookmarkListQuery } from "@/lib/client/queries"
+import { activeBookmarkQueryAtom, deleteDialogAtom } from "@/store/atoms"
 
 export const BookmarkSelectionBar = () => {
   const { count, selected, clear, selectAll } = useBookmarkSelection()
-  const list = useAtomValue(bookmarkListAtom)
+  const activeQuery = useAtomValue(activeBookmarkQueryAtom)
+  const { data: items = [] } = useQuery({
+    ...bookmarkListQuery(activeQuery ?? {}),
+    enabled: activeQuery !== null,
+  })
   const confirmDelete = useSetAtom(deleteDialogAtom)
   const pathname = usePathname()
 
@@ -40,7 +46,7 @@ export const BookmarkSelectionBar = () => {
     return null
   }
 
-  const allSelected = count >= list.items.length && list.items.length > 0
+  const allSelected = count >= items.length && items.length > 0
 
   return (
     <div
@@ -56,7 +62,7 @@ export const BookmarkSelectionBar = () => {
           size="sm"
           className="ml-1 rounded-full"
           disabled={allSelected}
-          onClick={() => selectAll(list.items)}
+          onClick={() => selectAll(items)}
         >
           Select all
         </Button>
@@ -65,7 +71,7 @@ export const BookmarkSelectionBar = () => {
           size="sm"
           className="rounded-full"
           onClick={() =>
-            confirmDelete(list.items.filter((item) => selected.has(item.id)))
+            confirmDelete(items.filter((item) => selected.has(item.id)))
           }
         >
           <Trash2Icon />

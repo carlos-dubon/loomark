@@ -12,6 +12,7 @@ import {
   getState,
   newId,
   nextPinnedPosition,
+  queryBookmarks,
   setState,
   shiftPositions,
   unsortedId,
@@ -26,6 +27,7 @@ import type {
   CollectionMoveInput,
   CollectionUpdateInput,
 } from "@/lib/schemas"
+import type { BookmarkQuery } from "@/lib/query-keys"
 
 const LATENCY_MS = 140
 
@@ -45,16 +47,6 @@ const requireBookmark = (current: DemoState, id: string) =>
 const requireCollection = (current: DemoState, id: string) =>
   current.collections.find((collection) => collection.id === id) ??
   fail("Collection not found")
-
-const matches = (bookmark: BookmarkDTO, query: string) => {
-  const needle = query.toLowerCase()
-
-  return (
-    bookmark.title.toLowerCase().includes(needle) ||
-    bookmark.url.toLowerCase().includes(needle) ||
-    (bookmark.description?.toLowerCase().includes(needle) ?? false)
-  )
-}
 
 const renumber = (current: DemoState) => {
   const byParent = new Map<string | null, typeof current.collections>()
@@ -81,40 +73,8 @@ const renumber = (current: DemoState) => {
 }
 
 export const demoApi = {
-  listBookmarks: (
-    query: {
-      q?: string
-      collectionId?: string
-      pinned?: boolean
-      unsorted?: boolean
-      take?: number
-    } = {}
-  ) => {
-    const current = getState()
-    const unsorted = unsortedId(current)
-
-    let results = current.bookmarks
-
-    if (query.pinned) {
-      results = results.filter((bookmark) => bookmark.pinned)
-    }
-
-    if (query.unsorted) {
-      results = results.filter((bookmark) => bookmark.collectionId === unsorted)
-    }
-
-    if (query.collectionId) {
-      results = results.filter(
-        (bookmark) => bookmark.collectionId === query.collectionId
-      )
-    }
-
-    if (query.q) {
-      results = results.filter((bookmark) => matches(bookmark, query.q ?? ""))
-    }
-
-    return settle(results.slice(0, query.take ?? 60))
-  },
+  listBookmarks: (query: BookmarkQuery = {}) =>
+    settle(queryBookmarks(getState(), query)),
 
   createBookmark: (input: BookmarkCreateInput) => {
     const current = getState()
@@ -486,6 +446,8 @@ export const demoApi = {
 
     return settle({ image: null })
   },
+
+  getAppearance: () => settle(getState().appearance),
 
   updateAppearance: (input: AppearanceUpdateInput) => {
     setState((state) => ({

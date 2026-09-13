@@ -8,6 +8,7 @@ import type {
 
 import { DEMO_UNSORTED_ID, DEMO_USER } from "@/lib/demo/config"
 import { DEMO_BOOKMARKS, DEMO_COLLECTIONS } from "@/lib/client/demo/seed"
+import type { BookmarkQuery } from "@/lib/query-keys"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
 import { DEFAULT_APPEARANCE } from "@/lib/themes/appearance-defaults"
 
@@ -128,44 +129,40 @@ export const collectionList = (current: DemoState) => {
   return list
 }
 
-const pinnedCache = new WeakMap<DemoState, BookmarkDTO[]>()
+const matches = (bookmark: BookmarkDTO, query: string) => {
+  const needle = query.toLowerCase()
 
-export const pinnedBookmarks = (current: DemoState) => {
-  const cached = pinnedCache.get(current)
-
-  if (cached) {
-    return cached
-  }
-
-  const list = current.bookmarks.filter((bookmark) => bookmark.pinned)
-
-  pinnedCache.set(current, list)
-
-  return list
+  return (
+    bookmark.title.toLowerCase().includes(needle) ||
+    bookmark.url.toLowerCase().includes(needle) ||
+    (bookmark.description?.toLowerCase().includes(needle) ?? false)
+  )
 }
 
-const collectionCache = new WeakMap<DemoState, Map<string, BookmarkDTO[]>>()
+export const queryBookmarks = (current: DemoState, query: BookmarkQuery) => {
+  const unsorted = unsortedId(current)
 
-export const bookmarksIn = (current: DemoState, collectionId: string) => {
-  const cache = collectionCache.get(current) ?? new Map<string, BookmarkDTO[]>()
+  let results = current.bookmarks
 
-  if (!collectionCache.has(current)) {
-    collectionCache.set(current, cache)
+  if (query.pinned) {
+    results = results.filter((bookmark) => bookmark.pinned)
   }
 
-  const cached = cache.get(collectionId)
-
-  if (cached) {
-    return cached
+  if (query.unsorted) {
+    results = results.filter((bookmark) => bookmark.collectionId === unsorted)
   }
 
-  const list = current.bookmarks.filter(
-    (bookmark) => bookmark.collectionId === collectionId
-  )
+  if (query.collectionId) {
+    results = results.filter(
+      (bookmark) => bookmark.collectionId === query.collectionId
+    )
+  }
 
-  cache.set(collectionId, list)
+  if (query.q) {
+    results = results.filter((bookmark) => matches(bookmark, query.q ?? ""))
+  }
 
-  return list
+  return results.slice(0, query.take ?? 60)
 }
 
 export const descendantIds = (current: DemoState, id: string) => {

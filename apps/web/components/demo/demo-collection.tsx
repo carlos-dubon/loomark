@@ -1,36 +1,38 @@
 "use client"
 
+import { HydrationBoundary } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 
 import { BookmarkListView } from "@/components/views/bookmark-list-view"
 import { useDemoState } from "@/hooks/use-demo-state"
-import { collectionEmptyState } from "@/lib/collection-view"
-import { bookmarksIn, collectionList } from "@/lib/client/demo/store"
+import { seedBookmarkLists } from "@/lib/client/demo/queries"
+import { getState } from "@/lib/client/demo/store"
+import { collectionBookmarks } from "@/lib/query-keys"
 
 export const DemoCollection = ({ id }: { id: string }) => {
   const state = useDemoState()
   const router = useRouter()
-  const collections = collectionList(state)
-  const collection = collections.find((item) => item.id === id)
+  const exists = state.collections.some((item) => item.id === id)
+
+  const seed = useMemo(
+    () => seedBookmarkLists(getState(), [collectionBookmarks(id)]),
+    [id]
+  )
 
   useEffect(() => {
-    if (!collection) {
+    if (!exists) {
       router.replace("/")
     }
-  }, [collection, router])
+  }, [exists, router])
 
-  if (!collection) {
+  if (!exists) {
     return null
   }
 
   return (
-    <BookmarkListView
-      title={collection.name}
-      collectionId={collection.id}
-      collection={collection}
-      bookmarks={bookmarksIn(state, collection.id)}
-      {...collectionEmptyState(collection)}
-    />
+    <HydrationBoundary state={seed}>
+      <BookmarkListView collectionId={id} />
+    </HydrationBoundary>
   )
 }

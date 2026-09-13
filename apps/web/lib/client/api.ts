@@ -20,6 +20,7 @@ import type {
   CollectionUpdateInput,
 } from "@/lib/schemas"
 import { demoApi } from "@/lib/client/demo/api"
+import type { BookmarkQuery } from "@/lib/query-keys"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
 
 const request = async <T>(url: string, init?: RequestInit): Promise<T> => {
@@ -45,14 +46,6 @@ const request = async <T>(url: string, init?: RequestInit): Promise<T> => {
   }
 
   return (await response.json()) as T
-}
-
-type BookmarkQuery = {
-  q?: string
-  collectionId?: string
-  pinned?: boolean
-  unsorted?: boolean
-  take?: number
 }
 
 const toSearchParams = (query: BookmarkQuery) => {
@@ -158,6 +151,7 @@ const serverApi = {
   },
   removeAvatar: () =>
     request<{ image: null }>(routes.profileAvatar, { method: "DELETE" }),
+  getAppearance: () => request<AppearanceDTO>(routes.appearance),
   updateAppearance: (input: AppearanceUpdateInput) =>
     request<AppearanceDTO>(routes.appearance, {
       method: "PATCH",

@@ -1,7 +1,7 @@
 "use client"
 
+import { useMutation } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { toast } from "sonner"
 
 import { errorMessage, plural } from "@loomark/core/format"
@@ -18,24 +18,22 @@ export const UserDeleteDialog = ({
   onOpenChange: (open: boolean) => void
 }) => {
   const router = useRouter()
-  const [pending, setPending] = useState(false)
 
-  const destroy = async () => {
-    if (!user) {
-      return
-    }
-
-    setPending(true)
-
-    try {
-      await api.deleteUser(user.id)
-      toast.success(`${user.email} deleted`)
+  const { mutateAsync, isPending: pending } = useMutation({
+    mutationFn: (target: InstanceUserDTO) => api.deleteUser(target.id),
+    onSuccess: (_result, target) => {
+      toast.success(`${target.email} deleted`)
       onOpenChange(false)
       router.refresh()
-    } catch (cause) {
+    },
+    onError: (cause) => {
       toast.error(errorMessage(cause, "Delete failed"))
-    } finally {
-      setPending(false)
+    },
+  })
+
+  const destroy = async () => {
+    if (user) {
+      await mutateAsync(user).catch(() => null)
     }
   }
 

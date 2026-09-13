@@ -1,3 +1,4 @@
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
@@ -19,9 +20,9 @@ import { isDemo } from "@/lib/demo/config"
 import { auth } from "@/lib/server/auth"
 import { ensureUnsortedCollection } from "@/lib/server/collections"
 import { NEW_TAB_COOKIE_NAME, toOpenInNewTab } from "@/lib/open-target"
+import { makeQueryClient } from "@/lib/query-client"
+import { queryKeys } from "@/lib/query-keys"
 import { getCollections, getProfile } from "@/lib/server/queries"
-import { THEMES } from "@/lib/themes/palettes"
-import { findTheme, themeToCss } from "@/lib/themes/theme"
 
 const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   if (isDemo) {
@@ -42,43 +43,53 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
 
   await ensureUnsortedCollection(session.user.id)
 
-  const [collections, cookieStore, appearance] = await Promise.all([
-    getCollections(session.user.id),
+  const userId = session.user.id
+  const queryClient = makeQueryClient()
+
+  const [cookieStore] = await Promise.all([
     cookies(),
-    getAppearance(session.user.id),
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.collections,
+      queryFn: () => getCollections(userId),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.appearance,
+      queryFn: () => getAppearance(userId),
+    }),
   ])
 
   return (
-    <AppearanceProvider
-      appearance={appearance}
-      themeCss={themeToCss(findTheme(THEMES, appearance.themeId))}
-      openInNewTab={toOpenInNewTab(cookieStore.get(NEW_TAB_COOKIE_NAME)?.value)}
-    >
-      <SidebarProvider
-        className="h-svh overflow-hidden"
-        defaultOpen={cookieStore.get("sidebar_state")?.value !== "false"}
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <AppearanceProvider
+        openInNewTab={toOpenInNewTab(
+          cookieStore.get(NEW_TAB_COOKIE_NAME)?.value
+        )}
       >
-        <DndProvider>
-          <AppSidebar
-            collections={collections}
-            isOwner={profile.role === "OWNER"}
-            user={{
-              name: profile.name,
-              email: profile.email,
-              image: profile.image,
-            }}
-          />
-          <SidebarInset>{children}</SidebarInset>
-        </DndProvider>
-        <BookmarkDialog />
-        <BookmarkSearchDialog />
-        <CollectionDialog />
-        <BookmarkSelectionBar />
-        <BookmarkDeleteDialog />
-        <CollectionDeleteDialog />
-        <UpdateToast isOwner={profile.role === "OWNER"} />
-      </SidebarProvider>
-    </AppearanceProvider>
+        <SidebarProvider
+          className="h-svh overflow-hidden"
+          defaultOpen={cookieStore.get("sidebar_state")?.value !== "false"}
+        >
+          <DndProvider>
+            <AppSidebar
+              isOwner={profile.role === "OWNER"}
+              user={{
+                name: profile.name,
+                email: profile.email,
+                image: profile.image,
+              }}
+            />
+            <SidebarInset>{children}</SidebarInset>
+          </DndProvider>
+          <BookmarkDialog />
+          <BookmarkSearchDialog />
+          <CollectionDialog />
+          <BookmarkSelectionBar />
+          <BookmarkDeleteDialog />
+          <CollectionDeleteDialog />
+          <UpdateToast isOwner={profile.role === "OWNER"} />
+        </SidebarProvider>
+      </AppearanceProvider>
+    </HydrationBoundary>
   )
 }
 

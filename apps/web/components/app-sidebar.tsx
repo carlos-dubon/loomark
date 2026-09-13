@@ -1,12 +1,9 @@
 "use client"
 
 import { useSetAtom } from "jotai"
-import { useHydrateAtoms } from "jotai/utils"
 import { HouseIcon, PlusIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
-import { useEffect } from "react"
 
-import type { CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import {
   Sidebar,
@@ -30,32 +27,19 @@ import { isSettingsRoute, SettingsNav } from "@/components/settings-nav"
 import { UnsortedNavItem } from "@/components/unsorted-nav-item"
 import { UserMenu, type SessionUser } from "@/components/user-menu"
 import { useCloseSidebar } from "@/hooks/use-close-sidebar"
-import {
-  bookmarkDialogAtom,
-  collectionDialogAtom,
-  collectionsAtom,
-} from "@/store/atoms"
+import { bookmarkDialogAtom, collectionDialogAtom } from "@/store/atoms"
 
 export const AppSidebar = ({
   user,
   isOwner,
-  collections: initialCollections,
 }: {
   user: SessionUser
   isOwner: boolean
-  collections: CollectionDTO[]
 }) => {
-  useHydrateAtoms([[collectionsAtom, initialCollections]])
-
   const pathname = usePathname()
-  const setCollections = useSetAtom(collectionsAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const openCollectionDialog = useSetAtom(collectionDialogAtom)
   const closeSidebar = useCloseSidebar()
-
-  useEffect(() => {
-    setCollections(initialCollections)
-  }, [initialCollections, setCollections])
 
   return (
     <Sidebar collapsible="icon">

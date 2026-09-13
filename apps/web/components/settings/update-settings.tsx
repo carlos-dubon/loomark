@@ -34,24 +34,18 @@ const COMPOSE_HINT = (gid: string) =>
 
 const Parked = ({
   parked,
+  discarding,
   onDiscard,
 }: {
   parked: ParkedUpdate[]
-  onDiscard: () => Promise<void>
+  discarding: boolean
+  onDiscard: () => void
 }) => {
-  const [discarding, setDiscarding] = useState(false)
-
   if (parked.length === 0) {
     return null
   }
 
   const [newest] = parked
-
-  const discard = async () => {
-    setDiscarding(true)
-    await onDiscard()
-    setDiscarding(false)
-  }
 
   return (
     <Alert variant="error">
@@ -69,7 +63,7 @@ const Parked = ({
           <Button
             variant="destructive-outline"
             loading={discarding}
-            onClick={() => void discard()}
+            onClick={onDiscard}
           >
             <Trash2Icon aria-hidden="true" />
             {discarding ? "Removing…" : "Remove it"}
@@ -132,9 +126,17 @@ const Blocked = ({ status }: { status: UpdateStatus }) => {
 }
 
 export const UpdateSettings = () => {
-  const { status, job, running, install, refresh, discardParked } = useUpdates()
-  const [checking, setChecking] = useState(false)
-  const [installing, setInstalling] = useState(false)
+  const {
+    status,
+    job,
+    running,
+    install,
+    installing,
+    check,
+    checking,
+    discardParked,
+    discarding,
+  } = useUpdates()
 
   if (!status) {
     return (
@@ -142,21 +144,6 @@ export const UpdateSettings = () => {
         Checking for updates…
       </span>
     )
-  }
-
-  const check = async () => {
-    setChecking(true)
-    await refresh({ force: true })
-    setChecking(false)
-  }
-
-  const startInstall = async () => {
-    setInstalling(true)
-    try {
-      await install()
-    } finally {
-      setInstalling(false)
-    }
   }
 
   if (running) {
@@ -175,13 +162,13 @@ export const UpdateSettings = () => {
   if (!status.available || !status.latest) {
     return (
       <div className="flex flex-col gap-4">
-        <Parked parked={status.parked} onDiscard={discardParked} />
+        <Parked
+          parked={status.parked}
+          discarding={discarding}
+          onDiscard={discardParked}
+        />
         <div className="flex items-center gap-3">
-          <Button
-            variant="outline"
-            loading={checking}
-            onClick={() => void check()}
-          >
+          <Button variant="outline" loading={checking} onClick={check}>
             <RefreshCwIcon aria-hidden="true" />
             {checking ? "Checking…" : "Check for updates"}
           </Button>
@@ -211,7 +198,7 @@ export const UpdateSettings = () => {
           </span>
         </div>
         {status.selfUpdate.supported ? (
-          <Button loading={installing} onClick={() => void startInstall()}>
+          <Button loading={installing} onClick={install}>
             <DownloadIcon aria-hidden="true" />
             {installing ? "Starting…" : "Update now"}
           </Button>
@@ -222,7 +209,11 @@ export const UpdateSettings = () => {
           <AlertDescription>{job.error}</AlertDescription>
         </Alert>
       ) : null}
-      <Parked parked={status.parked} onDiscard={discardParked} />
+      <Parked
+        parked={status.parked}
+        discarding={discarding}
+        onDiscard={discardParked}
+      />
       <Blocked status={status} />
     </div>
   )

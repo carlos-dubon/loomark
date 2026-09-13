@@ -1,6 +1,6 @@
 "use client"
 
-import { useAtomValue, useSetAtom } from "jotai"
+import { useSetAtom } from "jotai"
 import {
   FolderInputIcon,
   FolderPlusIcon,
@@ -32,11 +32,11 @@ import {
 } from "@loomark/ui/components/dropdown-menu"
 
 import { useCollectionActions } from "@/hooks/use-collection-actions"
+import { useCollections } from "@/hooks/use-collections"
 import {
   bookmarkDialogAtom,
   collectionDeleteDialogAtom,
   collectionDialogAtom,
-  collectionsAtom,
 } from "@/store/atoms"
 
 export const CollectionMenu = ({
@@ -51,7 +51,7 @@ export const CollectionMenu = ({
   const openCollectionDialog = useSetAtom(collectionDialogAtom)
   const openBookmarkDialog = useSetAtom(bookmarkDialogAtom)
   const confirmDelete = useSetAtom(collectionDeleteDialogAtom)
-  const collections = useAtomValue(collectionsAtom)
+  const collections = useCollections()
   const { move } = useCollectionActions()
 
   const moveTargets = useMemo(() => {

@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
 import { ArrowLeftIcon } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 
@@ -39,13 +40,19 @@ export const CollectionForm = ({
     defaultValues: { name: "", icon: null, parentId: defaultParentId },
   })
 
+  const { mutateAsync: create } = useMutation({
+    mutationFn: (values: CollectionFormValues) =>
+      createCollection(auth, values),
+    onSuccess: onCreated,
+  })
+
   const parents = flattenCollections(collections).filter(
     (node) => node.kind === "USER"
   )
 
   const onSubmit = handleSubmit(async (values) => {
     try {
-      onCreated(await createCollection(auth, values))
+      await create(values)
     } catch (cause) {
       setError("root", {
         message: errorMessage(cause, "Could not create it"),

@@ -3,73 +3,72 @@
 import { move } from "@dnd-kit/helpers"
 import { useDragDropMonitor } from "@dnd-kit/react"
 import { isSortable } from "@dnd-kit/react/sortable"
-import { useSetAtom } from "jotai"
-import { useRouter } from "next/navigation"
+import { useQueryClient } from "@tanstack/react-query"
 import { useRef } from "react"
-import { toast } from "sonner"
 
-import { errorMessage } from "@loomark/core/format"
 import { applyCollectionMove, siblingsOf } from "@loomark/core/tree"
 import type { CollectionDTO } from "@loomark/core/types"
 
-import { api } from "@/lib/client/api"
+import { useMoveCollection } from "@/hooks/use-collection-actions"
+import { collectionsQuery } from "@/lib/client/queries"
 import {
   collectionCardId,
   collectionSourceId,
   DRAG_TYPE,
   isCollectionCardId,
 } from "@/lib/dnd"
-import { collectionsAtom } from "@/store/atoms"
 
 export const useCollectionReorder = (parentId: string | null) => {
-  const router = useRouter()
-  const setCollections = useSetAtom(collectionsAtom)
+  const queryClient = useQueryClient()
+  const { mutate: save } = useMoveCollection("Could not save the order")
+  const { queryKey } = collectionsQuery
   const before = useRef<CollectionDTO[] | null>(null)
 
-  const save = async (id: string, index: number, previous: CollectionDTO[]) => {
-    try {
-      setCollections(await api.moveCollection({ id, parentId, index }))
-      router.refresh()
-    } catch (cause) {
-      setCollections(previous)
-      toast.error(errorMessage(cause, "Could not save the order"))
-    }
-  }
-
   useDragDropMonitor({
-    onDragStart: () => {
+    onDragStart: (event) => {
       before.current = null
+
+      if (event.operation.source?.type === DRAG_TYPE.collectionCard) {
+        void queryClient.cancelQueries({ queryKey })
+      }
     },
     onDragOver: (event) => {
       const { source, target } = event.operation
+      const collections = queryClient.getQueryData(queryKey)
       const id =
         source?.type === DRAG_TYPE.collectionCard
           ? collectionSourceId(source)
           : null
 
-      if (!id || !isSortable(target) || !isCollectionCardId(target.id)) {
+      if (
+        !id ||
+        !collections ||
+        !isSortable(target) ||
+        !isCollectionCardId(target.id)
+      ) {
         return
       }
 
-      setCollections((collections) => {
-        const ids = siblingsOf(collections, parentId).map((collection) =>
-          collectionCardId(collection.id)
-        )
+      const ids = siblingsOf(collections, parentId).map((collection) =>
+        collectionCardId(collection.id)
+      )
 
-        if (!ids.includes(collectionCardId(id))) {
-          return collections
-        }
+      if (!ids.includes(collectionCardId(id))) {
+        return
+      }
 
-        const index = move(ids, event).indexOf(collectionCardId(id))
+      const index = move(ids, event).indexOf(collectionCardId(id))
 
-        if (index === -1) {
-          return collections
-        }
+      if (index === -1) {
+        return
+      }
 
-        before.current ??= collections
+      before.current ??= collections
 
-        return applyCollectionMove(collections, id, parentId, index)
-      })
+      queryClient.setQueryData(
+        queryKey,
+        applyCollectionMove(collections, id, parentId, index)
+      )
     },
     onDragEnd: (event) => {
       const previous = before.current
@@ -88,21 +87,18 @@ export const useCollectionReorder = (parentId: string | null) => {
         !isCollectionCardId(target.id) ||
         !id
       ) {
-        setCollections(previous)
+        queryClient.setQueryData(queryKey, previous)
         return
       }
 
-      setCollections((collections) => {
-        const index = siblingsOf(collections, parentId).findIndex(
-          (collection) => collection.id === id
-        )
+      const collections = queryClient.getQueryData(queryKey) ?? previous
+      const index = siblingsOf(collections, parentId).findIndex(
+        (collection) => collection.id === id
+      )
 
-        if (index !== -1) {
-          void save(id, index, previous)
-        }
-
-        return collections
-      })
+      if (index !== -1) {
+        save({ input: { id, parentId, index }, previous })
+      }
     },
   })
 }

@@ -1,14 +1,13 @@
 "use client"
 
-import { useAtomValue } from "jotai"
 import { useMemo } from "react"
 
 import { buildCollectionTree, flattenTree } from "@loomark/core/tree"
 
-import { collectionsAtom } from "@/store/atoms"
+import { useCollections } from "@/hooks/use-collections"
 
 export const useCollectionItems = () => {
-  const collections = useAtomValue(collectionsAtom)
+  const collections = useCollections()
 
   return useMemo(() => {
     const tree = buildCollectionTree(collections)

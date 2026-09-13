@@ -30,6 +30,7 @@
     "@hookform/resolvers": "^5.9.1",
     "@loomark/core": "workspace:*",
     "@loomark/ui": "workspace:*",
+    "@tanstack/react-query": "^5.102.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "fuse.js": "^7.5.0",

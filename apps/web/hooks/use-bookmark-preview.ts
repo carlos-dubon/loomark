@@ -1,83 +1,64 @@
 "use client"
 
-import { useSetAtom } from "jotai"
-import { useEffect, useState } from "react"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 import type { BookmarkDTO } from "@loomark/core/types"
 
 import { api } from "@/lib/client/api"
-import { upsertBookmarkAtom } from "@/store/atoms"
+import { upsertBookmarkInCache } from "@/lib/client/queries"
+import { queryKeys } from "@/lib/query-keys"
 
 const MAX_CONCURRENT = 2
 
-const attempted = new Set<string>()
-const queue: (() => Promise<void>)[] = []
+const queue: (() => void)[] = []
 
 let active = 0
 
 const drain = () => {
-  while (active < MAX_CONCURRENT) {
-    const task = queue.shift()
-
-    if (!task) {
-      return
-    }
-
-    active += 1
-
-    void task().finally(() => {
-      active -= 1
-      drain()
-    })
+  while (active < MAX_CONCURRENT && queue.length > 0) {
+    queue.shift()?.()
   }
 }
 
-export const useBookmarkPreview = (bookmark: BookmarkDTO, enabled: boolean) => {
-  const upsertBookmark = useSetAtom(upsertBookmarkAtom)
-  const [settled, setSettled] = useState(() => attempted.has(bookmark.id))
+const limit = <T>(task: () => Promise<T>) =>
+  new Promise<T>((resolve, reject) => {
+    queue.push(() => {
+      active += 1
 
-  useEffect(() => {
-    const wanted = (enabled && !bookmark.previewUrl) || !bookmark.faviconUrl
-
-    if (!wanted || attempted.has(bookmark.id)) {
-      return
-    }
-
-    attempted.add(bookmark.id)
-
-    let cancelled = false
-
-    queue.push(async () => {
-      try {
-        const updated = await api.refreshPreview(bookmark.id)
-
-        if (
-          updated.previewUrl !== bookmark.previewUrl ||
-          updated.faviconUrl !== bookmark.faviconUrl
-        ) {
-          upsertBookmark(updated)
-        }
-      } catch {
-        attempted.delete(bookmark.id)
-      } finally {
-        if (!cancelled) {
-          setSettled(true)
-        }
-      }
+      void task()
+        .then(resolve, reject)
+        .finally(() => {
+          active -= 1
+          drain()
+        })
     })
 
     drain()
+  })
 
-    return () => {
-      cancelled = true
-    }
-  }, [
-    bookmark.id,
-    bookmark.previewUrl,
-    bookmark.faviconUrl,
-    enabled,
-    upsertBookmark,
-  ])
+export const useBookmarkPreview = (bookmark: BookmarkDTO, enabled: boolean) => {
+  const queryClient = useQueryClient()
+  const wanted = (enabled && !bookmark.previewUrl) || !bookmark.faviconUrl
 
-  return enabled && !bookmark.previewUrl && !settled
+  const { isPending } = useQuery({
+    queryKey: queryKeys.bookmarkPreview(bookmark.id),
+    queryFn: async () => {
+      const updated = await limit(() => api.refreshPreview(bookmark.id))
+
+      if (
+        updated.previewUrl !== bookmark.previewUrl ||
+        updated.faviconUrl !== bookmark.faviconUrl
+      ) {
+        upsertBookmarkInCache(queryClient, updated)
+      }
+
+      return updated
+    },
+    enabled: wanted,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    retry: false,
+  })
+
+  return enabled && !bookmark.previewUrl && isPending
 }

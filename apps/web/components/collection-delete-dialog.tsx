@@ -1,6 +1,6 @@
 "use client"
 
-import { useAtom, useAtomValue } from "jotai"
+import { useAtom } from "jotai"
 import { useState } from "react"
 
 import { plural } from "@loomark/core/format"
@@ -9,7 +9,8 @@ import type { CollectionDTO } from "@loomark/core/types"
 import { ConfirmDialog } from "@loomark/ui/components/confirm-dialog"
 
 import { useCollectionDelete } from "@/hooks/use-collection-delete"
-import { collectionDeleteDialogAtom, collectionsAtom } from "@/store/atoms"
+import { useCollections } from "@/hooks/use-collections"
+import { collectionDeleteDialogAtom } from "@/store/atoms"
 
 type Doomed = {
   id: string
@@ -36,7 +37,7 @@ const summarize = (
 
 export const CollectionDeleteDialog = () => {
   const [collection, setCollection] = useAtom(collectionDeleteDialogAtom)
-  const collections = useAtomValue(collectionsAtom)
+  const collections = useCollections()
   const { destroy, pending } = useCollectionDelete()
 
   const [doomed, setDoomed] = useState<Doomed | null>(null)

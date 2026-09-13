@@ -1,35 +1,24 @@
 "use client"
 
-import { useAtom, type PrimitiveAtom } from "jotai"
-import { toast } from "sonner"
-
-import { errorMessage } from "@loomark/core/format"
-
-import { api } from "@/lib/client/api"
+import { useAppearance, useUpdateAppearance } from "@/hooks/use-appearance"
 import type { AppearanceUpdateInput } from "@/lib/schemas"
+import type { AppearanceDTO } from "@/lib/themes/appearance"
 
-type Key = keyof AppearanceUpdateInput
+type Key = keyof AppearanceDTO
 
 export const useAppearanceSetting = <K extends Key>(
-  valueAtom: PrimitiveAtom<NonNullable<AppearanceUpdateInput[K]>>,
   key: K,
   fallback: string
 ) => {
-  const [value, setValue] = useAtom(valueAtom)
+  const value = useAppearance()[key]
+  const { mutate } = useUpdateAppearance(fallback)
 
-  const select = async (next: NonNullable<AppearanceUpdateInput[K]>) => {
+  const select = (next: AppearanceDTO[K]) => {
     if (next === value) {
       return
     }
 
-    setValue(next)
-
-    try {
-      await api.updateAppearance({ [key]: next } as AppearanceUpdateInput)
-    } catch (cause) {
-      setValue(value)
-      toast.error(errorMessage(cause, fallback))
-    }
+    mutate({ [key]: next } as AppearanceUpdateInput)
   }
 
   return [value, select] as const
