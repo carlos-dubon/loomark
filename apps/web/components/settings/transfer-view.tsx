@@ -1,12 +1,7 @@
 "use client"
 
 import { useSetAtom } from "jotai"
-import {
-  DownloadIcon,
-  FileCodeIcon,
-  Loader2Icon,
-  UploadIcon,
-} from "lucide-react"
+import { DownloadIcon, FileCodeIcon, UploadIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -141,14 +136,11 @@ export const TransferView = ({
           ) : null}
           <div>
             <Button
-              disabled={!file || importing}
+              disabled={!file}
+              loading={importing}
               onClick={() => void onImport()}
             >
-              {importing ? (
-                <Loader2Icon className="animate-spin" />
-              ) : (
-                <UploadIcon />
-              )}
+              <UploadIcon aria-hidden="true" />
               {importing ? "Importing…" : "Import"}
             </Button>
           </div>

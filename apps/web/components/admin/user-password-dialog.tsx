@@ -1,6 +1,6 @@
 "use client"
 
-import { Loader2Icon, KeyRoundIcon, ShuffleIcon } from "lucide-react"
+import { KeyRoundIcon, ShuffleIcon } from "lucide-react"
 import * as React from "react"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -126,15 +126,12 @@ export const UserPasswordDialog = ({
             Cancel
           </DialogClose>
           <Button
-            disabled={pending || tooShort}
+            disabled={tooShort}
+            loading={pending}
             onClick={() => void onSubmit()}
           >
-            {pending ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <KeyRoundIcon />
-            )}
-            Set password
+            <KeyRoundIcon aria-hidden="true" />
+            {pending ? "Setting…" : "Set password"}
           </Button>
         </DialogFooter>
       </DialogContent>

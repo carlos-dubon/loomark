@@ -3,6 +3,8 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@loomark/core/utils"
 
+import { Spinner } from "./spinner"
+
 const buttonVariants = cva(
   "group/button relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-[var(--control-radius)] border text-base font-medium whitespace-nowrap transition-[box-shadow,scale,background-color] outline-none select-none before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--control-radius)-1px)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background active:scale-[0.97] disabled:pointer-events-none disabled:opacity-64 aria-invalid:border-destructive/36 sm:text-sm pointer-coarse:after:absolute pointer-coarse:after:size-full pointer-coarse:after:min-h-11 pointer-coarse:after:min-w-11 [&_svg]:pointer-events-none [&_svg]:-mx-0.5 [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4.5 sm:[&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-[var(--control-icon-color,currentColor)]",
   {
@@ -56,20 +58,34 @@ const buttonVariants = cva(
   }
 )
 
-type ButtonProps = ButtonPrimitive.Props & VariantProps<typeof buttonVariants>
+type ButtonProps = Omit<ButtonPrimitive.Props, "loading"> &
+  VariantProps<typeof buttonVariants> & {
+    loading?: boolean
+  }
 
 function Button({
   className,
   variant = "default",
   size = "default",
+  loading = false,
+  disabled,
+  children,
   ...props
 }: ButtonProps) {
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      data-loading={loading || undefined}
+      disabled={disabled || loading}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        loading && "[&_svg:not([data-slot='spinner'])]:hidden"
+      )}
       {...props}
-    />
+    >
+      {loading ? <Spinner aria-hidden="true" /> : null}
+      {children}
+    </ButtonPrimitive>
   )
 }
 

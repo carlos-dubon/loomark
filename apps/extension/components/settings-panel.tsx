@@ -1,7 +1,8 @@
-import { ArrowLeftIcon, Loader2Icon, RefreshCwIcon } from "lucide-react"
+import { ArrowLeftIcon, RefreshCwIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { Button } from "@loomark/ui/components/button"
+import { Spinner } from "@loomark/ui/components/spinner"
 import { Switch } from "@loomark/ui/components/switch"
 
 import { useSyncStatus } from "@/hooks/use-sync-status"
@@ -160,7 +161,7 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
             <p className="flex min-w-0 items-center gap-1.5 truncate text-xs text-muted-foreground">
               {syncing ? (
                 <>
-                  <Loader2Icon className="size-3.5 shrink-0 animate-spin" />
+                  <Spinner aria-hidden="true" className="size-3.5 shrink-0" />
                   Syncing…
                 </>
               ) : status?.error ? (
@@ -177,17 +178,13 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
               type="button"
               variant="outline"
               size="sm"
-              disabled={busyish}
+              loading={busyish}
               onClick={() => {
                 void requestSync()
               }}
             >
-              {busyish ? (
-                <Loader2Icon className="animate-spin" />
-              ) : (
-                <RefreshCwIcon />
-              )}
-              Sync now
+              <RefreshCwIcon aria-hidden="true" />
+              {busyish ? "Syncing…" : "Sync now"}
             </Button>
           </div>
         ) : null}

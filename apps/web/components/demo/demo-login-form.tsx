@@ -69,7 +69,7 @@ export const DemoLoginForm = () => {
           </Alert>
         </CardContent>
         <CardFooter className="mt-4 flex-col items-stretch gap-3">
-          <Button type="submit" disabled={pending}>
+          <Button type="submit" loading={pending}>
             {pending ? "Opening the demo…" : "Sign in"}
           </Button>
           <p className="text-center text-sm text-muted-foreground">

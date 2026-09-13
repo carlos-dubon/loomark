@@ -7,6 +7,7 @@ import { toast } from "sonner"
 
 import { errorMessage } from "@loomark/core/format"
 import { cn } from "@loomark/core/utils"
+import { Spinner } from "@loomark/ui/components/spinner"
 
 import { useIsDark } from "@/hooks/use-is-dark"
 import { api } from "@/lib/client/api"
@@ -50,14 +51,15 @@ export const ThemePicker = () => {
   const [appearance, setAppearance] = useAtom(appearanceAtom)
   const setThemeCss = useSetAtom(themeCssAtom)
   const dark = useIsDark()
-  const [saving, setSaving] = useState(false)
+  const [savingId, setSavingId] = useState<string | null>(null)
+  const saving = savingId !== null
 
   const apply = async (option: ThemeOption) => {
     const previous = appearance
 
     setThemeCss(themeToCss(findTheme(THEMES, option.id)))
     setAppearance({ ...appearance, themeId: option.id })
-    setSaving(true)
+    setSavingId(option.id)
 
     try {
       setAppearance(await api.updateAppearance({ themeId: option.id }))
@@ -66,7 +68,7 @@ export const ThemePicker = () => {
       setAppearance(previous)
       toast.error(errorMessage(cause, "Could not save theme"))
     } finally {
-      setSaving(false)
+      setSavingId(null)
     }
   }
 
@@ -93,8 +95,16 @@ export const ThemePicker = () => {
             <span className="min-w-0 flex-1 truncate text-sm font-medium">
               {option.label}
             </span>
-            {active ? (
-              <CheckIcon className="size-4 shrink-0 text-primary" />
+            {savingId === option.id ? (
+              <Spinner
+                aria-hidden="true"
+                className="size-4 shrink-0 text-primary"
+              />
+            ) : active ? (
+              <CheckIcon
+                aria-hidden="true"
+                className="size-4 shrink-0 text-primary"
+              />
             ) : null}
           </button>
         )

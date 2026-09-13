@@ -4,7 +4,6 @@ import {
   CheckIcon,
   CopyIcon,
   DownloadIcon,
-  Loader2Icon,
   RefreshCwIcon,
   Trash2Icon,
 } from "lucide-react"
@@ -69,14 +68,10 @@ const Parked = ({
         <div>
           <Button
             variant="destructive-outline"
-            disabled={discarding}
+            loading={discarding}
             onClick={() => void discard()}
           >
-            {discarding ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <Trash2Icon />
-            )}
+            <Trash2Icon aria-hidden="true" />
             {discarding ? "Removing…" : "Remove it"}
           </Button>
         </div>
@@ -139,6 +134,7 @@ const Blocked = ({ status }: { status: UpdateStatus }) => {
 export const UpdateSettings = () => {
   const { status, job, running, install, refresh, discardParked } = useUpdates()
   const [checking, setChecking] = useState(false)
+  const [installing, setInstalling] = useState(false)
 
   if (!status) {
     return (
@@ -152,6 +148,15 @@ export const UpdateSettings = () => {
     setChecking(true)
     await refresh({ force: true })
     setChecking(false)
+  }
+
+  const startInstall = async () => {
+    setInstalling(true)
+    try {
+      await install()
+    } finally {
+      setInstalling(false)
+    }
   }
 
   if (running) {
@@ -174,14 +179,10 @@ export const UpdateSettings = () => {
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
-            disabled={checking}
+            loading={checking}
             onClick={() => void check()}
           >
-            {checking ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <RefreshCwIcon />
-            )}
+            <RefreshCwIcon aria-hidden="true" />
             {checking ? "Checking…" : "Check for updates"}
           </Button>
           <span className="text-xs text-muted-foreground">
@@ -210,9 +211,9 @@ export const UpdateSettings = () => {
           </span>
         </div>
         {status.selfUpdate.supported ? (
-          <Button onClick={() => void install()}>
-            <DownloadIcon />
-            Update now
+          <Button loading={installing} onClick={() => void startInstall()}>
+            <DownloadIcon aria-hidden="true" />
+            {installing ? "Starting…" : "Update now"}
           </Button>
         ) : null}
       </div>

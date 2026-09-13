@@ -1,11 +1,12 @@
 "use client"
 
-import { Loader2Icon, SearchIcon, XIcon } from "lucide-react"
+import { SearchIcon, XIcon } from "lucide-react"
 import * as React from "react"
 import { useEffect, useRef } from "react"
 
 import { Button } from "@loomark/ui/components/button"
 import { Input } from "@loomark/ui/components/input"
+import { Spinner } from "@loomark/ui/components/spinner"
 
 export const SearchBar = ({
   value,
@@ -48,7 +49,10 @@ export const SearchBar = ({
       />
       <div className="absolute top-1/2 right-2 flex -translate-y-1/2 items-center gap-1">
         {pending ? (
-          <Loader2Icon className="size-4 animate-spin text-muted-foreground" />
+          <Spinner
+            aria-hidden="true"
+            className="size-4 text-muted-foreground"
+          />
         ) : null}
         {value ? (
           <Button

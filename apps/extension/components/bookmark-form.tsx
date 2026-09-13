@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2Icon, PlusIcon, WandSparklesIcon } from "lucide-react"
+import { PlusIcon, WandSparklesIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 
@@ -163,14 +163,10 @@ export const BookmarkForm = ({
             variant="outline"
             size="icon"
             aria-label="Read details from the page"
-            disabled={fetching}
+            loading={fetching}
             onClick={loadMetadata}
           >
-            {fetching ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              <WandSparklesIcon />
-            )}
+            <WandSparklesIcon />
           </Button>
         </div>
       </Field>
@@ -246,16 +242,26 @@ export const BookmarkForm = ({
             type="button"
             variant="destructive"
             size="sm"
-            disabled={removing}
+            disabled={isSubmitting}
+            loading={removing}
             onClick={remove}
             onBlur={() => setConfirmingRemove(false)}
           >
-            {confirmingRemove ? "Tap again to remove" : "Remove"}
+            {removing
+              ? "Removing…"
+              : confirmingRemove
+                ? "Tap again to remove"
+                : "Remove"}
           </Button>
         ) : (
           <span />
         )}
-        <Button type="submit" size="sm" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          size="sm"
+          disabled={removing}
+          loading={isSubmitting}
+        >
           {isSubmitting
             ? "Saving…"
             : bookmark

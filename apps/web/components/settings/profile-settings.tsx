@@ -1,6 +1,6 @@
 "use client"
 
-import { ImageUpIcon, Loader2Icon, Trash2Icon } from "lucide-react"
+import { ImageUpIcon, Trash2Icon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import { toast } from "sonner"
@@ -29,13 +29,14 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [image, setImage] = useState(profile.image)
-  const [busy, setBusy] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const [removing, setRemoving] = useState(false)
 
   const label = profile.name ?? profile.email
   const initials = label.slice(0, 2).toUpperCase()
 
   const onPick = async (file: File) => {
-    setBusy(true)
+    setUploading(true)
 
     try {
       const square = await toSquareImage(file, AVATAR_EDGE)
@@ -47,12 +48,12 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
     } catch (cause) {
       toast.error(errorMessage(cause, "Upload failed"))
     } finally {
-      setBusy(false)
+      setUploading(false)
     }
   }
 
   const onRemove = async () => {
-    setBusy(true)
+    setRemoving(true)
 
     try {
       await api.removeAvatar()
@@ -63,7 +64,7 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
     } catch (cause) {
       toast.error(errorMessage(cause, "Removal failed"))
     } finally {
-      setBusy(false)
+      setRemoving(false)
     }
   }
 
@@ -91,20 +92,26 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
         />
         <Button
           variant="outline"
-          disabled={busy}
+          disabled={removing}
+          loading={uploading}
           onClick={() => inputRef.current?.click()}
         >
-          {busy ? <Loader2Icon className="animate-spin" /> : <ImageUpIcon />}
-          {image ? "Change picture" : "Upload picture"}
+          <ImageUpIcon aria-hidden="true" />
+          {uploading
+            ? "Uploading…"
+            : image
+              ? "Change picture"
+              : "Upload picture"}
         </Button>
         {image ? (
           <Button
             variant="destructive-outline"
-            disabled={busy}
+            disabled={uploading}
+            loading={removing}
             onClick={() => void onRemove()}
           >
-            <Trash2Icon />
-            Remove
+            <Trash2Icon aria-hidden="true" />
+            {removing ? "Removing…" : "Remove"}
           </Button>
         ) : null}
       </div>

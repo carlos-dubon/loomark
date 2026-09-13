@@ -1,11 +1,12 @@
 "use client"
 
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
-import { ClockIcon, Loader2Icon, XIcon } from "lucide-react"
+import { ClockIcon, XIcon } from "lucide-react"
 import { useEffect } from "react"
 
 import { hostFromUrl } from "@loomark/core/url"
 import { Button } from "@loomark/ui/components/button"
+import { Spinner } from "@loomark/ui/components/spinner"
 import {
   CommandDialog,
   CommandEmpty,
@@ -119,7 +120,10 @@ export const BookmarkSearchDialog = () => {
         placeholder="Search for bookmarks…"
       >
         {pending ? (
-          <Loader2Icon className="size-4 shrink-0 animate-spin text-muted-foreground" />
+          <Spinner
+            aria-hidden="true"
+            className="size-4 shrink-0 text-muted-foreground"
+          />
         ) : null}
       </CommandInput>
       <CommandList>

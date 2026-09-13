@@ -111,7 +111,7 @@ const ServerStep = ({
           {...register("serverUrl")}
         />
       </Field>
-      <Button type="button" disabled={pending} onClick={onContinue}>
+      <Button type="button" loading={pending} onClick={onContinue}>
         {pending ? "Waiting for permission…" : "Continue"}
       </Button>
     </div>
@@ -203,7 +203,7 @@ const CredentialsStep = ({
           {errors.root.message}
         </p>
       ) : null}
-      <Button type="submit" disabled={isSubmitting}>
+      <Button type="submit" loading={isSubmitting}>
         {isSubmitting ? "Connecting…" : "Connect"}
       </Button>
     </form>
