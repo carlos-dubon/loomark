@@ -1,6 +1,6 @@
 FROM node:24-alpine AS base
 RUN apk add --no-cache libc6-compat
-RUN corepack enable && corepack prepare pnpm@11.12.0 --activate
+RUN corepack enable && corepack prepare pnpm@11.26.0 --activate
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 

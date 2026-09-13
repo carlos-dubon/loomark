@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://loomarkdemo.vercel.app/login">Try the live demo</a> &#124; <a href="https://github.com/carlos-dubon/loomark/releases">Releases</a>
+  <a href="https://loomark-demo.vercel.app/login">Try the live demo</a> &#124; <a href="https://github.com/carlos-dubon/loomark/releases">Releases</a>
 </p>
 
 - Themes
