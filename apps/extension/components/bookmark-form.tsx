@@ -219,7 +219,7 @@ export const BookmarkForm = ({
           </Button>
         </div>
       </Field>
-      <div className="flex items-center justify-between rounded-md border px-3 py-2">
+      <div className="flex items-center justify-between gap-4">
         <Label size="sm" htmlFor="bookmark-pinned">
           Pin to homepage
         </Label>
