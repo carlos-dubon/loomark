@@ -2,7 +2,7 @@ const VERSION = "loomark-v1"
 const ASSETS = `${VERSION}-assets`
 const OFFLINE_URL = "/offline.html"
 
-const IMMUTABLE = ["/_next/static/", "/icons/", "/brand/", "/sounds/"]
+const IMMUTABLE = ["/_next/static/", "/icons/", "/brand/"]
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

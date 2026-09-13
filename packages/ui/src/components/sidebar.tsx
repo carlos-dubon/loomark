@@ -389,7 +389,7 @@ function SidebarGroupAction({
     props: mergeProps<"button">(
       {
         className: cn(
-          "absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-ring outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 hover:bg-sidebar-row-hover hover:text-sidebar-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-(--sidebar-icon-size) [&>svg]:shrink-0",
+          "absolute top-3.5 right-3 flex aspect-square w-5 cursor-pointer items-center justify-center rounded-md p-0 text-sidebar-foreground ring-ring outline-hidden transition-transform group-data-[collapsible=icon]:hidden after:absolute after:-inset-2 hover:bg-sidebar-row-hover hover:text-sidebar-foreground focus-visible:ring-2 md:after:hidden [&>svg]:size-(--sidebar-icon-size) [&>svg]:shrink-0",
           className
         ),
       },
