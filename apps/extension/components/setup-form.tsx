@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 import { ArrowLeftIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 import { errorMessage } from "@loomark/core/format"
 import type { Connection } from "@loomark/core/types"
@@ -131,7 +132,6 @@ const CredentialsStep = ({
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm<CredentialsValues>({
     resolver: zodResolver(credentialsSchema),
@@ -153,9 +153,7 @@ const CredentialsStep = ({
     try {
       await signIn(values)
     } catch (cause) {
-      setError("root", {
-        message: errorMessage(cause, "Could not sign in"),
-      })
+      toast.error(errorMessage(cause, "Could not sign in"))
     }
   })
 
@@ -207,11 +205,6 @@ const CredentialsStep = ({
           {...register("password")}
         />
       </Field>
-      {errors.root ? (
-        <p className="text-xs text-destructive" role="alert">
-          {errors.root.message}
-        </p>
-      ) : null}
       <Button type="submit" loading={isSubmitting}>
         {isSubmitting ? "Connecting…" : "Connect"}
       </Button>

@@ -79,7 +79,6 @@ const BookmarkForm = ({
     handleSubmit,
     setValue,
     getValues,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(bookmarkFormSchema),
@@ -152,9 +151,7 @@ const BookmarkForm = ({
       toast.success(editing ? "Bookmark updated" : "Bookmark saved")
       onClose()
     } catch (cause) {
-      setError("root", {
-        message: errorMessage(cause, "Something went wrong"),
-      })
+      toast.error(errorMessage(cause, "Something went wrong"))
     }
   })
 
@@ -269,11 +266,6 @@ const BookmarkForm = ({
             )}
           />
         </div>
-        {errors.root ? (
-          <p className="text-sm text-destructive" role="alert">
-            {errors.root.message}
-          </p>
-        ) : null}
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancel

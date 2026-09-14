@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client"
 
 import "@/assets/tailwind.css"
 
+import { Toaster } from "@loomark/ui/components/sonner"
+
 import { queryClient } from "@/lib/queries"
 
 import { App } from "./App"
@@ -13,6 +15,7 @@ if (container) {
   createRoot(container).render(
     <QueryClientProvider client={queryClient}>
       <App />
+      <Toaster position="top-center" />
     </QueryClientProvider>
   )
 }

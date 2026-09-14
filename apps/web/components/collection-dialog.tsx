@@ -58,7 +58,6 @@ const CollectionForm = ({
     register,
     control,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(collectionCreateSchema),
@@ -98,9 +97,7 @@ const CollectionForm = ({
       toast.success(editing ? "Collection updated" : "Collection created")
       onClose()
     } catch (cause) {
-      setError("root", {
-        message: errorMessage(cause, "Something went wrong"),
-      })
+      toast.error(errorMessage(cause, "Something went wrong"))
     }
   })
 
@@ -167,11 +164,6 @@ const CollectionForm = ({
             )}
           />
         </Field>
-        {errors.root ? (
-          <p className="text-sm text-destructive" role="alert">
-            {errors.root.message}
-          </p>
-        ) : null}
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancel

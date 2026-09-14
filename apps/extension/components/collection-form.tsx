@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import { ArrowLeftIcon } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 import { errorMessage } from "@loomark/core/format"
 import { flattenCollections } from "@loomark/core/tree"
@@ -33,7 +34,6 @@ export const CollectionForm = ({
     register,
     control,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm<CollectionFormValues>({
     resolver: zodResolver(collectionFormSchema),
@@ -54,9 +54,7 @@ export const CollectionForm = ({
     try {
       await create(values)
     } catch (cause) {
-      setError("root", {
-        message: errorMessage(cause, "Could not create it"),
-      })
+      toast.error(errorMessage(cause, "Could not create it"))
     }
   })
 
@@ -121,11 +119,6 @@ export const CollectionForm = ({
           )}
         />
       </Field>
-      {errors.root ? (
-        <p className="text-xs text-destructive" role="alert">
-          {errors.root.message}
-        </p>
-      ) : null}
       <div className="flex justify-end gap-2">
         <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
           Cancel

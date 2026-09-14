@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { PlusIcon, WandSparklesIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 import { errorMessage } from "@loomark/core/format"
 import { flattenCollections } from "@loomark/core/tree"
@@ -56,7 +57,6 @@ export const BookmarkForm = ({
     control,
     handleSubmit,
     setValue,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm<BookmarkFormValues>({
     resolver: zodResolver(bookmarkFormSchema),
@@ -86,7 +86,7 @@ export const BookmarkForm = ({
       setValue("description", metadata.description ?? "")
     },
     onError: () => {
-      setError("root", { message: "Could not read that page" })
+      toast.error("Could not read that page")
     },
   })
 
@@ -99,9 +99,7 @@ export const BookmarkForm = ({
       onRemoved()
     },
     onError: (cause) => {
-      setError("root", {
-        message: errorMessage(cause, "Could not remove it"),
-      })
+      toast.error(errorMessage(cause, "Could not remove it"))
     },
     onSettled: () => {
       setConfirmingRemove(false)
@@ -157,9 +155,7 @@ export const BookmarkForm = ({
     try {
       await save(payload)
     } catch (cause) {
-      setError("root", {
-        message: errorMessage(cause, "Could not save it"),
-      })
+      toast.error(errorMessage(cause, "Could not save it"))
     }
   })
 
@@ -252,11 +248,6 @@ export const BookmarkForm = ({
           )}
         />
       </div>
-      {errors.root ? (
-        <p className="text-xs text-destructive" role="alert">
-          {errors.root.message}
-        </p>
-      ) : null}
       <div className="flex items-center justify-between gap-2">
         {bookmark ? (
           <Button

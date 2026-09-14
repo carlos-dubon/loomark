@@ -1,6 +1,7 @@
 "use client"
 
-import type { ComponentProps, ReactNode } from "react"
+import { useState, type ComponentProps, type ReactNode } from "react"
+import { Collapsible } from "react-fast-collapsible"
 
 import { cn } from "@loomark/core/utils"
 
@@ -45,37 +46,43 @@ export const Field = ({
   size?: FieldSize
   className?: string
   children: ReactNode
-}) => (
-  <div
-    className={cn(
-      "flex flex-col",
-      size === "sm" ? "gap-1.5" : "gap-2",
-      className
-    )}
-  >
-    {label || hint ? (
-      <div className="flex items-baseline justify-between gap-2">
-        {label ? (
-          <Label htmlFor={htmlFor} size={size}>
-            {label}
-          </Label>
-        ) : (
-          <span />
-        )}
-        {hint}
+}) => {
+  const [lastError, setLastError] = useState(error)
+
+  if (error && error !== lastError) {
+    setLastError(error)
+  }
+
+  return (
+    <div className={className}>
+      <div className={cn("flex flex-col", size === "sm" ? "gap-1.5" : "gap-2")}>
+        {label || hint ? (
+          <div className="flex items-baseline justify-between gap-2">
+            {label ? (
+              <Label htmlFor={htmlFor} size={size}>
+                {label}
+              </Label>
+            ) : (
+              <span />
+            )}
+            {hint}
+          </div>
+        ) : null}
+        {children}
       </div>
-    ) : null}
-    {children}
-    {error ? (
-      <p
-        className={cn(
-          "text-destructive",
-          size === "sm" ? "text-xs" : "text-sm"
-        )}
-        role="alert"
+      <Collapsible
+        open={Boolean(error)}
+        duration={150}
+        innerClassName={size === "sm" ? "pt-1.5" : "pt-2"}
       >
-        {error}
-      </p>
-    ) : null}
-  </div>
-)
+        <p
+          key={error ? "error" : "cleared"}
+          className="text-xs text-destructive"
+          role={error ? "alert" : undefined}
+        >
+          {error || lastError}
+        </p>
+      </Collapsible>
+    </div>
+  )
+}

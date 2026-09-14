@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 import { Button } from "@loomark/ui/components/button"
 import {
@@ -32,7 +33,6 @@ export const LoginForm = ({ callbackUrl }: Props) => {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -46,7 +46,7 @@ export const LoginForm = ({ callbackUrl }: Props) => {
     })
 
     if (result?.error) {
-      setError("root", { message: "Invalid email or password" })
+      toast.error("Invalid email or password")
       return
     }
 
@@ -88,11 +88,6 @@ export const LoginForm = ({ callbackUrl }: Props) => {
               {...register("password")}
             />
           </Field>
-          {errors.root ? (
-            <p className="text-sm text-destructive" role="alert">
-              {errors.root.message}
-            </p>
-          ) : null}
         </CardContent>
         <CardFooter className="mt-4 flex-col items-stretch gap-3">
           <Button type="submit" loading={isSubmitting}>
