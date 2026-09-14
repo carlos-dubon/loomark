@@ -2,7 +2,11 @@
 
 import { Columns3Icon } from "lucide-react"
 
-import { MAX_GRID_COLUMNS, MIN_GRID_COLUMNS } from "@loomark/core/view-mode"
+import {
+  DEFAULT_GRID_COLUMNS,
+  GRID_COLUMNS,
+  type GridColumns,
+} from "@loomark/core/view-mode"
 import { Button } from "@loomark/ui/components/button"
 import {
   Popover,
@@ -13,13 +17,11 @@ import { Slider, SliderLabel, SliderValue } from "@loomark/ui/components/slider"
 
 import { useGridColumns } from "@/hooks/use-grid-columns"
 
-const TICKS = Array.from(
-  { length: MAX_GRID_COLUMNS - MIN_GRID_COLUMNS + 1 },
-  (_, index) => MIN_GRID_COLUMNS + index
-)
+const label = (columns: GridColumns) => (columns === "auto" ? "Auto" : columns)
 
-const toNumber = (value: number | readonly number[]) =>
-  typeof value === "number" ? value : (value[0] ?? MIN_GRID_COLUMNS)
+const toColumns = (value: number | readonly number[]) =>
+  GRID_COLUMNS[typeof value === "number" ? value : (value[0] ?? 0)] ??
+  DEFAULT_GRID_COLUMNS
 
 export const GridColumnsControl = () => {
   const { columns, select, setPreview } = useGridColumns()
@@ -46,28 +48,31 @@ export const GridColumnsControl = () => {
       </PopoverTrigger>
       <PopoverContent align="end" className="w-64">
         <Slider
-          min={MIN_GRID_COLUMNS}
-          max={MAX_GRID_COLUMNS}
-          value={columns}
-          onValueChange={(value) => setPreview(toNumber(value))}
-          onValueCommitted={(value) => select(toNumber(value))}
+          min={0}
+          max={GRID_COLUMNS.length - 1}
+          value={GRID_COLUMNS.indexOf(columns)}
+          onValueChange={(value) => setPreview(toColumns(value))}
+          onValueCommitted={(value) => select(toColumns(value))}
+          getAriaValueText={(_formatted, value) => label(toColumns(value))}
         >
           <div className="mb-3 flex items-center justify-between">
             <SliderLabel>Columns</SliderLabel>
-            <SliderValue className="text-muted-foreground" />
+            <SliderValue className="text-muted-foreground">
+              {(_formatted, values) => label(toColumns(values))}
+            </SliderValue>
           </div>
         </Slider>
         <div
           aria-hidden="true"
           className="mt-3 flex w-full items-center justify-between gap-1 px-2.5 text-xs font-medium text-muted-foreground sm:px-2"
         >
-          {TICKS.map((tick) => (
+          {GRID_COLUMNS.map((tick) => (
             <span
               key={tick}
               className="flex w-0 flex-col items-center justify-center gap-2"
             >
               <span className="h-1 w-px bg-muted-foreground/72" />
-              <span>{tick}</span>
+              <span>{label(tick)}</span>
             </span>
           ))}
         </div>

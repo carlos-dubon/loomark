@@ -12,11 +12,7 @@ import {
   urlString,
 } from "@loomark/core/schemas"
 import { ORDER_SCOPES, SORT_ORDERS } from "@loomark/core/sort"
-import {
-  MAX_GRID_COLUMNS,
-  MIN_GRID_COLUMNS,
-  VIEW_MODES,
-} from "@loomark/core/view-mode"
+import { GRID_COLUMNS, VIEW_MODES } from "@loomark/core/view-mode"
 
 export const registerSchema = z.object({
   name: collectionName,
@@ -110,7 +106,7 @@ export const appearanceUpdateSchema = z
   .object({
     themeId: slug,
     viewMode: z.enum(VIEW_MODES),
-    gridColumns: z.number().int().min(MIN_GRID_COLUMNS).max(MAX_GRID_COLUMNS),
+    gridColumns: z.enum(GRID_COLUMNS),
     sortOrder: z.enum(SORT_ORDERS),
   })
   .partial()

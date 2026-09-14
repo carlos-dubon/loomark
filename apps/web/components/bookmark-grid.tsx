@@ -1,7 +1,7 @@
 "use client"
 
 import type { BookmarkDTO } from "@loomark/core/types"
-import type { ViewMode } from "@loomark/core/view-mode"
+import type { GridColumns, ViewMode } from "@loomark/core/view-mode"
 
 import { BookmarkCard } from "@/components/bookmark-card"
 import { useBookmarkDragStack } from "@/hooks/use-bookmark-drag-stack"
@@ -14,7 +14,7 @@ export const BookmarkGrid = ({
 }: {
   bookmarks: BookmarkDTO[]
   mode: ViewMode
-  columns: number
+  columns: GridColumns
   manual: boolean
 }) => {
   useBookmarkDragStack()
@@ -22,6 +22,7 @@ export const BookmarkGrid = ({
   return mode === "grid" ? (
     <div
       className="grid-fill"
+      data-columns={columns}
       style={{ "--grid-columns": columns } as React.CSSProperties}
     >
       {bookmarks.map((bookmark, index) => (

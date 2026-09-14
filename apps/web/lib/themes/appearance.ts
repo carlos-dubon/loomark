@@ -1,9 +1,9 @@
 import type { SortOrder } from "@loomark/core/sort"
-import type { ViewMode } from "@loomark/core/view-mode"
+import type { GridColumns, ViewMode } from "@loomark/core/view-mode"
 
 export type AppearanceDTO = {
   themeId: string
   viewMode: ViewMode
-  gridColumns: number
+  gridColumns: GridColumns
   sortOrder: SortOrder
 }

@@ -3,6 +3,7 @@ import { atomWithStorage } from "jotai/utils"
 
 import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import { IDLE_UPDATE_JOB, type UpdateJob } from "@loomark/core/updates"
+import type { GridColumns } from "@loomark/core/view-mode"
 
 import type { BookmarkQuery } from "@/lib/query-keys"
 import type { ThemeMode } from "@/lib/theme-mode"
@@ -107,7 +108,7 @@ export const clearRecentSearchesAtom = atom(null, (_get, set) => {
   set(recentSearchesAtom, [])
 })
 
-export const gridColumnsPreviewAtom = atom<number | null>(null)
+export const gridColumnsPreviewAtom = atom<GridColumns | null>(null)
 
 export const openInNewTabAtom = atom(true)
 

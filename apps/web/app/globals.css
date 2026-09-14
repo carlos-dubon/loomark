@@ -241,24 +241,23 @@
 }
 
 @utility grid-fill {
+  --grid-track: max(
+    11rem,
+    calc(
+      (100% - (var(--grid-columns, 4) - 1) * --spacing(3)) /
+        var(--grid-columns, 4) - 1px
+    )
+  );
   display: grid;
   gap: --spacing(3);
   grid-template-columns: repeat(
     auto-fill,
-    minmax(
-      min(
-        100%,
-        max(
-          11rem,
-          calc(
-            (100% - (var(--grid-columns, 4) - 1) * --spacing(3)) /
-              var(--grid-columns, 4) - 1px
-          )
-        )
-      ),
-      1fr
-    )
+    minmax(min(100%, var(--grid-track)), 1fr)
   );
+
+  &[data-columns="auto"] {
+    --grid-track: clamp(12rem, 20%, 18rem);
+  }
 
   @variant max-md {
     grid-template-columns: minmax(0, 1fr);

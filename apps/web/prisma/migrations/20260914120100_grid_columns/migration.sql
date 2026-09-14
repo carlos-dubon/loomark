@@ -1,0 +1,1 @@
+ALTER TABLE "User" ADD COLUMN "gridColumns" TEXT NOT NULL DEFAULT 'auto';

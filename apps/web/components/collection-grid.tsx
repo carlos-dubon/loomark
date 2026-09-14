@@ -7,6 +7,7 @@ import { useCallback, useMemo } from "react"
 
 import type { CollectionDTO } from "@loomark/core/types"
 import { cn } from "@loomark/core/utils"
+import type { GridColumns } from "@loomark/core/view-mode"
 
 import { CollectionCard } from "@/components/collection-card"
 import { useCoarsePointer } from "@/hooks/use-coarse-pointer"
@@ -92,13 +93,14 @@ export const CollectionGrid = ({
 }: {
   collections: CollectionDTO[]
   parentId: string | null
-  columns: number
+  columns: GridColumns
 }) => {
   useCollectionReorder(parentId)
 
   return (
     <div
       className="grid-fill"
+      data-columns={columns}
       style={{ "--grid-columns": columns } as React.CSSProperties}
     >
       {collections.map((collection, index) => (
