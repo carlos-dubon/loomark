@@ -4,35 +4,35 @@ import { useQueryClient } from "@tanstack/react-query"
 import {
   ChevronsUpDownIcon,
   LogOutIcon,
-  MoonIcon,
   SettingsIcon,
-  SunIcon,
+  SunMoonIcon,
 } from "lucide-react"
 import { signOut } from "next-auth/react"
-import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@loomark/ui/components/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@loomark/ui/components/dropdown-menu"
 import { SidebarMenuButton } from "@loomark/ui/components/sidebar"
 
 import { Link } from "@/components/link"
+import { UserAvatar } from "@/components/user-avatar"
 import { useCloseSidebar } from "@/hooks/use-close-sidebar"
-import { useThemeToggle } from "@/hooks/use-theme-toggle"
+import { useThemeMode } from "@/hooks/use-theme-mode"
 import { isDemo } from "@/lib/demo/config"
 import { signOut as demoSignOut } from "@/lib/client/demo/store"
+import { THEME_MODE_OPTIONS, toThemeMode } from "@/lib/theme-mode"
 
 export type SessionUser = {
   name: string | null
@@ -43,21 +43,20 @@ export type SessionUser = {
 export const UserMenu = ({ user }: { user: SessionUser }) => {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const { resolvedTheme } = useTheme()
-  const toggleTheme = useThemeToggle()
+  const { mode, select } = useThemeMode()
   const closeSidebar = useCloseSidebar()
   const label = user.name ?? user.email
-  const initials = label.slice(0, 2).toUpperCase()
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         render={<SidebarMenuButton size="lg" className="h-11 gap-2" />}
       >
-        <Avatar className="size-7 group-data-[collapsible=icon]:size-(--sidebar-icon-tile)">
-          {user.image ? <AvatarImage src={user.image} alt={label} /> : null}
-          <AvatarFallback className="text-xs">{initials}</AvatarFallback>
-        </Avatar>
+        <UserAvatar
+          user={user}
+          className="size-7 group-data-[collapsible=icon]:size-(--sidebar-icon-tile)"
+          fallbackClassName="text-xs"
+        />
         <div className="grid flex-1 text-left leading-tight">
           <span className="truncate text-sm font-medium">{label}</span>
           <span className="truncate text-xs text-muted-foreground">
@@ -78,10 +77,25 @@ export const UserMenu = ({ user }: { user: SessionUser }) => {
           <SettingsIcon />
           Settings
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={toggleTheme}>
-          {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
-          Toggle theme
-        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <SunMoonIcon />
+            Theme
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className="w-40 min-w-40">
+            <DropdownMenuRadioGroup
+              value={mode}
+              onValueChange={(value) => select(toThemeMode(value))}
+            >
+              {THEME_MODE_OPTIONS.map((option) => (
+                <DropdownMenuRadioItem key={option.value} value={option.value}>
+                  <option.icon />
+                  {option.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuItem
           variant="destructive"
           onClick={() => {

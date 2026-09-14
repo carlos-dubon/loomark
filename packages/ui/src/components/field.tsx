@@ -7,6 +7,7 @@ import { cn } from "@loomark/core/utils"
 
 import { controlSurface } from "../lib/control"
 import { Label } from "./label"
+import { Switch } from "./switch"
 
 export type FieldSize = "sm" | "default"
 
@@ -86,3 +87,29 @@ export const Field = ({
     </div>
   )
 }
+
+export const SwitchField = ({
+  id,
+  label,
+  description,
+  size = "default",
+  className,
+  ...props
+}: Omit<ComponentProps<typeof Switch>, "size" | "id"> & {
+  id: string
+  label: ReactNode
+  description?: ReactNode
+  size?: FieldSize
+}) => (
+  <div className={cn("flex items-center justify-between gap-4", className)}>
+    <div className="flex min-w-0 flex-col gap-0.5">
+      <Label htmlFor={id} size={size}>
+        {label}
+      </Label>
+      {description ? (
+        <span className="text-xs text-muted-foreground">{description}</span>
+      ) : null}
+    </div>
+    <Switch id={id} {...props} />
+  </div>
+)

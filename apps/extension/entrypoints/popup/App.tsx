@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   CheckIcon,
   ExternalLinkIcon,
-  GlobeIcon,
   LogOutIcon,
   SettingsIcon,
 } from "lucide-react"
@@ -10,14 +9,11 @@ import { useCallback, useEffect, useState } from "react"
 
 import { errorMessage } from "@loomark/core/format"
 import { unsortedCollection } from "@loomark/core/tree"
-import type {
-  ActiveTab,
-  CollectionDTO,
-  Connection,
-} from "@loomark/core/types"
+import type { ActiveTab, CollectionDTO, Connection } from "@loomark/core/types"
 import { hostFromUrl } from "@loomark/core/url"
 import { Button } from "@loomark/ui/components/button"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
+import { Favicon } from "@loomark/ui/components/favicon"
 import { Spinner } from "@loomark/ui/components/spinner"
 
 import { BookmarkForm } from "@/components/bookmark-form"
@@ -47,18 +43,7 @@ const Centered = ({ children }: { children: React.ReactNode }) => (
 
 const Header = ({ tab }: { tab: ActiveTab }) => (
   <header className="flex items-center gap-2.5 border-b p-3">
-    {tab.faviconUrl ? (
-      <img
-        src={tab.faviconUrl}
-        alt=""
-        className="size-5 shrink-0 rounded-sm"
-        onError={(event) => {
-          event.currentTarget.style.visibility = "hidden"
-        }}
-      />
-    ) : (
-      <GlobeIcon className="size-5 shrink-0 text-muted-foreground" />
-    )}
+    <Favicon src={tab.faviconUrl} className="size-5 shrink-0 rounded-sm" />
     <div className="flex min-w-0 flex-col">
       <p className="truncate text-sm font-medium">
         {tab.title || hostFromUrl(tab.url)}
@@ -87,15 +72,17 @@ const StatusBar = ({
 
   return (
     <footer className="flex items-center justify-between gap-2 border-t px-3 py-2">
-      <button
+      <Button
         type="button"
+        variant="ghost-muted"
+        size="compact"
         onClick={onDisconnect}
         title="Disconnect this browser"
-        className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+        className="-ml-2 min-w-0 shrink"
       >
-        <LogOutIcon className="size-3.5 shrink-0" />
+        <LogOutIcon />
         <span className="truncate">{connection.user.email}</span>
-      </button>
+      </Button>
       {saved ? (
         <span className="flex shrink-0 items-center gap-1.5 text-xs font-medium text-success">
           <CheckIcon className="size-4" />
@@ -360,15 +347,17 @@ export const App = () => {
           <p className="text-xs text-muted-foreground">
             Loomark can only save regular web pages.
           </p>
-          <a
-            href={connection.serverUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-medium underline underline-offset-4"
+          <Button
+            variant="link"
+            size="compact"
+            nativeButton={false}
+            render={
+              <a href={connection.serverUrl} target="_blank" rel="noreferrer" />
+            }
           >
             Open Loomark
-            <ExternalLinkIcon className="size-3.5" />
-          </a>
+            <ExternalLinkIcon />
+          </Button>
         </Centered>
       </Shell>
     )

@@ -41,7 +41,7 @@ export const DemoShell = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <HydrationBoundary state={seed}>
-      <AppearanceProvider openInNewTab>
+      <AppearanceProvider openInNewTab themeMode="system">
         <SidebarProvider className="h-svh overflow-hidden" defaultOpen>
           <DndProvider>
             <AppSidebar isOwner={false} user={state.user} />

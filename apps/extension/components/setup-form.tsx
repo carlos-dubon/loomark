@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { ArrowLeftIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -12,6 +11,7 @@ import { Button } from "@loomark/ui/components/button"
 import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
 
+import { PanelHeader } from "@/components/panel-header"
 import { connect } from "@/lib/api"
 import { hasHostPermission, requestHostPermission } from "@/lib/permissions"
 import {
@@ -159,21 +159,12 @@ const CredentialsStep = ({
 
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-3 p-4">
-      <div className="flex items-center gap-1">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          aria-label="Change server"
-          onClick={onBack}
-        >
-          <ArrowLeftIcon />
-        </Button>
-        <div className="flex min-w-0 flex-col">
-          <h1 className="text-sm font-medium">Sign in</h1>
-          <p className="truncate text-xs text-muted-foreground">{serverUrl}</p>
-        </div>
-      </div>
+      <PanelHeader
+        title="Sign in"
+        description={serverUrl}
+        backLabel="Change server"
+        onBack={onBack}
+      />
       <Field
         size="sm"
         label="Email"

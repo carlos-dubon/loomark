@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAtom } from "jotai"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -13,6 +13,7 @@ import {
   collectDescendantIds,
   flattenTree,
 } from "@loomark/core/tree"
+import type { CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import {
   Dialog,
@@ -22,6 +23,7 @@ import {
   DialogTitle,
 } from "@loomark/ui/components/dialog"
 import { Field } from "@loomark/ui/components/field"
+import { IconPicker } from "@loomark/ui/components/icon-picker"
 import { Input } from "@loomark/ui/components/input"
 import {
   Select,
@@ -31,28 +33,34 @@ import {
   SelectValue,
 } from "@loomark/ui/components/select"
 
-import { IconPicker } from "@/components/icon-picker"
 import { useCollections } from "@/hooks/use-collections"
+import { useRemountKey } from "@/hooks/use-remount-key"
 import { api } from "@/lib/client/api"
 import { collectionsQuery, upsertCollectionInCache } from "@/lib/client/queries"
 import {
   collectionCreateSchema,
   type CollectionCreateInput,
 } from "@/lib/schemas"
-import { collectionDialogAtom, type CollectionDialogState } from "@/store/atoms"
+import { collectionDialogAtom } from "@/store/atoms"
 
 const NONE = "__root__"
 
-const CollectionForm = ({
-  state,
-  onClose,
-}: {
-  state: CollectionDialogState
+type CollectionFormDialogProps = {
+  open: boolean
+  collection: CollectionDTO | null
+  parentId: string | null
   onClose: () => void
-}) => {
+  onSaved?: (collection: CollectionDTO) => void
+}
+
+const CollectionForm = ({
+  collection: editing,
+  parentId,
+  onClose,
+  onSaved,
+}: Omit<CollectionFormDialogProps, "open">) => {
   const queryClient = useQueryClient()
   const collections = useCollections()
-  const editing = state.collection
 
   const {
     register,
@@ -64,7 +72,7 @@ const CollectionForm = ({
     defaultValues: {
       name: editing?.name ?? "",
       icon: editing?.icon ?? null,
-      parentId: editing?.parentId ?? state.parentId ?? null,
+      parentId: editing?.parentId ?? parentId,
     },
   })
 
@@ -93,8 +101,9 @@ const CollectionForm = ({
 
   const onSubmit = handleSubmit(async (values) => {
     try {
-      await save(values)
+      const saved = await save(values)
       toast.success(editing ? "Collection updated" : "Collection created")
+      onSaved?.(saved)
       onClose()
     } catch (cause) {
       toast.error(errorMessage(cause, "Something went wrong"))
@@ -177,34 +186,46 @@ const CollectionForm = ({
   )
 }
 
-export const CollectionDialog = () => {
-  const [state, setState] = useAtom(collectionDialogAtom)
-  const [formKey, setFormKey] = useState(0)
-  const [wasOpen, setWasOpen] = useState(state.open)
-
-  if (wasOpen !== state.open) {
-    setWasOpen(state.open)
-
-    if (state.open) {
-      setFormKey((value) => value + 1)
-    }
-  }
-
-  const close = () =>
-    setState({ open: false, collection: null, parentId: null })
+export const CollectionFormDialog = ({
+  open,
+  collection,
+  parentId,
+  onClose,
+  onSaved,
+}: CollectionFormDialogProps) => {
+  const formKey = useRemountKey(open)
 
   return (
     <Dialog
-      open={state.open}
-      onOpenChange={(open) => {
-        if (!open) {
-          close()
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) {
+          onClose()
         }
       }}
     >
       <DialogContent>
-        <CollectionForm key={formKey} state={state} onClose={close} />
+        <CollectionForm
+          key={formKey}
+          collection={collection}
+          parentId={parentId}
+          onClose={onClose}
+          onSaved={onSaved}
+        />
       </DialogContent>
     </Dialog>
+  )
+}
+
+export const CollectionDialog = () => {
+  const [state, setState] = useAtom(collectionDialogAtom)
+
+  return (
+    <CollectionFormDialog
+      {...state}
+      onClose={() =>
+        setState({ open: false, collection: null, parentId: null })
+      }
+    />
   )
 }

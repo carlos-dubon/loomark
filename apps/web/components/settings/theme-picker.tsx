@@ -4,15 +4,24 @@ import { CheckIcon } from "lucide-react"
 
 import { cn } from "@loomark/core/utils"
 import { Spinner } from "@loomark/ui/components/spinner"
+import { controlSurface } from "@loomark/ui/lib/control"
 
 import { useAppearance, useUpdateAppearance } from "@/hooks/use-appearance"
-import { useIsDark } from "@/hooks/use-is-dark"
 import { THEME_OPTIONS } from "@/lib/themes/palettes"
 import type { ThemeSwatch } from "@/lib/themes/theme"
 
-const Preview = ({ swatch }: { swatch: ThemeSwatch }) => (
+const Preview = ({
+  swatch,
+  className,
+}: {
+  swatch: ThemeSwatch
+  className?: string
+}) => (
   <span
-    className="flex h-11 w-14 shrink-0 overflow-hidden rounded-md border"
+    className={cn(
+      "flex h-11 w-14 shrink-0 overflow-hidden rounded-md border",
+      className
+    )}
     style={{ backgroundColor: swatch.canvas, borderColor: swatch.accent }}
   >
     <span
@@ -39,7 +48,6 @@ const Preview = ({ swatch }: { swatch: ThemeSwatch }) => (
 
 export const ThemePicker = () => {
   const appearance = useAppearance()
-  const dark = useIsDark()
   const {
     mutate,
     isPending: saving,
@@ -60,13 +68,15 @@ export const ThemePicker = () => {
             disabled={saving}
             onClick={() => mutate({ themeId: option.id })}
             className={cn(
-              "relative flex cursor-pointer items-center gap-3 rounded-lg border border-input bg-background p-2 text-left shadow-xs/5 transition-[box-shadow,background-color] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/24 disabled:cursor-progress disabled:opacity-64 dark:bg-input/32",
+              controlSurface,
+              "relative flex cursor-pointer items-center gap-3 p-2 text-left transition-[box-shadow,background-color] disabled:cursor-progress",
               active
                 ? "border-ring ring-2 ring-ring/24"
                 : "hover:bg-accent/50 dark:hover:bg-input/64"
             )}
           >
-            <Preview swatch={dark ? option.dark : option.light} />
+            <Preview swatch={option.light} className="dark:hidden" />
+            <Preview swatch={option.dark} className="hidden dark:flex" />
             <span className="min-w-0 flex-1 truncate text-sm font-medium">
               {option.label}
             </span>

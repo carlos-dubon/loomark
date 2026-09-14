@@ -99,19 +99,17 @@ export const BookmarkListView = ({
         ) : hasCollections ? (
           <section className="flex flex-col gap-3">
             <h2 className="text-sm font-semibold">Bookmarks</h2>
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-12 text-center">
-              <BookmarkIcon className="mb-3 size-8 text-muted-foreground" />
-              <p className="text-sm font-medium">
-                No bookmarks in this collection
-              </p>
-              <p className="mb-4 text-xs text-muted-foreground">
-                Add a bookmark to get started.
-              </p>
-              <Button variant="outline" onClick={addBookmark}>
-                <PlusIcon />
-                Add bookmark
-              </Button>
-            </div>
+            <EmptyState
+              icon={BookmarkIcon}
+              title="No bookmarks in this collection"
+              description="Add a bookmark to get started."
+              action={
+                <Button variant="outline" onClick={addBookmark}>
+                  <PlusIcon />
+                  Add bookmark
+                </Button>
+              }
+            />
           </section>
         ) : (
           <div className="flex flex-1 items-center justify-center">

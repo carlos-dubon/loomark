@@ -1,12 +1,17 @@
 "use client"
 
-import { GlobeIcon } from "lucide-react"
-import { useState } from "react"
-
 import { routes } from "@loomark/core/routes"
-import { cn } from "@loomark/core/utils"
+import { Favicon } from "@loomark/ui/components/favicon"
 
 import { isDemo } from "@/lib/demo/config"
+
+const proxied = (src: string | null) => {
+  if (!src) return null
+  if (src.startsWith("data:")) return src
+  if (src.startsWith("/api/")) return src
+  if (isDemo) return src
+  return routes.favicon(src)
+}
 
 export const FaviconImage = ({
   src,
@@ -14,35 +19,4 @@ export const FaviconImage = ({
 }: {
   src: string | null
   className?: string
-}) => {
-  const [failed, setFailed] = useState(false)
-  const [lastSrc, setLastSrc] = useState(src)
-
-  if (lastSrc !== src) {
-    setLastSrc(src)
-    setFailed(false)
-  }
-
-  const proxiedSrc = (() => {
-    if (!src) return null
-    if (src.startsWith("data:")) return src
-    if (src.startsWith("/api/")) return src
-    if (isDemo) return src
-    return routes.favicon(src)
-  })()
-
-  if (!proxiedSrc || failed) {
-    return (
-      <GlobeIcon className={cn("size-4 text-muted-foreground", className)} />
-    )
-  }
-
-  return (
-    <img
-      src={proxiedSrc}
-      alt=""
-      onError={() => setFailed(true)}
-      className={cn("size-4 rounded-[4px] object-contain", className)}
-    />
-  )
-}
+}) => <Favicon src={proxied(src)} className={className} />

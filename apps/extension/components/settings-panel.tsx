@@ -1,10 +1,11 @@
-import { ArrowLeftIcon, RefreshCwIcon } from "lucide-react"
+import { RefreshCwIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { Button } from "@loomark/ui/components/button"
+import { Field, SwitchField } from "@loomark/ui/components/field"
 import { Spinner } from "@loomark/ui/components/spinner"
-import { Switch } from "@loomark/ui/components/switch"
 
+import { PanelHeader } from "@/components/panel-header"
 import { useSyncStatus } from "@/hooks/use-sync-status"
 import {
   hasBookmarksPermission,
@@ -123,38 +124,20 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className="flex flex-col gap-4 p-3">
-      <div className="flex items-center gap-1">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          aria-label="Back"
-          onClick={onClose}
-        >
-          <ArrowLeftIcon />
-        </Button>
-        <h2 className="text-sm font-medium">Settings</h2>
-      </div>
+      <PanelHeader title="Settings" onBack={onClose} />
 
       <Section title="Bookmark sync">
-        <label className="flex items-start justify-between gap-3">
-          <span className="flex flex-col gap-0.5 text-sm font-medium">
-            Mirror the bookmarks bar
-          </span>
-          <Switch
+        <Field error={error ?? undefined}>
+          <SwitchField
+            id="sync-enabled"
+            label="Mirror the bookmarks bar"
             checked={Boolean(settings?.enabled)}
             disabled={!settings || busy}
             onCheckedChange={(checked) => {
               void toggle(checked)
             }}
           />
-        </label>
-
-        {error ? (
-          <p className="text-xs text-destructive" role="alert">
-            {error}
-          </p>
-        ) : null}
+        </Field>
 
         {settings?.enabled ? (
           <div className="flex items-center justify-between gap-2 border-t pt-3">

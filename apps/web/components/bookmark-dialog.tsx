@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAtom } from "jotai"
-import { WandSparklesIcon } from "lucide-react"
+import { PlusIcon, WandSparklesIcon } from "lucide-react"
 import * as React from "react"
 import { useMemo, useState } from "react"
 import { Controller, useForm, useWatch } from "react-hook-form"
@@ -22,9 +22,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@loomark/ui/components/dialog"
-import { Field } from "@loomark/ui/components/field"
+import { Field, SwitchField } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
-import { Label } from "@loomark/ui/components/label"
 import {
   Select,
   SelectContent,
@@ -32,10 +31,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@loomark/ui/components/select"
-import { Switch } from "@loomark/ui/components/switch"
 import { Textarea } from "@loomark/ui/components/textarea"
 
+import { CollectionFormDialog } from "@/components/collection-dialog"
 import { useCollections } from "@/hooks/use-collections"
+import { useRemountKey } from "@/hooks/use-remount-key"
 import { api } from "@/lib/client/api"
 import {
   invalidateLibrary,
@@ -72,6 +72,7 @@ const BookmarkForm = ({
   const queryClient = useQueryClient()
   const collections = useCollections()
   const editing = state.bookmark
+  const [creatingCollection, setCreatingCollection] = useState(false)
 
   const {
     register,
@@ -218,54 +219,63 @@ const BookmarkForm = ({
           />
         </Field>
         <Field label="Collection" htmlFor="bookmark-collection">
-          <Controller
-            control={control}
-            name="collectionId"
-            render={({ field }) => (
-              <Select
-                value={field.value ?? NONE}
-                onValueChange={(value) =>
-                  field.onChange(value === NONE ? null : String(value))
-                }
-              >
-                <SelectTrigger id="bookmark-collection" className="w-full">
-                  <SelectValue>
-                    {(value) =>
-                      value && value !== NONE
-                        ? (flat.find((node) => node.id === value)?.name ??
-                          "Unsorted")
-                        : "Unsorted"
-                    }
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={NONE}>Unsorted</SelectItem>
-                  {flat.map((node) => (
-                    <SelectItem key={node.id} value={node.id}>
-                      <span style={{ paddingLeft: node.depth * 10 }}>
-                        {node.name}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
+          <div className="flex gap-2">
+            <Controller
+              control={control}
+              name="collectionId"
+              render={({ field }) => (
+                <Select
+                  value={field.value ?? NONE}
+                  onValueChange={(value) =>
+                    field.onChange(value === NONE ? null : String(value))
+                  }
+                >
+                  <SelectTrigger id="bookmark-collection" className="w-full">
+                    <SelectValue>
+                      {(value) =>
+                        value && value !== NONE
+                          ? (flat.find((node) => node.id === value)?.name ??
+                            "Unsorted")
+                          : "Unsorted"
+                      }
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NONE}>Unsorted</SelectItem>
+                    {flat.map((node) => (
+                      <SelectItem key={node.id} value={node.id}>
+                        <span style={{ paddingLeft: node.depth * 10 }}>
+                          {node.name}
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              aria-label="New collection"
+              onClick={() => setCreatingCollection(true)}
+            >
+              <PlusIcon />
+            </Button>
+          </div>
         </Field>
-        <div className="flex items-center justify-between">
-          <Label htmlFor="bookmark-pinned">Pin to homepage</Label>
-          <Controller
-            control={control}
-            name="pinned"
-            render={({ field }) => (
-              <Switch
-                id="bookmark-pinned"
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
-            )}
-          />
-        </div>
+        <Controller
+          control={control}
+          name="pinned"
+          render={({ field }) => (
+            <SwitchField
+              id="bookmark-pinned"
+              label="Pin to homepage"
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          )}
+        />
         <DialogFooter>
           <Button type="button" variant="ghost" onClick={onClose}>
             Cancel
@@ -279,22 +289,20 @@ const BookmarkForm = ({
           </Button>
         </DialogFooter>
       </form>
+      <CollectionFormDialog
+        open={creatingCollection}
+        collection={null}
+        parentId={null}
+        onClose={() => setCreatingCollection(false)}
+        onSaved={(collection) => setValue("collectionId", collection.id)}
+      />
     </>
   )
 }
 
 export const BookmarkDialog = () => {
   const [state, setState] = useAtom(bookmarkDialogAtom)
-  const [formKey, setFormKey] = useState(0)
-  const [wasOpen, setWasOpen] = useState(state.open)
-
-  if (wasOpen !== state.open) {
-    setWasOpen(state.open)
-
-    if (state.open) {
-      setFormKey((value) => value + 1)
-    }
-  }
+  const formKey = useRemountKey(state.open)
 
   const close = () =>
     setState({ open: false, bookmark: null, collectionId: null })

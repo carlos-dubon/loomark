@@ -7,13 +7,9 @@ import { useRef, useState } from "react"
 import { toast } from "sonner"
 
 import { errorMessage } from "@loomark/core/format"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@loomark/ui/components/avatar"
 import { Button } from "@loomark/ui/components/button"
 
+import { UserAvatar } from "@/components/user-avatar"
 import { api } from "@/lib/client/api"
 import { toSquareImage } from "@/lib/client/image"
 
@@ -30,9 +26,6 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [image, setImage] = useState(profile.image)
-
-  const label = profile.name ?? profile.email
-  const initials = label.slice(0, 2).toUpperCase()
 
   const { mutate: upload, isPending: uploading } = useMutation({
     mutationFn: async (file: File) =>
@@ -61,10 +54,11 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
 
   return (
     <div className="flex items-center gap-4">
-      <Avatar className="size-16 shrink-0">
-        {image ? <AvatarImage src={image} alt={label} /> : null}
-        <AvatarFallback className="text-lg">{initials}</AvatarFallback>
-      </Avatar>
+      <UserAvatar
+        user={{ ...profile, image }}
+        className="size-16 shrink-0"
+        fallbackClassName="text-lg"
+      />
       <div className="flex flex-wrap items-center gap-2">
         <input
           ref={inputRef}

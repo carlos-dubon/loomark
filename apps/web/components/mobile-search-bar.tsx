@@ -4,6 +4,8 @@ import { useAtom, useSetAtom } from "jotai"
 import { SearchIcon } from "lucide-react"
 import { useEffect, useRef } from "react"
 
+import { Input } from "@loomark/ui/components/input"
+
 import { searchDialogAtom, searchQueryAtom } from "@/store/atoms"
 
 export const MobileSearchBar = () => {
@@ -20,15 +22,15 @@ export const MobileSearchBar = () => {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 px-4 pt-8 pb-[calc(--spacing(4)+env(safe-area-inset-bottom))] md:hidden">
       <div className="pointer-events-auto relative">
-        <SearchIcon className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-muted-foreground" />
-        <input
+        <SearchIcon className="pointer-events-none absolute top-1/2 left-4 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
           type="search"
           enterKeyHint="search"
           autoComplete="off"
           value=""
           aria-label="Search for bookmarks"
           placeholder="Search for bookmarks…"
-          className="h-12 w-full rounded-full border border-input bg-background pr-4 pl-10 text-base text-foreground shadow-lg outline-none placeholder:text-muted-foreground dark:bg-input/32 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none"
+          className="h-12 rounded-full text-base shadow-lg before:rounded-full sm:text-base [&_[data-slot=input]]:pr-4 [&_[data-slot=input]]:pl-10"
           onFocus={(event) => {
             if (open || !returning.current) {
               return

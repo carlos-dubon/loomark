@@ -22,6 +22,7 @@ import { ensureUnsortedCollection } from "@/lib/server/collections"
 import { NEW_TAB_COOKIE_NAME, toOpenInNewTab } from "@/lib/open-target"
 import { makeQueryClient } from "@/lib/query-client"
 import { queryKeys } from "@/lib/query-keys"
+import { THEME_COOKIE_NAME, toThemeMode } from "@/lib/theme-mode"
 import { getCollections, getProfile } from "@/lib/server/queries"
 
 const AppLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -64,6 +65,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
         openInNewTab={toOpenInNewTab(
           cookieStore.get(NEW_TAB_COOKIE_NAME)?.value
         )}
+        themeMode={toThemeMode(cookieStore.get(THEME_COOKIE_NAME)?.value)}
       >
         <SidebarProvider
           className="h-svh overflow-hidden"

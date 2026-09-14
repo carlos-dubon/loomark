@@ -21,6 +21,7 @@ import {
 import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
 
+import { Link } from "@/components/link"
 import { DEMO_CREDENTIALS } from "@/lib/demo/config"
 import { signIn } from "@/lib/client/demo/store"
 
@@ -74,14 +75,13 @@ export const DemoLoginForm = () => {
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Want the real thing?{" "}
-            <a
+            <Link
               href="https://github.com/carlos-dubon/loomark"
               target="_blank"
-              rel="noreferrer"
               className="text-foreground underline"
             >
               Self-host Loomark
-            </a>
+            </Link>
           </p>
         </CardFooter>
       </form>

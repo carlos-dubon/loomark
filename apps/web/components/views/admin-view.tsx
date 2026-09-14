@@ -14,19 +14,7 @@ import { useState } from "react"
 
 import { formatBytes, formatDate } from "@loomark/core/format"
 import type { InstanceUserDTO } from "@loomark/core/types"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@loomark/ui/components/avatar"
 import { Button } from "@loomark/ui/components/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@loomark/ui/components/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,7 +25,8 @@ import {
 
 import { UserDeleteDialog } from "@/components/admin/user-delete-dialog"
 import { UserPasswordDialog } from "@/components/admin/user-password-dialog"
-import { PageHeader } from "@/components/page-header"
+import { SettingsCard, SettingsPage } from "@/components/settings/settings-page"
+import { UserAvatar } from "@/components/user-avatar"
 
 const Stat = ({
   icon: Icon,
@@ -70,26 +59,22 @@ export const AdminView = ({
 
   return (
     <>
-      <PageHeader
+      <SettingsPage
         title="Server administration"
         description="Accounts on this instance"
-      />
-      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 md:p-6">
-        <Card className="w-full max-w-3xl shrink-0">
-          <CardHeader>
-            <CardTitle>This instance</CardTitle>
-            <CardDescription>
+      >
+        <SettingsCard
+          title="This instance"
+          description={
+            <>
               {users.length} {users.length === 1 ? "account" : "accounts"},{" "}
               {totalBookmarks} {totalBookmarks === 1 ? "bookmark" : "bookmarks"}
               , {formatBytes(totalBytes)} in total.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-        <Card className="w-full max-w-3xl shrink-0">
-          <CardHeader>
-            <CardTitle>Accounts</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col divide-y">
+            </>
+          }
+        />
+        <SettingsCard title="Accounts">
+          <div className="flex flex-col divide-y">
             {users.map((user) => {
               const label = user.name ?? user.email
               const isOwner = user.role === "OWNER"
@@ -99,14 +84,11 @@ export const AdminView = ({
                   key={user.id}
                   className="flex items-center gap-3 py-3 first:pt-0 last:pb-0"
                 >
-                  <Avatar className="size-9 shrink-0">
-                    {user.image ? (
-                      <AvatarImage src={user.image} alt={label} />
-                    ) : null}
-                    <AvatarFallback className="text-xs">
-                      {label.slice(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar
+                    user={user}
+                    className="size-9 shrink-0"
+                    fallbackClassName="text-xs"
+                  />
                   <div className="flex min-w-0 flex-1 flex-col gap-1">
                     <div className="flex min-w-0 items-center gap-2">
                       <span className="truncate text-sm font-medium">
@@ -173,9 +155,9 @@ export const AdminView = ({
                 </div>
               )
             })}
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </SettingsCard>
+      </SettingsPage>
       <UserPasswordDialog
         user={resetting}
         onOpenChange={(open) => {

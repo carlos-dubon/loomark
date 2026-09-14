@@ -9,11 +9,9 @@ import { errorMessage } from "@loomark/core/format"
 import { flattenCollections } from "@loomark/core/tree"
 import type { ActiveTab, BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
-import { Field, NativeSelect } from "@loomark/ui/components/field"
+import { Field, NativeSelect, SwitchField } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
-import { Label } from "@loomark/ui/components/label"
 import { Textarea } from "@loomark/ui/components/textarea"
-import { Switch } from "@loomark/ui/components/switch"
 
 import {
   createBookmark,
@@ -232,22 +230,19 @@ export const BookmarkForm = ({
           </Button>
         </div>
       </Field>
-      <div className="flex items-center justify-between gap-4">
-        <Label size="sm" htmlFor="bookmark-pinned">
-          Pin to homepage
-        </Label>
-        <Controller
-          control={control}
-          name="pinned"
-          render={({ field }) => (
-            <Switch
-              id="bookmark-pinned"
-              checked={field.value}
-              onCheckedChange={field.onChange}
-            />
-          )}
-        />
-      </div>
+      <Controller
+        control={control}
+        name="pinned"
+        render={({ field }) => (
+          <SwitchField
+            size="sm"
+            id="bookmark-pinned"
+            label="Pin to homepage"
+            checked={field.value}
+            onCheckedChange={field.onChange}
+          />
+        )}
+      />
       <div className="flex items-center justify-between gap-2">
         {bookmark ? (
           <Button

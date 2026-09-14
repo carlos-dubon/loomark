@@ -5,6 +5,7 @@ import type { BookmarkDTO, CollectionDTO } from "@loomark/core/types"
 import { IDLE_UPDATE_JOB, type UpdateJob } from "@loomark/core/updates"
 
 import type { BookmarkQuery } from "@/lib/query-keys"
+import type { ThemeMode } from "@/lib/theme-mode"
 
 export type BookmarkDialogState = {
   open: boolean
@@ -107,6 +108,8 @@ export const clearRecentSearchesAtom = atom(null, (_get, set) => {
 })
 
 export const openInNewTabAtom = atom(true)
+
+export const serverThemeModeAtom = atom<ThemeMode>("system")
 
 export const bookmarkDialogAtom = atom<BookmarkDialogState>({
   open: false,

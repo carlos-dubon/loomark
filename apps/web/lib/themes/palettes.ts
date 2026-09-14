@@ -1,5 +1,3 @@
-// Palettes ported from https://github.com/pingdotgg/t3code — packages/shared/src/themePalettes.ts.
-
 import {
   DEFAULT_THEME_ID,
   toThemeOption,

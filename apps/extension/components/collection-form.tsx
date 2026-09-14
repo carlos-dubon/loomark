@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
-import { ArrowLeftIcon } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -9,9 +8,10 @@ import { flattenCollections } from "@loomark/core/tree"
 import type { CollectionDTO } from "@loomark/core/types"
 import { Button } from "@loomark/ui/components/button"
 import { Field, NativeSelect } from "@loomark/ui/components/field"
+import { IconPicker } from "@loomark/ui/components/icon-picker"
 import { Input } from "@loomark/ui/components/input"
 
-import { IconPicker } from "@/components/icon-picker"
+import { PanelHeader } from "@/components/panel-header"
 import { createCollection, type Auth } from "@/lib/api"
 import { collectionFormSchema, type CollectionFormValues } from "@/lib/schemas"
 
@@ -60,18 +60,7 @@ export const CollectionForm = ({
 
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-3 p-3">
-      <div className="flex items-center gap-1">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          aria-label="Back"
-          onClick={onCancel}
-        >
-          <ArrowLeftIcon />
-        </Button>
-        <h2 className="text-sm font-medium">New collection</h2>
-      </div>
+      <PanelHeader title="New collection" onBack={onCancel} />
       <Field
         size="sm"
         label="Name"
@@ -91,7 +80,7 @@ export const CollectionForm = ({
         control={control}
         name="icon"
         render={({ field }) => (
-          <IconPicker value={field.value} onChange={field.onChange} />
+          <IconPicker size="sm" value={field.value} onChange={field.onChange} />
         )}
       />
       <Field size="sm" label="Parent" htmlFor="collection-parent">

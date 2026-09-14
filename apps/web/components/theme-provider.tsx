@@ -1,9 +1,14 @@
 "use client"
 
-import * as React from "react"
-import { ThemeProvider as NextThemesProvider } from "next-themes"
+import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes"
 
 import { useThemeToggle } from "@/hooks/use-theme-toggle"
+import {
+  THEME_COOKIE_MAX_AGE,
+  THEME_COOKIE_NAME,
+  toThemeMode,
+} from "@/lib/theme-mode"
+import { useEffect } from "react"
 
 function ThemeProvider({
   children,
@@ -18,9 +23,22 @@ function ThemeProvider({
       {...props}
     >
       <ThemeHotkey />
+      <ThemeCookie />
       {children}
     </NextThemesProvider>
   )
+}
+
+const ThemeCookie = () => {
+  const { theme } = useTheme()
+
+  useEffect(() => {
+    if (theme) {
+      document.cookie = `${THEME_COOKIE_NAME}=${toThemeMode(theme)}; path=/; max-age=${THEME_COOKIE_MAX_AGE}; samesite=lax`
+    }
+  }, [theme])
+
+  return null
 }
 
 function isTypingTarget(target: EventTarget | null) {
@@ -39,7 +57,7 @@ function isTypingTarget(target: EventTarget | null) {
 function ThemeHotkey() {
   const toggleTheme = useThemeToggle()
 
-  React.useEffect(() => {
+  useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.defaultPrevented || event.repeat) {
         return
