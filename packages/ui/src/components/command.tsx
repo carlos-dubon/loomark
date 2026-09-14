@@ -80,7 +80,7 @@ function CommandInput({
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(
-          "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-placeholder disabled:cursor-not-allowed disabled:opacity-64",
+          "flex h-10 w-full rounded-md bg-transparent py-3 text-base outline-none placeholder:text-placeholder disabled:cursor-not-allowed disabled:opacity-64 sm:text-sm",
           className
         )}
         {...props}

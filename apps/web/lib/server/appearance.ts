@@ -1,5 +1,5 @@
 import { toSortOrder } from "@loomark/core/sort"
-import { toViewMode } from "@loomark/core/view-mode"
+import { toGridColumns, toViewMode } from "@loomark/core/view-mode"
 
 import { prisma } from "@/lib/server/prisma"
 import type { AppearanceDTO } from "@/lib/themes/appearance"
@@ -11,6 +11,7 @@ export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
     select: {
       themeId: true,
       viewMode: true,
+      gridColumns: true,
       sortOrder: true,
     },
   })
@@ -22,6 +23,7 @@ export const getAppearance = async (userId: string): Promise<AppearanceDTO> => {
   return {
     themeId: user.themeId,
     viewMode: toViewMode(user.viewMode),
+    gridColumns: toGridColumns(user.gridColumns),
     sortOrder: toSortOrder(user.sortOrder),
   }
 }

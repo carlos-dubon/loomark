@@ -4,5 +4,6 @@ import type { ViewMode } from "@loomark/core/view-mode"
 export type AppearanceDTO = {
   themeId: string
   viewMode: ViewMode
+  gridColumns: number
   sortOrder: SortOrder
 }

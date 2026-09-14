@@ -88,14 +88,19 @@ const CollectionGridItem = ({
 export const CollectionGrid = ({
   collections,
   parentId,
+  columns,
 }: {
   collections: CollectionDTO[]
   parentId: string | null
+  columns: number
 }) => {
   useCollectionReorder(parentId)
 
   return (
-    <div className="grid gap-3 @lg:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-4">
+    <div
+      className="grid-fill"
+      style={{ "--grid-columns": columns } as React.CSSProperties}
+    >
       {collections.map((collection, index) => (
         <CollectionGridItem
           key={collection.id}

@@ -240,6 +240,31 @@
   }
 }
 
+@utility grid-fill {
+  display: grid;
+  gap: --spacing(3);
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      min(
+        100%,
+        max(
+          11rem,
+          calc(
+            (100% - (var(--grid-columns, 4) - 1) * --spacing(3)) /
+              var(--grid-columns, 4) - 1px
+          )
+        )
+      ),
+      1fr
+    )
+  );
+
+  @variant max-md {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @utility dialog-backdrop {
   background: color-mix(in srgb, var(--background) 60%, transparent);
   -webkit-backdrop-filter: blur(4px);

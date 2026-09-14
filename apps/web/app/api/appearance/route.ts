@@ -19,6 +19,7 @@ export const PATCH = withUser(async (request, userId) => {
     data: {
       themeId: data.themeId,
       viewMode: data.viewMode,
+      gridColumns: data.gridColumns,
       sortOrder: data.sortOrder,
     },
   })

@@ -9,16 +9,21 @@ import { useBookmarkDragStack } from "@/hooks/use-bookmark-drag-stack"
 export const BookmarkGrid = ({
   bookmarks,
   mode,
+  columns,
   manual,
 }: {
   bookmarks: BookmarkDTO[]
   mode: ViewMode
+  columns: number
   manual: boolean
 }) => {
   useBookmarkDragStack()
 
   return mode === "grid" ? (
-    <div className="grid gap-3 @lg:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-4">
+    <div
+      className="grid-fill"
+      style={{ "--grid-columns": columns } as React.CSSProperties}
+    >
       {bookmarks.map((bookmark, index) => (
         <BookmarkCard
           key={bookmark.id}

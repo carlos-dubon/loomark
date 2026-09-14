@@ -107,6 +107,8 @@ export const clearRecentSearchesAtom = atom(null, (_get, set) => {
   set(recentSearchesAtom, [])
 })
 
+export const gridColumnsPreviewAtom = atom<number | null>(null)
+
 export const openInNewTabAtom = atom(true)
 
 export const serverThemeModeAtom = atom<ThemeMode>("system")
