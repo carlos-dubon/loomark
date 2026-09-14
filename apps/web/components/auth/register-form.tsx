@@ -19,6 +19,7 @@ import {
 } from "@loomark/ui/components/card"
 import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
+import { PasswordInput } from "@loomark/ui/components/password-input"
 
 import { Link } from "@/components/link"
 import { api } from "@/lib/client/api"
@@ -94,9 +95,8 @@ export const RegisterForm = () => {
             htmlFor="password"
             error={errors.password ? "Use at least 8 characters" : undefined}
           >
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               autoComplete="new-password"
               aria-invalid={Boolean(errors.password)}
               {...register("password")}

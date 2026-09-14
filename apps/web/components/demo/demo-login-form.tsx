@@ -20,6 +20,7 @@ import {
 } from "@loomark/ui/components/card"
 import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
+import { PasswordInput } from "@loomark/ui/components/password-input"
 
 import { Link } from "@/components/link"
 import { DEMO_CREDENTIALS } from "@/lib/demo/config"
@@ -53,9 +54,8 @@ export const DemoLoginForm = () => {
             />
           </Field>
           <Field label="Password" htmlFor="password">
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               readOnly
               defaultValue={DEMO_CREDENTIALS.password}
             />

@@ -10,6 +10,7 @@ import { safeNormalizeUrl } from "@loomark/core/url"
 import { Button } from "@loomark/ui/components/button"
 import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
+import { PasswordInput } from "@loomark/ui/components/password-input"
 
 import { PanelHeader } from "@/components/panel-header"
 import { connect } from "@/lib/api"
@@ -187,10 +188,9 @@ const CredentialsStep = ({
         htmlFor="password"
         error={errors.password?.message}
       >
-        <Input
+        <PasswordInput
           size="sm"
           id="password"
-          type="password"
           autoComplete="current-password"
           aria-invalid={Boolean(errors.password)}
           {...register("password")}

@@ -17,6 +17,7 @@ import {
 } from "@loomark/ui/components/card"
 import { Field } from "@loomark/ui/components/field"
 import { Input } from "@loomark/ui/components/input"
+import { PasswordInput } from "@loomark/ui/components/password-input"
 
 import { Link } from "@/components/link"
 import { loginSchema } from "@/lib/schemas"
@@ -80,9 +81,8 @@ export const LoginForm = ({ callbackUrl }: Props) => {
             htmlFor="password"
             error={errors.password ? "Enter your password" : undefined}
           >
-            <Input
+            <PasswordInput
               id="password"
-              type="password"
               autoComplete="current-password"
               aria-invalid={Boolean(errors.password)}
               {...register("password")}
