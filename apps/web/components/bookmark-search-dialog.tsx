@@ -18,6 +18,7 @@ import {
 } from "@loomark/ui/components/command"
 
 import { FaviconImage } from "@/components/favicon-image"
+import { useCoarsePointer } from "@/hooks/use-coarse-pointer"
 import { useOpenInNewTab } from "@/hooks/use-open-in-new-tab"
 import { bookmarkListQuery } from "@/lib/client/queries"
 import {
@@ -41,6 +42,7 @@ export const BookmarkSearchDialog = () => {
   const removeRecent = useSetAtom(removeRecentSearchAtom)
   const clearRecents = useSetAtom(clearRecentSearchesAtom)
   const { open: openUrl } = useOpenInNewTab()
+  const coarsePointer = useCoarsePointer()
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -97,6 +99,7 @@ export const BookmarkSearchDialog = () => {
       description="Search your bookmarks by title, url or description."
     >
       <CommandInput
+        autoFocus={coarsePointer}
         value={query}
         onValueChange={setQuery}
         placeholder="Search for bookmarks…"
