@@ -1,13 +1,13 @@
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react"
 
-export const THEME_MODES = ["light", "dark", "system"] as const
+export const THEME_MODES = ["system", "light", "dark"] as const
 
 export type ThemeMode = (typeof THEME_MODES)[number]
 
 export const THEME_MODE_OPTIONS = [
+  { value: "system", label: "System", icon: MonitorIcon },
   { value: "light", label: "Light", icon: SunIcon },
   { value: "dark", label: "Dark", icon: MoonIcon },
-  { value: "system", label: "System", icon: MonitorIcon },
 ] satisfies { value: ThemeMode; label: string; icon: typeof SunIcon }[]
 
 export const THEME_COOKIE_NAME = "loomark_theme"

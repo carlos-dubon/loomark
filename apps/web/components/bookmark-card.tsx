@@ -1,7 +1,7 @@
 "use client"
 
 import { useSortable } from "@dnd-kit/react/sortable"
-import { CalendarIcon, LinkIcon, PinIcon } from "lucide-react"
+import { CalendarIcon, LinkIcon } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { formatDate } from "@loomark/core/format"
@@ -9,7 +9,6 @@ import type { BookmarkDTO } from "@loomark/core/types"
 import { hostFromUrl } from "@loomark/core/url"
 import { cn } from "@loomark/core/utils"
 import type { ViewMode } from "@loomark/core/view-mode"
-import { Button } from "@loomark/ui/components/button"
 import { Card, CardContent } from "@loomark/ui/components/card"
 import { Checkbox } from "@loomark/ui/components/checkbox"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
@@ -17,7 +16,6 @@ import { CollectionIcon } from "@loomark/ui/components/collection-icon"
 import { BookmarkMenu } from "@/components/bookmark-menu"
 import { FaviconImage } from "@/components/favicon-image"
 import { Link } from "@/components/link"
-import { useBookmarkActions } from "@/hooks/use-bookmark-actions"
 import { useBookmarkPreview } from "@/hooks/use-bookmark-preview"
 import { useBookmarkSelected } from "@/hooks/use-bookmark-selection"
 import { useCoarsePointer } from "@/hooks/use-coarse-pointer"
@@ -29,7 +27,6 @@ type DragState = "idle" | "source" | "group"
 type DragProps = {
   ref: (element: Element | null) => void
   dragState: DragState
-  groupSize: number
 }
 
 const DRAG_CLASS: Record<DragState, string | undefined> = {
@@ -37,24 +34,6 @@ const DRAG_CLASS: Record<DragState, string | undefined> = {
   source: "opacity-40",
   group: "shadow-xl",
 }
-
-const GroupCount = ({
-  count,
-  className,
-}: {
-  count: number
-  className?: string
-}) => (
-  <span
-    aria-hidden
-    className={cn(
-      "pointer-events-none absolute z-30 flex h-7 min-w-7 items-center justify-center rounded-full bg-primary px-2 text-sm font-semibold text-primary-foreground tabular-nums shadow-md ring-2 ring-background",
-      className
-    )}
-  >
-    {count}
-  </span>
-)
 
 const bookmarkLabel = (bookmark: BookmarkDTO) =>
   bookmark.title?.trim() || hostFromUrl(bookmark.url)
@@ -159,34 +138,16 @@ const BookmarkActions = ({
 }: {
   bookmark: BookmarkDTO
   className?: string
-}) => {
-  const { togglePin } = useBookmarkActions()
-
-  return (
-    <div
-      className={cn(
-        "relative z-10 flex shrink-0 items-center before:absolute before:-inset-2",
-        className
-      )}
-    >
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        aria-label={bookmark.pinned ? "Unpin bookmark" : "Pin to homepage"}
-        aria-pressed={bookmark.pinned}
-        onClick={() => togglePin(bookmark)}
-        className={
-          bookmark.pinned
-            ? "text-foreground"
-            : "text-muted-foreground hover:text-foreground"
-        }
-      >
-        <PinIcon className={bookmark.pinned ? "fill-current" : undefined} />
-      </Button>
-      <BookmarkMenu bookmark={bookmark} />
-    </div>
-  )
-}
+}) => (
+  <div
+    className={cn(
+      "relative z-10 flex shrink-0 items-center before:absolute before:-inset-2",
+      className
+    )}
+  >
+    <BookmarkMenu bookmark={bookmark} />
+  </div>
+)
 
 const BookmarkPreview = ({
   bookmark,
@@ -235,7 +196,6 @@ const GridCard = ({
   bookmark,
   ref,
   dragState,
-  groupSize,
   pendingPreview,
   ...select
 }: { bookmark: BookmarkDTO; pendingPreview: boolean } & DragProps &
@@ -251,12 +211,6 @@ const GridCard = ({
       DRAG_CLASS[dragState]
     )}
   >
-    {groupSize > 0 ? (
-      <GroupCount
-        count={groupSize}
-        className="top-(--card-spacing) right-(--card-spacing)"
-      />
-    ) : null}
     <SelectToggle
       bookmark={bookmark}
       {...select}
@@ -291,7 +245,6 @@ const ListRow = ({
   bookmark,
   ref,
   dragState,
-  groupSize,
   ...select
 }: { bookmark: BookmarkDTO } & DragProps & SelectProps) => (
   <Card
@@ -305,12 +258,6 @@ const ListRow = ({
       DRAG_CLASS[dragState]
     )}
   >
-    {groupSize > 0 ? (
-      <GroupCount
-        count={groupSize}
-        className="top-1/2 left-[calc(var(--card-spacing)+8px)] h-6 min-w-6 -translate-x-1/2 -translate-y-1/2 px-1.5 text-xs"
-      />
-    ) : null}
     <SelectToggle bookmark={bookmark} {...select} />
     <FaviconImage src={bookmark.faviconUrl} className="size-5 shrink-0" />
     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
@@ -369,7 +316,6 @@ export const BookmarkCard = ({
   const drag = {
     ref,
     dragState,
-    groupSize: dragState === "group" && dragGroup ? dragGroup.size : 0,
   }
 
   return mode === "grid" ? (
