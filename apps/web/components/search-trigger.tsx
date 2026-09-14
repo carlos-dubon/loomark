@@ -1,6 +1,5 @@
 "use client"
 
-import { useSetAtom } from "jotai"
 import { SearchIcon } from "lucide-react"
 import { useSyncExternalStore } from "react"
 
@@ -12,14 +11,14 @@ import {
 } from "@loomark/ui/components/sidebar"
 
 import { useCloseSidebar } from "@/hooks/use-close-sidebar"
-import { searchDialogAtom } from "@/store/atoms"
+import { useOpenSearchDialog } from "@/hooks/use-open-search-dialog"
 
 const subscribe = () => () => {}
 const getIsMac = () => navigator.userAgent.includes("Mac OS X")
 const getIsMacOnServer = () => false
 
 export const SearchTrigger = () => {
-  const setOpen = useSetAtom(searchDialogAtom)
+  const openSearch = useOpenSearchDialog()
   const closeSidebar = useCloseSidebar()
   const isMac = useSyncExternalStore(subscribe, getIsMac, getIsMacOnServer)
 
@@ -32,7 +31,7 @@ export const SearchTrigger = () => {
           aria-label="Search for bookmarks"
           onClick={() => {
             closeSidebar()
-            setOpen(true)
+            openSearch()
           }}
           className="text-muted-foreground hover:text-foreground"
         >
