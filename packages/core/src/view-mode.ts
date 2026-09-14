@@ -7,15 +7,13 @@ const KNOWN = new Set<string>(VIEW_MODES)
 export const toViewMode = (value: string): ViewMode =>
   KNOWN.has(value) ? (value as ViewMode) : "grid"
 
-export const MIN_GRID_COLUMNS = 1
+export const MIN_GRID_COLUMNS = 2
 
 export const MAX_GRID_COLUMNS = 6
 
 export const DEFAULT_GRID_COLUMNS = 4
 
 export const toGridColumns = (value: number) =>
-  Number.isInteger(value) &&
-  value >= MIN_GRID_COLUMNS &&
-  value <= MAX_GRID_COLUMNS
-    ? value
+  Number.isInteger(value)
+    ? Math.min(Math.max(value, MIN_GRID_COLUMNS), MAX_GRID_COLUMNS)
     : DEFAULT_GRID_COLUMNS
