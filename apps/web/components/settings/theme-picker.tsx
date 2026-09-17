@@ -19,7 +19,7 @@ const Preview = ({
 }) => (
   <span
     className={cn(
-      "flex h-11 w-14 shrink-0 overflow-hidden rounded-md border",
+      "flex h-11 w-14 shrink-0 overflow-hidden rounded-[calc(var(--radius-xl)-7px)] border",
       className
     )}
     style={{ backgroundColor: swatch.canvas, borderColor: swatch.accent }}
@@ -39,7 +39,7 @@ const Preview = ({
     </span>
     <span className="flex flex-1 items-end p-1">
       <span
-        className="h-2.5 w-full rounded-sm"
+        className="h-2.5 w-full rounded-[2px]"
         style={{ backgroundColor: swatch.primary }}
       />
     </span>
@@ -69,7 +69,7 @@ export const ThemePicker = () => {
             onClick={() => mutate({ themeId: option.id })}
             className={cn(
               controlSurface,
-              "relative flex cursor-pointer items-center gap-3 p-2 text-left transition-[box-shadow,background-color] disabled:cursor-progress",
+              "relative flex cursor-pointer items-center gap-3 rounded-xl p-1.5 text-left transition-[box-shadow,background-color] disabled:cursor-progress",
               active
                 ? "border-ring ring-2 ring-ring/24"
                 : "hover:bg-accent/50 dark:hover:bg-input/64"
