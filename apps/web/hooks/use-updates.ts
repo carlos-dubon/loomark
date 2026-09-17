@@ -6,7 +6,11 @@ import { useCallback } from "react"
 import { toast } from "sonner"
 
 import { errorMessage } from "@loomark/core/format"
-import { isUpdateRunning, type UpdateJob } from "@loomark/core/updates"
+import {
+  isUpdateRunning,
+  UPDATE_PHASE_MESSAGES,
+  type UpdateJob,
+} from "@loomark/core/updates"
 
 import { api } from "@/lib/client/api"
 import { updateStatusQuery } from "@/lib/client/queries"
@@ -47,6 +51,11 @@ export const useUpdates = () => {
 
         return
       }
+
+      setJob((current: UpdateJob) => ({
+        ...current,
+        message: "Waiting for the new version to come up",
+      }))
 
       const upBy = Date.now() + RESTART_TIMEOUT_MS
 
@@ -98,7 +107,12 @@ export const useUpdates = () => {
           break
         }
 
-        setJob(next)
+        setJob((current: UpdateJob) => ({
+          ...next,
+          progress: isUpdateRunning(next)
+            ? Math.max(current.progress, next.progress)
+            : next.progress,
+        }))
         parked = next.parked ?? parked
 
         if (next.phase === "FAILED") {
@@ -119,8 +133,8 @@ export const useUpdates = () => {
       setJob((current: UpdateJob) => ({
         ...current,
         phase: "RESTARTING",
-        progress: 95,
-        message: "Restarting into the new version",
+        progress: 100,
+        message: UPDATE_PHASE_MESSAGES.RESTARTING,
       }))
 
       await waitForRestart(from, parked)

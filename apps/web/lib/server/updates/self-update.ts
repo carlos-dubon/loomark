@@ -3,6 +3,7 @@ import {
   IDLE_UPDATE_JOB,
   isUpdateRunning,
   parseVersion,
+  UPDATE_PHASE_MESSAGES,
   type ParkedUpdate,
   type SelfUpdate,
   type UpdateJob,
@@ -181,7 +182,7 @@ const pullProgress = (layers: Map<string, Layer>) => {
     }
   }
 
-  return total === 0 ? 0 : Math.round((current / total) * 85)
+  return total === 0 ? 0 : Math.round((current / total) * 100)
 }
 
 const STALE_IMAGE =
@@ -197,7 +198,11 @@ const run = async (self: Container, target: string) => {
   const ref = parseImageRef(target)
   const layers = new Map<string, Layer>()
 
-  setJob({ phase: "PULLING", progress: 0, message: "Pulling the new image" })
+  setJob({
+    phase: "PULLING",
+    progress: 0,
+    message: UPDATE_PHASE_MESSAGES.PULLING,
+  })
 
   await streamPull(ref.repo, ref.tag ?? "latest", (event) => {
     if (event.id && event.progressDetail?.total) {
@@ -209,7 +214,7 @@ const run = async (self: Container, target: string) => {
 
     setJob({
       progress: pullProgress(layers),
-      message: event.status ?? "Pulling the new image",
+      message: UPDATE_PHASE_MESSAGES.PULLING,
     })
   })
 
@@ -226,8 +231,8 @@ const run = async (self: Container, target: string) => {
 
   setJob({
     phase: "SWAPPING",
-    progress: 88,
-    message: "Preparing the new container",
+    progress: 100,
+    message: UPDATE_PHASE_MESSAGES.SWAPPING,
   })
 
   const name = self.Name.replace(/^\//, "")
@@ -265,8 +270,8 @@ const run = async (self: Container, target: string) => {
 
   setJob({
     phase: "RESTARTING",
-    progress: 95,
-    message: "Restarting into the new version",
+    progress: 100,
+    message: UPDATE_PHASE_MESSAGES.RESTARTING,
     parked,
   })
 

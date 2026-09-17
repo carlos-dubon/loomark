@@ -2,35 +2,21 @@
 
 import { useSetAtom } from "jotai"
 import { useCallback } from "react"
+import { flushSync } from "react-dom"
 
 import { searchDialogAtom } from "@/store/atoms"
 
-const COARSE_POINTER = "(pointer: coarse)"
-const KEYBOARD_PROXY_TIMEOUT_MS = 1000
-
-const primeVirtualKeyboard = () => {
-  const proxy = document.createElement("input")
-  proxy.tabIndex = -1
-  proxy.setAttribute("aria-hidden", "true")
-  proxy.style.cssText =
-    "position:fixed;top:0;left:0;width:1px;height:1px;padding:0;border:0;opacity:0;font-size:16px;pointer-events:none"
-
-  const remove = () => proxy.remove()
-
-  proxy.addEventListener("blur", remove, { once: true })
-  document.body.append(proxy)
-  proxy.focus({ preventScroll: true })
-  setTimeout(remove, KEYBOARD_PROXY_TIMEOUT_MS)
-}
+const SEARCH_INPUT_SELECTOR =
+  "[data-slot='dialog-content'] [data-slot='command-input']"
 
 export const useOpenSearchDialog = () => {
   const setOpen = useSetAtom(searchDialogAtom)
 
   return useCallback(() => {
-    if (window.matchMedia(COARSE_POINTER).matches) {
-      primeVirtualKeyboard()
-    }
+    flushSync(() => setOpen(true))
 
-    setOpen(true)
+    document
+      .querySelector<HTMLInputElement>(SEARCH_INPUT_SELECTOR)
+      ?.focus({ preventScroll: true })
   }, [setOpen])
 }

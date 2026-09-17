@@ -136,7 +136,7 @@ export const TransferView = ({
           <div>
             <Button disabled={!file} loading={importing} onClick={onImport}>
               <UploadIcon aria-hidden="true" />
-              {importing ? "Importing…" : "Import"}
+              Import
             </Button>
           </div>
         </div>

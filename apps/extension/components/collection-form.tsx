@@ -113,7 +113,7 @@ export const CollectionForm = ({
           Cancel
         </Button>
         <Button type="submit" size="sm" loading={isSubmitting}>
-          {isSubmitting ? "Creating…" : "Create"}
+          Create
         </Button>
       </div>
     </form>

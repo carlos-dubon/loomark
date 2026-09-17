@@ -134,4 +134,12 @@ export const SELF_UPDATE_MESSAGES: Record<SelfUpdateBlocker, string> = {
     "This build does not report a release version, so there is nothing to compare against.",
 }
 
+export const UPDATE_PHASE_MESSAGES: Record<UpdatePhase, string> = {
+  IDLE: "Starting the update",
+  PULLING: "Downloading the new version",
+  SWAPPING: "Preparing the new container",
+  RESTARTING: "Restarting into the new version",
+  FAILED: "The update failed",
+}
+
 export const UPDATE_COMMAND = "docker compose pull && docker compose up -d"

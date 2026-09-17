@@ -12,9 +12,12 @@ import { toast } from "sonner"
 
 import { formatDate } from "@loomark/core/format"
 import {
+  RELEASES_URL,
   SELF_UPDATE_MESSAGES,
   UPDATE_COMMAND,
+  UPDATE_PHASE_MESSAGES,
   type ParkedUpdate,
+  type UpdateJob,
   type UpdateStatus,
 } from "@loomark/core/updates"
 import { Alert, AlertDescription } from "@loomark/ui/components/alert"
@@ -24,6 +27,7 @@ import {
   ProgressIndicator,
   ProgressLabel,
   ProgressTrack,
+  ProgressValue,
 } from "@loomark/ui/components/progress"
 
 import { Link } from "@/components/link"
@@ -31,6 +35,56 @@ import { useUpdates } from "@/hooks/use-updates"
 
 const COMPOSE_HINT = (gid: string) =>
   `Add group_add: ["${gid}"] to the app service so it can reach the socket.`
+
+export const VersionRow = ({
+  version,
+  summary,
+  children,
+}: {
+  version: string
+  summary?: string
+  children?: React.ReactNode
+}) => (
+  <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+    <div className="flex min-w-0 flex-col gap-0.5">
+      <span className="text-sm font-medium">
+        Loomark <span className="font-mono">{version}</span>
+      </span>
+      {summary ? (
+        <span className="text-xs text-muted-foreground">{summary}</span>
+      ) : null}
+    </div>
+    {children ? (
+      <div className="flex shrink-0 items-center gap-2">{children}</div>
+    ) : null}
+  </div>
+)
+
+export const ReleaseNotesButton = ({ href }: { href: string }) => (
+  <Button variant="ghost" render={<Link href={href} />}>
+    Release notes
+  </Button>
+)
+
+const UpdateProgress = ({
+  job,
+  value,
+}: {
+  job: UpdateJob
+  value: number | null
+}) => (
+  <Progress value={value} className="gap-2">
+    <div className="flex items-center justify-between gap-3">
+      <ProgressLabel className="truncate">
+        {job.message || UPDATE_PHASE_MESSAGES[job.phase]}
+      </ProgressLabel>
+      <ProgressValue />
+    </div>
+    <ProgressTrack className="h-1.5">
+      <ProgressIndicator />
+    </ProgressTrack>
+  </Progress>
+)
 
 const Parked = ({
   parked,
@@ -66,7 +120,7 @@ const Parked = ({
             onClick={onDiscard}
           >
             <Trash2Icon aria-hidden="true" />
-            {discarding ? "Removing…" : "Remove it"}
+            Remove it
           </Button>
         </div>
       </AlertDescription>
@@ -125,7 +179,7 @@ const Blocked = ({ status }: { status: UpdateStatus }) => {
   )
 }
 
-export const UpdateSettings = () => {
+export const UpdateSettings = ({ version }: { version: string }) => {
   const {
     status,
     job,
@@ -139,71 +193,41 @@ export const UpdateSettings = () => {
   } = useUpdates()
 
   if (!status) {
-    return (
-      <span className="text-sm text-muted-foreground">
-        Checking for updates…
-      </span>
-    )
+    return <VersionRow version={version} summary="Checking for updates…" />
   }
 
-  if (running) {
-    return (
-      <Progress value={job.progress} className="gap-1.5">
-        <ProgressTrack>
-          <ProgressIndicator />
-        </ProgressTrack>
-        <ProgressLabel className="truncate">
-          {job.message || "Updating"}
-        </ProgressLabel>
-      </Progress>
-    )
-  }
-
-  if (!status.available || !status.latest) {
-    return (
-      <div className="flex flex-col gap-4">
-        <Parked
-          parked={status.parked}
-          discarding={discarding}
-          onDiscard={discardParked}
-        />
-        <div className="flex items-center gap-3">
-          <Button variant="outline" loading={checking} onClick={check}>
-            <RefreshCwIcon aria-hidden="true" />
-            {checking ? "Checking…" : "Check for updates"}
-          </Button>
-          <span className="text-xs text-muted-foreground">
-            {job.error ?? "You are on the newest release."}
-          </span>
-        </div>
-      </div>
-    )
-  }
+  const latest = status.available ? status.latest : null
+  const updating = running || installing
+  const summary = updating
+    ? `Updating${latest ? ` to ${latest.version}` : ""}. Loomark will reload on its own.`
+    : latest
+      ? `${latest.version} is available, released ${formatDate(latest.publishedAt)}.`
+      : "You are on the newest release."
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-4 rounded-lg border border-dashed px-3 py-2">
-        <div className="flex min-w-0 flex-col">
-          <span className="text-sm font-medium">
-            {status.latest.version} is out
-          </span>
-          <span className="text-xs text-muted-foreground">
-            Released {formatDate(status.latest.publishedAt)} ·{" "}
-            <Link
-              className="underline underline-offset-4 hover:text-foreground"
-              href={status.latest.url}
-            >
-              Release notes
-            </Link>
-          </span>
-        </div>
-        {status.selfUpdate.supported ? (
-          <Button loading={installing} onClick={install}>
+      <VersionRow version={version} summary={summary}>
+        <ReleaseNotesButton href={latest?.url ?? RELEASES_URL} />
+        {latest && status.selfUpdate.supported ? (
+          <Button loading={updating} onClick={install}>
             <DownloadIcon aria-hidden="true" />
-            {installing ? "Starting…" : "Update now"}
+            Update now
           </Button>
-        ) : null}
-      </div>
+        ) : (
+          <Button variant="outline" loading={checking} onClick={check}>
+            <RefreshCwIcon aria-hidden="true" />
+            Check for updates
+          </Button>
+        )}
+      </VersionRow>
+      {running ? (
+        <UpdateProgress
+          job={job}
+          value={
+            job.phase === "PULLING" && job.progress > 0 ? job.progress : null
+          }
+        />
+      ) : null}
       {job.error ? (
         <Alert variant="error">
           <AlertDescription>{job.error}</AlertDescription>
@@ -214,7 +238,7 @@ export const UpdateSettings = () => {
         discarding={discarding}
         onDiscard={discardParked}
       />
-      <Blocked status={status} />
+      {latest ? <Blocked status={status} /> : null}
     </div>
   )
 }

@@ -115,7 +115,7 @@ const ServerStep = ({
         />
       </Field>
       <Button type="button" loading={pending} onClick={onContinue}>
-        {pending ? "Waiting for permission…" : "Continue"}
+        Continue
       </Button>
     </div>
   )
@@ -197,7 +197,7 @@ const CredentialsStep = ({
         />
       </Field>
       <Button type="submit" loading={isSubmitting}>
-        {isSubmitting ? "Connecting…" : "Connect"}
+        Connect
       </Button>
     </form>
   )

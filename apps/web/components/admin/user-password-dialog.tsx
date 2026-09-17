@@ -127,7 +127,7 @@ export const UserPasswordDialog = ({
           </DialogClose>
           <Button disabled={tooShort} loading={pending} onClick={onSubmit}>
             <KeyRoundIcon aria-hidden="true" />
-            {pending ? "Setting…" : "Set password"}
+            Set password
           </Button>
         </DialogFooter>
       </DialogContent>

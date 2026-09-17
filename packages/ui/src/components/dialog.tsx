@@ -40,17 +40,57 @@ function DialogOverlay({
   )
 }
 
+const useVisualViewportBounds = () => {
+  const [bounds, setBounds] = React.useState<{
+    top: number
+    height: number
+  } | null>(null)
+
+  React.useEffect(() => {
+    const viewport = window.visualViewport
+
+    if (!viewport) {
+      return
+    }
+
+    const update = () =>
+      setBounds({ top: viewport.offsetTop, height: viewport.height })
+
+    update()
+    viewport.addEventListener("resize", update)
+    viewport.addEventListener("scroll", update)
+
+    return () => {
+      viewport.removeEventListener("resize", update)
+      viewport.removeEventListener("scroll", update)
+    }
+  }, [])
+
+  return bounds
+}
+
 function DialogViewport({
   className,
+  style,
   ...props
 }: DialogPrimitive.Viewport.Props) {
+  const bounds = useVisualViewportBounds()
+
   return (
     <DialogPrimitive.Viewport
       data-slot="dialog-viewport"
       className={cn(
-        "fixed inset-0 z-50 grid grid-rows-[1fr_auto_1fr] justify-items-center p-4 max-sm:grid-rows-[1fr_auto] max-sm:p-0 max-sm:pt-12",
+        "fixed inset-0 z-50 grid grid-rows-[1fr_auto_1fr] justify-items-center overscroll-contain p-4 max-sm:grid-rows-[1fr_auto] max-sm:p-0 max-sm:pt-12",
         className
       )}
+      style={{
+        ...(bounds && {
+          top: bounds.top,
+          height: bounds.height,
+          bottom: "auto",
+        }),
+        ...style,
+      }}
       {...props}
     />
   )
@@ -71,7 +111,7 @@ function DialogContent({
         <DialogPrimitive.Popup
           data-slot="dialog-content"
           className={cn(
-            "relative row-start-2 flex max-h-full min-h-0 w-full max-w-sm min-w-0 -translate-y-[calc(1.25rem*var(--nested-dialogs))] scale-[calc(1-0.1*var(--nested-dialogs))] flex-col gap-4 rounded-2xl border dialog-glass p-4 text-sm text-popover-foreground opacity-[calc(1-0.1*var(--nested-dialogs))] transition-[scale,opacity,translate] duration-200 ease-in-out will-change-transform outline-none data-ending-style:scale-98 data-ending-style:opacity-0 data-nested:data-ending-style:translate-y-8 data-nested-dialog-open:origin-top data-starting-style:scale-98 data-starting-style:opacity-0 data-nested:data-starting-style:translate-y-8 max-sm:max-w-none max-sm:rounded-none max-sm:border-x-0 max-sm:border-t max-sm:border-b-0 max-sm:opacity-[calc(1-min(var(--nested-dialogs),1))] max-sm:data-ending-style:translate-y-4 max-sm:data-starting-style:translate-y-4",
+            "relative row-start-2 flex max-h-full min-h-0 w-full max-w-sm min-w-0 -translate-y-[calc(1.25rem*var(--nested-dialogs))] scale-[calc(1-0.1*var(--nested-dialogs))] flex-col gap-4 overflow-y-auto overscroll-contain rounded-2xl border dialog-glass p-4 text-sm text-popover-foreground opacity-[calc(1-0.1*var(--nested-dialogs))] transition-[scale,opacity,translate] duration-200 ease-in-out will-change-transform outline-none data-ending-style:scale-98 data-ending-style:opacity-0 data-nested:data-ending-style:translate-y-8 data-nested-dialog-open:origin-top data-starting-style:scale-98 data-starting-style:opacity-0 data-nested:data-starting-style:translate-y-8 max-sm:max-w-none max-sm:rounded-none max-sm:border-x-0 max-sm:border-t max-sm:border-b-0 max-sm:opacity-[calc(1-min(var(--nested-dialogs),1))] max-sm:data-ending-style:translate-y-4 max-sm:data-starting-style:translate-y-4",
             className
           )}
           {...props}

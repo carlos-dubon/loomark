@@ -19,6 +19,7 @@
 @theme inline {
   --color-zinc-25: oklch(99.2% 0 0);
   --animate-skeleton: skeleton 2.4s infinite;
+  --animate-progress-loop: progress-loop 1.6s ease-in-out infinite;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface-raised: var(--surface-raised);
@@ -80,6 +81,21 @@
     }
     100% {
       opacity: 1;
+    }
+  }
+
+  @keyframes progress-loop {
+    0% {
+      inset-inline-start: 0;
+      width: 12%;
+    }
+    50% {
+      inset-inline-start: 38%;
+      width: 42%;
+    }
+    100% {
+      inset-inline-start: 100%;
+      width: 12%;
     }
   }
 }

@@ -24,8 +24,7 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
-    "db:studio": "prisma studio",
-    "brand:generate": "node scripts/generate-brand-assets.mjs"
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
@@ -71,7 +70,6 @@
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "shadcn": "^4.19.0",
-    "sharp": "0.35.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

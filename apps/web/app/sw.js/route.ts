@@ -1,8 +1,12 @@
-const VERSION = "loomark-v1"
-const ASSETS = `${VERSION}-assets`
+export const dynamic = "force-dynamic"
+
+const script = (
+  version: string
+) => `const VERSION = ${JSON.stringify(`loomark-${version}`)}
+const ASSETS = VERSION + "-assets"
 const OFFLINE_URL = "/offline.html"
 
-const IMMUTABLE = ["/_next/static/", "/icons/", "/brand/"]
+const IMMUTABLE = ["/_next/static/"]
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -19,9 +23,7 @@ self.addEventListener("activate", (event) => {
       .keys()
       .then((keys) =>
         Promise.all(
-          keys
-            .filter((key) => !key.startsWith(VERSION))
-            .map((key) => caches.delete(key))
+          keys.filter((key) => key !== ASSETS).map((key) => caches.delete(key))
         )
       )
       .then(() => self.clients.claim())
@@ -69,3 +71,9 @@ self.addEventListener("fetch", (event) => {
     )
   )
 })
+`
+
+export const GET = () =>
+  new Response(script(process.env.APP_VERSION ?? "dev"), {
+    headers: { "content-type": "text/javascript; charset=utf-8" },
+  })

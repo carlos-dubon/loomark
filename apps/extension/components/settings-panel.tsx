@@ -167,7 +167,7 @@ export const SettingsPanel = ({ onClose }: { onClose: () => void }) => {
               }}
             >
               <RefreshCwIcon aria-hidden="true" />
-              {busyish ? "Syncing…" : "Sync now"}
+              Sync now
             </Button>
           </div>
         ) : null}

@@ -64,7 +64,7 @@ const SelectToggle = ({
       checked={selected}
       onCheckedChange={onSelect}
       aria-label={`Select ${bookmarkLabel(bookmark)}`}
-      className="after:-inset-3"
+      className="after:-inset-3 dark:not-data-checked:bg-card"
     />
   </span>
 )
@@ -219,10 +219,7 @@ const GridCard = ({
     <BookmarkPreview bookmark={bookmark} pending={pendingPreview} />
     <CardContent className="flex flex-1 flex-col gap-2">
       <div className="flex items-start gap-2">
-        <Favicon
-          src={bookmark.faviconUrl}
-          className="mt-0.5 size-4 shrink-0"
-        />
+        <Favicon src={bookmark.faviconUrl} className="mt-0.5 size-4 shrink-0" />
         <Link
           href={bookmark.url}
           className="min-w-0 flex-1 rounded-sm text-sm leading-snug font-medium outline-none after:absolute after:inset-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"

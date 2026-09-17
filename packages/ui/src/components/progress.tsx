@@ -42,7 +42,7 @@ function ProgressIndicator({
     <ProgressPrimitive.Indicator
       data-slot="progress-indicator"
       className={cn(
-        "absolute rounded-full bg-primary transition-[width] duration-500 ease-out group-data-[tone=destructive]/progress:bg-destructive group-data-[tone=muted]/progress:bg-muted-foreground motion-reduce:transition-none",
+        "absolute inset-y-0 rounded-full bg-primary transition-[width] duration-500 ease-out group-data-[tone=destructive]/progress:bg-destructive group-data-[tone=muted]/progress:bg-muted-foreground data-[indeterminate]:animate-progress-loop data-[indeterminate]:transition-none motion-reduce:animate-none motion-reduce:transition-none motion-reduce:data-[indeterminate]:w-full",
         className
       )}
       {...props}

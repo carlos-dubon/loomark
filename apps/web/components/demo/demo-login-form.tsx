@@ -71,7 +71,7 @@ export const DemoLoginForm = () => {
         </CardContent>
         <CardFooter className="mt-4 flex-col items-stretch gap-3">
           <Button type="submit" loading={pending}>
-            {pending ? "Opening the demo…" : "Sign in"}
+            Sign in
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Want the real thing?{" "}

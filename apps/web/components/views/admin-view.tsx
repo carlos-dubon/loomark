@@ -2,6 +2,7 @@
 
 import {
   BookmarkIcon,
+  CalendarIcon,
   CrownIcon,
   FolderIcon,
   HardDriveIcon,
@@ -107,7 +108,7 @@ export const AdminView = ({
                       ) : null}
                     </div>
                     <span className="truncate text-xs text-muted-foreground">
-                      {user.email} · joined {formatDate(user.createdAt)}
+                      {user.email}
                     </span>
                     <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
                       <Stat
@@ -121,6 +122,10 @@ export const AdminView = ({
                       <Stat
                         icon={HardDriveIcon}
                         label={`${formatBytes(user.bytes)} total`}
+                      />
+                      <Stat
+                        icon={CalendarIcon}
+                        label={`Joined ${formatDate(user.createdAt)}`}
                       />
                     </div>
                   </div>

@@ -254,11 +254,7 @@ export const BookmarkForm = ({
             onClick={remove}
             onBlur={() => setConfirmingRemove(false)}
           >
-            {removing
-              ? "Removing…"
-              : confirmingRemove
-                ? "Tap again to remove"
-                : "Remove"}
+            {confirmingRemove ? "Tap again to remove" : "Remove"}
           </Button>
         ) : (
           <span />
@@ -269,11 +265,7 @@ export const BookmarkForm = ({
           disabled={removing}
           loading={isSubmitting}
         >
-          {isSubmitting
-            ? "Saving…"
-            : bookmark
-              ? "Save changes"
-              : "Save bookmark"}
+          {bookmark ? "Save changes" : "Save bookmark"}
         </Button>
       </div>
     </form>

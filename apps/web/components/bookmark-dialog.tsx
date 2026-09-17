@@ -281,11 +281,7 @@ const BookmarkForm = ({
             Cancel
           </Button>
           <Button type="submit" loading={isSubmitting}>
-            {isSubmitting
-              ? "Saving…"
-              : editing
-                ? "Save changes"
-                : "Save bookmark"}
+            {editing ? "Save changes" : "Save bookmark"}
           </Button>
         </DialogFooter>
       </form>

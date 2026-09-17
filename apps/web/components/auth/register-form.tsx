@@ -105,7 +105,7 @@ export const RegisterForm = () => {
         </CardContent>
         <CardFooter className="mt-4 flex-col items-stretch gap-3">
           <Button type="submit" loading={isSubmitting}>
-            {isSubmitting ? "Creating…" : "Create account"}
+            Create account
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}

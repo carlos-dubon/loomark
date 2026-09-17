@@ -178,7 +178,7 @@ const CollectionForm = ({
             Cancel
           </Button>
           <Button type="submit" loading={isSubmitting}>
-            {isSubmitting ? "Saving…" : editing ? "Save changes" : "Create"}
+            {editing ? "Save changes" : "Create"}
           </Button>
         </DialogFooter>
       </form>

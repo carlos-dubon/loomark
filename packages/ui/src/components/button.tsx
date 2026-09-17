@@ -77,14 +77,15 @@ function Button({
       data-slot="button"
       data-loading={loading || undefined}
       disabled={disabled || loading}
-      className={cn(
-        buttonVariants({ variant, size, className }),
-        loading && "[&_svg:not([data-slot='spinner'])]:hidden"
-      )}
+      className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     >
-      {loading ? <Spinner aria-hidden="true" /> : null}
-      {children}
+      {loading ? (
+        <span className="absolute inset-0 flex items-center justify-center">
+          <Spinner aria-hidden="true" />
+        </span>
+      ) : null}
+      <span className={cn("contents", loading && "invisible")}>{children}</span>
     </ButtonPrimitive>
   )
 }

@@ -82,11 +82,7 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
           onClick={() => inputRef.current?.click()}
         >
           <ImageUpIcon aria-hidden="true" />
-          {uploading
-            ? "Uploading…"
-            : image
-              ? "Change picture"
-              : "Upload picture"}
+          {image ? "Change picture" : "Upload picture"}
         </Button>
         {image ? (
           <Button
@@ -96,7 +92,7 @@ export const ProfileSettings = ({ profile }: { profile: Profile }) => {
             onClick={() => remove()}
           >
             <Trash2Icon aria-hidden="true" />
-            {removing ? "Removing…" : "Remove"}
+            Remove
           </Button>
         ) : null}
       </div>

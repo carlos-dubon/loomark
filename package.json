@@ -40,7 +40,6 @@
     "db:migrate": "pnpm --filter loomark db:migrate",
     "db:deploy": "pnpm --filter loomark db:deploy",
     "db:studio": "pnpm --filter loomark db:studio",
-    "brand:generate": "pnpm --filter loomark brand:generate",
     "docker:build": "docker compose -f docker-compose.yml -f docker-compose.build.yml build",
     "ext:dev": "pnpm --filter loomark-extension dev",
     "ext:build": "pnpm --filter loomark-extension build",
