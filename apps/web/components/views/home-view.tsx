@@ -10,10 +10,10 @@ import type { BookmarkDTO } from "@loomark/core/types"
 import { hostFromUrl } from "@loomark/core/url"
 import { cn } from "@loomark/core/utils"
 import { Button } from "@loomark/ui/components/button"
+import { Favicon } from "@loomark/ui/components/favicon"
 
 import { BookmarkMenu } from "@/components/bookmark-menu"
 import { EmptyState } from "@/components/empty-state"
-import { FaviconImage } from "@/components/favicon-image"
 import { Link } from "@/components/link"
 import { MobileSearchBar } from "@/components/mobile-search-bar"
 import { PageHeader } from "@/components/page-header"
@@ -61,7 +61,7 @@ const PinnedItem = ({
     >
       <div className="relative">
         <div className="relative flex size-14 items-center justify-center rounded-xl border border-input bg-background shadow-xs/5 transition-[box-shadow,scale,background-color] not-dark:bg-clip-padding group-focus-within/pin:bg-accent/50 group-hover/pin:bg-accent/50 group-active/pin:scale-[0.97] group-active/pin:shadow-none before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-xl)-1px)] before:shadow-[0_1px_--theme(--color-black/4%)] group-active/pin:before:shadow-none sm:size-16 dark:bg-input/32 dark:group-focus-within/pin:bg-input/64 dark:group-hover/pin:bg-input/64 dark:before:shadow-[0_-1px_--theme(--color-white/6%)]">
-          <FaviconImage
+          <Favicon
             src={bookmark.faviconUrl}
             className="size-7 rounded-sm sm:size-8"
           />

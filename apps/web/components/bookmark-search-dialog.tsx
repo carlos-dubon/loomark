@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 
 import { hostFromUrl } from "@loomark/core/url"
 import { Button } from "@loomark/ui/components/button"
+import { Favicon } from "@loomark/ui/components/favicon"
 import { Spinner } from "@loomark/ui/components/spinner"
 import {
   CommandDialog,
@@ -17,7 +18,6 @@ import {
   CommandList,
 } from "@loomark/ui/components/command"
 
-import { FaviconImage } from "@/components/favicon-image"
 import { useOpenInNewTab } from "@/hooks/use-open-in-new-tab"
 import { bookmarkListQuery } from "@/lib/client/queries"
 import {
@@ -160,7 +160,7 @@ export const BookmarkSearchDialog = () => {
                 value={bookmark.id}
                 onSelect={() => openBookmark(bookmark.url)}
               >
-                <FaviconImage src={bookmark.faviconUrl} />
+                <Favicon src={bookmark.faviconUrl} />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate">
                     {bookmark.title || hostFromUrl(bookmark.url)}

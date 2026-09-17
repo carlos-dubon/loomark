@@ -12,9 +12,9 @@ import type { ViewMode } from "@loomark/core/view-mode"
 import { Card, CardContent } from "@loomark/ui/components/card"
 import { Checkbox } from "@loomark/ui/components/checkbox"
 import { CollectionIcon } from "@loomark/ui/components/collection-icon"
+import { Favicon } from "@loomark/ui/components/favicon"
 
 import { BookmarkMenu } from "@/components/bookmark-menu"
-import { FaviconImage } from "@/components/favicon-image"
 import { Link } from "@/components/link"
 import { useBookmarkPreview } from "@/hooks/use-bookmark-preview"
 import { useBookmarkSelected } from "@/hooks/use-bookmark-selection"
@@ -182,7 +182,7 @@ const BookmarkPreview = ({
             pending && "animate-pulse"
           )}
         >
-          <FaviconImage
+          <Favicon
             src={bookmark.faviconUrl}
             className="size-8 opacity-30 grayscale"
           />
@@ -219,7 +219,7 @@ const GridCard = ({
     <BookmarkPreview bookmark={bookmark} pending={pendingPreview} />
     <CardContent className="flex flex-1 flex-col gap-2">
       <div className="flex items-start gap-2">
-        <FaviconImage
+        <Favicon
           src={bookmark.faviconUrl}
           className="mt-0.5 size-4 shrink-0"
         />
@@ -259,7 +259,7 @@ const ListRow = ({
     )}
   >
     <SelectToggle bookmark={bookmark} {...select} />
-    <FaviconImage src={bookmark.faviconUrl} className="size-5 shrink-0" />
+    <Favicon src={bookmark.faviconUrl} className="size-5 shrink-0" />
     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
       <Link
         href={bookmark.url}

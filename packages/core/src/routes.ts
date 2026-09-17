@@ -14,7 +14,6 @@ export const routes = {
   collection: (id: string) => `/api/collections/${id}`,
   collectionsMove: "/api/collections/move",
   collectionsRestore: "/api/collections/restore",
-  favicon: (url: string) => withUrl("/api/favicon", url),
   metadata: (url: string) => withUrl("/api/metadata", url),
   appearance: "/api/appearance",
   profileAvatar: "/api/profile/avatar",
