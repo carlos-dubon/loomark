@@ -1,6 +1,6 @@
 {
   "name": "loomark-monorepo",
-  "version": "0.3.9",
+  "version": "0.4.0",
   "description": "A self-hosted bookmark manager that syncs with your browser.",
   "keywords": [
     "bookmarks",
