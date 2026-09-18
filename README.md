@@ -13,10 +13,10 @@
   <a href="https://loomark-demo.vercel.app/login">Try the live demo</a> &#124; <a href="https://github.com/carlos-dubon/loomark/releases">Releases</a>
 </p>
 
+- Two-way sync with your browser's bookmarks bar
+- Browser extension for Chromium based browsers and Firefox
 - Themes
 - Search your bookmarks with `Command+K`
-- Browser extension for Chromium based browsers and Firefox
-- Two-way sync with your browser's bookmarks bar
 - Import from any browser or from [Linkwarden](https://linkwarden.app)
 - Installable as a PWA
 
