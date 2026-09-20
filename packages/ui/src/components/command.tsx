@@ -15,7 +15,7 @@ function Command({
     <CommandPrimitive
       data-slot="command"
       className={cn(
-        "flex size-full flex-col overflow-hidden rounded-2xl text-popover-foreground",
+        "flex size-full min-h-0 flex-col overflow-hidden rounded-2xl text-popover-foreground",
         className
       )}
       {...props}
@@ -48,7 +48,7 @@ function CommandDialog({
           null
         }
         className={cn(
-          "max-h-[70vh] gap-0 overflow-hidden p-0 sm:max-w-xl",
+          "max-h-[min(70vh,100%)] gap-0 overflow-hidden p-0 sm:max-w-xl",
           className
         )}
       >
@@ -98,7 +98,7 @@ function CommandList({
     <CommandPrimitive.List
       data-slot="command-list"
       className={cn(
-        "max-h-[min(60vh,24rem)] scroll-fade-y scroll-py-1 overflow-x-hidden overflow-y-auto py-1",
+        "max-h-[min(60vh,24rem)] min-h-0 scroll-fade-y scroll-py-1 overflow-x-hidden overflow-y-auto overscroll-y-contain py-1",
         className
       )}
       {...props}

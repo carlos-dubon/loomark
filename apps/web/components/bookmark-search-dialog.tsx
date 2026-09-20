@@ -19,6 +19,7 @@ import {
 } from "@loomark/ui/components/command"
 
 import { useOpenInNewTab } from "@/hooks/use-open-in-new-tab"
+import { useOpenSearchDialog } from "@/hooks/use-open-search-dialog"
 import { bookmarkListQuery } from "@/lib/client/queries"
 import {
   clearRecentSearchesAtom,
@@ -41,6 +42,7 @@ export const BookmarkSearchDialog = () => {
   const removeRecent = useSetAtom(removeRecentSearchAtom)
   const clearRecents = useSetAtom(clearRecentSearchesAtom)
   const { open: openUrl } = useOpenInNewTab()
+  const openSearch = useOpenSearchDialog()
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -48,13 +50,13 @@ export const BookmarkSearchDialog = () => {
       if (!event.metaKey && !event.ctrlKey) return
 
       event.preventDefault()
-      setOpen(true)
+      openSearch()
     }
 
     window.addEventListener("keydown", onKeyDown)
 
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [setOpen])
+  }, [openSearch])
 
   useEffect(() => {
     if (!open) {
@@ -97,6 +99,7 @@ export const BookmarkSearchDialog = () => {
       description="Search your bookmarks by title, url or description."
     >
       <CommandInput
+        data-bookmark-search-input
         value={query}
         onValueChange={setQuery}
         placeholder="Search for bookmarks…"
