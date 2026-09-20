@@ -293,6 +293,9 @@ importers:
       react-fast-collapsible:
         specifier: ^1.0.2
         version: 1.0.2(react@19.2.8)
+      react-remove-scroll:
+        specifier: ^2.7.2
+        version: 2.7.2(@types/react@19.2.18)(react@19.2.8)
       sonner:
         specifier: ^2.0.8
         version: 2.0.8(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)

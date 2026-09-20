@@ -3,6 +3,7 @@
 import * as React from "react"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog"
 import { XIcon } from "lucide-react"
+import { RemoveScroll } from "react-remove-scroll"
 
 import { cn } from "@loomark/core/utils"
 import { Button } from "./button"
@@ -57,41 +58,32 @@ function DialogViewport({
       viewport.style.height = `${visualViewport.height}px`
     }
 
-    const preventOutsideScroll = (event: Event) => {
-      if (
-        event.target instanceof Element &&
-        !event.target.closest('[data-slot="dialog-content"]')
-      ) {
-        event.preventDefault()
-      }
-    }
-
     updateViewport()
     visualViewport?.addEventListener("resize", updateViewport)
     visualViewport?.addEventListener("scroll", updateViewport)
-    viewport.addEventListener("touchmove", preventOutsideScroll, {
-      passive: false,
-    })
-    viewport.addEventListener("wheel", preventOutsideScroll, { passive: false })
 
     return () => {
       visualViewport?.removeEventListener("resize", updateViewport)
       visualViewport?.removeEventListener("scroll", updateViewport)
-      viewport.removeEventListener("touchmove", preventOutsideScroll)
-      viewport.removeEventListener("wheel", preventOutsideScroll)
     }
   }, [])
 
   return (
-    <DialogPrimitive.Viewport
+    <RemoveScroll
       ref={viewportRef}
-      data-slot="dialog-viewport"
-      className={cn(
-        "fixed inset-0 z-50 flex flex-col items-center justify-center overflow-y-auto overscroll-y-none p-4 max-sm:justify-end max-sm:p-0 max-sm:pt-12",
-        className
-      )}
-      {...props}
-    />
+      forwardProps
+      removeScrollBar={false}
+      allowPinchZoom
+    >
+      <DialogPrimitive.Viewport
+        data-slot="dialog-viewport"
+        className={cn(
+          "fixed inset-0 z-50 flex flex-col items-center justify-center overflow-y-auto overscroll-y-none p-4 max-sm:justify-end max-sm:p-0 max-sm:pt-12",
+          className
+        )}
+        {...props}
+      />
+    </RemoveScroll>
   )
 }
 
